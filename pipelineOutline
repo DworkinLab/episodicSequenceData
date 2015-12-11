@@ -51,11 +51,23 @@ scp paul@info.mcmaster.ca:/home/paul/episodicData/fastqcOutputs/*_fastqc.html /U
 		- M - Mark shorter split hits as secondary
 		
 5. SAM to BAM
-	- samtools view
-	- FLAGS
-		-Sb = sam to bam
-		-q = quality (will do 20 as recommended by PoPoolation2)
-	- pipe to {sametools sort}
+- samtools view;  FLAGS
+	-Sb = sam to bam
+	-q = quality (will do 20 as recommended by PoPoolation2)
+- pipe to {sametools sort}
+```
+#! /bin/bash
+dir = /home/paul/episodicData/mappedSequence
+files = (${dir}*.SAM)
+echo ${files[@]}
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name}.SAM`
+sametools view -Sb -q 20 ${dir}${base}.SAM| sametools sort - ${dir}${base}
+done
+```
+
 	 
 6.* Sort with Picard?
 7.* Remove duplicates
@@ -69,7 +81,17 @@ scp paul@info.mcmaster.ca:/home/paul/episodicData/fastqcOutputs/*_fastqc.html /U
 		-FLAGS
 			-B = disable BAQ computation
 		- BCF and VCF?
-			
+```
+#! /bin/bash
+
+ref_genome=/home/paul/episodicData/indexSequence/dmel-all-chromosome-r5.57.fasta.gz
+dir = /home/paul/episodicData/mappedSequence
+files = (${dir}*.bam)
+echo ${files[@]}
+samtools mpileup -B ${ref_genome} ${files[@]} > episodicData.mpileup
+```
+
+
 10. Convert to sync file with popoolation2 (java)
 	- with java and PoPoolation2 script (mpileup2sync.jar)
 		- Flags:
