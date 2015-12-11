@@ -1,15 +1,22 @@
-Pipeline; Paul Knoops
-Episodic Data
-Generation 0, 38, 77, 115
+#Pipeline; Paul Knoops
+##Episodic Data
+###Generation 0, 38, 77, 115
 
-1. Fastqc files
-To check if the data uploaded correctly (matched set), used md5sum on md5.txt. "-c" = report if checksums match contents of files (OK). Must be in rawData directory (with the raw sequence files and the md5.txt file)
+###1. Quality Control and Fastqc
+First; check if the data uploaded correctly (matched set) 
+Use md5sum on md5.txt. 
+	- "-c" = report if checksums match contents of files (OK).
+	- Must be in rawData directory (with the raw sequence files and the md5.txt file)
 
 ```
 md5sum - c md5.txt
 ```
 
-Next check with Fastqc for quality of the reads. Fastqc flag "-o" sends all output files to output directory (specified after). The process will output two files (*fastqc.html and *fastqc.zip). The *fastqc.html will be loaded to local machine and opened in web browser to view files. Moving to local machine also shown below (to directory fastqcOutputs) while on the local machine.
+Next check with Fastqc for quality of the reads. 
+Fastqc flag "-o" sends all output files to output directory. 
+The process will output two files (*fastqc.html and *fastqc.zip). 
+The *fastqc.html will be loaded to local machine and opened in web browser to view files.
+Moving to local machine also shown below while on the local machine.
 
 ```
 fastqc -o /home/paul/episodicData/fastqcOutputs /home/paul/episodicData/rawData*.fastq.gz
@@ -19,7 +26,7 @@ fastqc -o /home/paul/episodicData/fastqcOutputs /home/paul/episodicData/rawData*
 scp paul@info.mcmaster.ca:/home/paul/episodicData/fastqcOutputs/*_fastqc.html /Users/paulknoops/episodicWork/data/fastqcOutputs
 ```
 
-2. Trim files (Trimmomatic)
+2. Quality Trimming files (Trimmomatic)
 	FLAGS/INPUT SETTINGS
 	- java program
 	- trimmomatic v.0.33
@@ -54,6 +61,7 @@ scp paul@info.mcmaster.ca:/home/paul/episodicData/fastqcOutputs/*_fastqc.html /U
 7.* Remove duplicates
 8.* Remove low quality mapping
 	- same as adding -q (step 5.) however, adds flags -f 0x0002 -F 0x0004 -F 0x0008 -b
+	- only using -q (20), -F 0x0004, and -b (for bam files)
 * 6,7,8 from PoPoolation; PoPoolation2 uses SAM to BAM with sort, than to step 9
 
 9. Create mpileup file with samtools
@@ -78,12 +86,12 @@ scp paul@info.mcmaster.ca:/home/paul/episodicData/fastqcOutputs/*_fastqc.html /U
 			--input
 			--output
 			--suppress-noninformative
-			--min-count 6
-			--min-coverage 50
-			--max-coverage 200
+			--min-count 3
+			--min-coverage 10
+			--max-coverage 250
 			--min-covered-fraction 1
-			--window-size = 1 for SNP, 500 for sliding window
-			--step-size =window size
+			--window-size = 1for SNP, 500 for sliding window
+			--step-size = window size (500)
 			--pool-size =
 		-SCRIPT to load to IGV = pwc2igv.pl
 			--input and --output flags
