@@ -36,6 +36,23 @@ scp paul@info.mcmaster.ca:/home/paul/episodicData/fastqcOutputs/*_fastqc.html /U
 	- MAXINFO = adaptive quality (balance b/w length and quality) = 0.5 (middle ground = safe bet)
 	- alternatively, edit input and run PoPoolation2 perl script for trimming
 	
+	-trimlog <trimlog>
+*Trimming F0 and F77
+```
+#!/bin/bash
+
+cd /usr/local/trimmomatic
+dir=/home/paul/episodicData/gen0_gen77_start_to_mapped/Rawdata_2/
+files=(${dir}*_R1_001.fastq.gz)
+echo ${files[@]}
+for file in ${files[@]} 
+do
+name=${file}
+base=`basename ${name} _R1_001.fastq.gz`
+java -jar trimmomatic-0.33.jar PE -phred33 -trimlog /home/paul/episodicData/gen0_gen77_start_to_mapped/trim2/trimlog_gen0_gen77.txt ${dir}${base}_R1_001.fastq.gz ${dir}${base}_R2_001.fastq.gz /home/paul/episodicData/gen0_gen77_start_to_mapped/trim2/${base}_R1_PE_phred33.fastq.gz /home/paul/episodicData/gen0_gen77_start_to_mapped/trim2/${base}_R1_SE_phred33.fastq.gz /home/paul/episodicData/gen0_gen77_start_to_mapped/trim2/${base}_R2_PE_phred33.fastq.gz /home/paul/episodicData/gen0_gen77_start_to_mapped/trim2/${base}_R2_SE_phred33.fastq.gz ILLUMINACLIP:/usr/local/trimmomatic/adapters/TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 MAXINFO:40:0.5 MINLEN:36
+done
+```
+	
 3. Bring in reference sequence (version r5.57.fasta.gz)
 	- curl -O (URL)
 	- bwa index ${REFERENCE}
