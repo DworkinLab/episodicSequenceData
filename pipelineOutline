@@ -1,0 +1,112 @@
+Pipeline; Paul Knoops
+Episodic Data
+Generation 0, 38, 77, 115
+
+1. Fastqc files
+To check if the data uploaded correctly (matched set), used md5sum on md5.txt. "-c" = report if checksums match contents of files (OK). Must be in rawData directory (with the raw sequence files and the md5.txt file)
+
+```
+md5sum - c md5.txt
+```
+
+Next check with Fastqc for quality of the reads. Fastqc flag "-o" sends all output files to output directory (specified after). The process will output two files (*fastqc.html and *fastqc.zip). The *fastqc.html will be loaded to local machine and opened in web browser to view files. Moving to local machine also shown below (to directory fastqcOutputs) while on the local machine.
+
+```
+fastqc -o /home/paul/episodicData/fastqcOutputs /home/paul/episodicData/rawData*.fastq.gz
+```
+
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/fastqcOutputs/*_fastqc.html /Users/paulknoops/episodicWork/data/fastqcOutputs
+```
+
+2. Trim files (Trimmomatic)
+	FLAGS/INPUT SETTINGS
+	- java program
+	- trimmomatic v.0.33
+	- IlluminaClip = adapter removal (TruSeq3-PE:2:30:10)
+	- LEADING & TRAILING = 3; removal at start end end if below quality
+	- MINLEN = minimum length (36)
+	- MAXINFO = adaptive quality (balance b/w length and quality) = 0.5 (middle ground = safe bet)
+	- alternatively, edit input and run PoPoolation2 perl script for trimming
+	
+3. Bring in reference sequence (version r5.57.fasta.gz)
+	- curl -O (URL)
+	- bwa index ${REFERENCE}
+	
+4. BWA Mapping
+	- Output = SAM files 
+		* Two files (different lanes) for same sample
+			-combine now or downstream
+			- comine with bwa (or add to current script)
+	- use basename:
+	- bwa mem
+		- t - processors (8)
+		- M - Mark shorter split hits as secondary
+		
+5. SAM to BAM
+	- samtools view
+	- FLAGS
+		-Sb = sam to bam
+		-q = quality (will do 20 as recommended by PoPoolation2)
+	- pipe to {sametools sort}
+	 
+6.* Sort with Picard?
+7.* Remove duplicates
+8.* Remove low quality mapping
+	- same as adding -q (step 5.) however, adds flags -f 0x0002 -F 0x0004 -F 0x0008 -b
+* 6,7,8 from PoPoolation; PoPoolation2 uses SAM to BAM with sort, than to step 9
+
+9. Create mpileup file with samtools
+	- samtools mpileup (output = .mpileup)
+		-FLAGS
+			-B = disable BAQ computation
+		- BCF and VCF?
+			
+10. Convert to sync file with popoolation2 (java)
+	- with java and PoPoolation2 script (mpileup2sync.jar)
+		- Flags:
+			--input = input files (.mpileup)
+			--output = output files (_java.sync)
+			--fastq-type = sanger???
+			--min-qual = minimum quality score (20)
+			--threads = 8
+			
+11. Can now run scripts from popoolation2 directory to find / visualize;
+	- calculate allele frequency differences
+	- Fst (differentiation b/w pops.) 
+		-SCRIPT = fst-sliding
+			--input
+			--output
+			--suppress-noninformative
+			--min-count 6
+			--min-coverage 50
+			--max-coverage 200
+			--min-covered-fraction 1
+			--window-size = 1 for SNP, 500 for sliding window
+			--step-size =window size
+			--pool-size =
+		-SCRIPT to load to IGV = pwc2igv.pl
+			--input and --output flags
+			-index bam files
+		-has option for Fst for genes
+		
+	- The CMH test (Cochran-Mantel-Haenszel test) - constant allele frequency changes in several replicates
+		- SCRIPT = cmh-test.pl
+			--input =  (.sync)
+			--output = (.cmh)
+			--min-count 12 (6)
+			--min-coverage 50 (4)
+			--max-coverage 200 (120)
+			--population 1-2,3-4 (each population tested once)
+		- SCRIPT to display on IGV = cmh2gwas.pl
+			-set min p-value (--min-pvalue 1.0e-20)
+			
+	- Fisher's Exact Test (significance of allele frequency differences)
+		- SCRIPT = fisher-test.pl
+			--input
+			--output = (.fet)
+			--min-count 6 
+			--min-coverage 50 
+			--max-coverage 200 
+			--suppress-noninformative
+		- SCRIPT to IGV = pwc2igv.pl
