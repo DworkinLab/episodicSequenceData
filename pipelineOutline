@@ -56,7 +56,19 @@ done
 3. Bring in reference sequence (version r5.57.fasta.gz)
 	- curl -O (URL)
 	- bwa index ${REFERENCE}
-	
+```
+# Download index genome for D. mel
+# Make outdirectory
+index_dir=/home/paul/episodicData/indexSequence
+
+cd ${index_dir}
+curl -O ftp://ftp.flybase.net/genomes/Drosophila_melanogaster/dmel_r5.57_FB2014_03/fasta/dmel-all-chromosome-r5.57.fasta.gz
+
+# Set bwa index genome 
+
+bwa index dmel-all-chromosome-r5.57.fasta.gz
+```	
+
 4. BWA Mapping
 	- Output = SAM files 
 		* Two files (different lanes) for same sample
@@ -66,6 +78,45 @@ done
 	- bwa mem
 		- t - processors (8)
 		- M - Mark shorter split hits as secondary
+```
+#!/bin/bash
+
+# Log onto remote server
+# make BWA directory path
+bwa_dir=/usr/local/bwa/0.7.8
+
+cd ${bwa_dir}
+
+# make variable for working directory for
+dir=/home/paul/episodicData/trimmomaticOutputs
+
+#make variable for reference genome
+ref_genome=/home/paul/episodicData/indexSequence/dmel-all-chromosome-r5.57.fasta.gz
+
+# make variable for output directory
+out_dir=/home/paul/episodicData/mappedSequence
+
+#make an array for each file in the directory "dir" that ends in _R1_PE_phred33.fastq.gz
+files=(${dir}/*_R1_PE_phred33.fastq.gz)
+
+#Check with echo
+#echo ${files[1]}
+#echo ${files[@]}
+
+
+#Use "for loop" to map reads with the same "basename" to ref_genome
+#Two flags for bwa mem
+# -t = number of processors
+# -M	Mark shorter split hits as secondary (for Picard compatibility).
+# Do I need qstat
+
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _R1_PE_phred33.fastq.gz`
+bwa mem -t 8 -M ${ref_genome} ${dir}/${base}_R1_PE_phred33.fastq.gz ${dir}/${base}_R2_PE_phred33.fastq.gz > ${out_dir}/${base}_aligned_pe.SAM
+done
+```
 		
 5. SAM to BAM
 - samtools view;  FLAGS
