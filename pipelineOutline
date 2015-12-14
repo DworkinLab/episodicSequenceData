@@ -148,7 +148,7 @@ done
 ```
 #! /bin/bash
 dir = /home/paul/episodicData/mappedSequence
-files = (${dir}*.SAM)
+files = (${dir}/*.SAM)
 echo ${files[@]}
 for file in ${files[@]}
 do
@@ -160,7 +160,45 @@ done
 
 	 
 6.* Sort with Picard?
+```
+#! /bin/bash
+
+mapped_dir=/home/paul/episodicData/mappedSequence
+files=(${mapped_dir}/*.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name}.bam`
+java -Xmx2g -jar ˜pic/SortSam.jar I= ${mapped_dir}/*.bam O= ${mapped_dir}/${base}.sort.bam VALIDATION_STRINGENCY=SILENT SO=coordinate
+done
+```
+
+Picard runs with Java
+ Xmx2g give Java 2 Gb of memory
+ jar SortSam use the Java software SortSam
+ I= input
+ O= output
+ SO= sort order; sort by coordinate
+VALIDATION STRINGENCY= Picard is like a Princess that is constantly complaining about every small deviation of our sam file from the most stringent requirements. I have never found a sam file satisfying all of Picards demands ⇒ ’shut up Picard’
+
 7.* Remove duplicates
+```
+#! /bin/bash
+
+mapped_dir=/home/paul/episodicData/mappedSequence
+files=(${mapped_dir}/*.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name}.sort.bam`
+java -Xmx2g -jar ˜pic/MarkDuplicates.jar I= ${mapped_dir}/*.sort.bam O= ${mapped_dir}/${base}.rmd.sort.bam M= ${mapped_dir}/dupstat.txt VALIDATION_STRINGENCY=SILENT REMOVE_DUPLICATES= true
+done
+```
+- I= input file
+- O= output file for reads
+- M= output file of statistics (how many identified duplicates)
+- REMOVE DUPLICATES= remove duplicates from the output file rather than just marking them (remember flag in sam-file 0x400)
+
 8.* Remove low quality mapping
 	- same as adding -q (step 5.) however, adds flags -f 0x0002 -F 0x0004 -F 0x0008 -b
 	- only using -q (20), -F 0x0004, and -b (for bam files)
