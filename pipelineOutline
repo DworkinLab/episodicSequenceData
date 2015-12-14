@@ -121,6 +121,7 @@ May want to combine lanes
 - Can combine L001 with L002 with same start (R1)
 - need to change to run those in L003 and L004 and L005 and L006
 - find way to add to first script
+- example below, but better to samtools merge (shown after SAM to BAM)
 ```
 #!/bin/bash
 
@@ -138,21 +139,6 @@ bwa mem -t 8 -M ${ref_genome} ${mapped_dir}/${base}_L001_aligned_pe.SAM ${mapped
 done
 ```
 
-Alternate:
-samtools merge
-```
-#!/bin/bash
-
-mapped_dir=/home/paul/episodicData/mappedSequence
-files=(${mapped_dir}/*_L001_aligned_pe.SAM)
-for file in ${files[@]}
-do
-name=${file}
-base=`basename ${name} _L001_aligned_pe.SAM`
-samtools merge ${mapped_dir}/${base}_merged_aligned_pe.SAM ${mapped_dir}/${base}_L001_aligned_pe.SAM ${mapped_dir}/${base}_L002_aligned_pe.SAM
-
-- still need to change for L003/L004 and L005/L006
-- tried running: needs to be in BAM format for samtools merge aparently.
 
 
 5. SAM to BAM
@@ -182,12 +168,31 @@ for file in ${files[@]}
 do
 name=${file}
 base=`basename ${name} _L005_aligned_pe.SAM`
-samtools view -b -S -q 20 ${dir}${base}_L005_aligned_pe.SAM | samtools sort - ${dir}${base}
+samtools view -b -S -q 20 ${dir}${base}_L005_aligned_pe.SAM | samtools sort - ${dir}${base}_L005_aligned_pe
 done > L005_SAM_TO_BAM.txt
-* be sure to change output to signify lane (merge after)
+* be sure to change output to signify lane (merge after) -- did above (lane specified)
+
+doing each seperate (based on lane) to make sure get done before server shuts down
 
 5.5. merge files:
 
+samtools merge --output --input1.bam --input2.bam .... inputN.bam
+should be based on lane (differently numbered)
+- could change names (all L001 and L002) or set up for even and odd numbers)
+
+```
+#!/bin/bash
+
+mapped_dir=/home/paul/episodicData/mappedSequence
+files=(${mapped_dir}/*_L001_aligned_pe.SAM)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _L001_aligned_pe.SAM`
+samtools merge ${mapped_dir}/${base}_merged_aligned_pe.SAM ${mapped_dir}/${base}_L001_aligned_pe.SAM ${mapped_dir}/${base}_L002_aligned_pe.SAM
+
+- still need to change for L003/L004 and L005/L006
+- tried running: needs to be in BAM format for samtools merge aparently.
 	 
 6.* Sort with Picard?
 ```
@@ -232,7 +237,13 @@ done
 8.* Remove low quality mapping
 	- same as adding -q (step 5.) however, adds flags -f 0x0002 -F 0x0004 -F 0x0008 -b
 	- only using -q (20), -F 0x0004, and -b (for bam files)
-* 6,7,8 from PoPoolation; PoPoolation2 uses SAM to BAM with sort, than to step 9
+```
+samtools view -q 20 -f 0x0002 -F 0x0004 -F 0x0008 -b pe/pe.rmd.sort.bam > pe/pe.qf.rmd.sort.bam
+```
+	
+	
+* 6,7,8 from PoPoolation; PoPoolation2 uses SAM to BAM with sort, than to step 9; including just as a precaution, may not be needed
+
 
 9. Create mpileup file with samtools
 	- samtools mpileup (output = .mpileup)
