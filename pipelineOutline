@@ -173,6 +173,21 @@ sametools view -Sb -q 20 ${dir}${base}.SAM| sametools sort - ${dir}${base}
 done
 ```
 
+Test with L005
+#! /bin/bash
+dir=/home/paul/episodicData/mappedSequence/
+files=(${dir}*_L005_aligned_pe.SAM)
+echo ${files[@]}
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _L005_aligned_pe.SAM`
+samtools view -b -S -q 20 ${dir}${base}_L005_aligned_pe.SAM | samtools sort - ${dir}${base}
+done > L005_SAM_TO_BAM.txt
+* be sure to change output to signify lane (merge after)
+
+5.5. merge files:
+
 	 
 6.* Sort with Picard?
 ```
