@@ -152,6 +152,7 @@ base=`basename ${name} _L001_aligned_pe.SAM`
 samtools merge ${mapped_dir}/${base}_merged_aligned_pe.SAM ${mapped_dir}/${base}_L001_aligned_pe.SAM ${mapped_dir}/${base}_L002_aligned_pe.SAM
 
 - still need to change for L003/L004 and L005/L006
+- tried running: needs to be in BAM format for samtools merge aparently.
 
 
 5. SAM to BAM
