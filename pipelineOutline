@@ -117,7 +117,29 @@ base=`basename ${name} _R1_PE_phred33.fastq.gz`
 bwa mem -t 8 -M ${ref_genome} ${dir}/${base}_R1_PE_phred33.fastq.gz ${dir}/${base}_R2_PE_phred33.fastq.gz > ${out_dir}/${base}_aligned_pe.SAM
 done
 ```
-		
+May want to combine lanes
+- Can combine L001 with L002 with same start (R1)
+- need to change to run those in L003 and L004 and L005 and L006
+- find way to add to first script
+```
+#!/bin/bash
+
+bwa_dir=/usr/local/bwa/0.7.8
+cd ${bwa_dir}
+mapped_dir=/home/paul/episodicData/mappedSequence
+ref_genome=/home/paul/episodicData/indexSequence/dmel-all-chromosome-r5.57.fasta.gz
+out_dir=/home/paul/episodicData/mappedSequence
+files=(${mapped_dir}/*_L001_aligned_pe.SAM)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _L001_aligned_pe.SAM`
+bwa mem -t 8 -M ${ref_genome} ${mapped_dir}/${base}_L001_aligned_pe.SAM ${mapped_dir}/${base}_L002_aligned_pe.SAM > ${out_dir}/${base}_aligned_pe.SAM
+done
+```
+
+
+
 5. SAM to BAM
 - samtools view;  FLAGS
 	-Sb = sam to bam
