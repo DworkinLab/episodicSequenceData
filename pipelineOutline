@@ -143,8 +143,6 @@ samtools merge
 ```
 #!/bin/bash
 
-bwa_dir=/usr/local/bwa/0.7.8
-cd ${bwa_dir}
 mapped_dir=/home/paul/episodicData/mappedSequence
 files=(${mapped_dir}/*_L001_aligned_pe.SAM)
 for file in ${files[@]}
