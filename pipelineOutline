@@ -138,6 +138,22 @@ bwa mem -t 8 -M ${ref_genome} ${mapped_dir}/${base}_L001_aligned_pe.SAM ${mapped
 done
 ```
 
+Alternate:
+samtools merge
+```
+#!/bin/bash
+
+bwa_dir=/usr/local/bwa/0.7.8
+cd ${bwa_dir}
+mapped_dir=/home/paul/episodicData/mappedSequence
+files=(${mapped_dir}/*_L001_aligned_pe.SAM)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _L001_aligned_pe.SAM`
+samtools merge ${mapped_dir}/${base}_merged_aligned_pe.SAM ${mapped_dir}/${base}_L001_aligned_pe.SAM ${mapped_dir}/${base}_L002_aligned_pe.SAM
+
+- still need to change for L003/L004 and L005/L006
 
 
 5. SAM to BAM
