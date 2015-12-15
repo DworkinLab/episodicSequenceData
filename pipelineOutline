@@ -59,8 +59,8 @@ done
 ```
 # Download index genome for D. mel
 # Make outdirectory
-index_dir=/home/paul/episodicData/indexSequence
 
+index_dir=/home/paul/episodicData/indexSequence
 cd ${index_dir}
 curl -O ftp://ftp.flybase.net/genomes/Drosophila_melanogaster/dmel_r5.57_FB2014_03/fasta/dmel-all-chromosome-r5.57.fasta.gz
 
@@ -117,6 +117,7 @@ base=`basename ${name} _R1_PE_phred33.fastq.gz`
 bwa mem -t 8 -M ${ref_genome} ${dir}/${base}_R1_PE_phred33.fastq.gz ${dir}/${base}_R2_PE_phred33.fastq.gz > ${out_dir}/${base}_aligned_pe.SAM
 done
 ```
+
 May want to combine lanes
 - Can combine L001 with L002 with same start (R1)
 - need to change to run those in L003 and L004 and L005 and L006
@@ -155,7 +156,7 @@ for file in ${files[@]}
 do
 name=${file}
 base=`basename ${name}.SAM`
-sametools view -Sb -q 20 ${dir}${base}.SAM| sametools sort - ${dir}${base}
+sametools view -b -S -q 20 ${dir}${base}.SAM| sametools sort - ${dir}${base}
 done
 ```
 
@@ -237,8 +238,10 @@ done
 8.* Remove low quality mapping
 	- same as adding -q (step 5.) however, adds flags -f 0x0002 -F 0x0004 -F 0x0008 -b
 	- only using -q (20), -F 0x0004, and -b (for bam files)
+	- can be done with samtools view above 
+	-ex: samtools view -q 20 -f 0x0002 -F 0x0004 -F 0x0008 -b pe/pe.rmd.sort.bam > pe/pe.qf.rmd.sort.bam
 ```
-samtools view -q 20 -f 0x0002 -F 0x0004 -F 0x0008 -b pe/pe.rmd.sort.bam > pe/pe.qf.rmd.sort.bam
+samtools view -q 20 -F 0x0004 -b pe/pe.rmd.sort.bam > pe/pe.qf.rmd.sort.bam
 ```
 	
 	
@@ -266,9 +269,16 @@ samtools mpileup -B ${ref_genome} ${files[@]} > episodicData.mpileup
 		- Flags:
 			--input = input files (.mpileup)
 			--output = output files (_java.sync)
-			--fastq-type = sanger???
+			--fastq-type = sanger or illumina
 			--min-qual = minimum quality score (20)
 			--threads = 8
+			
+Ex.
+java -jar ˜/programs/popoolation2/mpileup2sync.jar --input p1-2.mpileup --output p1-2.sync --fastqtype sanger --min-qual 20 --threads 2
+
+```
+java -jar ˜/programs/popoolation2/mpileup2sync.jar --input episodicData.mpileup --output episodicData.mpileup.sync --fastqtype illumina --min-qual 20 --threads 8
+```
 			
 11. Can now run scripts from popoolation2 directory to find / visualize;
 	- calculate allele frequency differences
