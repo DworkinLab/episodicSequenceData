@@ -94,7 +94,7 @@ dir=/home/paul/episodicData/trimmomaticOutputs
 ref_genome=/home/paul/episodicData/indexSequence/dmel-all-chromosome-r5.57.fasta.gz
 
 # make variable for output directory
-out_dir=/home/paul/episodicData/mappedSequence
+sam_dir=/home/paul/episodicData/mappedSequence/SAM_files
 
 #make an array for each file in the directory "dir" that ends in _R1_PE_phred33.fastq.gz
 files=(${dir}/*_R1_PE_phred33.fastq.gz)
@@ -114,7 +114,7 @@ for file in ${files[@]}
 do
 name=${file}
 base=`basename ${name} _R1_PE_phred33.fastq.gz`
-bwa mem -t 8 -M ${ref_genome} ${dir}/${base}_R1_PE_phred33.fastq.gz ${dir}/${base}_R2_PE_phred33.fastq.gz > ${out_dir}/${base}_aligned_pe.SAM
+bwa mem -t 8 -M ${ref_genome} ${dir}/${base}_R1_PE_phred33.fastq.gz ${dir}/${base}_R2_PE_phred33.fastq.gz > ${sam_dir}/${base}_aligned_pe.SAM
 done
 ```
 
@@ -175,6 +175,23 @@ done > L005_SAM_TO_BAM.txt
 
 doing each seperate (based on lane) to make sure get done before server shuts down
 
+Different Outputs for organization: Final Script
+
+```
+#! /bin/bash
+sam_dir=/home/paul/episodicData/mappedSequence/SAM_files/
+bam_dir=/home/paul/episodicData/mappedSequence/BAM_files/
+files=(${dir}*.SAM)
+echo ${files[@]}
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} .SAM`
+samtools view -b -S -q 20 ${sam_dir}${base}.SAM | samtools sort - ${bam_dir}${base}
+done
+```
+
+
 5.5. merge files:
 
 samtools merge --output --input1.bam --input2.bam .... inputN.bam
@@ -194,6 +211,27 @@ samtools merge ${mapped_dir}/${base}_merged_aligned_pe.SAM ${mapped_dir}/${base}
 
 - still need to change for L003/L004 and L005/L006
 - tried running: needs to be in BAM format for samtools merge aparently.
+
+FINAL; 
+
+```
+#!/bin/bash
+#Only works if all lanes are L001/L002
+
+bam_dir=/home/paul/episodicData/mappedSequence/BAM_files
+
+merged_dir=/home/paul/episodicData/mappedSequence/merged_bam_files
+
+files=(${bam_dir}/*_L001_aligned_pe.bam)
+
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _L001_aligned_pe.bam`
+samtools merge ${merged_dir}/${base}_merged_aligned_pe.bam ${bam_dir}/${base}_L001_aligned_pe.bam ${bam_dir}/${base}_L002_aligned_pe.bam
+done
+```
+
 	 
 6.* Sort with Picard?
 ```
