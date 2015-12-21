@@ -365,6 +365,27 @@ java -jar /usr/local/popoolation/mpileup2sync.jar --input ${map_dir}/epidsodicDa
 
 Once again, no output allele frequencies (all 0's)
 
+Using non-merged files (test if merge is mistake)
+Adding -Q 0 = skip bases with base quality smaller than the given value
+
+```
+#! /bin/bash
+
+ref_genome=/home/paul/episodicData/indexSequence/dmel-all-chromosome-r5.57.fasta.gz
+BAM_bam=/home/paul/episodicData/mappedSequence/BAM_files
+mpileup_dir=/home/paul/episodicData/mappedSequence/
+samtools mpileup -6 -B -Q 0 -f ${ref_genome} ${BAM_bam}/*.bam > ${mpileup_dir}episodicData_nomerge.mpileup
+```
+
+```
+#! /bin/bash
+
+map_dir=/home/paul/episodicData/mappedSequence
+
+java -jar /usr/local/popoolation/mpileup2sync.jar --input ${map_dir}/epidsodicData_nomerge.mpileup --output ${map_dir}/epidsodicData_nomerge.sync --fastq-type illumina --min-qual 20 --threads 8
+```
+
+
 
 		
 ###13. Can now run scripts from popoolation2 directory to find / visualize Fst, CMH Tests, and Fisher's Exact Test
