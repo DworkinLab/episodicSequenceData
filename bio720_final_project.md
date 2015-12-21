@@ -336,7 +336,7 @@ For PoPoolation2 to run, the mpileup file must by synced with PoPoolation2 (Kofl
 
 map_dir=/home/paul/episodicData/mappedSequence
 
-java -jar /usr/local/popoolation/mpileup2sync.jar --input ${map_dir}/epidsodicData.mpileup --output ${map_dir}/epidsodicData.sync --fastq-type illumina --min-qual 20 --threads 8
+java -jar /usr/local/popoolation/mpileup2sync.jar --input ${map_dir}/episodicData.mpileup --output ${map_dir}/episodicData.sync --fastq-type illumina --min-qual 20 --threads 8
 ```
 
 Upon inspection of the files, no allele frequencies are shown (A:T:C:G:N:del = 0:0:0:0:0:0), indicating some errors previously in the pipeline. Without data to find values; none of the tests outlined below can be analyzed.
@@ -360,7 +360,7 @@ samtools mpileup -6 -B -f ${ref_genome} ${merged_bam}/*.bam > ${mpileup_dir}epis
 
 map_dir=/home/paul/episodicData/mappedSequence
 
-java -jar /usr/local/popoolation/mpileup2sync.jar --input ${map_dir}/epidsodicData_noPicard.mpileup --output ${map_dir}/epidsodicData_noPicard.sync --fastq-type illumina --min-qual 20 --threads 8
+java -jar /usr/local/popoolation/mpileup2sync.jar --input ${map_dir}/episodicData_noPicard.mpileup --output ${map_dir}/episodicData_noPicard.sync --fastq-type illumina --min-qual 20 --threads 8
 ```
 
 Once again, no output allele frequencies (all 0's)
@@ -382,7 +382,7 @@ samtools mpileup -6 -B -Q 0 -f ${ref_genome} ${BAM_bam}/*.bam > ${mpileup_dir}ep
 
 map_dir=/home/paul/episodicData/mappedSequence
 
-java -jar /usr/local/popoolation/mpileup2sync.jar --input ${map_dir}/epidsodicData_nomerge.mpileup --output ${map_dir}/epidsodicData_nomerge.sync --fastq-type illumina --min-qual 20 --threads 8
+java -jar /usr/local/popoolation/mpileup2sync.jar --input ${map_dir}/episodicData_nomerge.mpileup --output ${map_dir}/episodicData_nomerge.sync --fastq-type illumina --min-qual 20 --threads 8
 ```
 
 
