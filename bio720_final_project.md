@@ -429,15 +429,6 @@ null
 *Was not difference with Illumina or Sanger (ran also and gave only outputs of 0:0:0:0:0:0)*
 
 
-Decided to run create bcf (binary variant call format) and vcf (variant call format) files
-
-```
-bcftools view -cg /home/paul/episodicData/mappedSequence/episodicData_nomerge.mpileup > /home/paul/episodicData/mappedSequence/episodicData_nomerge.vcf
-```
-
-```
-bcftools view -bcg /home/paul/episodicData/mappedSequence/episodicData_nomerge.mpileup > /home/paul/episodicData/mappedSequence/episodicData_nomerge.bcf
-```
 
 
 
