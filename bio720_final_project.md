@@ -450,8 +450,17 @@ map_dir=/home/paul/episodicData/mappedSequence
 perl /usr/local/popoolation/mpileup2sync.pl --fastq-type illumina --min-qual 20 --input ${map_dir}/episodicData_nomerge.mpileup --output ${map_dir}/episodicData_nomerge_syncPL.txt
 ```
 
+Could be by having .sync
+Ran java with .txt
 
 
+```
+#! /bin/bash
+
+map_dir=/home/paul/episodicData/mappedSequence
+
+java -ea -Xmx7g -jar /usr/local/popoolation/mpileup2sync.jar --input ${map_dir}/episodicData_nomerge.mpileup --output ${map_dir}/episodicData_nomerge_sync.txt --fastq-type illumina --min-qual 20 --threads 8
+```
 
 
 
