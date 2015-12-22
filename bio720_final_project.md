@@ -217,12 +217,12 @@ cd ${bwa_dir}
 sam_dir=/home/paul/episodicData/mappedSequence/SAM_files
 ref_genome=/home/paul/episodicData/indexSequence/dmel-all-chromosome-r5.57.fasta.gz
 out_dir=/home/paul/episodicData/mappedSequence/merge_SAM
-files=(${mapped_dir}/*_L001_aligned_pe.SAM)
+files=(${sam_dir}/*_L001_aligned_pe.SAM)
 for file in ${files[@]}
 do
 name=${file}
 base=`basename ${name} _L001_aligned_pe.SAM`
-bwa mem -t 8 -M ${ref_genome} ${mapped_dir}/${base}_L001_aligned_pe.SAM ${mapped_dir}/${base}_L002_aligned_pe.SAM > ${out_dir}/${base}_aligned_pe.SAM
+bwa mem -t 8 -M ${ref_genome} ${sam_dir}/${base}_L001_aligned_pe.SAM ${sam_dir}/${base}_L002_aligned_pe.SAM > ${out_dir}/${base}_aligned_pe.SAM
 done
 ```
 
@@ -495,12 +495,12 @@ cd ${bwa_dir}
 bam_dir=/home/paul/episodicData/mappedSequence/BAM_files
 ref_genome=/home/paul/episodicData/indexSequence/dmel-all-chromosome-r5.57.fasta.gz
 out_dir=/home/paul/episodicData/mappedSequence/merge_BAM
-files=(${mapped_dir}/*_L001_aligned_pe.bam)
+files=(${bam_dir}/*_L001_aligned_pe.bam)
 for file in ${files[@]}
 do
 name=${file}
 base=`basename ${name} _L001_aligned_pe.bam`
-bwa mem -t 8 -M ${ref_genome} ${mapped_dir}/${base}_L001_aligned_pe.bam ${mapped_dir}/${base}_L002_aligned_pe.bam > ${out_dir}/${base}_aligned_pe.bam
+bwa mem -t 8 -M ${ref_genome} ${bam_dir}/${base}_L001_aligned_pe.bam ${bam_dir}/${base}_L002_aligned_pe.bam > ${out_dir}/${base}_aligned_pe.bam
 done
 ```
 
