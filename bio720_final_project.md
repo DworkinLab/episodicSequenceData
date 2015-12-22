@@ -341,6 +341,9 @@ java -jar /usr/local/popoolation/mpileup2sync.jar --input ${map_dir}/episodicDat
 
 Upon inspection of the files, no allele frequencies are shown (A:T:C:G:N:del = 0:0:0:0:0:0), indicating some errors previously in the pipeline. Without data to find values; none of the tests outlined below can be analyzed.
 
+
+### Alternative methods; testing where the problem may be
+
 A thought is that using Picard (which is not included in some PoPoolation2 tutorials) may be interfering with the end results, so I will re-run the analysis from step 7, skipping strait to step 11 and create an mpileup file for them. 
 *This is being done to hopefully have some initial results, with less stringency on the sequences to analyze, and to hopefully discover where the errors may be present*
 
@@ -366,7 +369,7 @@ java -jar /usr/local/popoolation/mpileup2sync.jar --input ${map_dir}/episodicDat
 Once again, no output allele frequencies (all 0's)
 
 Using non-merged files (test if merge is mistake)
-Adding -Q 0 = skip bases with base quality smaller than the given value
+Adding -Q = skip bases with base quality smaller than the given value (for 0 does not skip any low quality)
 
 ```
 #! /bin/bash
@@ -376,7 +379,7 @@ BAM_bam=/home/paul/episodicData/mappedSequence/BAM_files
 mpileup_dir=/home/paul/episodicData/mappedSequence/
 samtools mpileup -6 -B -Q 0 -f ${ref_genome} ${BAM_bam}/*.bam > ${mpileup_dir}episodicData_nomerge.mpileup
 ```
-This step had an output (checked with less ${mpileup_dir}episodicData_nomerge.mpileup) of file containing many symbols for each sample combined.
+This step had an output (checked with less ${mpileup_dir}episodicData_nomerge.mpileup) of file containing many symbols for each sample combined. Output looks like this:
 
 ```
 YHet	3	G	4	....	*+!$	4	....	**+*	1	.	)	2	..	()	2	..	$%	..	*%	2	..	'%	2	..	%%	3	...	)*#	5	.....	++!+%	5	.....	#&&$#	2	..	'%	0	*	*	0	*	*	0	*	*	5	....,	*%&&%	1	.	#	2	..	#%	1	.	%	4	....	+#**	2	..	(*	1	.	+	2	..	(*	1	..	*+	0	*	*	5	....,	+*++%
@@ -389,13 +392,23 @@ YHet	9	G	4	....	&+''	4	....	&)'+	1	.	%	2	..	!'	2	..	)%	..	(%	2	..	*%	2	..	*!	3	.
 YHet	10	T	4	....	%(')	4	....	()&*	1	.	&	2	..	!&	2	..	*%	..	)%	2	..	*%	2	..	!!	3	...	!)!	5	.....	''$!%	5	.....	!#'!%	2	..	)#	0	*	*	0	*	*	0	*	*	5	....,	+%'(&	1	.	!	2	..	!#	1	.	%	4	....	!#**	2	..	!)	1	.	)	2	..	!)	1	..	%%	1	.	'	5	....,	')**%
 ```
 
+And this matches the PoPoolation sample output for mpileup
+
+```
+ YHet    4067    N       9       ttttTtttt       aaab_Za_b       2       tt      `b      2       tt      \b
+        YHet    4068    N       9       c$cccCcccc      a_a_a]a_`       2       cc      ab      2       cc      `b
+        YHet    4069    N       8       aaaAaaaa        ]aaa_^__        2       aa      ab      2       aa      \b
+        YHet    4070    N       8       a$a$aAaaaa      \a]^YX_a        2       a$a     ab      2       aa      Wb
+```
+
+And to re-run the sync file
 
 ```
 #! /bin/bash
 
 map_dir=/home/paul/episodicData/mappedSequence
 
-java -jar /usr/local/popoolation/mpileup2sync.jar --input ${map_dir}/episodicData_nomerge.mpileup --output ${map_dir}/episodicData_nomerge.sync --fastq-type illumina --min-qual 20 --threads 8
+java -ea -Xmx7g -jar /usr/local/popoolation/mpileup2sync.jar --input ${map_dir}/episodicData_nomerge.mpileup --output ${map_dir}/episodicData_nomerge.sync --fastq-type illumina --min-qual 20 --threads 8
 ```
 
 However, this step only produced lines of null
@@ -426,7 +439,16 @@ null
 null
 ```
 
-*Was not difference with Illumina or Sanger (ran also and gave only outputs of 0:0:0:0:0:0)*
+*Was not difference with Illumina or Sanger as fastq-type (ran also and gave only outputs of 0:0:0:0:0:0)*
+
+Try longer perl script
+
+```
+#! /bin/bash
+
+map_dir=/home/paul/episodicData/mappedSequence 
+perl /usr/local/popoolation/mpileup2sync.pl --fastq-type illumina --min-qual 20 --input ${map_dir}/episodicData_nomerge.mpileup --output ${map_dir}/episodicData_nomerge_syncPL.txt
+```
 
 
 
