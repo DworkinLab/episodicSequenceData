@@ -484,6 +484,26 @@ java -ea -Xmx7g -jar /usr/local/popoolation/mpileup2sync.jar --input ${map_dir}/
 
 Nope
 
+Looks like may be a merge issue, merging with alternative methods (bwa mem with lanes) shown in step 7, than rerun mpileup and sync.
+*Changed for BAM files (removed SAM files to save space)*
+
+```
+#! /bin/bash
+
+bwa_dir=/usr/local/bwa/0.7.8
+cd ${bwa_dir}
+bam_dir=/home/paul/episodicData/mappedSequence/BAM_files
+ref_genome=/home/paul/episodicData/indexSequence/dmel-all-chromosome-r5.57.fasta.gz
+out_dir=/home/paul/episodicData/mappedSequence/merge_BAM
+files=(${mapped_dir}/*_L001_aligned_pe.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _L001_aligned_pe.bam`
+bwa mem -t 8 -M ${ref_genome} ${mapped_dir}/${base}_L001_aligned_pe.bam ${mapped_dir}/${base}_L002_aligned_pe.bam > ${out_dir}/${base}_aligned_pe.bam
+done
+```
+
 
 
 		
