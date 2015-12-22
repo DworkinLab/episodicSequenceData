@@ -151,6 +151,25 @@ bwa mem -t 8 -M ${ref_genome} ${dir}/${base}_R1_PE_phred33.fastq.gz ${dir}/${bas
 done
 ```
 
+*In order to merge lanes now, include second BWA mem for L001 and L002. This is included as the alternative to what was actually done below (samtools merge).*
+
+```#!/bin/bash
+
+bwa_dir=/usr/local/bwa/0.7.8
+cd ${bwa_dir}
+sam_dir=/home/paul/episodicData/mappedSequence/SAM_files
+ref_genome=/home/paul/episodicData/indexSequence/dmel-all-chromosome-r5.57.fasta.gz
+out_dir=/home/paul/episodicData/mappedSequence/merge_SAM
+files=(${mapped_dir}/*_L001_aligned_pe.SAM)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _L001_aligned_pe.SAM`
+bwa mem -t 8 -M ${ref_genome} ${mapped_dir}/${base}_L001_aligned_pe.SAM ${mapped_dir}/${base}_L002_aligned_pe.SAM > ${out_dir}/${base}_aligned_pe.SAM
+done
+```
+
+
 ###6. SAM to BAM
 Sequence Alignment/Mapped files (sam) (Li *et al.* 2009) need to be converted to the easier to use bam files (Binary Alignment/Mapped). bam format will allow for merging files and creating the mpileup file needed to ran PoPoolation2 program and scripts. This is done with samtools view (Li *et al.* 2009) with the -q flag, allowing some quality control removing improperly mapped reads below a score of 20 (as recommended by PoPoolation2 creators). The other flags indicate sam (-s) or bam (-b) format. This is piped to samtools sort, ordering the file by the leftmost coordinate for ease of use further down the pipeline. The final output will be a bam file matching that of the sam file.
 
