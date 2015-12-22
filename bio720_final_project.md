@@ -504,6 +504,13 @@ bwa mem -t 8 -M ${ref_genome} ${bam_dir}/${base}_L001_aligned_pe.bam ${bam_dir}/
 done
 ```
 
+```
+samtools mpileup -6 -B -Q 0 -f /home/paul/episodicData/indexSequence/dmel-all-chromosome-r5.57.fasta.gz /home/paul/episodicData/mappedSequence/merge_BAM/*.bam > /home/paul/episodicData/mappedSequence/merge_BAM/episodicData_bwaMerge.mpileup
+```
+
+```
+java -ea -Xmx7g -jar /usr/local/popoolation/mpileup2sync.jar --input /home/paul/episodicData/mappedSequence/merge_BAM/episodicData_bwaMerge.mpileup --output /home/paul/episodicData/mappedSequence/merge_BAM/episodicData_bwaMerge.sync --fastq-type illumina --min-qual 20 --threads 8
+```
 
 
 		
