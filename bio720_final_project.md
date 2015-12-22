@@ -376,6 +376,19 @@ BAM_bam=/home/paul/episodicData/mappedSequence/BAM_files
 mpileup_dir=/home/paul/episodicData/mappedSequence/
 samtools mpileup -6 -B -Q 0 -f ${ref_genome} ${BAM_bam}/*.bam > ${mpileup_dir}episodicData_nomerge.mpileup
 ```
+This step had an output (checked with less ${mpileup_dir}episodicData_nomerge.mpileup) of file containing many symbols for each sample combined.
+
+```
+YHet	3	G	4	....	*+!$	4	....	**+*	1	.	)	2	..	()	2	..	$%	..	*%	2	..	'%	2	..	%%	3	...	)*#	5	.....	++!+%	5	.....	#&&$#	2	..	'%	0	*	*	0	*	*	0	*	*	5	....,	*%&&%	1	.	#	2	..	#%	1	.	%	4	....	+#**	2	..	(*	1	.	+	2	..	(*	1	..	*+	0	*	*	5	....,	+*++%
+YHet	4	G	4	....	*+!$	4	....	+#)*	1	.	&	2	..	))	2	..	&#	..	*#	2	..	!%	2	..	*%	3	...	%*#	5	.....	*)!*%	5	.....	##&$%	2	..	'%	0	*	*	0	*	*	0	*	*	5	....,	*%(&%	1	.	%	2	..	%#	1	.	%	4	....	)#+*	2	..	(+	1	.	+	2	..	(+	1	..	++	1	^].	$	5	....,	++++%
+YHet	5	T	4	....	!#!%	4	....	!%&#	1	.	!	2	..	!)	2	..	($	..	!%	2	..	"$	2	..	($	3	...	'(%	5	.....	!)#%$	5	.....	!&#!%	2	..	%!	0	*	*	0	*	*	0	*	*	5	....,	*%(%%	1	.	%	2	..	!$	1	.	"	4	....	!$'!	2	..	!'	1	.	'	2	..	!'	1	..	'(	1	.	$	5	....,	''&(%
+YHet	6	C	4	....	')!%	4	....	!)$(	1	.	!	2	..	%'	2	..	""	..	%%	2	..	%$	2	..	)&	3	...	'*$	5	.....	$(()$	5	.....	"&!"$	2	..	)$	0	*	*	0	*	*	0	*	*	5	....,	+%)(%	1	.	%	2	..	!%	1	.	$	4	....	&$&'	2	..	$)	1	.	)	2	..	$)	1	..	()	1	.	$	5	....,	)())%
+YHet	7	A	4	....	)*!'	4	....	$(&)	1	.	!	2	..	''	2	..	!#	..	'%	2	..	'#	2	..	*#	3	...	&&#	5	.....	$))*#	5	.....	!&'!%	2	..	)#	0	*	*	0	*	*	0	*	*	5	....,	*%*)#	1	.	%	2	..	!%	1	.	%	4	....	'#))	2	..	%+	1	.	+	2	..	%+	1	..	)*	1	.	'	5	....,	*(**#
+YHet	8	C	4	....	**''	4	....	(*)+	1	.	$	2	..	)'	2	..	'$	..	)%	2	..	*$	2	..	)$	3	...	$)"	5	.....	))*(%	5	.....	!&!!%	2	..	)$	0	*	*	0	*	*	0	*	*	5	....,	*%**%	1	.	%	2	..	$%	1	.	$	4	....	'$**	2	..	)+	1	.	+	2	..	)+	1	..	*+	1	.	'	5	....,	*)+*%
+YHet	9	G	4	....	&+''	4	....	&)'+	1	.	%	2	..	!'	2	..	)%	..	(%	2	..	*%	2	..	*!	3	...	#*#	5	.....	!'*)%	5	.....	!$(!%	2	..	)#	0	*	*	0	*	*	0	*	*	5	....,	*%)#&	1	.	%	2	..	%%	1	.	%	4	....	'!**	2	..	*+	1	.	+	2	..	*+	1	..	**	1	.	'	5	....,	++++%
+YHet	10	T	4	....	%(')	4	....	()&*	1	.	&	2	..	!&	2	..	*%	..	)%	2	..	*%	2	..	!!	3	...	!)!	5	.....	''$!%	5	.....	!#'!%	2	..	)#	0	*	*	0	*	*	0	*	*	5	....,	+%'(&	1	.	!	2	..	!#	1	.	%	4	....	!#**	2	..	!)	1	.	)	2	..	!)	1	..	%%	1	.	'	5	....,	')**%
+```
+
 
 ```
 #! /bin/bash
@@ -384,6 +397,38 @@ map_dir=/home/paul/episodicData/mappedSequence
 
 java -jar /usr/local/popoolation/mpileup2sync.jar --input ${map_dir}/episodicData_nomerge.mpileup --output ${map_dir}/episodicData_nomerge.sync --fastq-type illumina --min-qual 20 --threads 8
 ```
+
+However, this step only produced lines of null
+
+```
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+```
+
+*Was not difference with Illumina or Sanger (ran also and gave only outputs of 0:0:0:0:0:0)*
+
+
 
 
 
