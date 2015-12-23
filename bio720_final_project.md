@@ -388,6 +388,7 @@ java -jar /usr/local/popoolation/mpileup2sync.jar --input ${map_dir}/episodicDat
 
 Once again, no output allele frequencies (all 0's)
 
+_______________________
 Using non-merged files (test if merge is mistake)
 Adding -Q = skip bases with base quality smaller than the given value (for 0 does not skip any low quality)
 
@@ -461,6 +462,7 @@ null
 
 *Was not difference with Illumina or Sanger as fastq-type (ran also and gave only outputs of 0:0:0:0:0:0)*
 
+________________________
 Try longer perl script
 
 ```
@@ -469,6 +471,9 @@ Try longer perl script
 map_dir=/home/paul/episodicData/mappedSequence 
 perl /usr/local/popoolation/mpileup2sync.pl --fastq-type illumina --min-qual 20 --input ${map_dir}/episodicData_nomerge.mpileup --output ${map_dir}/episodicData_nomerge_syncPL.txt
 ```
+
+Ongoing....
+___________________
 
 Could be by having .sync
 Ran java with .txt
@@ -483,6 +488,7 @@ java -ea -Xmx7g -jar /usr/local/popoolation/mpileup2sync.jar --input ${map_dir}/
 ```
 
 Nope
+___________________________
 
 Is the issue the -6 flag (illumina) when is actually sanger?
 
@@ -494,7 +500,17 @@ BAM_bam=/home/paul/episodicData/mappedSequence/BAM_files
 mpileup_dir=/home/paul/episodicData/mappedSequence/
 samtools mpileup -B -Q 0 -f ${ref_genome} ${BAM_bam}/*.bam > ${mpileup_dir}episodicData_nomerge_Sanger.mpileup 
 ```
+Ongoing.....
 
+```
+#! /bin/bash
+
+map_dir=/home/paul/episodicData/mappedSequence
+
+java -ea -Xmx7g -jar /usr/local/popoolation/mpileup2sync.jar --input ${map_dir}/episodicData_nomerge_Sanger.mpileup --output ${map_dir}/episodicData_nomerge_Sanger.sync --fastq-type sanger --min-qual 20 --threads 2
+```
+__________________
+Merge issue
 
 Looks like may be a merge issue, merging with alternative methods (bwa mem with lanes) shown in step 7, than rerun mpileup and sync.
 *Changed for BAM files (removed SAM files to save space)*
