@@ -416,10 +416,10 @@ YHet	10	T	4	....	%(')	4	....	()&*	1	.	&	2	..	!&	2	..	*%	..	)%	2	..	*%	2	..	!!	3	
 And this matches the PoPoolation sample output for mpileup
 
 ```
- YHet    4067    N       9       ttttTtttt       aaab_Za_b       2       tt      `b      2       tt      \b
-        YHet    4068    N       9       c$cccCcccc      a_a_a]a_`       2       cc      ab      2       cc      `b
-        YHet    4069    N       8       aaaAaaaa        ]aaa_^__        2       aa      ab      2       aa      \b
-        YHet    4070    N       8       a$a$aAaaaa      \a]^YX_a        2       a$a     ab      2       aa      Wb
+YHet    4067    N       9       ttttTtttt       aaab_Za_b       2       tt      `b      2       tt      \b
+YHet    4068    N       9       c$cccCcccc      a_a_a]a_`       2       cc      ab      2       cc      `b
+YHet    4069    N       8       aaaAaaaa        ]aaa_^__        2       aa      ab      2       aa      \b
+YHet    4070    N       8       a$a$aAaaaa      \a]^YX_a        2       a$a     ab      2       aa      Wb
 ```
 
 And to re-run the sync file
