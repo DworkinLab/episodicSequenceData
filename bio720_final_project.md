@@ -484,6 +484,18 @@ java -ea -Xmx7g -jar /usr/local/popoolation/mpileup2sync.jar --input ${map_dir}/
 
 Nope
 
+Is the issue the -6 flag (illumina) when is actually sanger?
+
+```
+#! /bin/bash
+
+ref_genome=/home/paul/episodicData/indexSequence/dmel-all-chromosome-r5.57.fasta.gz
+BAM_bam=/home/paul/episodicData/mappedSequence/BAM_files
+mpileup_dir=/home/paul/episodicData/mappedSequence/
+samtools mpileup -B -Q 0 -f ${ref_genome} ${BAM_bam}/*.bam > ${mpileup_dir}episodicData_nomerge_Sanger.mpileup 
+```
+
+
 Looks like may be a merge issue, merging with alternative methods (bwa mem with lanes) shown in step 7, than rerun mpileup and sync.
 *Changed for BAM files (removed SAM files to save space)*
 
