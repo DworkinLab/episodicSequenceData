@@ -580,7 +580,26 @@ YHet    5       T       0:3:0:0:0:0     0:3:0:0:0:0     0:1:0:0:0:0     0:2:0:0:
 ```
 
 __________________
+#*Will rerun final bam (with picard sort etc. for mpileip etc.) but all below (Step 13 and onward; Fst and CMH etc.) will be run with sync file = /home/paul/episodicData/mappedSequence/episodicData_nomerge_Sanger.sync*
 
+```
+#! /bin/bash
+
+ref_genome=/home/paul/episodicData/indexSequence/dmel-all-chromosome-r5.57.fasta.gz
+final_bam=/home/paul/episodicData/mappedSequence/final_bam_files
+mpileup_dir=/home/paul/episodicData/mappedSequence/
+samtools mpileup -B -Q 0 -f ${ref_genome} ${final_bam}/*.bam > ${mpileup_dir}episodicData_Sanger.mpileup
+```
+
+sync:
+
+```
+#! /bin/bash
+
+map_dir=/home/paul/episodicData/mappedSequence
+
+java -ea -Xmx7g -jar /usr/local/popoolation/mpileup2sync.jar --input ${map_dir}/episodicData_Sanger.mpileup --output ${map_dir}/episodicData_Sanger.sync --fastq-type sanger --min-qual 20 --threads 2
+```
 
 		
 ###13. Can now run scripts from popoolation2 directory to find / visualize Fst, CMH Tests, and Fisher's Exact Test
@@ -613,7 +632,7 @@ Using help      0
 
 map_dir=/home/paul/episodicData/mappedSequence
 
-perl /usr/local/popoolation/fst-sliding.pl --window-size 500 --step-size 500 --suppress-noninformative --input ${map_dir}/episodicData.sync --min-covered-fraction 1.0 --min-coverage 10 --max-coverage 250 --min-count 3 --output ${map_dir}/fst.txt --pool-size 60
+perl /usr/local/popoolation/fst-sliding.pl --window-size 500 --step-size 500 --suppress-noninformative --input ${map_dir}/episodicData_nomerge_Sanger.sync --min-covered-fraction 1.0 --min-coverage 10 --max-coverage 250 --min-count 3 --output ${map_dir}/fst_nomerge_Sanger.txt --pool-size 60
 ```
 
 In order to view these results graphically, the Fst.txt file (with PoPoolation2 script *pwc2igv.pl*) will be loaded to IGV (Integrative Genomics Viewer).
