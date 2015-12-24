@@ -591,6 +591,15 @@ mpileup_dir=/home/paul/episodicData/mappedSequence/
 samtools mpileup -B -Q 0 -f ${ref_genome} ${final_bam}/*.bam > ${mpileup_dir}episodicData_Sanger.mpileup
 ```
 
+Output: Worked, so issue may have just been the -6
+```
+YHet    1       A       4       ^].^].^].^].    GEGD    4       ^].^O.^].^].    FDJF    8       ^].^].^].^].^].^].^].^].        HJAJJHJD        7       ^].^].^].^].^].^].^].   CHBFCFF 0       *       *       5       ^].^].^].^].^], JDEGD   3       ^].^[.^].       DDD     5       ^].^].^].^].^]. DIDHI   3       ^].^].^].       JJH     3       ^].^].^].       JJH
+YHet    2       G       4       ....    FDGD    4       ....    FDJF    8       ........        GJAIJGID        7       ....... BAD@DFD 0       *       *       5       ....,   GDGED   3       ...     BDD     5       .....   DJDHH   3       ...     HJH     3       ...     HJH
+YHet    3       G       4       ....    CDID    4       ....    FDDD    8       ........        HIBJJ;JD        7       ....... BEECBFD 0       *       *       5       ....,   IDEED   3       ...     BBD     5       .....   DJBII   3       ...     GIJ     3       ...     GIJ
+YHet    4       G       4       ....    EBIB    4       ....    ?DID    8       ........        DIBIH:ID        7       ....... BBECDFD 0       *       *       5       ....,   IDGED   3       ...     DDB     5       .....   DHBJI   3       ...     GJJ     3       ...     GJJ
+YHet    5       T       4       ....    GC?D    4       ....    ACGC    8       ........        FGD:HBDC        7       ....... 5EB@DD> 0       *       *       5       ....,   IDGDD   3       ...     D<C     5       .....   A?CF?   3       ...     =FF     3       ...     =FF
+```
+
 sync:
 
 ```
