@@ -462,6 +462,40 @@ null
 
 *Was not difference with Illumina or Sanger as fastq-type (ran also and gave only outputs of 0:0:0:0:0:0)*
 
+_______________________
+Merge issue
+
+Looks like may be a merge issue, merging with alternative methods (bwa mem with lanes) shown in step 7, than rerun mpileup and sync.
+*Changed for BAM files (removed SAM files to save space)*
+
+```
+#! /bin/bash
+
+bwa_dir=/usr/local/bwa/0.7.8
+cd ${bwa_dir}
+bam_dir=/home/paul/episodicData/mappedSequence/BAM_files
+ref_genome=/home/paul/episodicData/indexSequence/dmel-all-chromosome-r5.57.fasta.gz
+out_dir=/home/paul/episodicData/mappedSequence/merge_BAM
+files=(${bam_dir}/*_L001_aligned_pe.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _L001_aligned_pe.bam`
+bwa mem -t 8 -M ${ref_genome} ${bam_dir}/${base}_L001_aligned_pe.bam ${bam_dir}/${base}_L002_aligned_pe.bam > ${out_dir}/${base}_aligned_pe.bam
+done
+```
+
+Ran very quick, may not have worked (and alternative done below - -6 flag change) so will not continue this for now.
+
+```
+samtools mpileup -6 -B -Q 0 -f /home/paul/episodicData/indexSequence/dmel-all-chromosome-r5.57.fasta.gz /home/paul/episodicData/mappedSequence/merge_BAM/*.bam > /home/paul/episodicData/mappedSequence/merge_BAM/episodicData_bwaMerge.mpileup
+```
+
+```
+java -ea -Xmx7g -jar /usr/local/popoolation/mpileup2sync.jar --input /home/paul/episodicData/mappedSequence/merge_BAM/episodicData_bwaMerge.mpileup --output /home/paul/episodicData/mappedSequence/merge_BAM/episodicData_bwaMerge.sync --fastq-type illumina --min-qual 20 --threads 8
+```
+
+
 ________________________
 Try longer perl script
 
@@ -472,7 +506,7 @@ map_dir=/home/paul/episodicData/mappedSequence
 perl /usr/local/popoolation/mpileup2sync.pl --fastq-type illumina --min-qual 20 --input ${map_dir}/episodicData_nomerge.mpileup --output ${map_dir}/episodicData_nomerge_syncPL.txt
 ```
 
-Ongoing....
+
 ___________________
 
 Could be by having .sync
@@ -500,7 +534,27 @@ BAM_bam=/home/paul/episodicData/mappedSequence/BAM_files
 mpileup_dir=/home/paul/episodicData/mappedSequence/
 samtools mpileup -B -Q 0 -f ${ref_genome} ${BAM_bam}/*.bam > ${mpileup_dir}episodicData_nomerge_Sanger.mpileup 
 ```
-Ongoing.....
+
+Output:
+
+```
+YHet    1       A       3       ^].^].^].       GJC     4       ^].^].^].^].    IGJI    1       ^].     ;       2       ^].^].  IJ
+      2       ^].^].  GE      2       ^].^].  GD      2       ^].^O.  FD      2       ^].^].  JF      3       ^].^].^].       HJA     5       ^].^].^].^].^]. JJHJD   5       ^].^].^].^].^]. CHBFC   2       ^].^].  FF      0       *       *       0       *       *       0       *       *       5       ^].^].^].^].^], JDEGD   1       ^].     D       2       ^[.^].  DD      1       ^].     D       4
+       ^].^].^].^].    IDHI    2       ^].^].  JJ      1       ^].     H       2       ^].^].  JJ      1       ^].     H       1       ^].     I       2       ^].^].  IJ      0       *       *       5       ^].^].^].^].^], IJJJD
+YHet    2       G       4       ...^].  IJFB    4       ....    GHIJ    1       .       C       2       ..      IJ      2       ..
+      FD      2       ..      GD      2       ..      FD      2       ..      JF      3       ...     GJA     5       .....   IJGID   5       .....   BAD@D   2       ..      FD      0       *       *       0       *       *       0       *       *       5       ....,   GDGED   1       .       B       2       ..      DD      1       .       D       4       ....    JDHH    2       ..      HJ      1
+       .       H       2       ..      HJ      1       .       H       1       .       J       2       ..      JJ      0       *       *       5       ....,   JIJJD
+YHet    3       G       4       ....    IJ1C    4       ....    IIJI    1       .       H       2       ..      GH      2       ..
+      CD      2       ..      ID      2       ..      FD      2       ..      DD      3       ...     HIB     5       .....   JJ;JD   5       .....   BEECB   2       ..      FD      0       *       *       0       *       *       0       *       *       5       ....,   IDEED   1       .       B       2       ..      BD      1       .       D       4       ....    JBII    2       ..      GI      1
+       .       J       2       ..      GI      1       .       J       1       .       J       2       ..      IJ      0       *       *       5       ....,   JIJJD
+YHet    4       G       4       ....    IJ:C    4       ....    JBHI    1       .       E       2       ..      HH      2       ..
+      EB      2       ..      IB      2       ..      ?D      2       ..      ID      3       ...     DIB     5       .....   IH:ID   5       .....   BBECD   2       ..      FD      0       *       *       0       *       *       0       *       *       5       ....,   IDGED   1       .       D       2       ..      DB      1       .       D       4       ....    HBJI    2       ..      GJ      1
+       .       J       2       ..      GJ      1       .       J       1       .       J       2       ..      JJ      1       ^].     C       5       ....,   JJJJD
+YHet    5       T       4       ....    ?B1D    4       ....    )DEB    1       .       =       2       ..      ?H      2       ..
+      GC      2       ..      ?D      2       ..      AC      2       ..      GC      3       ...     FGD     5       .....   :HBDC   5       .....   5EB@D   2       ..      D>      0       *       *       0       *       *       0       *       *       5       ....,   IDGDD   1       .       D       2       ..      <C      1       .       A       4       ....    ?CF?    2       ..      =F      1
+       .       F       2       ..      =F      1       .       F       1       .       D       2       ..      FG      1       .       C       5       ....,   FFEGD
+
+```
 
 ```
 #! /bin/bash
@@ -509,36 +563,23 @@ map_dir=/home/paul/episodicData/mappedSequence
 
 java -ea -Xmx7g -jar /usr/local/popoolation/mpileup2sync.jar --input ${map_dir}/episodicData_nomerge_Sanger.mpileup --output ${map_dir}/episodicData_nomerge_Sanger.sync --fastq-type sanger --min-qual 20 --threads 2
 ```
+
+Output:
+
+```
+YHet    1       A       3:0:0:0:0:0     4:0:0:0:0:0     1:0:0:0:0:0     2:0:0:0:0:0     2:0:0:0:0:0     2:0:0:0:0:0     2:0:0:0:0:0
+     2:0:0:0:0:0     3:0:0:0:0:0     5:0:0:0:0:0     5:0:0:0:0:0     2:0:0:0:0:0     0:0:0:0:0:0     0:0:0:0:0:0     0:0:0:0:0:0     5:0:0:0:0:0     1:0:0:0:0:0     2:0:0:0:0:0     1:0:0:0:0:0     4:0:0:0:0:0     2:0:0:0:0:0     1:0:0:0:0:0     2:0:0:0:0:0     1:0:0:0:0:0     1:0:0:0:0:0     2:0:0:0:0:0     0:0:0:0:0:0     5:0:0:0:0:0
+YHet    2       G       0:0:0:4:0:0     0:0:0:4:0:0     0:0:0:1:0:0     0:0:0:2:0:0     0:0:0:2:0:0     0:0:0:2:0:0     0:0:0:2:0:0
+     0:0:0:2:0:0     0:0:0:3:0:0     0:0:0:5:0:0     0:0:0:5:0:0     0:0:0:2:0:0     0:0:0:0:0:0     0:0:0:0:0:0     0:0:0:0:0:0     0:0:0:5:0:0     0:0:0:1:0:0     0:0:0:2:0:0     0:0:0:1:0:0     0:0:0:4:0:0     0:0:0:2:0:0     0:0:0:1:0:0     0:0:0:2:0:0     0:0:0:1:0:0     0:0:0:1:0:0     0:0:0:2:0:0     0:0:0:0:0:0     0:0:0:5:0:0
+YHet    3       G       0:0:0:3:0:0     0:0:0:4:0:0     0:0:0:1:0:0     0:0:0:2:0:0     0:0:0:2:0:0     0:0:0:2:0:0     0:0:0:2:0:0
+     0:0:0:2:0:0     0:0:0:3:0:0     0:0:0:5:0:0     0:0:0:5:0:0     0:0:0:2:0:0     0:0:0:0:0:0     0:0:0:0:0:0     0:0:0:0:0:0     0:0:0:5:0:0     0:0:0:1:0:0     0:0:0:2:0:0     0:0:0:1:0:0     0:0:0:4:0:0     0:0:0:2:0:0     0:0:0:1:0:0     0:0:0:2:0:0     0:0:0:1:0:0     0:0:0:1:0:0     0:0:0:2:0:0     0:0:0:0:0:0     0:0:0:5:0:0
+YHet    4       G       0:0:0:4:0:0     0:0:0:4:0:0     0:0:0:1:0:0     0:0:0:2:0:0     0:0:0:2:0:0     0:0:0:2:0:0     0:0:0:2:0:0
+     0:0:0:2:0:0     0:0:0:3:0:0     0:0:0:5:0:0     0:0:0:5:0:0     0:0:0:2:0:0     0:0:0:0:0:0     0:0:0:0:0:0     0:0:0:0:0:0     0:0:0:5:0:0     0:0:0:1:0:0     0:0:0:2:0:0     0:0:0:1:0:0     0:0:0:4:0:0     0:0:0:2:0:0     0:0:0:1:0:0     0:0:0:2:0:0     0:0:0:1:0:0     0:0:0:1:0:0     0:0:0:2:0:0     0:0:0:1:0:0     0:0:0:5:0:0
+YHet    5       T       0:3:0:0:0:0     0:3:0:0:0:0     0:1:0:0:0:0     0:2:0:0:0:0     0:2:0:0:0:0     0:2:0:0:0:0     0:2:0:0:0:0
+     0:2:0:0:0:0     0:3:0:0:0:0     0:5:0:0:0:0     0:5:0:0:0:0     0:2:0:0:0:0     0:0:0:0:0:0     0:0:0:0:0:0     0:0:0:0:0:0     0:5:0:0:0:0     0:1:0:0:0:0     0:2:0:0:0:0     0:1:0:0:0:0     0:4:0:0:0:0     0:2:0:0:0:0     0:1:0:0:0:0     0:2:0:0:0:0     0:1:0:0:0:0     0:1:0:0:0:0     0:2:0:0:0:0     0:1:0:0:0:0     0:5:0:0:0:0
+```
+
 __________________
-Merge issue
-
-Looks like may be a merge issue, merging with alternative methods (bwa mem with lanes) shown in step 7, than rerun mpileup and sync.
-*Changed for BAM files (removed SAM files to save space)*
-
-```
-#! /bin/bash
-
-bwa_dir=/usr/local/bwa/0.7.8
-cd ${bwa_dir}
-bam_dir=/home/paul/episodicData/mappedSequence/BAM_files
-ref_genome=/home/paul/episodicData/indexSequence/dmel-all-chromosome-r5.57.fasta.gz
-out_dir=/home/paul/episodicData/mappedSequence/merge_BAM
-files=(${bam_dir}/*_L001_aligned_pe.bam)
-for file in ${files[@]}
-do
-name=${file}
-base=`basename ${name} _L001_aligned_pe.bam`
-bwa mem -t 8 -M ${ref_genome} ${bam_dir}/${base}_L001_aligned_pe.bam ${bam_dir}/${base}_L002_aligned_pe.bam > ${out_dir}/${base}_aligned_pe.bam
-done
-```
-
-```
-samtools mpileup -6 -B -Q 0 -f /home/paul/episodicData/indexSequence/dmel-all-chromosome-r5.57.fasta.gz /home/paul/episodicData/mappedSequence/merge_BAM/*.bam > /home/paul/episodicData/mappedSequence/merge_BAM/episodicData_bwaMerge.mpileup
-```
-
-```
-java -ea -Xmx7g -jar /usr/local/popoolation/mpileup2sync.jar --input /home/paul/episodicData/mappedSequence/merge_BAM/episodicData_bwaMerge.mpileup --output /home/paul/episodicData/mappedSequence/merge_BAM/episodicData_bwaMerge.sync --fastq-type illumina --min-qual 20 --threads 8
-```
 
 
 		
