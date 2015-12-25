@@ -497,17 +497,8 @@ java -ea -Xmx7g -jar /usr/local/popoolation/mpileup2sync.jar --input /home/paul/
 
 
 ________________________
-Try longer perl script
-
-```
-#! /bin/bash
-
-map_dir=/home/paul/episodicData/mappedSequence 
-perl /usr/local/popoolation/mpileup2sync.pl --fastq-type illumina --min-qual 20 --input ${map_dir}/episodicData_nomerge.mpileup --output ${map_dir}/episodicData_nomerge_syncPL.txt
-```
 
 
-___________________
 
 Could be by having .sync
 Ran java with .txt
