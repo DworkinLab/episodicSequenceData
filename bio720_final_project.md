@@ -648,7 +648,10 @@ In order to view these results graphically, the Fst.txt file (with PoPoolation2 
 
 ```
 #! /bin/bash
-perl /usr/local/popoolation/export/pwc2igv.pl --input ${map_dir}/fst.txt --output ${map_dir}/fst.igv 
+
+map_dir=/home/paul/episodicData/mappedSequence
+
+perl /usr/local/popoolation/export/pwc2igv.pl --input ${map_dir}/fst_nomerge_Sanger.txt --output ${map_dir}/fst_nomerge_Sanger.igv 
 
 #likely from final_bam directory
 
