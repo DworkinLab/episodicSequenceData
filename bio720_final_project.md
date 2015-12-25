@@ -684,13 +684,16 @@ java -Xmx2g -jar /usr/local/igv/IGV_2.1.21/igv.jar
 ###Fisher's Exact Test 
 This test gives the statistical significance of allele frequency differences using script *fisher-test.pl* and viewed using *pwc2igv.pl* and IGV.
 
+episodicData_nomerge_Sanger.sync
 
 ```
+#! /bin/bash
+
 map_dir=/home/paul/episodicData/mappedSequence
 
-perl usr/local/popoolation/fisher-test.pl --input ${map_dir}/episodicData.sync --output ${map_dir}/episodicData.fet --min-count 3 --min-coverage 10 --max-coverage 250 --suppress-noninformative
+perl /usr/local/popoolation/fisher-test.pl --input ${map_dir}/episodicData_nomerge_Sanger.sync --output ${map_dir}/episodicData_nomerge_Sanger.fet --min-count 3 --min-coverage 10 --max-coverage 250 --suppress-noninformative
 
-perl usr/local/popoolation/export/pwc2igv.pl --input ${map_dir}/episodicData.fet --output ${map_dir}/episodicData.fet.igv
+perl /usr/local/popoolation/export/pwc2igv.pl --input ${map_dir}/episodicData.fet --output ${map_dir}/episodicData.fet.igv
 
 java -Xmx2g -jar /usr/local/igv/IGV_2.1.21/igv.jar
 
