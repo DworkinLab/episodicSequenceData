@@ -749,43 +749,25 @@ Comparsion between Gen0 and each 115 treatment
 map_dir=/home/paul/episodicData/mappedSequence
 sync_file=/home/paul/episodicData/mappedSequence/episodicData_Sanger.sync
 
+#F115ConR1 vs. MGD2
+
 perl /usr/local/popoolation/cmh-test.pl --min-count 3 --min-coverage 10 --max-coverage 250 --population 1-9 --input ${map_dir}/episodicData_Sanger.sync --output ${map_dir}/cmhtest_19.txt
 
 perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_19.txt --output ${map_dir}/cmh_19.gwas --min-pvalue 1.0e-20
-```
 
-
-```
-#! /bin/bash
-
-map_dir=/home/paul/episodicData/mappedSequence
-sync_file=/home/paul/episodicData/mappedSequence/episodicData_Sanger.sync
+#F115ConR2 vs. MGD2
 
 perl /usr/local/popoolation/cmh-test.pl --min-count 3 --min-coverage 10 --max-coverage 250 --population 2-9 --input ${map_dir}/episodicData_Sanger.sync --output ${map_dir}/cmhtest_29.txt
 
 perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_29.txt --output ${map_dir}/cmh_29.gwas --min-pvalue 1.0e-20
-```
 
-Comparsion between Gen0 and each 115 treatment
-
-```
-#! /bin/bash
-
-map_dir=/home/paul/episodicData/mappedSequence
-sync_file=/home/paul/episodicData/mappedSequence/episodicData_Sanger.sync
+#F115SelR1 vs. MGD2
 
 perl /usr/local/popoolation/cmh-test.pl --min-count 3 --min-coverage 10 --max-coverage 250 --population 3-9 --input ${map_dir}/episodicData_Sanger.sync --output ${map_dir}/cmhtest_39.txt
 
 perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_39.txt --output ${map_dir}/cmh_39.gwas --min-pvalue 1.0e-20
-```
 
-Comparsion between Gen0 and each 115 treatment
-
-```
-#! /bin/bash
-
-map_dir=/home/paul/episodicData/mappedSequence
-sync_file=/home/paul/episodicData/mappedSequence/episodicData_Sanger.sync
+#F115SelR2 vs. MGD2
 
 perl /usr/local/popoolation/cmh-test.pl --min-count 3 --min-coverage 10 --max-coverage 250 --population 4-9 --input ${map_dir}/episodicData_Sanger.sync --output ${map_dir}/cmhtest_49.txt
 
