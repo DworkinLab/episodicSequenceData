@@ -785,13 +785,20 @@ This test gives the statistical significance of allele frequency differences usi
 
 map_dir=/home/paul/episodicData/mappedSequence
 
-perl /usr/local/popoolation/fisher-test.pl --input ${map_dir}/episodicData_nomerge_Sanger.sync --output ${map_dir}/episodicData_nomerge_Sanger.fet --min-count 3 --min-coverage 10 --max-coverage 250 --suppress-noninformative
+perl /usr/local/popoolation/fisher-test.pl --input ${map_dir}/episodicData_Sanger.sync --output ${map_dir}/episodicData_Sanger.fet --min-count 3 --min-coverage 10 --max-coverage 250 --suppress-noninformative
 
-perl /usr/local/popoolation/export/pwc2igv.pl --input ${map_dir}/episodicData.fet --output ${map_dir}/episodicData.fet.igv
+perl /usr/local/popoolation/export/pwc2igv.pl --input ${map_dir}/episodicData_Sanger.fet --output ${map_dir}/episodicData_Sanger.fet.igv
 
-java -Xmx2g -jar /usr/local/igv/IGV_2.1.21/igv.jar
+# Load to IGV java -Xmx2g -jar /usr/local/igv/IGV_2.1.21/igv.jar
+```
 
-#Than start the IGV and load files
+Output when run (and even when using help command for Popoolation perl fisher-test.pl --help) appears to be a script issue, and fishers will not be included yet.
+
+```
+Can't locate Text/NSP/Measures/2D/Fisher/twotailed.pm in @INC (@INC contains: /usr/local/popoolation /usr/local/popoolation/Modules /usr/local/ensembl/current/bioperl-1.2.3 /usr/local/ensembl/current/ensembl/modules /usr/local/ensembl/current/ensembl-compara/modules /usr/local/ensembl/current/ensembl-variation/modules /usr/local/ensembl/current/ensembl-funcgen/modules /usr/local/lib64/perl5 /usr/local/share/perl5 /usr/lib64/perl5/vendor_perl /usr/share/perl5/vendor_perl /usr/lib64/perl5 /usr/share/perl5 .) at /usr/local/popoolation/Modules/FET.pm line 10.
+BEGIN failed--compilation aborted at /usr/local/popoolation/Modules/FET.pm line 10.
+Compilation failed in require at fisher-test.pl line 9.
+BEGIN failed--compilation aborted at fisher-test.pl line 9.
 ```
 
 
