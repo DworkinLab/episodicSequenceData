@@ -696,7 +696,7 @@ The output image for full pairwise comparisons;
 ###The CMH test (Cochran-Mantel-Haenszel test) 
 This test can test the statistical significance between groups, depending on the input. The CMH test only tests significance of allele frequency changes between generations, with each populations only in the input once (may need to run multiple times dependent on the desired data). This test can identify SNPs with allele frequency changes among different time points. This is run with PoPoolation2 script *cmh-test.pl*, and diplayed to IGV with *cmh2gwas.pl*
 
---population 1-2,3-4; this will change based on what is being tested. For this analysis, I will just compare generation 0 with generation 115 (both Selection and Control). The input will depend on the .sync file based on population placement, and can change based on the input order. In this case, 1-2 compared the control treatments for F115 (R1 and R2) and 3-4 does the same for selection treatment, and continues like this (5-6, 7-8), 9-10 would only compare the two same unmerged reference sequences. 
+--population 1-2,3-4; this will change based on what is being tested, but each number can only be included once. The input will depend on the .sync file based on population placement, and can change based on the input order. In this case, 1-2 compared the control treatments for F115 (R1 and R2) and 3-4 does the same for selection treatment, and continues like this (5-6, 7-8), 9-10 would only compare the two same unmerged reference sequences. 
 
 ```
 #! /bin/bash
@@ -715,11 +715,38 @@ Move to local machine (scp) and open IGV GUI format
 java -Xmx2g -jar /Users/paulknoops/episodicWork/IGV_2.3.67/igv.jar
 ```
 
+Other comparisons that can be made, and for this analysis, I will just compare generation 0 with generation 115 (both Selection and Control). Comparisons between replicates are completed, and below are inputs comparing gen 0 (using MGD2_SO..., which was seqeunced with more coverage) and generation 115. When comparing all different comparisons, a script will be set up to analyze all necessary input options.
+
+Comparison between Control and Selection (R1 with R1)
+```
+#! /bin/bash
+
+map_dir=/home/paul/episodicData/mappedSequence
+sync_file=/home/paul/episodicData/mappedSequence/episodicData_Sanger.sync
+
+perl /usr/local/popoolation/cmh-test.pl --min-count 3 --min-coverage 10 --max-coverage 250 --population 1-3,2-4 --input ${map_dir}/episodicData_Sanger.sync --output ${map_dir}/cmhtest_115_R1.txt
+
+perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_115_R1.txt --output ${map_dir}/cmh_115_R1.gwas --min-pvalue 1.0e-20
+```
+
+Comparsion between Gen0 and each 115 treatment
+
+```
+#! /bin/bash
+
+map_dir=/home/paul/episodicData/mappedSequence
+sync_file=/home/paul/episodicData/mappedSequence/episodicData_Sanger.sync
+
+perl /usr/local/popoolation/cmh-test.pl --min-count 3 --min-coverage 10 --max-coverage 250 --population  --input ${map_dir}/episodicData_Sanger.sync --output ${map_dir}/cmhtest_Sanger.txt
+
+perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_Sanger.txt --output ${map_dir}/cmh_Sanger.gwas --min-pvalue 1.0e-20
+```
+
+
+
 			
 ###Fisher's Exact Test 
 This test gives the statistical significance of allele frequency differences using script *fisher-test.pl* and viewed using *pwc2igv.pl* and IGV.
-
-episodicData_nomerge_Sanger.sync
 
 ```
 #! /bin/bash
