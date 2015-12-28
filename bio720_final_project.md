@@ -652,22 +652,22 @@ In order to view these results graphically, the Fst.txt file (with PoPoolation2 
 map_dir=/home/paul/episodicData/mappedSequence
 
 perl /usr/local/popoolation/export/pwc2igv.pl --input ${map_dir}/fst_Sanger.txt --output ${map_dir}/fst_Sanger.igv 
-
-#likely from final_bam directory
-
-final_bam=/home/paul/episodicData/mappedSequence/final_bam_files
-files=(${final_dir}/*.final.bam)
-for file in ${files[@]}
-do
-samtools index ${file}
-done 
- 
-java -Xmx2g -jar /usr/local/igv/IGV_2.1.21/igv.jar
-
-#Load populations into IGV
 ```
 
-		
+This output file is moved to my local machine 
+
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/mappedSequence/fst_Sanger.igv /Users/paulknoops/episodicWork
+```
+
+and IGV is opened with command:
+
+```
+java -Xmx750m -jar igv.jar
+```
+ 
+and the file is opened in GUI format to open file and using pre-loaded reference for *D. mel* (5.9)
+
 ###The CMH test (Cochran-Mantel-Haenszel test) 
 This test can test the statistical significance between groups, depending on the input. The CMH test only tests significance of allele frequency changes between generations, with each populations only in the input once (may need to run multiple times dependent on the desired data). This test can identify SNPs with allele frequency changes among different time points. This is run with PoPoolation2 script *cmh-test.pl*, and diplayed to IGV with *cmh2gwas.pl*
 
