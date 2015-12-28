@@ -571,7 +571,7 @@ YHet    5       T       0:3:0:0:0:0     0:3:0:0:0:0     0:1:0:0:0:0     0:2:0:0:
 ```
 
 __________________
-#*Will rerun final bam (with picard sort etc. for mpileip etc.) and all below (Step 13 and onward; Fst and CMH etc.) will be run with sync files = /home/paul/episodicData/mappedSequence/episodicData_Sanger.sync*
+###*Will rerun final bam (with picard sort etc. for mpileip etc.) and all below (Step 13 and onward; Fst and CMH etc.) will be run with sync files = /home/paul/episodicData/mappedSequence/episodicData_Sanger.sync found below*
 
 ```
 #! /bin/bash
