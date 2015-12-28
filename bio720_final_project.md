@@ -571,7 +571,7 @@ YHet    5       T       0:3:0:0:0:0     0:3:0:0:0:0     0:1:0:0:0:0     0:2:0:0:
 ```
 
 __________________
-#*Will rerun final bam (with picard sort etc. for mpileip etc.) but all below (Step 13 and onward; Fst and CMH etc.) will be run with sync file = /home/paul/episodicData/mappedSequence/episodicData_nomerge_Sanger.sync*
+#*Will rerun final bam (with picard sort etc. for mpileip etc.) and all below (Step 13 and onward; Fst and CMH etc.) will be run with sync file = /home/paul/episodicData/mappedSequence/episodicData_Sanger.sync*
 
 ```
 #! /bin/bash
@@ -620,8 +620,8 @@ Using PoPoolation2 script *fst-test.pl* all pairwise comparisons can be tested f
 The following parameters are used for this script;
 
 ```
-Using input     /home/paul/episodicData/mappedSequence/episodicData.sync
-Using output    /home/paul/episodicData/mappedSequence/fst.txt
+Using input     /home/paul/episodicData/mappedSequence/episodicData_Sanger.sync
+Using output    /home/paul/episodicData/mappedSequence/fst_Sanger.txt
 Using min-count 3
 Using min-coverage      10
 Using max-coverage      250
@@ -641,7 +641,7 @@ Using help      0
 
 map_dir=/home/paul/episodicData/mappedSequence
 
-perl /usr/local/popoolation/fst-sliding.pl --window-size 500 --step-size 500 --suppress-noninformative --input ${map_dir}/episodicData_nomerge_Sanger.sync --min-covered-fraction 1.0 --min-coverage 10 --max-coverage 250 --min-count 3 --output ${map_dir}/fst_nomerge_Sanger.txt --pool-size 60
+perl /usr/local/popoolation/fst-sliding.pl --window-size 500 --step-size 500 --suppress-noninformative --input ${map_dir}/episodicData_Sanger.sync --min-covered-fraction 1.0 --min-coverage 10 --max-coverage 250 --min-count 3 --output ${map_dir}/fst_Sanger.txt --pool-size 60
 ```
 
 In order to view these results graphically, the Fst.txt file (with PoPoolation2 script *pwc2igv.pl*) will be loaded to IGV (Integrative Genomics Viewer).
