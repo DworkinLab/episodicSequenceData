@@ -571,7 +571,7 @@ YHet    5       T       0:3:0:0:0:0     0:3:0:0:0:0     0:1:0:0:0:0     0:2:0:0:
 ```
 
 __________________
-#*Will rerun final bam (with picard sort etc. for mpileip etc.) and all below (Step 13 and onward; Fst and CMH etc.) will be run with sync file = /home/paul/episodicData/mappedSequence/episodicData_Sanger.sync*
+#*Will rerun final bam (with picard sort etc. for mpileip etc.) and all below (Step 13 and onward; Fst and CMH etc.) will be run with sync files = /home/paul/episodicData/mappedSequence/episodicData_Sanger.sync*
 
 ```
 #! /bin/bash
@@ -651,7 +651,7 @@ In order to view these results graphically, the Fst.txt file (with PoPoolation2 
 
 map_dir=/home/paul/episodicData/mappedSequence
 
-perl /usr/local/popoolation/export/pwc2igv.pl --input ${map_dir}/fst_nomerge_Sanger.txt --output ${map_dir}/fst_nomerge_Sanger.igv 
+perl /usr/local/popoolation/export/pwc2igv.pl --input ${map_dir}/fst_Sanger.txt --output ${map_dir}/fst_Sanger.igv 
 
 #likely from final_bam directory
 
