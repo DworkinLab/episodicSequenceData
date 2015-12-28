@@ -610,6 +610,23 @@ YHet    3       G       0:0:0:4:0:0     0:0:0:4:0:0     0:0:0:8:0:0     0:0:0:7:
 YHet    4       G       0:0:0:4:0:0     0:0:0:4:0:0     0:0:0:8:0:0     0:0:0:7:0:0     0:0:0:0:0:0     0:0:0:5:0:0     0:0:0:3:0:0     0:0:0:5:0:0     0:0:0:3:0:0     0:0:0:3:0:0
 YHet    5       T       0:4:0:0:0:0     0:4:0:0:0:0     0:8:0:0:0:0     0:7:0:0:0:0     0:0:0:0:0:0     0:5:0:0:0:0     0:3:0:0:0:0     0:5:0:0:0:0     0:3:0:0:0:0     0:3:0:0:0:0
 ```
+
+
+*NOTE* The output below are only based on numbers (i.e compare 1 to 2 etc.) and the numbers are the input order from the final bam files directory
+
+```
+1 = F115ConR1_TAGCTT_merged_aligned_pe.final.bam
+2 = F115ConR2_GGCTAC_merged_aligned_pe.final.bam
+3 = F115SelR1_GTTTCG_merged_aligned_pe.final.bam
+4 = F115SelR2_GTGGCC_merged_aligned_pe.final.bam
+5 = F38ConR1_ATCACG_merged_aligned_pe.final.bam
+6 = F38ConR2_TTAGGC_merged_aligned_pe.final.bam
+7 = F38SelR1_ACTTGA_merged_aligned_pe.final.bam
+8 = F38SelR2_GATCAG_merged_aligned_pe.final.bam
+9 = MGD2_SO_CAGATC_merged_aligned_pe.final.bam
+10 = MGD_SO_CAGATC_merged_aligned_pe.final.bam
+```
+
 		
 ###13. Can now run scripts from popoolation2 directory to find / visualize Fst, CMH Tests, and Fisher's Exact Test
 ____________________________________________________________________
@@ -667,6 +684,14 @@ java -Xmx750m -jar igv.jar
 ```
  
 and the file is opened in GUI format to open file and commpared using reference *D. mel* sequence r5.57
+
+The output image for full pairwise comparisons;
+
+
+*could not find way to fit all in yet*
+
+
+
 
 ###The CMH test (Cochran-Mantel-Haenszel test) 
 This test can test the statistical significance between groups, depending on the input. The CMH test only tests significance of allele frequency changes between generations, with each populations only in the input once (may need to run multiple times dependent on the desired data). This test can identify SNPs with allele frequency changes among different time points. This is run with PoPoolation2 script *cmh-test.pl*, and diplayed to IGV with *cmh2gwas.pl*
