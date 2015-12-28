@@ -729,6 +729,18 @@ perl /usr/local/popoolation/cmh-test.pl --min-count 3 --min-coverage 10 --max-co
 perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_115_R1.txt --output ${map_dir}/cmh_115_R1.gwas --min-pvalue 1.0e-20
 ```
 
+Comparison between Control and Selection (R1 with R2)
+```
+#! /bin/bash
+
+map_dir=/home/paul/episodicData/mappedSequence
+sync_file=/home/paul/episodicData/mappedSequence/episodicData_Sanger.sync
+
+perl /usr/local/popoolation/cmh-test.pl --min-count 3 --min-coverage 10 --max-coverage 250 --population 1-4,2-3 --input ${map_dir}/episodicData_Sanger.sync --output ${map_dir}/cmhtest_115_R1vsR2.txt
+
+perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_115_R1vsR2.txt --output ${map_dir}/cmh_115_R1vsR2.gwas --min-pvalue 1.0e-20
+```
+
 Comparsion between Gen0 and each 115 treatment
 
 ```
@@ -737,9 +749,47 @@ Comparsion between Gen0 and each 115 treatment
 map_dir=/home/paul/episodicData/mappedSequence
 sync_file=/home/paul/episodicData/mappedSequence/episodicData_Sanger.sync
 
-perl /usr/local/popoolation/cmh-test.pl --min-count 3 --min-coverage 10 --max-coverage 250 --population  --input ${map_dir}/episodicData_Sanger.sync --output ${map_dir}/cmhtest_Sanger.txt
+perl /usr/local/popoolation/cmh-test.pl --min-count 3 --min-coverage 10 --max-coverage 250 --population 1-9 --input ${map_dir}/episodicData_Sanger.sync --output ${map_dir}/cmhtest_19.txt
 
-perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_Sanger.txt --output ${map_dir}/cmh_Sanger.gwas --min-pvalue 1.0e-20
+perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_19.txt --output ${map_dir}/cmh_19.gwas --min-pvalue 1.0e-20
+```
+
+
+```
+#! /bin/bash
+
+map_dir=/home/paul/episodicData/mappedSequence
+sync_file=/home/paul/episodicData/mappedSequence/episodicData_Sanger.sync
+
+perl /usr/local/popoolation/cmh-test.pl --min-count 3 --min-coverage 10 --max-coverage 250 --population 2-9 --input ${map_dir}/episodicData_Sanger.sync --output ${map_dir}/cmhtest_29.txt
+
+perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_29.txt --output ${map_dir}/cmh_29.gwas --min-pvalue 1.0e-20
+```
+
+Comparsion between Gen0 and each 115 treatment
+
+```
+#! /bin/bash
+
+map_dir=/home/paul/episodicData/mappedSequence
+sync_file=/home/paul/episodicData/mappedSequence/episodicData_Sanger.sync
+
+perl /usr/local/popoolation/cmh-test.pl --min-count 3 --min-coverage 10 --max-coverage 250 --population 3-9 --input ${map_dir}/episodicData_Sanger.sync --output ${map_dir}/cmhtest_39.txt
+
+perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_39.txt --output ${map_dir}/cmh_39.gwas --min-pvalue 1.0e-20
+```
+
+Comparsion between Gen0 and each 115 treatment
+
+```
+#! /bin/bash
+
+map_dir=/home/paul/episodicData/mappedSequence
+sync_file=/home/paul/episodicData/mappedSequence/episodicData_Sanger.sync
+
+perl /usr/local/popoolation/cmh-test.pl --min-count 3 --min-coverage 10 --max-coverage 250 --population 4-9 --input ${map_dir}/episodicData_Sanger.sync --output ${map_dir}/cmhtest_49.txt
+
+perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_49.txt --output ${map_dir}/cmh_49.gwas --min-pvalue 1.0e-20
 ```
 
 
