@@ -755,10 +755,33 @@ perl /usr/local/popoolation/cmh-test.pl --min-count 3 --min-coverage 10 --max-co
 perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_9_vs_1234.txt --output ${map_dir}/cmh_9_vs_1234.gwas --min-pvalue 1.0e-20
 ```
 
+Was viewing all results, and relized I compared to much incorrectly.  The CMH Tests compares data from multiple generations in 2x2 tables, so it would be a comparision between Gen 0 and Selection with Gen 0 and control for each replicate seperatly. 
+
+```
+#! /bin/bash
+
+map_dir=/home/paul/episodicData/mappedSequence
+sync_file=/home/paul/episodicData/mappedSequence/episodicData_Sanger.sync
 
 
+perl /usr/local/popoolation/cmh-test.pl --min-count 3 --min-coverage 10 --max-coverage 250 --population 1-9,3-9 --input ${map_dir}/episodicData_Sanger.sync --output ${map_dir}/cmhtest_9_vs_13.txt
 
-			
+perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_9_vs_13.txt --output ${map_dir}/cmh_9_vs_13.gwas --min-pvalue 1.0e-20
+```
+
+```
+#! /bin/bash
+
+map_dir=/home/paul/episodicData/mappedSequence
+sync_file=/home/paul/episodicData/mappedSequence/episodicData_Sanger.sync
+
+
+perl /usr/local/popoolation/cmh-test.pl --min-count 3 --min-coverage 10 --max-coverage 250 --population 2-9,4-9 --input ${map_dir}/episodicData_Sanger.sync --output ${map_dir}/cmhtest_9_vs_24.txt
+
+perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_9_vs_24.txt --output ${map_dir}/cmh_9_vs_24.gwas --min-pvalue 1.0e-20
+```
+
+
 ###Fisher's Exact Test 
 This test gives the statistical significance of allele frequency differences using script *fisher-test.pl* and viewed using *pwc2igv.pl* and IGV.
 
