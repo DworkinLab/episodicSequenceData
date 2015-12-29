@@ -389,6 +389,7 @@ java -jar /usr/local/popoolation/mpileup2sync.jar --input ${map_dir}/episodicDat
 Once again, no output allele frequencies (all 0's)
 
 _______________________
+
 Using non-merged files (test if merge is mistake)
 Adding -Q = skip bases with base quality smaller than the given value (for 0 does not skip any low quality)
 
@@ -462,57 +463,7 @@ null
 
 *Was not difference with Illumina or Sanger as fastq-type (ran also and gave only outputs of 0:0:0:0:0:0)*
 
-_______________________
-Merge issue
 
-Looks like may be a merge issue, merging with alternative methods (bwa mem with lanes) shown in step 7, than rerun mpileup and sync.
-*Changed for BAM files (removed SAM files to save space)*
-
-```
-#! /bin/bash
-
-bwa_dir=/usr/local/bwa/0.7.8
-cd ${bwa_dir}
-bam_dir=/home/paul/episodicData/mappedSequence/BAM_files
-ref_genome=/home/paul/episodicData/indexSequence/dmel-all-chromosome-r5.57.fasta.gz
-out_dir=/home/paul/episodicData/mappedSequence/merge_BAM
-files=(${bam_dir}/*_L001_aligned_pe.bam)
-for file in ${files[@]}
-do
-name=${file}
-base=`basename ${name} _L001_aligned_pe.bam`
-bwa mem -t 8 -M ${ref_genome} ${bam_dir}/${base}_L001_aligned_pe.bam ${bam_dir}/${base}_L002_aligned_pe.bam > ${out_dir}/${base}_aligned_pe.bam
-done
-```
-
-Ran very quick, may not have worked (and alternative done below - -6 flag change) so will not continue this for now.
-
-```
-samtools mpileup -6 -B -Q 0 -f /home/paul/episodicData/indexSequence/dmel-all-chromosome-r5.57.fasta.gz /home/paul/episodicData/mappedSequence/merge_BAM/*.bam > /home/paul/episodicData/mappedSequence/merge_BAM/episodicData_bwaMerge.mpileup
-```
-
-```
-java -ea -Xmx7g -jar /usr/local/popoolation/mpileup2sync.jar --input /home/paul/episodicData/mappedSequence/merge_BAM/episodicData_bwaMerge.mpileup --output /home/paul/episodicData/mappedSequence/merge_BAM/episodicData_bwaMerge.sync --fastq-type illumina --min-qual 20 --threads 8
-```
-
-
-________________________
-
-
-
-Could be by having .sync
-Ran java with .txt
-
-
-```
-#! /bin/bash
-
-map_dir=/home/paul/episodicData/mappedSequence
-
-java -ea -Xmx7g -jar /usr/local/popoolation/mpileup2sync.jar --input ${map_dir}/episodicData_nomerge.mpileup --output ${map_dir}/episodicData_nomerge_sync.txt --fastq-type illumina --min-qual 20 --threads 8
-```
-
-Nope
 ___________________________
 
 Is the issue the -6 flag (illumina) when is actually sanger?
