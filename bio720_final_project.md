@@ -757,6 +757,7 @@ perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_9_vs_1
 
 
 
+
 			
 ###Fisher's Exact Test 
 This test gives the statistical significance of allele frequency differences using script *fisher-test.pl* and viewed using *pwc2igv.pl* and IGV.
