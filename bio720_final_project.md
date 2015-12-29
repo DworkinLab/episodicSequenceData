@@ -685,14 +685,12 @@ java -Xmx750m -jar igv.jar
  
 and the file is opened in GUI format to open file and commpared using reference *D. mel* sequence r5.57
 
-The output image for full pairwise comparisons;
+The output image for full pairwise comparisons for comparisons with file 9 (MGD2 = High coverage Gen 0);
 
-
-*could not find way to fit all in yet*
 
 ![9vsall](https://cloud.githubusercontent.com/assets/14790488/12039788/828e3ed0-ae31-11e5-9d84-2baff0cdbe1c.jpg)
 
-Fst values for all pairwise comparisons with data file 9 (MGD2 = High coverage Gen 0)
+Fst values for all pairwise comparisons with data file 9
 
 
 ###The CMH test (Cochran-Mantel-Haenszel test) 
@@ -717,47 +715,7 @@ Move to local machine (scp) and open IGV GUI format
 java -Xmx2g -jar /Users/paulknoops/episodicWork/IGV_2.3.67/igv.jar
 ```
 
-Other comparisons that can be made, and for this analysis, I will just compare generation 0 with generation 115 (both Selection and Control). Comparisons between replicates are completed, and below are inputs comparing gen 0 (using MGD2_SO..., which was seqeunced with more coverage) and generation 115. When comparing all different comparisons, a script will be set up to analyze all necessary input options.
-
-Comparison between Control and Selection (R1 with R1)
-```
-#! /bin/bash
-
-map_dir=/home/paul/episodicData/mappedSequence
-sync_file=/home/paul/episodicData/mappedSequence/episodicData_Sanger.sync
-
-perl /usr/local/popoolation/cmh-test.pl --min-count 3 --min-coverage 10 --max-coverage 250 --population 1-3,2-4 --input ${map_dir}/episodicData_Sanger.sync --output ${map_dir}/cmhtest_115_R1.txt
-
-perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_115_R1.txt --output ${map_dir}/cmh_115_R1.gwas --min-pvalue 1.0e-20
-```
-
-Comparison between Control and Selection (R1 with R2)
-```
-#! /bin/bash
-
-map_dir=/home/paul/episodicData/mappedSequence
-sync_file=/home/paul/episodicData/mappedSequence/episodicData_Sanger.sync
-
-perl /usr/local/popoolation/cmh-test.pl --min-count 3 --min-coverage 10 --max-coverage 250 --population 1-4,2-3 --input ${map_dir}/episodicData_Sanger.sync --output ${map_dir}/cmhtest_115_R1vsR2.txt
-
-perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_115_R1vsR2.txt --output ${map_dir}/cmh_115_R1vsR2.gwas --min-pvalue 1.0e-20
-```
-
-Comparsion between Gen0 and each 115 treatment
-
-```
-#! /bin/bash
-
-map_dir=/home/paul/episodicData/mappedSequence
-sync_file=/home/paul/episodicData/mappedSequence/episodicData_Sanger.sync
-
-
-perl /usr/local/popoolation/cmh-test.pl --min-count 3 --min-coverage 10 --max-coverage 250 --population 1-9,2-9,3-9,4-9 --input ${map_dir}/episodicData_Sanger.sync --output ${map_dir}/cmhtest_9_vs_1234.txt
-
-perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_9_vs_1234.txt --output ${map_dir}/cmh_9_vs_1234.gwas --min-pvalue 1.0e-20
-```
-
-Was viewing all results, and relized I compared to much incorrectly.  The CMH Tests compares data from multiple generations in 2x2 tables, so it would be a comparision between Gen 0 and Selection with Gen 0 and control for each replicate seperatly. 
+Other comparisons that can be made, and for this analysis, I will just compare generation 0 with generation 115 (both Selection and Control). Comparisons between replicates are completed, and below are inputs comparing gen 0 (using MGD2_SO..., which was seqeunced with more coverage) and generation 115. When comparing all different comparisons, a script will be set up to analyze all necessary input options. The CMH Tests compares data from multiple generations in 2x2 tables, so it would be a comparision between Gen 0 and Selection with Gen 0 and control for each replicate seperatly. 
 
 ```
 #! /bin/bash
