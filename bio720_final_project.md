@@ -741,6 +741,13 @@ perl /usr/local/popoolation/cmh-test.pl --min-count 3 --min-coverage 10 --max-co
 perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_9_vs_24.txt --output ${map_dir}/cmh_9_vs_24.gwas --min-pvalue 1.0e-20
 ```
 
+Output for the two;
+
+
+![igv_snapshot](https://cloud.githubusercontent.com/assets/14790488/12039690/7cc637b0-ae30-11e5-8fbb-b87e137f34c6.png)
+
+CMH comparisons for 2-9,4-9 on top and 1-9,3-9 on bottom
+
 
 ###Fisher's Exact Test 
 This test gives the statistical significance of allele frequency differences using script *fisher-test.pl* and viewed using *pwc2igv.pl* and IGV.
