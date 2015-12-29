@@ -690,7 +690,9 @@ The output image for full pairwise comparisons;
 
 *could not find way to fit all in yet*
 
+![9vsall](https://cloud.githubusercontent.com/assets/14790488/12039788/828e3ed0-ae31-11e5-9d84-2baff0cdbe1c.jpg)
 
+Fst values for all pairwise comparisons with data file 9 (MGD2 = High coverage Gen 0)
 
 
 ###The CMH test (Cochran-Mantel-Haenszel test) 
