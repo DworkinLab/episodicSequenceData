@@ -41,13 +41,6 @@ Next check with Fastqc (Babraham Bioinformatics, 2015) for quality of the reads.
 fastqc -o /home/paul/episodicData/fastqcOutputs /home/paul/episodicData/rawData*.fastq.gz
 ```
 
-For MGD2 Fastqc to check encoding (will move to local machine)
-
-```
-fastqc -o /home/paul/episodicData/gen0_gen77_start_to_mapped/fastqc2 /home/paul/episodicData/gen0_gen77_start_to_mapped/Rawdata_2/MGD2_SO_CAGATC_L005_R2_001.fastq.gz
-```
-
-
 Flags
 "-o" sends all output files to output directory.
 	
