@@ -1,4 +1,4 @@
-### Full run through of all sequence data - start to finish
+### Full run through of all sequence data - Trimming to mpileup file format
 ## Need a thourough log
 # Change parameters here at top, rest should fall in place
 Should run md5sum and fastqc seperatly (before running quality control)
