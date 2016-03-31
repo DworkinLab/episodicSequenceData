@@ -11,7 +11,20 @@ Should run md5sum and fastqc seperatly (before running quality control)
 Set up/ edit this script
 
 ```
+#! /bin/bash
 
+project_dir = /home/paul/episodicData
+
+raw_dir = ${project_dir}/raw_dir
+
+trimmomatic = /usr/local/trimmomatic
+# location of trimmomatic on machine
+adapt_path = /usr/local/trimmomatic/adapters
+# path to adapter sequences
+# ?? need to change the apater type!!!
+bwa_path = /usr/local/bwa/0.7.8
+
+# ?? ref_genome needs to be difined:
 
 ```
 
@@ -41,7 +54,7 @@ mkdir ${project_dir}/bam_dir
 
 Define all directories 
 ```
-#! bin/bash
+#! /bin/bash
 
 trim_dir = ${project_dir}/trim_dir
 index_dir = ${project_dir}/index_dir
