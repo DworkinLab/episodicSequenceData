@@ -10,9 +10,6 @@ Should run md5sum and fastqc seperatly (before running quality control)
 
 Set up/ edit this script
 
-```
-#! /bin/bash
-
 project_dir = /home/paul/episodicData
 
 raw_dir = ${project_dir}/raw_dir
@@ -26,13 +23,14 @@ bwa_path = /usr/local/bwa/0.7.8
 
 # ?? ref_genome needs to be difined:
 
-```
-
 Defining all directories (cp to start of all scripts?)
 some of these will not work until after they are created
 ```
 project_dir = /home/paul/episodicData
 raw_dir = ${project_dir}/raw_dir
+trimmomatic = /usr/local/trimmomatic
+adapt_path = /usr/local/trimmomatic/adapters
+bwa_path = /usr/local/bwa/0.7.8
 trim_dir = ${project_dir}/trim_dir
 index_dir = ${project_dir}/index_dir
 bwa_dir = ${project_dir}/bwa_dir
