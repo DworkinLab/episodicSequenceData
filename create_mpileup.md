@@ -8,41 +8,49 @@ Should run md5sum and fastqc seperatly (before running quality control)
   - need to move paths to other directories on machine (i.e bwa or trim) at the top
   - ?? scripts: make a directory and move based on them
 
-project_dir = /home/paul/episodicData
+Set up/ edit this script
 
-raw_dir = ${project_dir}/raw_dir
+```
 
-trimmomatic = /usr/local/trimmomatic
-  - location of trimmomatic on machine
 
-adapt_path = /usr/local/trimmomatic/adapters
-  - path to adapter sequences
-  - ?? need to change the apater type!!!
-
-bwa_path = /usr/local/bwa/0.7.8
-
-?? ref_genome needs to be difined:
-
+```
 
 
 
 ### Should not need to change anything below here
 
+Create all working Directories
+```
+#! /bin/bash
+
+cd {project_dir}
+
 mkdir ${project_dir}/trim_dir
-trim_dir = ${project_dir}/trim_dir
 
 mkdir ${project_dir}/index_dir
-index_dir = ${project_dir}/index_dir 
-
-ref_genome = 
-  - genome from index_dir for reference (will have the extension)
 
 mkdir ${project_dir}/bwa_dir
-bwa_dir = ${project_dir}/bwa_dir
+
 
 mkdir ${project_dir}/sam_dir
-sam_dir = ${project_dir}/sam_dir
+
 
 mkdir ${project_dir}/bam_dir
+
+```
+
+Define all directories 
+```
+#! bin/bash
+
+trim_dir = ${project_dir}/trim_dir
+index_dir = ${project_dir}/index_dir
+bwa_dir = ${project_dir}/bwa_dir
+sam_dir = ${project_dir}/sam_dir
 bam_dir = ${project_dir}/bam_dir 
+
+```
+
+
+
 
