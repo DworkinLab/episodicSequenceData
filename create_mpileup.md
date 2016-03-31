@@ -28,6 +28,19 @@ bwa_path = /usr/local/bwa/0.7.8
 
 ```
 
+Defining all directories (cp to start of all scripts?)
+some of these will not work until after they are created
+```
+project_dir = /home/paul/episodicData
+raw_dir = ${project_dir}/raw_dir
+trim_dir = ${project_dir}/trim_dir
+index_dir = ${project_dir}/index_dir
+bwa_dir = ${project_dir}/bwa_dir
+sam_dir = ${project_dir}/sam_dir
+bam_dir = ${project_dir}/bam_dir 
+
+```
+
 
 
 ### Should not need to change anything below here
@@ -52,17 +65,6 @@ mkdir ${project_dir}/bam_dir
 
 ```
 
-Defining all directories (cp to start of all scripts?)
-```
-project_dir = /home/paul/episodicData
-raw_dir = ${project_dir}/raw_dir
-trim_dir = ${project_dir}/trim_dir
-index_dir = ${project_dir}/index_dir
-bwa_dir = ${project_dir}/bwa_dir
-sam_dir = ${project_dir}/sam_dir
-bam_dir = ${project_dir}/bam_dir 
-
-```
 
 
 
