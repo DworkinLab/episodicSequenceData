@@ -52,10 +52,10 @@ mkdir ${project_dir}/bam_dir
 
 ```
 
-Define all directories 
+Defining all directories (cp to start of all scripts?)
 ```
-#! /bin/bash
-
+project_dir = /home/paul/episodicData
+raw_dir = ${project_dir}/raw_dir
 trim_dir = ${project_dir}/trim_dir
 index_dir = ${project_dir}/index_dir
 bwa_dir = ${project_dir}/bwa_dir
