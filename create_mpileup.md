@@ -62,7 +62,33 @@ sam_dir = ${project_dir}/sam_dir
 bam_dir = ${project_dir}/bam_dir 
 ```
 
-Scripts:
+###Scripts:
+
+### Trimmomatic
+```
+#! /bin/bash
+
+project_dir = /home/paul/episodicData
+raw_dir = ${project_dir}/raw_dir
+trimmomatic = /usr/local/trimmomatic
+adapt_path = /usr/local/trimmomatic/adapters
+bwa_path = /usr/local/bwa/0.7.8
+trim_dir = ${project_dir}/trim_dir
+index_dir = ${project_dir}/index_dir
+bwa_dir = ${project_dir}/bwa_dir
+sam_dir = ${project_dir}/sam_dir
+bam_dir = ${project_dir}/bam_dir 
+
+
+files=(${raw_dir}*_R1_001.fastq.gz)
+for file in ${files[@]} 
+do
+name=${file}
+base=`basename ${name} _R1_001.fastq.gz`
+java -jar ${trimmomatic}/trimmomatic-0.33.jar PE -phred33 -trimlog ${trim_dir}/trimlog.txt ${raw_dir}${base}_R1_001.fastq.gz ${raw_dir}${base}_R2_001.fastq.gz ${trim_dir}/${base}_R1_PE_phred33.fastq.gz ${out_dir}/${base}_R1_SE_phred33.fastq.gz ${trim_dir}/${base}_R2_PE_phred33.fastq.gz ${trim_dir}/${base}_R2_SE_phred33.fastq.gz ILLUMINACLIP:${adapt_path}/TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 MAXINFO:40:0.5 MINLEN:36
+done
+```
+
 
 
 
