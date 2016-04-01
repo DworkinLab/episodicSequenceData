@@ -9,25 +9,23 @@ Should run md5sum and fastqc seperatly (before running quality control)
   - ?? scripts: make a directory and move based on them
 
 Set up/ edit this script
-
-```
+??
 project_dir = /home/paul/episodicData
 
 raw_dir = ${project_dir}/raw_dir
 
 trimmomatic = /usr/local/trimmomatic
-# location of trimmomatic on machine
+location of trimmomatic on machine
 adapt_path = /usr/local/trimmomatic/adapters
-# path to adapter sequences
-# ?? need to change the apater type!!!
+path to adapter sequences
+?? need to change the apater type!!!
 bwa_path = /usr/local/bwa/0.7.8
 
-# ?? ref_genome needs to be difined:
-```
+?? ref_genome needs to be difined:
+??
 
-### Should not need to change anything below here
+###Create all working Directories
 
-Create all working Directories
 ```
 #! /bin/bash
 
@@ -50,8 +48,7 @@ mkdir ${project_dir}/bam_dir
 ```
 
 
-Defining all directories (cp to start of all scripts?)
-some of these will not work until after they are created
+Defining all directories (copy to start of all scripts?)
 ```
 project_dir = /home/paul/episodicData
 raw_dir = ${project_dir}/raw_dir
@@ -63,8 +60,9 @@ index_dir = ${project_dir}/index_dir
 bwa_dir = ${project_dir}/bwa_dir
 sam_dir = ${project_dir}/sam_dir
 bam_dir = ${project_dir}/bam_dir 
-
 ```
+
+Scripts:
 
 
 
