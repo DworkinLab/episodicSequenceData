@@ -19,6 +19,7 @@ path to adapter sequences
 bwa_path = /usr/local/bwa/0.7.8
 
 pic=/usr/local/picard-tools-1.131/picard.jar
+/usr/local/popoolation/mpileup2sync.jar
 
 
 merged= ${project_dir}/merged
@@ -78,12 +79,14 @@ ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
 
 Defining all directories (copy to start of all scripts?)
 ```
+project_name = episodic_data
 project_dir = /home/paul/episodicData
 raw_dir = ${project_dir}/raw_dir
 trimmomatic = /usr/local/trimmomatic
 adapt_path = /usr/local/trimmomatic/adapters
 bwa_path = /usr/local/bwa/0.7.8
 pic=/usr/local/picard-tools-1.131/picard.jar
+sync = /usr/local/popoolation/mpileup2sync.jar
 
 trim_dir = ${project_dir}/trim_dir
 index_dir = ${project_dir}/index_dir
@@ -204,11 +207,17 @@ done
 
 ### Create mpileup file format
 check the flags (illumina or sanger) -6 removed as not what is needed
+trying with input of project name to create files.....
 ```
 #! /bin/bash
 
-ref_genome=/home/paul/episodicData/indexSequence/dmel-all-chromosome-r5.57.fasta.gz
-final_bam=/home/paul/episodicData/mappedSequence/final_bam_files
-mpileup_dir=/home/paul/episodicData/mappedSequence
-samtools mpileup -B -Q 0 -f ${ref_genome} ${final_bam}/*.bam > ${mpileup_dir}/episodicData_Sanger.mpileup
+samtools mpileup -B -Q 0 -f ${ref_genome} ${final_bam}/*.bam > ${mpileup_dir}/${project_name}_Sanger.mpileup
 ```
+
+### Sync Files
+```
+#! /bin/bash
+
+java -ea -Xmx7g -jar ${sync} --input ${mpileup_dir}/${project_name}_Sanger.mpileup --output ${mpileup_dir}/${project_name}_Sanger.sync --fastq-type sanger --min-qual 20 --threads 2
+```
+
