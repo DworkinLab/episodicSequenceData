@@ -55,6 +55,7 @@ adapt_path = /usr/local/trimmomatic/adapters
 bwa_path = /usr/local/bwa/0.7.8
 trim_dir = ${project_dir}/trim_dir
 index_dir = ${project_dir}/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
 bwa_dir = ${project_dir}/bwa_dir
 sam_dir = ${project_dir}/sam_dir
 bam_dir = ${project_dir}/bam_dir 
@@ -73,10 +74,10 @@ adapt_path = /usr/local/trimmomatic/adapters
 bwa_path = /usr/local/bwa/0.7.8
 trim_dir = ${project_dir}/trim_dir
 index_dir = ${project_dir}/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
 bwa_dir = ${project_dir}/bwa_dir
 sam_dir = ${project_dir}/sam_dir
 bam_dir = ${project_dir}/bam_dir 
-
 
 files=(${raw_dir}*_R1_001.fastq.gz)
 for file in ${files[@]} 
@@ -88,8 +89,22 @@ done
 ```
 
 ### Bringing in Reference sequence and Indexing
+##Can change to set it up in a way that don't need to edit the reference sequence.....
 ```
-index_dir=/home/paul/episodicData/indexSequence
+#! /bin/bash
+
+project_dir = /home/paul/episodicData
+raw_dir = ${project_dir}/raw_dir
+trimmomatic = /usr/local/trimmomatic
+adapt_path = /usr/local/trimmomatic/adapters
+bwa_path = /usr/local/bwa/0.7.8
+trim_dir = ${project_dir}/trim_dir
+index_dir = ${project_dir}/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+bwa_dir = ${project_dir}/bwa_dir
+sam_dir = ${project_dir}/sam_dir
+bam_dir = ${project_dir}/bam_dir 
+
 cd ${index_dir}
 curl -O ftp://ftp.flybase.net/genomes/Drosophila_melanogaster/dmel_r5.57_FB2014_03/fasta/dmel-all-chromosome-r5.57.fasta.gz
 
@@ -100,27 +115,31 @@ bwa index dmel-all-chromosome-r5.57.fasta.gz
 ```
 #!/bin/bash
 
-# Log onto remote server
-# make BWA directory path
-bwa_dir=/usr/local/bwa/0.7.8
+project_dir = /home/paul/episodicData
+raw_dir = ${project_dir}/raw_dir
+trimmomatic = /usr/local/trimmomatic
+adapt_path = /usr/local/trimmomatic/adapters
+bwa_path = /usr/local/bwa/0.7.8
+trim_dir = ${project_dir}/trim_dir
+index_dir = ${project_dir}/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+bwa_dir = ${project_dir}/bwa_dir
+sam_dir = ${project_dir}/sam_dir
+bam_dir = ${project_dir}/bam_dir 
 
-cd ${bwa_dir}
+cd ${bwa_path}
 
 # make variable for working directory for
-dir=/home/paul/episodicData/trimmomaticOutputs
+#dir=/home/paul/episodicData/trimmomaticOutputs
 
 #make variable for reference genome
-ref_genome=/home/paul/episodicData/indexSequence/dmel-all-chromosome-r5.57.fasta.gz
+#ref_genome=/home/paul/episodicData/indexSequence/dmel-all-chromosome-r5.57.fasta.gz
 
 # make variable for output directory
-sam_dir=/home/paul/episodicData/mappedSequence/SAM_files
+#sam_dir=/home/paul/episodicData/mappedSequence/SAM_files
 
 #make an array for each file in the directory "dir" that ends in _R1_PE_phred33.fastq.gz
 files=(${dir}/*_R1_PE_phred33.fastq.gz)
-
-#Check with echo
-#echo ${files[1]}
-#echo ${files[@]}
 
 
 #Use "for loop" to map reads with the same "basename" to ref_genome
@@ -133,15 +152,30 @@ for file in ${files[@]}
 do
 name=${file}
 base=`basename ${name} _R1_PE_phred33.fastq.gz`
-bwa mem -t 8 -M ${ref_genome} ${dir}/${base}_R1_PE_phred33.fastq.gz ${dir}/${base}_R2_PE_phred33.fastq.gz > ${sam_dir}/${base}_aligned_pe.SAM
+bwa mem -t 8 -M ${ref_genome} ${trim_dir}/${base}_R1_PE_phred33.fastq.gz ${trim_dir}/${base}_R2_PE_phred33.fastq.gz > ${sam_dir}/${base}_aligned_pe.SAM
 done
 ```
 
 ### convert SAM to BAM
 ```
 #! /bin/bash
-sam_dir=/home/paul/episodicData/mappedSequence/SAM_files/
-bam_dir=/home/paul/episodicData/mappedSequence/BAM_files/
+
+
+project_dir = /home/paul/episodicData
+raw_dir = ${project_dir}/raw_dir
+trimmomatic = /usr/local/trimmomatic
+adapt_path = /usr/local/trimmomatic/adapters
+bwa_path = /usr/local/bwa/0.7.8
+trim_dir = ${project_dir}/trim_dir
+index_dir = ${project_dir}/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+bwa_dir = ${project_dir}/bwa_dir
+sam_dir = ${project_dir}/sam_dir
+bam_dir = ${project_dir}/bam_dir 
+
+#sam_dir=/home/paul/episodicData/mappedSequence/SAM_files/
+#bam_dir=/home/paul/episodicData/mappedSequence/BAM_files/
+
 files=(${sam_dir}*.SAM)
 echo ${files[@]}
 for file in ${files[@]}
