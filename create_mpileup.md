@@ -20,6 +20,7 @@ bwa_path = /usr/local/bwa/0.7.8
 
 
 merged= ${project_dir}/merged
+sort_dir=/home/paul/episodicData/mappedSequence/sort_bam_files
 
 ```
 
@@ -50,6 +51,8 @@ mkdir ${project_dir}/sam_dir
 mkdir ${project_dir}/bam_dir
 
 mkdir ${project_dir}/merged
+
+mkdir ${project_dir}/
 
 # Can change the index sequence here
 cd ${index_dir}
@@ -140,7 +143,21 @@ samtools merge ${merged}/${base}_merged_aligned_pe.bam ${bam_dir}/${base}_L001_a
 done
 ```
 
+### sort with Picard
+```
+#! /bin/bash
 
+merged_dir=/home/paul/episodicData/mappedSequence/merged_bam_files
+sort_dir=/home/paul/episodicData/mappedSequence/sort_bam_files
+files=(${merged_dir}/*)
+pic=/usr/local/picard-tools-1.131/picard.jar
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} .bam`
+java -Xmx2g -jar ${pic} SortSam I= ${merged_dir}/${base}.bam O= ${sort_dir}/${base}.sort.bam VALIDATION_STRINGENCY=SILENT SO=coordinate
+done
+```
 
 
 
