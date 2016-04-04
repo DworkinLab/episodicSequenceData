@@ -39,9 +39,7 @@ mkdir ${project_dir}/index_dir
 
 mkdir ${project_dir}/bwa_dir
 
-
 mkdir ${project_dir}/sam_dir
-
 
 mkdir ${project_dir}/bam_dir
 
@@ -86,6 +84,71 @@ do
 name=${file}
 base=`basename ${name} _R1_001.fastq.gz`
 java -jar ${trimmomatic}/trimmomatic-0.33.jar PE -phred33 -trimlog ${trim_dir}/trimlog.txt ${raw_dir}${base}_R1_001.fastq.gz ${raw_dir}${base}_R2_001.fastq.gz ${trim_dir}/${base}_R1_PE_phred33.fastq.gz ${out_dir}/${base}_R1_SE_phred33.fastq.gz ${trim_dir}/${base}_R2_PE_phred33.fastq.gz ${trim_dir}/${base}_R2_SE_phred33.fastq.gz ILLUMINACLIP:${adapt_path}/TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 MAXINFO:40:0.5 MINLEN:36
+done
+```
+
+### Bringing in Reference sequence and Indexing
+```
+index_dir=/home/paul/episodicData/indexSequence
+cd ${index_dir}
+curl -O ftp://ftp.flybase.net/genomes/Drosophila_melanogaster/dmel_r5.57_FB2014_03/fasta/dmel-all-chromosome-r5.57.fasta.gz
+
+bwa index dmel-all-chromosome-r5.57.fasta.gz
+```
+
+### BWA mapping
+```
+#!/bin/bash
+
+# Log onto remote server
+# make BWA directory path
+bwa_dir=/usr/local/bwa/0.7.8
+
+cd ${bwa_dir}
+
+# make variable for working directory for
+dir=/home/paul/episodicData/trimmomaticOutputs
+
+#make variable for reference genome
+ref_genome=/home/paul/episodicData/indexSequence/dmel-all-chromosome-r5.57.fasta.gz
+
+# make variable for output directory
+sam_dir=/home/paul/episodicData/mappedSequence/SAM_files
+
+#make an array for each file in the directory "dir" that ends in _R1_PE_phred33.fastq.gz
+files=(${dir}/*_R1_PE_phred33.fastq.gz)
+
+#Check with echo
+#echo ${files[1]}
+#echo ${files[@]}
+
+
+#Use "for loop" to map reads with the same "basename" to ref_genome
+#Two flags for bwa mem
+# -t = number of processors
+# -M    Mark shorter split hits as secondary (for Picard compatibility(see step 8).
+# Do I need qstat
+
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _R1_PE_phred33.fastq.gz`
+bwa mem -t 8 -M ${ref_genome} ${dir}/${base}_R1_PE_phred33.fastq.gz ${dir}/${base}_R2_PE_phred33.fastq.gz > ${sam_dir}/${base}_aligned_pe.SAM
+done
+```
+
+### convert SAM to BAM
+```
+#! /bin/bash
+sam_dir=/home/paul/episodicData/mappedSequence/SAM_files/
+bam_dir=/home/paul/episodicData/mappedSequence/BAM_files/
+files=(${sam_dir}*.SAM)
+echo ${files[@]}
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} .SAM`
+samtools view -b -S -q 20 ${sam_dir}${base}.SAM | samtools sort - ${bam_dir}${base}
 done
 ```
 
