@@ -9,39 +9,49 @@ Should run md5sum and fastqc seperatly (before running quality control)
   - ?? scripts: make a directory and move based on them
 
 Set up/ edit this script
-??
-project_dir = /home/paul/episodicData
-
-raw_dir = ${project_dir}/raw_dir
-
+-- Rough locations needed:
+```
 trimmomatic = /usr/local/trimmomatic
 location of trimmomatic on machine
 adapt_path = /usr/local/trimmomatic/adapters
 path to adapter sequences
 ?? need to change the apater type!!!
 bwa_path = /usr/local/bwa/0.7.8
+```
 
-?? ref_genome needs to be difined:
-??
+###Change so all files like this:  _R1_001.fastq.gz (or R2_001...)
 
-###Create all working Directories
+
+
+
+###Create all working Directories and bringing in reference sequence and indexing
 
 ```
 #! /bin/bash
 
 project_dir = /home/paul/episodicData
 raw_dir = ${project_dir}/raw_dir
+
 cd {project_dir}
 
 mkdir ${project_dir}/trim_dir
 
 mkdir ${project_dir}/index_dir
+index_dir = ${project_dir}/index_dir
 
 mkdir ${project_dir}/bwa_dir
 
 mkdir ${project_dir}/sam_dir
 
 mkdir ${project_dir}/bam_dir
+
+# Can change the index sequence here
+cd ${index_dir}
+curl -O ftp://ftp.flybase.net/genomes/Drosophila_melanogaster/dmel_r5.57_FB2014_03/fasta/dmel-all-chromosome-r5.57.fasta.gz
+
+bwa index dmel-all-chromosome-r5.57.fasta.gz
+
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
 
 ```
 
@@ -86,29 +96,6 @@ name=${file}
 base=`basename ${name} _R1_001.fastq.gz`
 java -jar ${trimmomatic}/trimmomatic-0.33.jar PE -phred33 -trimlog ${trim_dir}/trimlog.txt ${raw_dir}${base}_R1_001.fastq.gz ${raw_dir}${base}_R2_001.fastq.gz ${trim_dir}/${base}_R1_PE_phred33.fastq.gz ${out_dir}/${base}_R1_SE_phred33.fastq.gz ${trim_dir}/${base}_R2_PE_phred33.fastq.gz ${trim_dir}/${base}_R2_SE_phred33.fastq.gz ILLUMINACLIP:${adapt_path}/TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 MAXINFO:40:0.5 MINLEN:36
 done
-```
-
-### Bringing in Reference sequence and Indexing
-##Can change to set it up in a way that don't need to edit the reference sequence.....
-```
-#! /bin/bash
-
-project_dir = /home/paul/episodicData
-raw_dir = ${project_dir}/raw_dir
-trimmomatic = /usr/local/trimmomatic
-adapt_path = /usr/local/trimmomatic/adapters
-bwa_path = /usr/local/bwa/0.7.8
-trim_dir = ${project_dir}/trim_dir
-index_dir = ${project_dir}/index_dir
-ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
-bwa_dir = ${project_dir}/bwa_dir
-sam_dir = ${project_dir}/sam_dir
-bam_dir = ${project_dir}/bam_dir 
-
-cd ${index_dir}
-curl -O ftp://ftp.flybase.net/genomes/Drosophila_melanogaster/dmel_r5.57_FB2014_03/fasta/dmel-all-chromosome-r5.57.fasta.gz
-
-bwa index dmel-all-chromosome-r5.57.fasta.gz
 ```
 
 ### BWA mapping
