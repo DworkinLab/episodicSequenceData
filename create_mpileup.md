@@ -73,7 +73,7 @@ bam_dir = ${project_dir}/bam_dir
 
 ###Scripts:
 
-### Trimmomatic
+### Trimmomatic -- Check the trim log. adapter path
 ```
 #! /bin/bash
 
@@ -94,7 +94,7 @@ for file in ${files[@]}
 do
 name=${file}
 base=`basename ${name} _R1_001.fastq.gz`
-java -jar ${trimmomatic}/trimmomatic-0.33.jar PE -phred33 -trimlog ${trim_dir}/trimlog.txt ${raw_dir}${base}_R1_001.fastq.gz ${raw_dir}${base}_R2_001.fastq.gz ${trim_dir}/${base}_R1_PE_phred33.fastq.gz ${out_dir}/${base}_R1_SE_phred33.fastq.gz ${trim_dir}/${base}_R2_PE_phred33.fastq.gz ${trim_dir}/${base}_R2_SE_phred33.fastq.gz ILLUMINACLIP:${adapt_path}/TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 MAXINFO:40:0.5 MINLEN:36
+java -jar ${trimmomatic}/trimmomatic-0.33.jar PE -phred33 -trimlog ${trim_dir}/trimlog.txt ${raw_dir}${base}_R1_001.fastq.gz ${raw_dir}${base}_R2_001.fastq.gz ${trim_dir}/${base}_R1_PE.fastq.gz ${out_dir}/${base}_R1_SE.fastq.gz ${trim_dir}/${base}_R2_PE.fastq.gz ${trim_dir}/${base}_R2_SE.fastq.gz ILLUMINACLIP:${adapt_path}/TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 MAXINFO:40:0.5 MINLEN:36
 done
 ```
 
@@ -116,30 +116,14 @@ bam_dir = ${project_dir}/bam_dir
 
 cd ${bwa_path}
 
-# make variable for working directory for
-#dir=/home/paul/episodicData/trimmomaticOutputs
-
-#make variable for reference genome
-#ref_genome=/home/paul/episodicData/indexSequence/dmel-all-chromosome-r5.57.fasta.gz
-
-# make variable for output directory
-#sam_dir=/home/paul/episodicData/mappedSequence/SAM_files
-
 #make an array for each file in the directory "dir" that ends in _R1_PE_phred33.fastq.gz
-files=(${dir}/*_R1_PE_phred33.fastq.gz)
-
-
-#Use "for loop" to map reads with the same "basename" to ref_genome
-#Two flags for bwa mem
-# -t = number of processors
-# -M    Mark shorter split hits as secondary (for Picard compatibility(see step 8).
-# Do I need qstat
+files=(${trim_dir}/*_R1_PE.fastq.gz)
 
 for file in ${files[@]}
 do
 name=${file}
 base=`basename ${name} _R1_PE_phred33.fastq.gz`
-bwa mem -t 8 -M ${ref_genome} ${trim_dir}/${base}_R1_PE_phred33.fastq.gz ${trim_dir}/${base}_R2_PE_phred33.fastq.gz > ${sam_dir}/${base}_aligned_pe.SAM
+bwa mem -t 8 -M ${ref_genome} ${trim_dir}/${base}_R1_PE.fastq.gz ${trim_dir}/${base}_R2_PE.fastq.gz > ${sam_dir}/${base}_aligned_pe.SAM
 done
 ```
 
@@ -159,9 +143,6 @@ ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
 bwa_dir = ${project_dir}/bwa_dir
 sam_dir = ${project_dir}/sam_dir
 bam_dir = ${project_dir}/bam_dir 
-
-#sam_dir=/home/paul/episodicData/mappedSequence/SAM_files/
-#bam_dir=/home/paul/episodicData/mappedSequence/BAM_files/
 
 files=(${sam_dir}*.SAM)
 echo ${files[@]}
