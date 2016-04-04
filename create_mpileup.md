@@ -18,6 +18,8 @@ path to adapter sequences
 ?? need to change the apater type!!!
 bwa_path = /usr/local/bwa/0.7.8
 
+pic=/usr/local/picard-tools-1.131/picard.jar
+
 
 merged= ${project_dir}/merged
 sort_dir=/home/paul/episodicData/mappedSequence/sort_bam_files
@@ -52,7 +54,7 @@ mkdir ${project_dir}/bam_dir
 
 mkdir ${project_dir}/merged
 
-mkdir ${project_dir}/
+mkdir ${project_dir}/sort_dir
 
 # Can change the index sequence here
 cd ${index_dir}
@@ -72,6 +74,8 @@ raw_dir = ${project_dir}/raw_dir
 trimmomatic = /usr/local/trimmomatic
 adapt_path = /usr/local/trimmomatic/adapters
 bwa_path = /usr/local/bwa/0.7.8
+pic=/usr/local/picard-tools-1.131/picard.jar
+
 trim_dir = ${project_dir}/trim_dir
 index_dir = ${project_dir}/index_dir
 ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
@@ -79,11 +83,15 @@ bwa_dir = ${project_dir}/bwa_dir
 sam_dir = ${project_dir}/sam_dir
 bam_dir = ${project_dir}/bam_dir 
 merged= ${project_dir}/merged
+sort_dir= ${project_dir}/sort_dir
+
 ```
 
 ###Scripts:
 
 ### Trimmomatic -- Check the trim log. adapter path
+make $trimmomatic/trimmomatic-0.33.jar one imput (no need to change later)
+
 ```
 #! /bin/bash
 
@@ -147,10 +155,7 @@ done
 ```
 #! /bin/bash
 
-merged_dir=/home/paul/episodicData/mappedSequence/merged_bam_files
-sort_dir=/home/paul/episodicData/mappedSequence/sort_bam_files
 files=(${merged_dir}/*)
-pic=/usr/local/picard-tools-1.131/picard.jar
 for file in ${files[@]}
 do
 name=${file}
