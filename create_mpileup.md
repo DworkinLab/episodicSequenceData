@@ -8,31 +8,7 @@ Should run md5sum and fastqc seperatly (before running quality control)
   - need to move paths to other directories on machine (i.e bwa or trim) at the top
   - ?? scripts: make a directory and move based on them
 
-Set up/ edit this script
--- Rough locations needed:
-```
-trimmomatic = /usr/local/trimmomatic
-location of trimmomatic on machine
-adapt_path = /usr/local/trimmomatic/adapters
-path to adapter sequences
-?? need to change the apater type!!!
-bwa_path = /usr/local/bwa/0.7.8
-
-pic=/usr/local/picard-tools-1.131/picard.jar
-/usr/local/popoolation/mpileup2sync.jar
-
-
-merged= ${project_dir}/merged
-sort_dir=/home/paul/episodicData/mappedSequence/sort_bam_files
-rmd_dir=/home/paul/episodicData/mappedSequence/rmd_bam_files
-final_bam=/home/paul/episodicData/mappedSequence/final_bam_files
-mpileup_dir=/home/paul/episodicData/mappedSequence
-
-```
-
 ###Change so all files like this:  _R1_001.fastq.gz (or R2_001...)
-
-
 
 
 ###Create all working Directories and bringing in reference sequence and indexing
@@ -105,7 +81,7 @@ mpileup_dir=${project_dir}/mpileup_dir
 ###Scripts:
 
 ### Trimmomatic -- Check the trim log. adapter path
-make $trimmomatic/trimmomatic-0.33.jar one imput (no need to change later)
+make $trimmomatic/trimmomatic-0.33.jar one input (no need to change later)
 
 ```
 #! /bin/bash
