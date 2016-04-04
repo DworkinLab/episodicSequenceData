@@ -25,7 +25,7 @@ bwa_path = /usr/local/bwa/0.7.8
 
 
 ###Create all working Directories and bringing in reference sequence and indexing
-
+Change trim to actual file / input (same for adapters)
 ```
 #! /bin/bash
 
