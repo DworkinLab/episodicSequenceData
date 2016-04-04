@@ -24,6 +24,7 @@ pic=/usr/local/picard-tools-1.131/picard.jar
 merged= ${project_dir}/merged
 sort_dir=/home/paul/episodicData/mappedSequence/sort_bam_files
 rmd_dir=/home/paul/episodicData/mappedSequence/rmd_bam_files
+final_bam=/home/paul/episodicData/mappedSequence/final_bam_files
 
 ```
 
@@ -59,6 +60,8 @@ mkdir ${project_dir}/sort_dir
 
 mkdir ${project_dir}/rmd_dir
 
+mkdir ${project_dir}/final_bam
+
 # Can change the index sequence here
 cd ${index_dir}
 curl -O ftp://ftp.flybase.net/genomes/Drosophila_melanogaster/dmel_r5.57_FB2014_03/fasta/dmel-all-chromosome-r5.57.fasta.gz
@@ -88,6 +91,7 @@ bam_dir = ${project_dir}/bam_dir
 merged= ${project_dir}/merged
 sort_dir= ${project_dir}/sort_dir
 rmd_dir= ${project_dir}/rmd_dir
+final_bam=${project_dir}/final_bam
 
 ```
 
@@ -178,6 +182,19 @@ do
 name=${file}
 base=`basename ${name} .sort.bam`
 java -Xmx2g -jar ${pic} MarkDuplicates I= ${sort_dir}/*.sort.bam O= ${rmd_dir}/${base}.rmd.sort.bam M= ${rmd_dir}/dupstat.txt VALIDATION_STRINGENCY=SILENT REMOVE_DUPLICATES= true
+done
+```
+
+### Remove low quality reads
+```
+#! /bin/bash
+
+files=(${rmd_dir}/*.rmd.sort.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} .rmd.sort.bam`
+samtools view -q 20 -F 0x0004 -b ${rmd_dir}/${base}.rmd.sort.bam > ${final_bam}/${base}.final.bam
 done
 ```
 
