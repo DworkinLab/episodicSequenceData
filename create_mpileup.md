@@ -23,6 +23,7 @@ pic=/usr/local/picard-tools-1.131/picard.jar
 
 merged= ${project_dir}/merged
 sort_dir=/home/paul/episodicData/mappedSequence/sort_bam_files
+rmd_dir=/home/paul/episodicData/mappedSequence/rmd_bam_files
 
 ```
 
@@ -56,6 +57,8 @@ mkdir ${project_dir}/merged
 
 mkdir ${project_dir}/sort_dir
 
+mkdir ${project_dir}/rmd_dir
+
 # Can change the index sequence here
 cd ${index_dir}
 curl -O ftp://ftp.flybase.net/genomes/Drosophila_melanogaster/dmel_r5.57_FB2014_03/fasta/dmel-all-chromosome-r5.57.fasta.gz
@@ -78,12 +81,13 @@ pic=/usr/local/picard-tools-1.131/picard.jar
 
 trim_dir = ${project_dir}/trim_dir
 index_dir = ${project_dir}/index_dir
-ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+ref_genome = ${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
 bwa_dir = ${project_dir}/bwa_dir
 sam_dir = ${project_dir}/sam_dir
 bam_dir = ${project_dir}/bam_dir 
 merged= ${project_dir}/merged
 sort_dir= ${project_dir}/sort_dir
+rmd_dir= ${project_dir}/rmd_dir
 
 ```
 
@@ -164,5 +168,17 @@ java -Xmx2g -jar ${pic} SortSam I= ${merged_dir}/${base}.bam O= ${sort_dir}/${ba
 done
 ```
 
+### Remove duplicates
+```
+#! /bin/bash
+
+files=(${sort_dir}/*)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} .sort.bam`
+java -Xmx2g -jar ${pic} MarkDuplicates I= ${sort_dir}/*.sort.bam O= ${rmd_dir}/${base}.rmd.sort.bam M= ${rmd_dir}/dupstat.txt VALIDATION_STRINGENCY=SILENT REMOVE_DUPLICATES= true
+done
+```
 
 
