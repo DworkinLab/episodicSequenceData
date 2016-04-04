@@ -17,6 +17,10 @@ adapt_path = /usr/local/trimmomatic/adapters
 path to adapter sequences
 ?? need to change the apater type!!!
 bwa_path = /usr/local/bwa/0.7.8
+
+
+merged= ${project_dir}/merged
+
 ```
 
 ###Change so all files like this:  _R1_001.fastq.gz (or R2_001...)
@@ -45,6 +49,8 @@ mkdir ${project_dir}/sam_dir
 
 mkdir ${project_dir}/bam_dir
 
+mkdir ${project_dir}/merged
+
 # Can change the index sequence here
 cd ${index_dir}
 curl -O ftp://ftp.flybase.net/genomes/Drosophila_melanogaster/dmel_r5.57_FB2014_03/fasta/dmel-all-chromosome-r5.57.fasta.gz
@@ -69,6 +75,7 @@ ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
 bwa_dir = ${project_dir}/bwa_dir
 sam_dir = ${project_dir}/sam_dir
 bam_dir = ${project_dir}/bam_dir 
+merged= ${project_dir}/merged
 ```
 
 ###Scripts:
@@ -76,18 +83,6 @@ bam_dir = ${project_dir}/bam_dir
 ### Trimmomatic -- Check the trim log. adapter path
 ```
 #! /bin/bash
-
-project_dir = /home/paul/episodicData
-raw_dir = ${project_dir}/raw_dir
-trimmomatic = /usr/local/trimmomatic
-adapt_path = /usr/local/trimmomatic/adapters
-bwa_path = /usr/local/bwa/0.7.8
-trim_dir = ${project_dir}/trim_dir
-index_dir = ${project_dir}/index_dir
-ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
-bwa_dir = ${project_dir}/bwa_dir
-sam_dir = ${project_dir}/sam_dir
-bam_dir = ${project_dir}/bam_dir 
 
 files=(${raw_dir}*_R1_001.fastq.gz)
 for file in ${files[@]} 
@@ -101,18 +96,6 @@ done
 ### BWA mapping
 ```
 #!/bin/bash
-
-project_dir = /home/paul/episodicData
-raw_dir = ${project_dir}/raw_dir
-trimmomatic = /usr/local/trimmomatic
-adapt_path = /usr/local/trimmomatic/adapters
-bwa_path = /usr/local/bwa/0.7.8
-trim_dir = ${project_dir}/trim_dir
-index_dir = ${project_dir}/index_dir
-ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
-bwa_dir = ${project_dir}/bwa_dir
-sam_dir = ${project_dir}/sam_dir
-bam_dir = ${project_dir}/bam_dir 
 
 cd ${bwa_path}
 
@@ -132,18 +115,6 @@ done
 #! /bin/bash
 
 
-project_dir = /home/paul/episodicData
-raw_dir = ${project_dir}/raw_dir
-trimmomatic = /usr/local/trimmomatic
-adapt_path = /usr/local/trimmomatic/adapters
-bwa_path = /usr/local/bwa/0.7.8
-trim_dir = ${project_dir}/trim_dir
-index_dir = ${project_dir}/index_dir
-ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
-bwa_dir = ${project_dir}/bwa_dir
-sam_dir = ${project_dir}/sam_dir
-bam_dir = ${project_dir}/bam_dir 
-
 files=(${sam_dir}*.SAM)
 echo ${files[@]}
 for file in ${files[@]}
@@ -153,7 +124,21 @@ base=`basename ${name} .SAM`
 samtools view -b -S -q 20 ${sam_dir}${base}.SAM | samtools sort - ${bam_dir}${base}
 done
 ```
+### Merge files
+Only works if all lanes are L001/L002
+Is alternative merge method (other, 1st script)
 
+```
+#!/bin/bash
+
+files=(${bam_dir}/*_L001_aligned_pe.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _L001_aligned_pe.bam`
+samtools merge ${merged}/${base}_merged_aligned_pe.bam ${bam_dir}/${base}_L001_aligned_pe.bam ${bam_dir}/${base}_L002_aligned_pe.bam
+done
+```
 
 
 
