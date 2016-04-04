@@ -25,6 +25,7 @@ merged= ${project_dir}/merged
 sort_dir=/home/paul/episodicData/mappedSequence/sort_bam_files
 rmd_dir=/home/paul/episodicData/mappedSequence/rmd_bam_files
 final_bam=/home/paul/episodicData/mappedSequence/final_bam_files
+mpileup_dir=/home/paul/episodicData/mappedSequence
 
 ```
 
@@ -62,6 +63,8 @@ mkdir ${project_dir}/rmd_dir
 
 mkdir ${project_dir}/final_bam
 
+mkdir ${project_dir}/mpileup_dir
+
 # Can change the index sequence here
 cd ${index_dir}
 curl -O ftp://ftp.flybase.net/genomes/Drosophila_melanogaster/dmel_r5.57_FB2014_03/fasta/dmel-all-chromosome-r5.57.fasta.gz
@@ -92,6 +95,7 @@ merged= ${project_dir}/merged
 sort_dir= ${project_dir}/sort_dir
 rmd_dir= ${project_dir}/rmd_dir
 final_bam=${project_dir}/final_bam
+mpileup_dir=${project_dir}/mpileup_dir
 
 ```
 
@@ -198,4 +202,13 @@ samtools view -q 20 -F 0x0004 -b ${rmd_dir}/${base}.rmd.sort.bam > ${final_bam}/
 done
 ```
 
+### Create mpileup file format
+check the flags (illumina or sanger) -6 removed as not what is needed
+```
+#! /bin/bash
 
+ref_genome=/home/paul/episodicData/indexSequence/dmel-all-chromosome-r5.57.fasta.gz
+final_bam=/home/paul/episodicData/mappedSequence/final_bam_files
+mpileup_dir=/home/paul/episodicData/mappedSequence
+samtools mpileup -B -Q 0 -f ${ref_genome} ${final_bam}/*.bam > ${mpileup_dir}/episodicData_Sanger.mpileup
+```
