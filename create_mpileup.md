@@ -134,7 +134,7 @@ done
 ```
 ### Merge files
 Only works if all lanes are L001/L002
-Is alternative merge method (other, 1st script)
+Is alternative merge method (other, 1st script from before)
 
 ```
 #!/bin/bash
