@@ -19,7 +19,7 @@ Change trim to actual file / input (same for adapters)
 project_dir=/home/paul/episodicData
 raw_dir=${project_dir}/raw_dir
 
-cd {project_dir}
+cd ${project_dir}
 
 mkdir ${project_dir}/trim_dir
 
