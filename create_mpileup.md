@@ -16,15 +16,15 @@ Change trim to actual file / input (same for adapters)
 ```
 #! /bin/bash
 
-project_dir = /home/paul/episodicData
-raw_dir = ${project_dir}/raw_dir
+project_dir=/home/paul/episodicData
+raw_dir=${project_dir}/raw_dir
 
 cd {project_dir}
 
 mkdir ${project_dir}/trim_dir
 
 mkdir ${project_dir}/index_dir
-index_dir = ${project_dir}/index_dir
+index_dir=${project_dir}/index_dir
 
 mkdir ${project_dir}/bwa_dir
 
@@ -55,31 +55,31 @@ ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
 
 Defining all directories (copy to start of all scripts?)
 ```
-project_name = episodic_data
-project_dir = /home/paul/episodicData
-raw_dir = ${project_dir}/raw_dir
+project_name=episodic_data
+project_dir=/home/paul/episodicData
+raw_dir=${project_dir}/raw_dir
 
-trimmomatic = /usr/local/trimmomatic
-trim = ${trimmomatic}/trimmomatic-0.33.jar
+trimmomatic=/usr/local/trimmomatic
+trim=${trimmomatic}/trimmomatic-0.33.jar
 
-adapt_path = /usr/local/trimmomatic/adapters
-adapter = ${adapt_path}/TruSeq3-PE.fa:2:30:10
+adapt_path=/usr/local/trimmomatic/adapters
+adapter=${adapt_path}/TruSeq3-PE.fa:2:30:10
 
-bwa_path = /usr/local/bwa/0.7.8
+bwa_path=/usr/local/bwa/0.7.8
 pic=/usr/local/picard-tools-1.131/picard.jar
-sync = /usr/local/popoolation/mpileup2sync.jar
+sync=/usr/local/popoolation/mpileup2sync.jar
 
-index_dir = ${project_dir}/index_dir
-ref_genome = ${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+index_dir=${project_dir}/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
 
 
-trim_dir = ${project_dir}/trim_dir
-bwa_dir = ${project_dir}/bwa_dir
-sam_dir = ${project_dir}/sam_dir
-bam_dir = ${project_dir}/bam_dir 
-merged= ${project_dir}/merged
-sort_dir= ${project_dir}/sort_dir
-rmd_dir= ${project_dir}/rmd_dir
+trim_dir=${project_dir}/trim_dir
+bwa_dir=${project_dir}/bwa_dir
+sam_dir=${project_dir}/sam_dir
+bam_dir=${project_dir}/bam_dir 
+merged=${project_dir}/merged
+sort_dir=${project_dir}/sort_dir
+rmd_dir=${project_dir}/rmd_dir
 final_bam=${project_dir}/final_bam
 mpileup_dir=${project_dir}/mpileup_dir
 
