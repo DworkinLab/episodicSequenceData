@@ -58,15 +58,22 @@ Defining all directories (copy to start of all scripts?)
 project_name = episodic_data
 project_dir = /home/paul/episodicData
 raw_dir = ${project_dir}/raw_dir
+
 trimmomatic = /usr/local/trimmomatic
+trim = ${trimmomatic}/trimmomatic-0.33.jar
+
 adapt_path = /usr/local/trimmomatic/adapters
+adapter = ${adapt_path}/TruSeq3-PE.fa:2:30:10
+
 bwa_path = /usr/local/bwa/0.7.8
 pic=/usr/local/picard-tools-1.131/picard.jar
 sync = /usr/local/popoolation/mpileup2sync.jar
 
-trim_dir = ${project_dir}/trim_dir
 index_dir = ${project_dir}/index_dir
 ref_genome = ${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+
+
+trim_dir = ${project_dir}/trim_dir
 bwa_dir = ${project_dir}/bwa_dir
 sam_dir = ${project_dir}/sam_dir
 bam_dir = ${project_dir}/bam_dir 
@@ -91,7 +98,7 @@ for file in ${files[@]}
 do
 name=${file}
 base=`basename ${name} _R1_001.fastq.gz`
-java -jar ${trimmomatic}/trimmomatic-0.33.jar PE -phred33 -trimlog ${trim_dir}/trimlog.txt ${raw_dir}${base}_R1_001.fastq.gz ${raw_dir}${base}_R2_001.fastq.gz ${trim_dir}/${base}_R1_PE.fastq.gz ${out_dir}/${base}_R1_SE.fastq.gz ${trim_dir}/${base}_R2_PE.fastq.gz ${trim_dir}/${base}_R2_SE.fastq.gz ILLUMINACLIP:${adapt_path}/TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 MAXINFO:40:0.5 MINLEN:36
+java -jar ${trimmomatic}/trimmomatic-0.33.jar PE -phred33 -trimlog ${trim_dir}/trimlog.txt ${raw_dir}${base}_R1_001.fastq.gz ${raw_dir}${base}_R2_001.fastq.gz ${trim_dir}/${base}_R1_PE.fastq.gz ${trim_dir}/${base}_R1_SE.fastq.gz ${trim_dir}/${base}_R2_PE.fastq.gz ${trim_dir}/${base}_R2_SE.fastq.gz ILLUMINACLIP:${adapt_path}/TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 MAXINFO:40:0.5 MINLEN:36
 done
 ```
 
@@ -118,7 +125,6 @@ done
 
 
 files=(${sam_dir}*.SAM)
-echo ${files[@]}
 for file in ${files[@]}
 do
 name=${file}
