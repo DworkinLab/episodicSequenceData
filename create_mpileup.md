@@ -90,6 +90,8 @@ mpileup_dir=${project_dir}/mpileup_dir
 ### Trimmomatic -- Check the trim log. adapter path
 make $trimmomatic/trimmomatic-0.33.jar one input (no need to change later)
 
+?? Trim raw_data}{base} missing the /
+
 ```
 #! /bin/bash
 
@@ -98,7 +100,7 @@ for file in ${files[@]}
 do
 name=${file}
 base=`basename ${name} _R1_001.fastq.gz`
-java -jar ${trimmomatic}/trimmomatic-0.33.jar PE -phred33 -trimlog ${trim_dir}/trimlog.txt ${raw_dir}${base}_R1_001.fastq.gz ${raw_dir}${base}_R2_001.fastq.gz ${trim_dir}/${base}_R1_PE.fastq.gz ${trim_dir}/${base}_R1_SE.fastq.gz ${trim_dir}/${base}_R2_PE.fastq.gz ${trim_dir}/${base}_R2_SE.fastq.gz ILLUMINACLIP:${adapt_path}/TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 MAXINFO:40:0.5 MINLEN:36
+java -jar ${trimmomatic}/trimmomatic-0.33.jar PE -phred33 -trimlog ${trim_dir}/trimlog.txt ${raw_dir}/${base}_R1_001.fastq.gz ${raw_dir}/${base}_R2_001.fastq.gz ${trim_dir}/${base}_R1_PE.fastq.gz ${trim_dir}/${base}_R1_SE.fastq.gz ${trim_dir}/${base}_R2_PE.fastq.gz ${trim_dir}/${base}_R2_SE.fastq.gz ILLUMINACLIP:${adapt_path}/TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 MAXINFO:40:0.5 MINLEN:36
 done
 ```
 
