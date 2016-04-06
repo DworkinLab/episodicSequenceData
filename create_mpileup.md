@@ -95,7 +95,7 @@ make $trimmomatic/trimmomatic-0.33.jar one input (no need to change later)
 ```
 #! /bin/bash
 
-files=(${raw_dir}*_R1_001.fastq.gz)
+files=(${raw_dir}/*_R1_001.fastq.gz)
 for file in ${files[@]} 
 do
 name=${file}
