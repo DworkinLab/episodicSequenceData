@@ -118,7 +118,10 @@ java -jar ${trimmomatic}/trimmomatic-0.33.jar PE -phred33 -trimlog ${trim_dir}/$
 done
 ```
 
-7)
+7) BWA mapping
+- forgot script screen to make log
+
+
 ```
 #!/bin/bash
 
