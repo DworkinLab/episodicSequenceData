@@ -157,5 +157,73 @@ base=`basename ${name} _R1_PE.fastq.gz`
 bwa mem -t 8 -M ${ref_genome} ${trim_dir}/${base}_R1_PE.fastq.gz ${trim_dir}/${base}_R2_PE.fastq.gz > ${sam_dir}/${base}_aligned_pe.SAM
 done
 ```
+8) Sam to Bam
+```
+#! /bin/bash
+
+project_dir=/home/paul/Trial
+raw_dir=${project_dir}/raw_dir
+trimmomatic=/usr/local/trimmomatic
+trim=${trimmomatic}/trimmomatic-0.33.jar
+adapt_path=/usr/local/trimmomatic/adapters
+adapter=${adapt_path}/TruSeq3-PE.fa:2:30:10
+bwa_path=/usr/local/bwa/0.7.8
+pic=/usr/local/picard-tools-1.131/picard.jar
+sync=/usr/local/popoolation/mpileup2sync.jar
+index_dir=${project_dir}/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+trim_dir=${project_dir}/trim_dir
+bwa_dir=${project_dir}/bwa_dir
+sam_dir=${project_dir}/sam_dir
+bam_dir=${project_dir}/bam_dir
+merged=${project_dir}/merged
+sort_dir=${project_dir}/sort_dir
+rmd_dir=${project_dir}/rmd_dir
+final_bam=${project_dir}/final_bam
+mpileup_dir=${project_dir}/mpileup_dir
+
+files=(${sam_dir}/*.SAM)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} .SAM`
+samtools view -b -S -q 20 ${sam_dir}/${base}.SAM | samtools sort - ${bam_dir}/${base}
+done
+```
+
+
+9) Merging
+```
+#!/bin/bash
+
+project_dir=/home/paul/Trial
+raw_dir=${project_dir}/raw_dir
+trimmomatic=/usr/local/trimmomatic
+trim=${trimmomatic}/trimmomatic-0.33.jar
+adapt_path=/usr/local/trimmomatic/adapters
+adapter=${adapt_path}/TruSeq3-PE.fa:2:30:10
+bwa_path=/usr/local/bwa/0.7.8
+pic=/usr/local/picard-tools-1.131/picard.jar
+sync=/usr/local/popoolation/mpileup2sync.jar
+index_dir=${project_dir}/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+trim_dir=${project_dir}/trim_dir
+bwa_dir=${project_dir}/bwa_dir
+sam_dir=${project_dir}/sam_dir
+bam_dir=${project_dir}/bam_dir
+merged=${project_dir}/merged
+sort_dir=${project_dir}/sort_dir
+rmd_dir=${project_dir}/rmd_dir
+final_bam=${project_dir}/final_bam
+mpileup_dir=${project_dir}/mpileup_dir
+
+files=(${bam_dir}/*_L001_aligned_pe.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _L001_aligned_pe.bam`
+samtools merge ${merged}/${base}_merged_aligned_pe.bam ${bam_dir}/${base}_L001_aligned_pe.bam ${bam_dir}/${base}_L002_aligned_pe.bam
+done
+```
 
 
