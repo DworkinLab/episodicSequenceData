@@ -116,7 +116,7 @@ files=(${trim_dir}/*_R1_PE.fastq.gz)
 for file in ${files[@]}
 do
 name=${file}
-base=`basename ${name} _R1_PE_phred33.fastq.gz`
+base=`basename ${name} _R1_PE.fastq.gz`
 bwa mem -t 8 -M ${ref_genome} ${trim_dir}/${base}_R1_PE.fastq.gz ${trim_dir}/${base}_R2_PE.fastq.gz > ${sam_dir}/${base}_aligned_pe.SAM
 done
 ```
