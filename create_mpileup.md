@@ -126,12 +126,12 @@ done
 #! /bin/bash
 
 
-files=(${sam_dir}*.SAM)
+files=(${sam_dir}/*.SAM)
 for file in ${files[@]}
 do
 name=${file}
 base=`basename ${name} .SAM`
-samtools view -b -S -q 20 ${sam_dir}${base}.SAM | samtools sort - ${bam_dir}${base}
+samtools view -b -S -q 20 ${sam_dir}/${base}.SAM | samtools sort - ${bam_dir}/${base}
 done
 ```
 ### Merge files
