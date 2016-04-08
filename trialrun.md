@@ -146,8 +146,6 @@ final_bam=${project_dir}/final_bam
 mpileup_dir=${project_dir}/mpileup_dir
 
 cd ${bwa_path}
-
-#make an array for each file in the directory "dir" that ends in _R1_PE_phred33.fastq.gz
 files=(${trim_dir}/*_R1_PE.fastq.gz)
 
 for file in ${files[@]}
