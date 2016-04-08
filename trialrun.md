@@ -1,10 +1,13 @@
 ## Trial
 
 1) moved one set of Con_F77 into new project_dir = Trial
+
 2) moved raw into new dir
  - mkdir raw_dir
+
 3)  make script directory
   - mkdir scripts
+
 4) nano script to make directories
 	- change to new project dir
 	- # hash out the curl functions (for the test)
