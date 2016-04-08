@@ -35,6 +35,31 @@ mkdir ${project_dir}/mpileup_dir
 #ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
 ```
 
+All directories here:
+```
+project_dir=/home/paul/Trial
+raw_dir=${project_dir}/raw_dir
+trimmomatic=/usr/local/trimmomatic
+trim=${trimmomatic}/trimmomatic-0.33.jar
+adapt_path=/usr/local/trimmomatic/adapters
+adapter=${adapt_path}/TruSeq3-PE.fa:2:30:10
+bwa_path=/usr/local/bwa/0.7.8
+pic=/usr/local/picard-tools-1.131/picard.jar
+sync=/usr/local/popoolation/mpileup2sync.jar
+index_dir=${project_dir}/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+trim_dir=${project_dir}/trim_dir
+bwa_dir=${project_dir}/bwa_dir
+sam_dir=${project_dir}/sam_dir
+bam_dir=${project_dir}/bam_dir
+merged=${project_dir}/merged
+sort_dir=${project_dir}/sort_dir
+rmd_dir=${project_dir}/rmd_dir
+final_bam=${project_dir}/final_bam
+mpileup_dir=${project_dir}/mpileup_dir
+```
+
+
 5) nano script indexing
 - cp the hashed out bits
 - now run with this
@@ -93,5 +118,42 @@ java -jar ${trimmomatic}/trimmomatic-0.33.jar PE -phred33 -trimlog ${trim_dir}/$
 done
 ```
 
+7)
+```
+#!/bin/bash
+
+project_dir=/home/paul/Trial
+raw_dir=${project_dir}/raw_dir
+trimmomatic=/usr/local/trimmomatic
+trim=${trimmomatic}/trimmomatic-0.33.jar
+adapt_path=/usr/local/trimmomatic/adapters
+adapter=${adapt_path}/TruSeq3-PE.fa:2:30:10
+bwa_path=/usr/local/bwa/0.7.8
+pic=/usr/local/picard-tools-1.131/picard.jar
+sync=/usr/local/popoolation/mpileup2sync.jar
+index_dir=${project_dir}/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+trim_dir=${project_dir}/trim_dir
+bwa_dir=${project_dir}/bwa_dir
+sam_dir=${project_dir}/sam_dir
+bam_dir=${project_dir}/bam_dir
+merged=${project_dir}/merged
+sort_dir=${project_dir}/sort_dir
+rmd_dir=${project_dir}/rmd_dir
+final_bam=${project_dir}/final_bam
+mpileup_dir=${project_dir}/mpileup_dir
+
+cd ${bwa_path}
+
+#make an array for each file in the directory "dir" that ends in _R1_PE_phred33.fastq.gz
+files=(${trim_dir}/*_R1_PE.fastq.gz)
+
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _R1_PE_phred33.fastq.gz`
+bwa mem -t 8 -M ${ref_genome} ${trim_dir}/${base}_R1_PE.fastq.gz ${trim_dir}/${base}_R2_PE.fastq.gz > ${sam_dir}/${base}_aligned_pe.SAM
+done
+```
 
 
