@@ -30,9 +30,8 @@ mkdir ${project_dir}/final_bam
 mkdir ${project_dir}/mpileup_dir
 # Can change the index sequence here
 #cd ${index_dir}
-#curl -O ftp://ftp.flybase.net/genomes/Drosophila_melanogaster/dmel_r5.57_FB201$
+#curl -O ftp://ftp.flybase.net/genomes/Drosophila_melanogaster/dmel_r5.57_FB2014_03/fasta/dmel-all-chromosome-r5.57.fasta.gz
 #bwa index dmel-all-chromosome-r5.57.fasta.gz
-#ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
 ```
 
 All directories here:
@@ -73,9 +72,8 @@ mpileup_dir=${project_dir}/mpileup_dir
 project_dir=/home/paul/Trial
 index_dir=${project_dir}/index_dir
 cd ${index_dir}
-curl -O ftp://ftp.flybase.net/genomes/Drosophila_melanogaster/dmel_r5.57_FB2014$
+curl -O ftp://ftp.flybase.net/genomes/Drosophila_melanogaster/dmel_r5.57_FB2014_03/fasta/dmel-all-chromosome-r5.57.fasta.gz
 bwa index dmel-all-chromosome-r5.57.fasta.gz
-ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
 ```
 
 6) script for trimming:
