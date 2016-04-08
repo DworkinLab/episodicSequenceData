@@ -9,8 +9,9 @@
   - mkdir scripts
 
 4) nano script to make directories
-	- change to new project dir
-	- # hash out the curl functions (for the test)
+  - change to new project dir
+  - # hash out the curl functions (for the test)
+ 
 ```
 #! /bin/bash
 project_dir=/home/paul/Trial
@@ -35,13 +36,13 @@ mkdir ${project_dir}/mpileup_dir
 ```
 
 5) nano script indexing
-	- cp the hashed out bits
-	- now run with this
-	-** interesting, worked even though ${index_dir} not specified
-	- worked : but all in home directory..... (take away interesting note)
-	- used mv dmel* /home/paul/Trial/index_dir to get them to correct place
-```
+- cp the hashed out bits
+- now run with this
+- ** interesting, worked even though ${index_dir} not specified
+- worked : but all in home directory..... (take away interesting note)
+- used mv dmel* /home/paul/Trial/index_dir to get them to correct place
 
+```
 #! /bin/bash
 
 project_dir=/home/paul/Trial
@@ -57,7 +58,8 @@ ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
 - change the spacing; be sure if short cut (i.e raw_dir) does not end with / and the line in code has the /
 - Was just a missing /
 - fixed and running (with a trim log try)
-  - trim log worked: unknown what it is
+- trim log worked: unknown what it is
+
 ```
 #! /bin/bash
 
