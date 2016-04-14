@@ -249,7 +249,7 @@ rmd_dir=${project_dir}/rmd_dir
 final_bam=${project_dir}/final_bam
 mpileup_dir=${project_dir}/mpileup_dir
 
-files=(${merged_dir}/*)
+files=(${merged}/*)
 for file in ${files[@]}
 do
 name=${file}
