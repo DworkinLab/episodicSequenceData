@@ -254,7 +254,7 @@ for file in ${files[@]}
 do
 name=${file}
 base=`basename ${name} .bam`
-java -Xmx2g -jar ${pic} SortSam I= ${merged_dir}/${base}.bam O= ${sort_dir}/${base}.sort.bam VALIDATION_STRINGENCY=SILENT SO=coordinate
+java -Xmx2g -jar ${pic} SortSam I= ${merged}/${base}.bam O= ${sort_dir}/${base}.sort.bam VALIDATION_STRINGENCY=SILENT SO=coordinate
 done
 ```
 
