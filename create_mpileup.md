@@ -228,7 +228,7 @@ done
 ```
 #! /bin/bash
 
-files=(${merged_dir}/*)
+files=(${merged}/*)
 for file in ${files[@]}
 do
 name=${file}
