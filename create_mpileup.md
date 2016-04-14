@@ -11,6 +11,10 @@ Should run md5sum and fastqc seperatly (before running quality control)
 ###Change so all files like this:  _R1_001.fastq.gz (or R2_001...)
 
 
+
+## Project name idea: make sure to change in mpileup and sync : find out if possible
+
+
 ###Create all working Directories and bringing in reference sequence and indexing
 Change trim to actual file / input (same for adapters)
 ```
