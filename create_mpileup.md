@@ -9,10 +9,15 @@ Should run md5sum and fastqc seperatly (before running quality control)
   - ?? scripts: make a directory and move based on them
 
 ###Change so all files like this:  _R1_001.fastq.gz (or R2_001...)
+### Project name idea: make sure to change in mpileup and sync : find out if possible
 
 
-
-## Project name idea: make sure to change in mpileup and sync : find out if possible
+Step 1: make sure project_dir is set correct in mkdir script below, and all files are in raw_dir=${project_dir}/raw_dir
+Step 2: md5sum all raw files: changes depending on the file name
+```
+md5sum - c md5.txt
+```
+Step 3:
 
 
 ###Create all working Directories and bringing in reference sequence and indexing
