@@ -189,6 +189,7 @@ done
 
 
 9) Merging
+-- Need to change so either L001 and L002 OR L003 and L004 (or 005/006 FOR MGD)
 ```
 #!/bin/bash
 
@@ -213,12 +214,12 @@ rmd_dir=${project_dir}/rmd_dir
 final_bam=${project_dir}/final_bam
 mpileup_dir=${project_dir}/mpileup_dir
 
-files=(${bam_dir}/*_L001_aligned_pe.bam)
+files=(${bam_dir}/*_L003_aligned_pe.bam)
 for file in ${files[@]}
 do
 name=${file}
-base=`basename ${name} _L001_aligned_pe.bam`
-samtools merge ${merged}/${base}_merged_aligned_pe.bam ${bam_dir}/${base}_L001_aligned_pe.bam ${bam_dir}/${base}_L002_aligned_pe.bam
+base=`basename ${name} _L003_aligned_pe.bam`
+samtools merge ${merged}/${base}_merged_aligned_pe.bam ${bam_dir}/${base}_L003_aligned_pe.bam ${bam_dir}/${base}_L004_aligned_pe.bam
 done
 ```
 
