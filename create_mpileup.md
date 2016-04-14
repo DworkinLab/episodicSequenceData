@@ -85,6 +85,71 @@ mpileup_dir=${project_dir}/mpileup_dir
 
 ```
 
+In order for easier run through, change names to common names (ending in _L001_RX_001.fastq.gz or _L002_RX_001.fastq.gz)
+Starting files (without md5sum):
+
+```
+Con_R1_F77_ATGTCA_L003_R1_001.fastq.gz*
+Con_R1_F77_ATGTCA_L003_R2_001.fastq.gz*
+Con_R1_F77_ATGTCA_L004_R1_001.fastq.gz*
+Con_R1_F77_ATGTCA_L004_R2_001.fastq.gz*
+Con_R2_F77_ATTCCT_L003_R1_001.fastq.gz*
+Con_R2_F77_ATTCCT_L003_R2_001.fastq.gz*
+Con_R2_F77_ATTCCT_L004_R1_001.fastq.gz*
+Con_R2_F77_ATTCCT_L004_R2_001.fastq.gz*
+F115ConR1_TAGCTT_L001_R1_001.fastq.gz
+F115ConR1_TAGCTT_L001_R2_001.fastq.gz
+F115ConR1_TAGCTT_L002_R1_001.fastq.gz
+F115ConR1_TAGCTT_L002_R2_001.fastq.gz
+F115ConR2_GGCTAC_L001_R1_001.fastq.gz
+F115ConR2_GGCTAC_L001_R2_001.fastq.gz
+F115ConR2_GGCTAC_L002_R1_001.fastq.gz
+F115ConR2_GGCTAC_L002_R2_001.fastq.gz
+F115SelR1_GTTTCG_L001_R1_001.fastq.gz
+F115SelR1_GTTTCG_L001_R2_001.fastq.gz
+F115SelR1_GTTTCG_L002_R1_001.fastq.gz
+F115SelR1_GTTTCG_L002_R2_001.fastq.gz
+F115SelR2_GTGGCC_L001_R1_001.fastq.gz
+F115SelR2_GTGGCC_L001_R2_001.fastq.gz
+F115SelR2_GTGGCC_L002_R1_001.fastq.gz
+F115SelR2_GTGGCC_L002_R2_001.fastq.gz
+F38ConR1_ATCACG_L001_R1_001.fastq.gz
+F38ConR1_ATCACG_L001_R2_001.fastq.gz
+F38ConR1_ATCACG_L002_R1_001.fastq.gz
+F38ConR1_ATCACG_L002_R2_001.fastq.gz
+F38ConR2_TTAGGC_L001_R1_001.fastq.gz
+F38ConR2_TTAGGC_L001_R2_001.fastq.gz
+F38ConR2_TTAGGC_L002_R1_001.fastq.gz
+F38ConR2_TTAGGC_L002_R2_001.fastq.gz
+F38SelR1_ACTTGA_L001_R1_001.fastq.gz
+F38SelR1_ACTTGA_L001_R2_001.fastq.gz
+F38SelR1_ACTTGA_L002_R1_001.fastq.gz
+F38SelR1_ACTTGA_L002_R2_001.fastq.gz
+F38SelR2_GATCAG_L001_R1_001.fastq.gz
+F38SelR2_GATCAG_L001_R2_001.fastq.gz
+F38SelR2_GATCAG_L002_R1_001.fastq.gz
+F38SelR2_GATCAG_L002_R2_001.fastq.gz
+MGD2_SO_CAGATC_L005_R1_001.fastq.gz
+MGD2_SO_CAGATC_L005_R2_001.fastq.gz
+MGD2_SO_CAGATC_L006_R1_001.fastq.gz
+MGD2_SO_CAGATC_L006_R2_001.fastq.gz
+MGD_SO_CAGATC_L005_R1_001.fastq.gz*
+MGD_SO_CAGATC_L005_R2_001.fastq.gz*
+MGD_SO_CAGATC_L006_R1_001.fastq.gz*
+MGD_SO_CAGATC_L006_R2_001.fastq.gz*
+Sel_R1_F77_TTAGGC_L003_R1_001.fastq.gz*
+Sel_R1_F77_TTAGGC_L003_R2_001.fastq.gz*
+Sel_R1_F77_TTAGGC_L004_R1_001.fastq.gz*
+Sel_R1_F77_TTAGGC_L004_R2_001.fastq.gz*
+Sel_R2_F77_GATCAG_L003_R1_001.fastq.gz*
+Sel_R2_F77_GATCAG_L003_R2_001.fastq.gz*
+Sel_R2_F77_GATCAG_L004_R1_001.fastq.gz*
+Sel_R2_F77_GATCAG_L004_R2_001.fastq.gz*
+```
+Change using mv function: easiest method would be to copy and paste with changes already made for ones you want
+Change to match F38SelR2_GATCAG_L001_R2_001.fastq.gz style
+
+
 ###Scripts:
 
 ### Trimmomatic -- Check the trim log. adapter path
