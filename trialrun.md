@@ -223,4 +223,59 @@ samtools merge ${merged}/${base}_merged_aligned_pe.bam ${bam_dir}/${base}_L003_a
 done
 ```
 
+10) Sort with Picard
+
+```
+#! /bin/bash
+
+files=(${merged_dir}/*)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} .bam`
+java -Xmx2g -jar ${pic} SortSam I= ${merged_dir}/${base}.bam O= ${sort_dir}/${base}.sort.bam VALIDATION_STRINGENCY=SILENT SO=coordinate
+done
+```
+
+11) Remove Duplicates
+```
+#! /bin/bash
+
+files=(${sort_dir}/*)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} .sort.bam`
+java -Xmx2g -jar ${pic} MarkDuplicates I= ${sort_dir}/*.sort.bam O= ${rmd_dir}/${base}.rmd.sort.bam M= ${rmd_dir}/dupstat.txt VALIDATION_STRINGENCY=SILENT REMOVE_DUPLICATES= true
+done
+```
+
+12) Remove low qulaity Reads
+```
+#! /bin/bash
+
+files=(${rmd_dir}/*.rmd.sort.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} .rmd.sort.bam`
+samtools view -q 20 -F 0x0004 -b ${rmd_dir}/${base}.rmd.sort.bam > ${final_bam}/${base}.final.bam
+done
+```
+
+13) Create mpileup
+
+```
+#! /bin/bash
+
+samtools mpileup -B -Q 0 -f ${ref_genome} ${final_bam}/*.bam > ${mpileup_dir}/${project_name}_Sanger.mpileup
+```
+
+14) Sync
+```
+#! /bin/bash
+
+java -ea -Xmx7g -jar ${sync} --input ${mpileup_dir}/${project_name}_Sanger.mpileup --output ${mpileup_dir}/${project_name}_Sanger.sync --fastq-type sanger --min-qual 20 --threads 2
+```
+
 
