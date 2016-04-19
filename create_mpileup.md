@@ -11,6 +11,7 @@ Should run md5sum and fastqc seperatly (before running quality control)
 ###Change so all files like this:  _R1_001.fastq.gz (or R2_001...)
 ### Project name idea: make sure to change in mpileup and sync : find out if possible
 
+## tmp for picard sort!
 
 Step 1: make sure project_dir is set correct in mkdir script below, and all files are in raw_dir=${project_dir}/raw_dir
 Step 2: md5sum all raw files: changes depending on the file name
@@ -44,6 +45,8 @@ mkdir ${project_dir}/bam_dir
 mkdir ${project_dir}/merged
 
 mkdir ${project_dir}/sort_dir
+
+mkdir ${project_dir}/tmp
 
 mkdir ${project_dir}/rmd_dir
 
@@ -88,6 +91,7 @@ sam_dir=${project_dir}/sam_dir
 bam_dir=${project_dir}/bam_dir 
 merged=${project_dir}/merged
 sort_dir=${project_dir}/sort_dir
+tmp=${project_dir}/tmp
 rmd_dir=${project_dir}/rmd_dir
 final_bam=${project_dir}/final_bam
 mpileup_dir=${project_dir}/mpileup_dir
@@ -233,7 +237,7 @@ for file in ${files[@]}
 do
 name=${file}
 base=`basename ${name} .bam`
-java -Xmx2g -jar ${pic} SortSam I= ${merged}/${base}.bam O= ${sort_dir}/${base}.sort.bam VALIDATION_STRINGENCY=SILENT SO=coordinate
+java -Xmx2g -Djava.io.tmpdir=${tmp} -jar ${pic} SortSam I= ${merged}/${base}.bam O= ${sort_dir}/${base}.sort.bam VALIDATION_STRINGENCY=SILENT SO=coordinate TMP_DIR=${tmp}
 done
 ```
 
