@@ -25,6 +25,7 @@ mkdir ${project_dir}/sam_dir
 mkdir ${project_dir}/bam_dir
 mkdir ${project_dir}/merged
 mkdir ${project_dir}/sort_dir
+mkdir ${project_dir}/tmp
 mkdir ${project_dir}/rmd_dir
 mkdir ${project_dir}/final_bam
 mkdir ${project_dir}/mpileup_dir
@@ -53,6 +54,7 @@ sam_dir=${project_dir}/sam_dir
 bam_dir=${project_dir}/bam_dir
 merged=${project_dir}/merged
 sort_dir=${project_dir}/sort_dir
+tmp=${project_dir}/tmp
 rmd_dir=${project_dir}/rmd_dir
 final_bam=${project_dir}/final_bam
 mpileup_dir=${project_dir}/mpileup_dir
@@ -103,6 +105,7 @@ sam_dir=${project_dir}/sam_dir
 bam_dir=${project_dir}/bam_dir
 merged=${project_dir}/merged
 sort_dir=${project_dir}/sort_dir
+tmp=${project_dir}/tmp
 rmd_dir=${project_dir}/rmd_dir
 final_bam=${project_dir}/final_bam
 mpileup_dir=${project_dir}/mpileup_dir
@@ -139,6 +142,7 @@ sam_dir=${project_dir}/sam_dir
 bam_dir=${project_dir}/bam_dir
 merged=${project_dir}/merged
 sort_dir=${project_dir}/sort_dir
+tmp=${project_dir}/tmp
 rmd_dir=${project_dir}/rmd_dir
 final_bam=${project_dir}/final_bam
 mpileup_dir=${project_dir}/mpileup_dir
@@ -174,6 +178,7 @@ sam_dir=${project_dir}/sam_dir
 bam_dir=${project_dir}/bam_dir
 merged=${project_dir}/merged
 sort_dir=${project_dir}/sort_dir
+tmp=${project_dir}/tmp
 rmd_dir=${project_dir}/rmd_dir
 final_bam=${project_dir}/final_bam
 mpileup_dir=${project_dir}/mpileup_dir
@@ -210,6 +215,7 @@ sam_dir=${project_dir}/sam_dir
 bam_dir=${project_dir}/bam_dir
 merged=${project_dir}/merged
 sort_dir=${project_dir}/sort_dir
+tmp=${project_dir}/tmp
 rmd_dir=${project_dir}/rmd_dir
 final_bam=${project_dir}/final_bam
 mpileup_dir=${project_dir}/mpileup_dir
@@ -245,6 +251,7 @@ sam_dir=${project_dir}/sam_dir
 bam_dir=${project_dir}/bam_dir
 merged=${project_dir}/merged
 sort_dir=${project_dir}/sort_dir
+tmp=${project_dir}/tmp
 rmd_dir=${project_dir}/rmd_dir
 final_bam=${project_dir}/final_bam
 mpileup_dir=${project_dir}/mpileup_dir
@@ -256,6 +263,12 @@ name=${file}
 base=`basename ${name} .bam`
 java -Xmx2g -jar ${pic} SortSam I=${merged}/${base}.bam O=${sort_dir}/${base}.sort.bam VALIDATION_STRINGENCY=SILENT SO=coordinate
 done
+```
+
+Internet changes
+need to mkdir tmp
+```
+java -Xmx2g -Djava.io.tmpdir=`pwd`/tmp -jar SortSam.jar SORT_ORDER=coordinate INPUT=input.bam OUTPUT=output.sort TMP_DIR=`pwd`/tmp
 ```
 
 
@@ -280,6 +293,7 @@ sam_dir=${project_dir}/sam_dir
 bam_dir=${project_dir}/bam_dir
 merged=${project_dir}/merged
 sort_dir=${project_dir}/sort_dir
+tmp=${project_dir}/tmp
 rmd_dir=${project_dir}/rmd_dir
 final_bam=${project_dir}/final_bam
 mpileup_dir=${project_dir}/mpileup_dir
@@ -314,6 +328,7 @@ sam_dir=${project_dir}/sam_dir
 bam_dir=${project_dir}/bam_dir
 merged=${project_dir}/merged
 sort_dir=${project_dir}/sort_dir
+tmp=${project_dir}/tmp
 rmd_dir=${project_dir}/rmd_dir
 final_bam=${project_dir}/final_bam
 mpileup_dir=${project_dir}/mpileup_dir
@@ -348,6 +363,7 @@ bwa_dir=${project_dir}/bwa_dir
 sam_dir=${project_dir}/sam_dir
 bam_dir=${project_dir}/bam_dir
 merged=${project_dir}/merged
+tmp=${project_dir}/tmp
 sort_dir=${project_dir}/sort_dir
 rmd_dir=${project_dir}/rmd_dir
 final_bam=${project_dir}/final_bam
@@ -377,6 +393,7 @@ sam_dir=${project_dir}/sam_dir
 bam_dir=${project_dir}/bam_dir
 merged=${project_dir}/merged
 sort_dir=${project_dir}/sort_dir
+tmp=${project_dir}/tmp
 rmd_dir=${project_dir}/rmd_dir
 final_bam=${project_dir}/final_bam
 mpileup_dir=${project_dir}/mpileup_dir
