@@ -265,7 +265,7 @@ java -Xmx2g -jar ${pic} SortSam I=${merged}/${base}.bam O=${sort_dir}/${base}.so
 done
 ```
 
-Internet changes
+Internet changes = https://www.biostars.org/p/42613/
 need to mkdir tmp
 ```
 java -Xmx2g -Djava.io.tmpdir=`pwd`/tmp -jar SortSam.jar SORT_ORDER=coordinate INPUT=input.bam OUTPUT=output.sort TMP_DIR=`pwd`/tmp
