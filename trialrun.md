@@ -271,6 +271,43 @@ need to mkdir tmp
 java -Xmx2g -Djava.io.tmpdir=`pwd`/tmp -jar SortSam.jar SORT_ORDER=coordinate INPUT=input.bam OUTPUT=output.sort TMP_DIR=`pwd`/tmp
 ```
 
+New script:
+worked (large file size); added mkdir tmp and tmp path to all scripts here
+```
+#! /bin/bash
+
+project_dir=/home/paul/Trial
+raw_dir=${project_dir}/raw_dir
+trimmomatic=/usr/local/trimmomatic
+trim=${trimmomatic}/trimmomatic-0.33.jar
+adapt_path=/usr/local/trimmomatic/adapters
+adapter=${adapt_path}/TruSeq3-PE.fa:2:30:10
+bwa_path=/usr/local/bwa/0.7.8
+pic=/usr/local/picard-tools-1.131/picard.jar
+sync=/usr/local/popoolation/mpileup2sync.jar
+index_dir=${project_dir}/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+trim_dir=${project_dir}/trim_dir
+bwa_dir=${project_dir}/bwa_dir
+sam_dir=${project_dir}/sam_dir
+bam_dir=${project_dir}/bam_dir
+merged=${project_dir}/merged
+sort_dir=${project_dir}/sort_dir
+tmp=${project_dir}/tmp
+rmd_dir=${project_dir}/rmd_dir
+final_bam=${project_dir}/final_bam
+mpileup_dir=${project_dir}/mpileup_dir
+
+files=(${merged}/*)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} .bam`
+java -Xmx2g -Djava.io.tmpdir=${tmp} -jar ${pic} SortSam I=${merged}/${base}.bam O=${sort_dir}/${base}.sort.bam VALIDATION_STRINGENCY=SILENT SO=coordinate TMP_DIR=${tmp}
+done
+```
+
+
 
 11) Remove Duplicates
 ```
