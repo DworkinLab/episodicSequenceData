@@ -195,6 +195,7 @@ done
 
 9) Merging
 -- Need to change so either L001 and L002 OR L003 and L004 (or 005/006 FOR MGD)
+- alternative method.. other script
 ```
 #!/bin/bash
 
