@@ -15,12 +15,14 @@
   - Change so all files like this:  _R1_001.fastq.gz (or R2_001...)
 
 
-Step 1: make sure project_dir is set correct in mkdir script below, and all files are in raw_dir=${project_dir}/raw_dir
-Step 2: md5sum all raw files: changes depending on the file name
+Step 1: make sure project_dir is set correct in ${mkdir script} below, and all files are in raw_dir=${project_dir}/raw_dir
+Step 2: md5sum all raw files: changes depending on the file name (example below)
+
 ```
 md5sum - c md5.txt
 ```
-Step 3:
+
+Step 3: Fastqc
 
 
 ###Create all working Directories and bringing in reference sequence and indexing
@@ -68,6 +70,9 @@ ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
 
 
 Defining all directories (copy to start of all scripts?)
+
+###Def_Dir
+
 ```
 project_name=episodic_data
 project_dir=/home/paul/episodicData
