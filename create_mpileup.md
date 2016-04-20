@@ -227,7 +227,9 @@ Sel_R2_F77_GATCAG_L004_R1_001.fastq.gz F77SelR2_GATCAG_L002_R1_001.fastq.gz
 Sel_R2_F77_GATCAG_L004_R2_001.fastq.gz F77SelR2_GATCAG_L002_R2_001.fastq.gz
 ```
 
-##Scripts:
+##Scripts: copy the file/directory paths above into each script
+###Nano in scripts directory for each step below
+__________________________________________________________________________________
 
 ### Trimmomatic
 Flags:
