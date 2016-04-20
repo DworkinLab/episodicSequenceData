@@ -1,9 +1,10 @@
 # Full run through of all sequence data - Trimming to mpileup file format
 ## Need a thourough log
 ### Change parameters here at top (before scripts), rest should fall in place, unless changes need to be made for quality purposes
+
   - set up so user needs to create project name and create a raw directory (raw_dir) and this will automatically create other directories
 
-Should run md5sum and fastqc seperatly (before running quality control)
+  - Should run md5sum and fastqc seperatly (before running quality control)
 
   - need known path to project name (i.e /home/paul/episodicData)
   
