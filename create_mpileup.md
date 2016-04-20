@@ -1,15 +1,18 @@
 # Full run through of all sequence data - Trimming to mpileup file format
 ## Need a thourough log
-### Change parameters here at top, rest should fall in place
-Should run md5sum and fastqc seperatly (before running quality control)
-  - set it up so user needs to create project name and create a raw directory (raw_dir) and this will automatically create other directories
-  - need to move (mv) all raw files with md5sum files into {project_dir}/raw_dir
-  - need known path to project name (i.e /home/paul/episodicData)
-  - need to move paths to other directories on machine (i.e bwa or trim) at the top
-  - ?? scripts: make a directory and move based on them
+### Change parameters here at top (before scripts), rest should fall in place, unless changes need to be made for quality purposes
+  - set up so user needs to create project name and create a raw directory (raw_dir) and this will automatically create other directories
 
-###Change so all files like this:  _R1_001.fastq.gz (or R2_001...)
-### Project name idea: make sure to change in mpileup and sync : find out if possible
+Should run md5sum and fastqc seperatly (before running quality control)
+
+  - need known path to project name (i.e /home/paul/episodicData)
+  
+  - need to move (mv) all raw files with md5sum files into {project_dir}/raw_dir
+  
+  - should make a directory for scripts (mkdir scripts)
+  
+  - Change so all files like this:  _R1_001.fastq.gz (or R2_001...)
+
 
 Step 1: make sure project_dir is set correct in mkdir script below, and all files are in raw_dir=${project_dir}/raw_dir
 Step 2: md5sum all raw files: changes depending on the file name
