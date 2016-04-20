@@ -11,8 +11,6 @@ Should run md5sum and fastqc seperatly (before running quality control)
 ###Change so all files like this:  _R1_001.fastq.gz (or R2_001...)
 ### Project name idea: make sure to change in mpileup and sync : find out if possible
 
-## tmp for picard sort!
-
 Step 1: make sure project_dir is set correct in mkdir script below, and all files are in raw_dir=${project_dir}/raw_dir
 Step 2: md5sum all raw files: changes depending on the file name
 ```
@@ -163,12 +161,17 @@ Change using mv function: easiest method would be to copy and paste with changes
 Change to match F38SelR2_GATCAG_L001_R2_001.fastq.gz style
 
 
-###Scripts:
+##Scripts:
 
-### Trimmomatic -- Check the trim log. adapter path
-make $trimmomatic/trimmomatic-0.33.jar one input (no need to change later)
+### Trimmomatic
+Flags:
+  -phred33 = may not need to be specified
+  -trimlog = log of trim outputs
+  -IlluminaClip = adapter removal (${adapter})
+  -LEADING & TRAILING = 3; removal at start end end if below quality
+  -MINLEN = minimum length of 36
+  -MAXINFO = adaptive quality (balance b/w length and quality) = 0.5
 
-?? Trim raw_data}{base} missing the /
 
 ```
 #! /bin/bash
@@ -178,17 +181,19 @@ for file in ${files[@]}
 do
 name=${file}
 base=`basename ${name} _R1_001.fastq.gz`
-java -jar ${trimmomatic}/trimmomatic-0.33.jar PE -phred33 -trimlog ${trim_dir}/trimlog.txt ${raw_dir}/${base}_R1_001.fastq.gz ${raw_dir}/${base}_R2_001.fastq.gz ${trim_dir}/${base}_R1_PE.fastq.gz ${trim_dir}/${base}_R1_SE.fastq.gz ${trim_dir}/${base}_R2_PE.fastq.gz ${trim_dir}/${base}_R2_SE.fastq.gz ILLUMINACLIP:${adapt_path}/TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 MAXINFO:40:0.5 MINLEN:36
+java -jar ${trim} PE -phred33 -trimlog ${trim_dir}/trimlog.txt ${raw_dir}/${base}_R1_001.fastq.gz ${raw_dir}/${base}_R2_001.fastq.gz ${trim_dir}/${base}_R1_PE.fastq.gz ${trim_dir}/${base}_R1_SE.fastq.gz ${trim_dir}/${base}_R2_PE.fastq.gz ${trim_dir}/${base}_R2_SE.fastq.gz ILLUMINACLIP:${adapter} LEADING:3 TRAILING:3 MAXINFO:40:0.5 MINLEN:36
 done
 ```
 
 ### BWA mapping
+Flags:
+  -t 8 = number of processors
+  -M = Mark shorter split hits as secondary (for Picard compatibility)
+
 ```
 #!/bin/bash
 
 cd ${bwa_path}
-
-#make an array for each file in the directory "dir" that ends in _R1_PE_phred33.fastq.gz
 files=(${trim_dir}/*_R1_PE.fastq.gz)
 
 for file in ${files[@]}
@@ -200,6 +205,11 @@ done
 ```
 
 ### convert SAM to BAM
+Flags:
+  -b = Bam files
+  -S = Sam files
+  -q 20 = minimum quality score 
+
 ```
 #! /bin/bash
 
@@ -214,7 +224,6 @@ done
 ```
 ### Merge files
 Only works if all lanes are L001/L002
-Is alternative merge method (other, 1st script from before)
 
 ```
 #!/bin/bash
@@ -229,6 +238,15 @@ done
 ```
 
 ### sort with Picard
+Flags: 
+  -Xmx2g = allocated Java 2 Gb of memory
+  -SO = sort order
+  -VALIDATION_STRINGENCY = surpress validation messages completely
+  -I = input file
+  -O = output file
+  -Djava.io.tmpdir=${tmp} = to be sure for java programs in general (may not be needed and TMP_DIR could be sufficient)
+  -TMP_DIR = temporary scratch directory for large files
+  
 ```
 #! /bin/bash
 
@@ -242,6 +260,8 @@ done
 ```
 
 ### Remove duplicates
+Flags: same as above
+
 ```
 #! /bin/bash
 
@@ -255,6 +275,10 @@ done
 ```
 
 ### Remove low quality reads
+Flags:
+  -q 20 = min quality score
+  -F 0x0004 = remove unmapped reads
+  - 
 ```
 #! /bin/bash
 
@@ -269,17 +293,17 @@ done
 
 ### Create mpileup file format
 check the flags (illumina or sanger) -6 removed as not what is needed
-trying with input of project name to create files.....
+
 ```
 #! /bin/bash
 
-samtools mpileup -B -Q 0 -f ${ref_genome} ${final_bam}/*.bam > ${mpileup_dir}/${project_name}_Sanger.mpileup
+samtools mpileup -B -Q 0 -f ${ref_genome} ${final_bam}/*.bam > ${mpileup_dir}/${project_name}.mpileup
 ```
 
 ### Sync Files
 ```
 #! /bin/bash
 
-java -ea -Xmx7g -jar ${sync} --input ${mpileup_dir}/${project_name}_Sanger.mpileup --output ${mpileup_dir}/${project_name}_Sanger.sync --fastq-type sanger --min-qual 20 --threads 2
+java -ea -Xmx7g -jar ${sync} --input ${mpileup_dir}/${project_name}.mpileup --output ${mpileup_dir}/${project_name}.sync --fastq-type sanger --min-qual 20 --threads 2
 ```
 
