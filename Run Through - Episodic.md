@@ -63,7 +63,19 @@ MGD also failed (long with extra files in md5.txt)
 
 Test in scratch folder (* on the head)
 
-Step 3)
+
+Appears F77 files had some errors, will run through with them but re do later with a new transfer
+
+Step 3) Fastqc quality control
+```
+mkdir /home/paul/episodicData/fastqc
+```
+```
+fastqc -o /home/paul/episodicData/fastqc /home/paul/episodicData/raw_data/*.fastq.gz
+```
+
+Step 4) mkdir / redefine Def_fir (or renaming)
+Step 5) Opposite from above
 
 
 
