@@ -306,8 +306,13 @@ Once complete: exit log
 exit
 ```
 
-Step 7) Create all scripts and change permissions while trimmomatic runs
+Step 7) Create all scripts and change permissions while trimmomatic runs: Copy and paste each section as applicable
   - BWA mapping
+
+```
+nano map_episodic
+```
+
 ```
 #!/bin/bash
 
@@ -321,7 +326,14 @@ base=`basename ${name} _R1_PE.fastq.gz`
 bwa mem -t 8 -M ${ref_genome} ${trim_dir}/${base}_R1_PE.fastq.gz ${trim_dir}/${base}_R2_PE.fastq.gz > ${sam_dir}/${base}_aligned_pe.SAM
 done
 ```
+```
+chmod +x map_episodic
+```
+
   - Sam to Bam
+```
+nano samTObam_episodic
+```
 ```
 #! /bin/bash
 
@@ -334,7 +346,15 @@ base=`basename ${name} .SAM`
 samtools view -b -S -q 20 ${sam_dir}/${base}.SAM | samtools sort - ${bam_dir}/${base}
 done
 ```
+```
+chmod +x samTObam_episodic
+```
+
   - Merge
+```
+nano merge_episodic
+```
+
 ```
 #!/bin/bash
 
@@ -346,7 +366,16 @@ base=`basename ${name} _L001_aligned_pe.bam`
 samtools merge ${merged}/${base}_merged_aligned_pe.bam ${bam_dir}/${base}_L001_aligned_pe.bam ${bam_dir}/${base}_L002_aligned_pe.bam
 done
 ```
+
+```
+chmod +x merge_episodic
+```
+
   - Picard Sort
+```
+nano picard_episodic
+```
+
 ```
 #! /bin/bash
 
@@ -358,7 +387,17 @@ base=`basename ${name} .bam`
 java -Xmx2g -Djava.io.tmpdir=${tmp} -jar ${pic} SortSam I= ${merged}/${base}.bam O= ${sort_dir}/${base}.sort.bam VALIDATION_STRINGENCY=SILENT SO=coordinate TMP_DIR=${tmp}
 done
 ```
+
+```
+chmod +x picard_episodic
+```
+
   - Remove Duplicates
+
+```
+nano rmd_episodic
+```
+
 ```
 #! /bin/bash
 
@@ -370,7 +409,16 @@ base=`basename ${name} .sort.bam`
 java -Xmx2g -jar ${pic} MarkDuplicates I= ${sort_dir}/*.sort.bam O= ${rmd_dir}/${base}.rmd.sort.bam M= ${rmd_dir}/dupstat.txt VALIDATION_STRINGENCY=SILENT REMOVE_DUPLICATES= true
 done
 ```
+
+```
+chmod +x rmd_episodic
+```
+
   - Remove low quality reads
+```
+nano quality_episodic
+```
+
 ```
 #! /bin/bash
 
@@ -382,17 +430,39 @@ base=`basename ${name} .rmd.sort.bam`
 samtools view -q 20 -F 0x0004 -b ${rmd_dir}/${base}.rmd.sort.bam > ${final_bam}/${base}.final.bam
 done
 ```
+
+```
+chmod +x quality_episodic
+```
+
   - Create mpileup
+```
+nano mpileup_episodic
+```
+
 ```
 #! /bin/bash
 
 samtools mpileup -B -Q 0 -f ${ref_genome} ${final_bam}/*.bam > ${mpileup_dir}/${project_name}.mpileup
 ```
+
+```
+chmod +x mpileup_episodic
+```
+
   - Create sync file
+```
+nano sync_episodic
+```
+
 ```
 #! /bin/bash
 
 java -ea -Xmx7g -jar ${sync} --input ${mpileup_dir}/${project_name}.mpileup --output ${mpileup_dir}/${project_name}.sync --fastq-type sanger --min-qual 20 --threads 2
+```
+
+```
+chmod +x sync_episodic
 ```
 
 Step 8)
