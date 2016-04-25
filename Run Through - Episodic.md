@@ -306,7 +306,95 @@ Once complete: exit log
 exit
 ```
 
-Step 7)
+Step 7) Create all scripts and change permissions while trimmomatic runs
+  - BWA mapping
+```
+#!/bin/bash
+
+cd ${bwa_path}
+files=(${trim_dir}/*_R1_PE.fastq.gz)
+
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _R1_PE.fastq.gz`
+bwa mem -t 8 -M ${ref_genome} ${trim_dir}/${base}_R1_PE.fastq.gz ${trim_dir}/${base}_R2_PE.fastq.gz > ${sam_dir}/${base}_aligned_pe.SAM
+done
+```
+  - Sam to Bam
+```
+#! /bin/bash
+
+
+files=(${sam_dir}/*.SAM)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} .SAM`
+samtools view -b -S -q 20 ${sam_dir}/${base}.SAM | samtools sort - ${bam_dir}/${base}
+done
+```
+  - Merge
+```
+#!/bin/bash
+
+files=(${bam_dir}/*_L001_aligned_pe.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _L001_aligned_pe.bam`
+samtools merge ${merged}/${base}_merged_aligned_pe.bam ${bam_dir}/${base}_L001_aligned_pe.bam ${bam_dir}/${base}_L002_aligned_pe.bam
+done
+```
+  - Picard Sort
+```
+#! /bin/bash
+
+files=(${merged}/*)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} .bam`
+java -Xmx2g -Djava.io.tmpdir=${tmp} -jar ${pic} SortSam I= ${merged}/${base}.bam O= ${sort_dir}/${base}.sort.bam VALIDATION_STRINGENCY=SILENT SO=coordinate TMP_DIR=${tmp}
+done
+```
+  - Remove Duplicates
+```
+#! /bin/bash
+
+files=(${sort_dir}/*)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} .sort.bam`
+java -Xmx2g -jar ${pic} MarkDuplicates I= ${sort_dir}/*.sort.bam O= ${rmd_dir}/${base}.rmd.sort.bam M= ${rmd_dir}/dupstat.txt VALIDATION_STRINGENCY=SILENT REMOVE_DUPLICATES= true
+done
+```
+  - Remove low quality reads
+```
+#! /bin/bash
+
+files=(${rmd_dir}/*.rmd.sort.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} .rmd.sort.bam`
+samtools view -q 20 -F 0x0004 -b ${rmd_dir}/${base}.rmd.sort.bam > ${final_bam}/${base}.final.bam
+done
+```
+  - Create mpileup
+```
+#! /bin/bash
+
+samtools mpileup -B -Q 0 -f ${ref_genome} ${final_bam}/*.bam > ${mpileup_dir}/${project_name}.mpileup
+```
+  - Create sync file
+```
+#! /bin/bash
+
+java -ea -Xmx7g -jar ${sync} --input ${mpileup_dir}/${project_name}.mpileup --output ${mpileup_dir}/${project_name}.sync --fastq-type sanger --min-qual 20 --threads 2
+```
+
 Step 8)
 Step 9)
 Step 10)
