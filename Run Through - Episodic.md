@@ -288,7 +288,7 @@ chmod +x trim_episodic
 Run in screen
 
 ```
-screen -r
+screen
 ```
 
 Create a log of all outputs of trim screen
