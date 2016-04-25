@@ -78,7 +78,9 @@ fastqc -o /home/paul/episodicData/fastqc /home/paul/episodicData/raw_data/*.fast
 
 Step 4) Renaming
 For some of the steps, need a specific naming style, matching F38SelR2_GATCAG_L001_R2_001.fastq.gz
-Change names using mv and copy and paste from below necessary files (do from raw_dir)
+
+Change names using mv and copy and paste from below necessary files
+
 ex. from raw_dir
 ```
 mv Con_R1_F77_ATGTCA_L003_R1_001.fastq.gz F77ConR1_ATGTCA_L001_R1_001.fastq.gz
@@ -143,6 +145,7 @@ Sel_R2_F77_GATCAG_L004_R1_001.fastq.gz F77SelR2_GATCAG_L002_R1_001.fastq.gz
 Sel_R2_F77_GATCAG_L004_R2_001.fastq.gz F77SelR2_GATCAG_L002_R2_001.fastq.gz
 ```
 Step 5) mkdir / redefine Def_dir
+
 Make scripts directory
 ```
 mkdir /home/paul/episodicData/scripts
@@ -199,7 +202,39 @@ because reference sequence being brought in could take time
 ```
 mkdir_and_ref
 ```
+runs script
 
+Now need to have all the directories defined to copy and paste into later scripts
 
+Can edit sections here (ending at ref_genome) depending on adapters, reference genome used, project directory etc.
+```
+project_name=episodic_data
+project_dir=/home/paul/episodicData
+raw_dir=${project_dir}/raw_dir
+
+trimmomatic=/usr/local/trimmomatic
+trim=${trimmomatic}/trimmomatic-0.33.jar
+
+adapt_path=/usr/local/trimmomatic/adapters
+adapter=${adapt_path}/TruSeq3-PE.fa:2:30:10
+
+bwa_path=/usr/local/bwa/0.7.8
+pic=/usr/local/picard-tools-1.131/picard.jar
+sync=/usr/local/popoolation/mpileup2sync.jar
+
+index_dir=${project_dir}/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+
+trim_dir=${project_dir}/trim_dir
+bwa_dir=${project_dir}/bwa_dir
+sam_dir=${project_dir}/sam_dir
+bam_dir=${project_dir}/bam_dir 
+merged=${project_dir}/merged
+sort_dir=${project_dir}/sort_dir
+tmp=${project_dir}/tmp
+rmd_dir=${project_dir}/rmd_dir
+final_bam=${project_dir}/final_bam
+mpileup_dir=${project_dir}/mpileup_dir
+```
 
 
