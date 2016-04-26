@@ -648,9 +648,22 @@ java -ea -Xmx7g -jar ${sync} --input ${mpileup_dir}/${project_name}.mpileup --ou
 chmod +x sync_episodic
 ```
 
-Step 8)
+Step 8) Bwa Mapping
+Running from scripts directory puts log's into that section.
+```
+screen -r
+script bwaScreen.log
+map_episodic
+```
+once done, exit to stop log
+```
+exit
+```
 Step 9)
 Step 10)
+
+
+
 
 
 
