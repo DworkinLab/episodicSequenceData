@@ -659,7 +659,19 @@ once done, exit to stop log
 ```
 exit
 ```
-Step 9)
+
+Step 9) Sam - Bam 
+```
+screen -r
+script samBamScreen.log
+samTObam_episodic
+```
+Once Done
+```
+exit
+```
+
+
 Step 10)
 
 
