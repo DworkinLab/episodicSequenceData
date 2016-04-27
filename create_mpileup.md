@@ -27,6 +27,8 @@ Step 3: Fastqc
 
 ###Create all working Directories and bringing in reference sequence and indexing
 Change trim to actual file / input (same for adapters)
+
+-- Don't need bwa_dir (need bwa_path); check output for Mapping...
 ```
 #! /bin/bash
 
