@@ -672,7 +672,26 @@ exit
 ```
 
 
-Step 10)
+Step 10) Merging
+```
+screen -r
+script mergeScreen.log
+merge_episodic
+```
+
+```
+exit
+```
+
+Step 11)
+
+
+
+
+
+
+
+
 
 
 
