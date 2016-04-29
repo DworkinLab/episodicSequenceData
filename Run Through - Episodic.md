@@ -683,9 +683,21 @@ merge_episodic
 exit
 ```
 
-Step 11)
+Step 11) Picard Sort
 
-
+```
+screen -r
+script picardScreen.log
+picard_episodic
+```
+```
+exit
+```
+Step 12) Remove Duplicates
+Step 13) Remove low Quality Reads
+Step 14) Create mpileup
+Step 15) Create Sync
+ 
 
 
 
