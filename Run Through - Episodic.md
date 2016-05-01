@@ -523,6 +523,16 @@ base=`basename ${name} .sort.bam`
 java -Xmx2g -jar ${pic} MarkDuplicates I= ${sort_dir}/*.sort.bam O= ${rmd_dir}/${base}.rmd.sort.bam M= ${rmd_dir}/dupstat.txt VALIDATION_STRINGENCY=SILENT REMOVE_DUPLICATES= true
 done
 ```
+Issue: base name in input?
+```
+files=(${sort_dir}/*)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} .sort.bam`
+java -Xmx2g -jar ${pic} MarkDuplicates I= ${sort_dir}/${base}.sort.bam O= ${rmd_dir}/${base}.rmd.sort.bam M= ${rmd_dir}/dupstat.txt VALIDATION_STRINGENCY=SILENT REMOVE_DUPLICATES= true
+done
+```
 
 ```
 chmod +x rmd_episodic
@@ -694,6 +704,16 @@ picard_episodic
 exit
 ```
 Step 12) Remove Duplicates
+```
+screen -r
+script rmdScreen.log
+rmd_episodic
+```
+
+```
+exit
+```
+
 Step 13) Remove low Quality Reads
 Step 14) Create mpileup
 Step 15) Create Sync
