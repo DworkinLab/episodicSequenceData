@@ -715,6 +715,15 @@ exit
 ```
 
 Step 13) Remove low Quality Reads
+```
+screen -r
+script qualityScreen.log
+quality_episodic
+```
+
+```
+exit
+```
 Step 14) Create mpileup
 Step 15) Create Sync
  
