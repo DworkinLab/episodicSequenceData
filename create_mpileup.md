@@ -1,10 +1,10 @@
 # Full run through of all sequence data - Trimming to mpileup file format
-## 
 ## Change parameters here at top (before scripts), rest should fall in place, unless changes need to be made for quality purposes
+### Most functions best to do using screen
 ____________________________________________________________________________________________________
   
 ###Step 1: 
-Make project_dir and put all files are in raw_dir=${project_dir}/raw_dir
+Make a project directory (project_dir) and put all files are in a raw directory located in the project directory (raw_dir=${project_dir}/raw_dir)
 
 ###Step 2: 
 md5sum all raw files: changes depending on the file name (example below)
