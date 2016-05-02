@@ -3,17 +3,22 @@
 ## Change parameters here at top (before scripts), rest should fall in place, unless changes need to be made for quality purposes
 ____________________________________________________________________________________________________
   
-###Step 1: make project_dir and put all files are in raw_dir=${project_dir}/raw_dir
+###Step 1: 
+Make project_dir and put all files are in raw_dir=${project_dir}/raw_dir
 
-###Step 2: md5sum all raw files: changes depending on the file name (example below)
+###Step 2: 
+md5sum all raw files: changes depending on the file name (example below)
 ```
 md5sum - c md5.txt
 ```
 
-###Step 3: Fastqc; run as a quality control and view
+###Step 3: 
+Fastqc; run as a quality control and view
 
-###Step 4: Create all working Directories and bringing in reference sequence and indexing
+###Step 4: 
+Create all working directories and bringing in reference sequence and indexing
 
+Change name of project_dir at top & change index sequence and path to desired reference
 
 ```
 #! /bin/bash
@@ -51,9 +56,10 @@ mkdir ${project_dir}/mpileup_dir
 
 ```
 
+### Step 5
+Defining all directories to copy and paste at start of each script
 
-###Def_Dir
-Defining all directories (copy to start of all scripts)
+Change everything to desired locations, adapters, paths to locations etc. up to comment
 
 ```
 project_name=episodic_data
@@ -73,6 +79,7 @@ sync=/usr/local/popoolation/mpileup2sync.jar
 index_dir=${project_dir}/index_dir
 ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
 
+#Nothing to change below
 
 trim_dir=${project_dir}/trim_dir
 sam_dir=${project_dir}/sam_dir
@@ -85,6 +92,10 @@ final_bam=${project_dir}/final_bam
 mpileup_dir=${project_dir}/mpileup_dir
 
 ```
+
+
+###Step 6
+Change names to match
 
 In order for easier run through, change names to common names (ending in _L001_RX_001.fastq.gz or _L002_RX_001.fastq.gz)
   - Change using mv function: easiest method would be to copy and paste with changes already made for ones you want
