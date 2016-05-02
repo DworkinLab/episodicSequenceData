@@ -1,66 +1,31 @@
 # Full run through of all sequence data - Trimming to mpileup file format
-## Need a thourough log
-### Change parameters here at top (before scripts), rest should fall in place, unless changes need to be made for quality purposes
-
-  - set up so user needs to create project name and create a raw directory (raw_dir) and this will automatically create other directories
-
-  - Should run md5sum and fastqc seperatly (before running quality control)
-
-  - need known path to project name (i.e /home/paul/episodicData)
+## 
+## Change parameters here at top (before scripts), rest should fall in place, unless changes need to be made for quality purposes
+____________________________________________________________________________________________________
   
-  - need to move (mv) all raw files with md5sum files into {project_dir}/raw_dir
-  
-  - should make a directory for scripts (mkdir scripts)
-  
-  - Change so all files like this:  _R1_001.fastq.gz (or R2_001...)
+###Step 1: make project_dir and put all files are in raw_dir=${project_dir}/raw_dir
 
-
-Step 1: make sure project_dir is set correct in ${mkdir script} below, and all files are in raw_dir=${project_dir}/raw_dir
-Step 2: md5sum all raw files: changes depending on the file name (example below)
-
+###Step 2: md5sum all raw files: changes depending on the file name (example below)
 ```
 md5sum - c md5.txt
 ```
 
-Step 3: Fastqc
+###Step 3: Fastqc; run as a quality control and view
+
+###Step 4: Create all working Directories and bringing in reference sequence and indexing
 
 
-###Create all working Directories and bringing in reference sequence and indexing
-Change trim to actual file / input (same for adapters)
-
--- Don't need bwa_dir (need bwa_path); check output for Mapping...
 ```
 #! /bin/bash
 
+#Change name of project directory (made above with raw_dir)
+
 project_dir=/home/paul/episodicData
-raw_dir=${project_dir}/raw_dir
 
-cd ${project_dir}
-
-mkdir ${project_dir}/trim_dir
+# Can change the index sequence here
 
 mkdir ${project_dir}/index_dir
 index_dir=${project_dir}/index_dir
-
-mkdir ${project_dir}/bwa_dir
-
-mkdir ${project_dir}/sam_dir
-
-mkdir ${project_dir}/bam_dir
-
-mkdir ${project_dir}/merged
-
-mkdir ${project_dir}/sort_dir
-
-mkdir ${project_dir}/tmp
-
-mkdir ${project_dir}/rmd_dir
-
-mkdir ${project_dir}/final_bam
-
-mkdir ${project_dir}/mpileup_dir
-
-# Can change the index sequence here
 cd ${index_dir}
 curl -O ftp://ftp.flybase.net/genomes/Drosophila_melanogaster/dmel_r5.57_FB2014_03/fasta/dmel-all-chromosome-r5.57.fasta.gz
 
@@ -68,12 +33,27 @@ bwa index dmel-all-chromosome-r5.57.fasta.gz
 
 ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
 
+
+
+cd ${project_dir}
+
+raw_dir=${project_dir}/raw_dir
+mkdir ${project_dir}/trim_dir
+mkdir ${project_dir}/index_dir
+mkdir ${project_dir}/sam_dir
+mkdir ${project_dir}/bam_dir
+mkdir ${project_dir}/merged
+mkdir ${project_dir}/sort_dir
+mkdir ${project_dir}/tmp
+mkdir ${project_dir}/rmd_dir
+mkdir ${project_dir}/final_bam
+mkdir ${project_dir}/mpileup_dir
+
 ```
 
 
-Defining all directories (copy to start of all scripts?)
-
 ###Def_Dir
+Defining all directories (copy to start of all scripts)
 
 ```
 project_name=episodic_data
@@ -95,7 +75,6 @@ ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
 
 
 trim_dir=${project_dir}/trim_dir
-bwa_dir=${project_dir}/bwa_dir
 sam_dir=${project_dir}/sam_dir
 bam_dir=${project_dir}/bam_dir 
 merged=${project_dir}/merged
@@ -108,131 +87,11 @@ mpileup_dir=${project_dir}/mpileup_dir
 ```
 
 In order for easier run through, change names to common names (ending in _L001_RX_001.fastq.gz or _L002_RX_001.fastq.gz)
-Starting files (without md5sum):
-
-```
-Con_R1_F77_ATGTCA_L003_R1_001.fastq.gz*
-Con_R1_F77_ATGTCA_L003_R2_001.fastq.gz*
-Con_R1_F77_ATGTCA_L004_R1_001.fastq.gz*
-Con_R1_F77_ATGTCA_L004_R2_001.fastq.gz*
-Con_R2_F77_ATTCCT_L003_R1_001.fastq.gz*
-Con_R2_F77_ATTCCT_L003_R2_001.fastq.gz*
-Con_R2_F77_ATTCCT_L004_R1_001.fastq.gz*
-Con_R2_F77_ATTCCT_L004_R2_001.fastq.gz*
-F115ConR1_TAGCTT_L001_R1_001.fastq.gz
-F115ConR1_TAGCTT_L001_R2_001.fastq.gz
-F115ConR1_TAGCTT_L002_R1_001.fastq.gz
-F115ConR1_TAGCTT_L002_R2_001.fastq.gz
-F115ConR2_GGCTAC_L001_R1_001.fastq.gz
-F115ConR2_GGCTAC_L001_R2_001.fastq.gz
-F115ConR2_GGCTAC_L002_R1_001.fastq.gz
-F115ConR2_GGCTAC_L002_R2_001.fastq.gz
-F115SelR1_GTTTCG_L001_R1_001.fastq.gz
-F115SelR1_GTTTCG_L001_R2_001.fastq.gz
-F115SelR1_GTTTCG_L002_R1_001.fastq.gz
-F115SelR1_GTTTCG_L002_R2_001.fastq.gz
-F115SelR2_GTGGCC_L001_R1_001.fastq.gz
-F115SelR2_GTGGCC_L001_R2_001.fastq.gz
-F115SelR2_GTGGCC_L002_R1_001.fastq.gz
-F115SelR2_GTGGCC_L002_R2_001.fastq.gz
-F38ConR1_ATCACG_L001_R1_001.fastq.gz
-F38ConR1_ATCACG_L001_R2_001.fastq.gz
-F38ConR1_ATCACG_L002_R1_001.fastq.gz
-F38ConR1_ATCACG_L002_R2_001.fastq.gz
-F38ConR2_TTAGGC_L001_R1_001.fastq.gz
-F38ConR2_TTAGGC_L001_R2_001.fastq.gz
-F38ConR2_TTAGGC_L002_R1_001.fastq.gz
-F38ConR2_TTAGGC_L002_R2_001.fastq.gz
-F38SelR1_ACTTGA_L001_R1_001.fastq.gz
-F38SelR1_ACTTGA_L001_R2_001.fastq.gz
-F38SelR1_ACTTGA_L002_R1_001.fastq.gz
-F38SelR1_ACTTGA_L002_R2_001.fastq.gz
-F38SelR2_GATCAG_L001_R1_001.fastq.gz
-F38SelR2_GATCAG_L001_R2_001.fastq.gz
-F38SelR2_GATCAG_L002_R1_001.fastq.gz
-F38SelR2_GATCAG_L002_R2_001.fastq.gz
-MGD2_SO_CAGATC_L005_R1_001.fastq.gz
-MGD2_SO_CAGATC_L005_R2_001.fastq.gz
-MGD2_SO_CAGATC_L006_R1_001.fastq.gz
-MGD2_SO_CAGATC_L006_R2_001.fastq.gz
-MGD_SO_CAGATC_L005_R1_001.fastq.gz*
-MGD_SO_CAGATC_L005_R2_001.fastq.gz*
-MGD_SO_CAGATC_L006_R1_001.fastq.gz*
-MGD_SO_CAGATC_L006_R2_001.fastq.gz*
-Sel_R1_F77_TTAGGC_L003_R1_001.fastq.gz*
-Sel_R1_F77_TTAGGC_L003_R2_001.fastq.gz*
-Sel_R1_F77_TTAGGC_L004_R1_001.fastq.gz*
-Sel_R1_F77_TTAGGC_L004_R2_001.fastq.gz*
-Sel_R2_F77_GATCAG_L003_R1_001.fastq.gz*
-Sel_R2_F77_GATCAG_L003_R2_001.fastq.gz*
-Sel_R2_F77_GATCAG_L004_R1_001.fastq.gz*
-Sel_R2_F77_GATCAG_L004_R2_001.fastq.gz*
-```
-Change using mv function: easiest method would be to copy and paste with changes already made for ones you want
-Change to match F38SelR2_GATCAG_L001_R2_001.fastq.gz style
-- should be same start
-- all L003 = L001
-- all L004 = L002 (etc.)
-
-origional files and changed names
-```
-Con_R1_F77_ATGTCA_L003_R1_001.fastq.gz F77ConR1_ATGTCA_L001_R1_001.fastq.gz
-Con_R1_F77_ATGTCA_L003_R2_001.fastq.gz F77ConR1_ATGTCA_L001_R2_001.fastq.gz
-Con_R1_F77_ATGTCA_L004_R1_001.fastq.gz F77ConR1_ATGTCA_L002_R1_001.fastq.gz
-Con_R1_F77_ATGTCA_L004_R2_001.fastq.gz F77ConR1_ATGTCA_L002_R2_001.fastq.gz
-Con_R2_F77_ATTCCT_L003_R1_001.fastq.gz F77ConR2_ATTCCT_L001_R1_001.fastq.gz
-Con_R2_F77_ATTCCT_L003_R2_001.fastq.gz F77ConR2_ATTCCT_L001_R2_001.fastq.gz
-Con_R2_F77_ATTCCT_L004_R1_001.fastq.gz F77ConR2_ATTCCT_L002_R1_001.fastq.gz
-Con_R2_F77_ATTCCT_L004_R2_001.fastq.gz F77ConR2_ATTCCT_L002_R2_001.fastq.gz
-F115ConR1_TAGCTT_L001_R1_001.fastq.gz OK
-F115ConR1_TAGCTT_L001_R2_001.fastq.gz OK
-F115ConR1_TAGCTT_L002_R1_001.fastq.gz OK
-F115ConR1_TAGCTT_L002_R2_001.fastq.gz OK
-F115ConR2_GGCTAC_L001_R1_001.fastq.gz OK
-F115ConR2_GGCTAC_L001_R2_001.fastq.gz OK
-F115ConR2_GGCTAC_L002_R1_001.fastq.gz OK
-F115ConR2_GGCTAC_L002_R2_001.fastq.gz OK
-F115SelR1_GTTTCG_L001_R1_001.fastq.gz OK
-F115SelR1_GTTTCG_L001_R2_001.fastq.gz OK
-F115SelR1_GTTTCG_L002_R1_001.fastq.gz OK
-F115SelR1_GTTTCG_L002_R2_001.fastq.gz OK
-F115SelR2_GTGGCC_L001_R1_001.fastq.gz OK
-F115SelR2_GTGGCC_L001_R2_001.fastq.gz OK
-F115SelR2_GTGGCC_L002_R1_001.fastq.gz OK
-F115SelR2_GTGGCC_L002_R2_001.fastq.gz OK
-F38ConR1_ATCACG_L001_R1_001.fastq.gz OK
-F38ConR1_ATCACG_L001_R2_001.fastq.gz OK
-F38ConR1_ATCACG_L002_R1_001.fastq.gz OK
-F38ConR1_ATCACG_L002_R2_001.fastq.gz OK
-F38ConR2_TTAGGC_L001_R1_001.fastq.gz OK
-F38ConR2_TTAGGC_L001_R2_001.fastq.gz OK
-F38ConR2_TTAGGC_L002_R1_001.fastq.gz OK
-F38ConR2_TTAGGC_L002_R2_001.fastq.gz OK
-F38SelR1_ACTTGA_L001_R1_001.fastq.gz OK
-F38SelR1_ACTTGA_L001_R2_001.fastq.gz OK
-F38SelR1_ACTTGA_L002_R1_001.fastq.gz OK
-F38SelR1_ACTTGA_L002_R2_001.fastq.gz OK
-F38SelR2_GATCAG_L001_R1_001.fastq.gz OK
-F38SelR2_GATCAG_L001_R2_001.fastq.gz OK
-F38SelR2_GATCAG_L002_R1_001.fastq.gz OK
-F38SelR2_GATCAG_L002_R2_001.fastq.gz OK
-MGD2_SO_CAGATC_L005_R1_001.fastq.gz MGD2_SO_CAGATC_L001_R1_001.fastq.gz
-MGD2_SO_CAGATC_L005_R2_001.fastq.gz MGD2_SO_CAGATC_L001_R2_001.fastq.gz
-MGD2_SO_CAGATC_L006_R1_001.fastq.gz MGD2_SO_CAGATC_L002_R1_001.fastq.gz
-MGD2_SO_CAGATC_L006_R2_001.fastq.gz MGD2_SO_CAGATC_L002_R2_001.fastq.gz
-MGD_SO_CAGATC_L005_R1_001.fastq.gz MGD_SO_CAGATC_L001_R1_001.fastq.gz
-MGD_SO_CAGATC_L005_R2_001.fastq.gz MGD_SO_CAGATC_L001_R2_001.fastq.gz
-MGD_SO_CAGATC_L006_R1_001.fastq.gz MGD_SO_CAGATC_L002_R1_001.fastq.gz
-MGD_SO_CAGATC_L006_R2_001.fastq.gz MGD_SO_CAGATC_L002_R2_001.fastq.gz
-Sel_R1_F77_TTAGGC_L003_R1_001.fastq.gz F77SelR1_TTAGGC_L001_R1_001.fastq.gz
-Sel_R1_F77_TTAGGC_L003_R2_001.fastq.gz F77SelR1_TTAGGC_L001_R2_001.fastq.gz
-Sel_R1_F77_TTAGGC_L004_R1_001.fastq.gz F77SelR1_TTAGGC_L002_R1_001.fastq.gz
-Sel_R1_F77_TTAGGC_L004_R2_001.fastq.gz F77SelR1_TTAGGC_L002_R2_001.fastq.gz
-Sel_R2_F77_GATCAG_L003_R1_001.fastq.gz F77SelR2_GATCAG_L001_R1_001.fastq.gz
-Sel_R2_F77_GATCAG_L003_R2_001.fastq.gz F77SelR2_GATCAG_L001_R2_001.fastq.gz
-Sel_R2_F77_GATCAG_L004_R1_001.fastq.gz F77SelR2_GATCAG_L002_R1_001.fastq.gz
-Sel_R2_F77_GATCAG_L004_R2_001.fastq.gz F77SelR2_GATCAG_L002_R2_001.fastq.gz
-```
+  - Change using mv function: easiest method would be to copy and paste with changes already made for ones you want
+  - Change to match F38SelR2_GATCAG_L001_R2_001.fastq.gz style
+  - should be same start
+  - all L003 = L001
+  - all L004 = L002 (etc.)
 
 ##Scripts: copy the file/directory paths above into each script
 ###Nano in scripts directory for each step below
@@ -345,7 +204,7 @@ for file in ${files[@]}
 do
 name=${file}
 base=`basename ${name} .sort.bam`
-java -Xmx2g -jar ${pic} MarkDuplicates I= ${sort_dir}/*.sort.bam O= ${rmd_dir}/${base}.rmd.sort.bam M= ${rmd_dir}/dupstat.txt VALIDATION_STRINGENCY=SILENT REMOVE_DUPLICATES= true
+java -Xmx2g -jar ${pic} MarkDuplicates I= ${sort_dir}/${base}.sort.bam O= ${rmd_dir}/${base}.rmd.sort.bam M= ${rmd_dir}/dupstat.txt VALIDATION_STRINGENCY=SILENT REMOVE_DUPLICATES= true
 done
 ```
 
