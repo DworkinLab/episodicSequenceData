@@ -724,7 +724,21 @@ quality_episodic
 ```
 exit
 ```
+
+REALIZATION: The MGD are not merged and have two difference coverages for Gen 0
+- Becuase I am lazy, will just use both as a comparision
+
 Step 14) Create mpileup
+```
+screen -r
+script mpileupScreen.log
+mpileup_episodic
+
+```
+
+```
+exit
+```
 Step 15) Create Sync
  
 
