@@ -739,8 +739,18 @@ mpileup_episodic
 ```
 exit
 ```
+
 Step 15) Create Sync
- 
+
+```
+screen -r
+script syncScreen.log
+sync_episodic
+```
+
+```
+exit
+```
 
 
 
