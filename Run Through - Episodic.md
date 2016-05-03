@@ -751,7 +751,8 @@ sync_episodic
 ```
 exit
 ```
-Done but quick.
+
+Franssen: indels / repeat masker?
 
 
 Now have a sync file to be used for CMH test and Fst values.
