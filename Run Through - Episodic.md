@@ -776,6 +776,7 @@ MGD_SO_CAGATC_merged_aligned_pe.final.bam
 
 CMH Test
 ?? check values and comparisons?
+comparisons are not between same replicates (i.e R1 and R2) but rather based on generations.
 ```
 #! /bin/bash
 
