@@ -756,6 +756,24 @@ Done but quick.
 
 Now have a sync file to be used for CMH test and Fst values.
 
+Order? from final_bam
+```
+F115ConR1_TAGCTT_merged_aligned_pe.final.bam
+F115ConR2_GGCTAC_merged_aligned_pe.final.bam
+F115SelR1_GTTTCG_merged_aligned_pe.final.bam
+F115SelR2_GTGGCC_merged_aligned_pe.final.bam
+F38ConR1_ATCACG_merged_aligned_pe.final.bam
+F38ConR2_TTAGGC_merged_aligned_pe.final.bam
+F38SelR1_ACTTGA_merged_aligned_pe.final.bam
+F38SelR2_GATCAG_merged_aligned_pe.final.bam
+F77ConR1_ATGTCA_merged_aligned_pe.final.bam
+F77ConR2_ATTCCT_merged_aligned_pe.final.bam
+F77SelR1_TTAGGC_merged_aligned_pe.final.bam
+F77SelR2_GATCAG_merged_aligned_pe.final.bam
+MGD2_SO_CAGATC_merged_aligned_pe.final.bam
+MGD_SO_CAGATC_merged_aligned_pe.final.bam
+```
+
 
 
 
