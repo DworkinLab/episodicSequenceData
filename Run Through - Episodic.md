@@ -774,6 +774,38 @@ MGD2_SO_CAGATC_merged_aligned_pe.final.bam
 MGD_SO_CAGATC_merged_aligned_pe.final.bam
 ```
 
+CMH Test
+?? check values and comparisons?
+```
+#! /bin/bash
+
+
+sync_file=/home/paul/episodicData/mappedSequence/episodicData_Sanger.sync
+
+perl /usr/local/popoolation/cmh-test.pl --min-count 3 --min-coverage 10 --max-coverage 250 --population 1-2,3-4,5-6,7-8 --input ${map_dir}/episodicData_Sanger.sync --output ${map_dir}/cmhtest_Sanger.txt
+
+perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_Sanger.txt --output ${map_dir}/cmh_Sanger.gwas --min-pvalue 1.0e-20
+```
+
+
+
+FST values?
+
+Check pool size?
+Change popoolation to a short cut.
+etc.
+```
+#! /bin/bash
+
+map_dir=/home/paul/episodicData/mappedSequence
+
+perl /usr/local/popoolation/fst-sliding.pl --window-size 500 --step-size 500 --suppress-noninformative --input ${mpileup_dir}/${project_name}.sync --min-covered-fraction 1.0 --min-coverage 10 --max-coverage 250 --min-count 3 --output ${mpileup_dir}/${project_name}.fst.txt --pool-size 60
+```
+
+
+
+
+
 
 
 
