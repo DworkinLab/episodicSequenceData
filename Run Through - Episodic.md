@@ -778,6 +778,11 @@ Order? from final_bam
 CMH Test
 ?? check values and comparisons?
 comparisons are not between same replicates (i.e R1 and R2) but rather based on generations.
+Comparisons:
+1-5,1-9,1-13,1-14
+2-6,2-10,2-13,2-14
+3-7,3-11,3-13,3-14
+4-8,4-12,4-13,4-14
 ```
 #! /bin/bash
 
