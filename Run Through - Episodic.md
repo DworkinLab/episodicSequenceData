@@ -788,7 +788,7 @@ Comparisons:
 * Just copy MGD2 (13.) 3 times at end: should now be 13,15,16,17 that are compared to per generation (4 samples at each time point)
 Code is this: added below to script to copy and paste
 ```
-cat ${mpileup_dir}/${project_name}.sync | awk ’BEGIN{OFS="\t"}{print $0,$13,$13,$13}’ > ${mpileup_dir}/${project_name}_MGD2.sync
+cat ${mpileup_dir}/${project_name}.sync | awk 'BEGIN{OFS="\t"}{print $0,$13,$13,$13}' > ${mpileup_dir}/${project_name}_MGD2.sync
 ```
 
 
@@ -823,7 +823,7 @@ rmd_dir=${project_dir}/rmd_dir
 final_bam=${project_dir}/final_bam
 mpileup_dir=${project_dir}/mpileup_dir
 
-cat ${mpileup_dir}/${project_name}.sync | awk ’BEGIN{OFS="\t"}{print $0,$13,$13,$13}’ > ${mpileup_dir}/${project_name}_MGD2.sync
+cat ${mpileup_dir}/${project_name}.sync | awk 'BEGIN{OFS="\t"}{print $0,$13,$13,$13}' > ${mpileup_dir}/${project_name}_MGD2.sync
 ```
 change permissions
 ```
@@ -852,7 +852,8 @@ bash: exi: command not found
 exit
 Script done, file is catMGD2Screen.log
 ```
-cat p1_p2.sync|awk 'BEGIN{OFS="\t"}{print $0,$4,$5}' > cmh/p1_p2_p1_p2.sync
+cat p1_p2.sync|awk 'BEGIN{OFS="\t"}{print $0,$4,$5}' > cmh/p1_p2_p1_p2.sync (difference is the quotes: changed above....)
+- Rerun all above
 
 
 Now should be able to run the cmh test with comparisions per generation (B = base, B-115 (x4), B-77 (x4), B-38 (X40)
