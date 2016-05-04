@@ -912,6 +912,8 @@ cmh_test = /usr/local/popoolation/cmh-test.pl
 
 perl ${cmh_test} --min-count 3 --min-coverage 10 --max-coverage 250 --population ${population} --input ${mpileup_dir}/${project_name}_MGD2.sync --output ${mpileup_dir}/${project_name}_${population}.cmh.txt
 
+
+#CHANGE BELOW !!!!!
 perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_Sanger.txt --output ${map_dir}/cmh_Sanger.gwas --min-pvalue 1.0e-20
 ```
 
