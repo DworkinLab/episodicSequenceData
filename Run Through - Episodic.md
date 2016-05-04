@@ -840,6 +840,21 @@ Stop the screen log
 exit
 ```
 
+Error = 
+```
+Script started, file is catMGD2Screen.log
+sync_add_base[paul@info114 scripts]$ sync_add_base
+awk: ’BEGIN{OFS=\t}{print
+awk: ^ invalid char '�' in expression
+[paul@info114 scripts]$ exi
+bash: exi: command not found
+[paul@info114 scripts]$ exit
+exit
+Script done, file is catMGD2Screen.log
+```
+cat p1_p2.sync|awk 'BEGIN{OFS="\t"}{print $0,$4,$5}' > cmh/p1_p2_p1_p2.sync
+
+
 Now should be able to run the cmh test with comparisions per generation (B = base, B-115 (x4), B-77 (x4), B-38 (X40)
 
 
