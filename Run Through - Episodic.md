@@ -859,8 +859,29 @@ cat p1_p2.sync|awk 'BEGIN{OFS="\t"}{print $0,$4,$5}' > cmh/p1_p2_p1_p2.sync (dif
 
 Now should be able to run the cmh test with comparisions per generation (B = base, B-115 (x4), B-77 (x4), B-38 (X40)
 
+Comparisons Proper (with Sarah discussion)
+```
+MGD2 X F115ConR1 & MGD2 X F115ConR2
+MGD2 X F115SelR1 & MGD2 X F115SelR2
+MGD2 X F38ConR1 & MGD2 X F38ConR2
+MGD2 X F38SelR1 & MGD2 X F38SelR2
+MGD2 X F77ConR1 & MGD2 X F77ConR2
+MGD2 X F77SelR1 & MGD2 X F77SelR2
+```
+Equvilant to:
+```
+13 X 1 & 15 X 2
+13 X 3 & 15 X 4
+13 X 5 & 15 X 6
+13 X 7 & 15 X 8
+13 X 9 & 15 X 10
+13 X 11 & 15 X 12
+```
+Meaning too many MGD2 copied with cat / awk above..
 
 
+
+The script:
 ```
 #! /bin/bash
 
