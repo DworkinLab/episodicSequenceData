@@ -854,6 +854,7 @@ Script done, file is catMGD2Screen.log
 ```
 cat p1_p2.sync|awk 'BEGIN{OFS="\t"}{print $0,$4,$5}' > cmh/p1_p2_p1_p2.sync (difference is the quotes: changed above....)
 - Rerun all above
+(FYI this is old version -- cat ${mpileup_dir}/${project_name}.sync | awk ’BEGIN{OFS="\t"}{print $0,$13,$13,$13}’ > ${mpileup_dir}/${project_name}_MGD2.sync)
 
 
 Now should be able to run the cmh test with comparisions per generation (B = base, B-115 (x4), B-77 (x4), B-38 (X40)
