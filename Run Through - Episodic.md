@@ -878,8 +878,7 @@ Equvilant to:
 13 X 11 & 15 X 12
 ```
 Meaning too many MGD2 copied with cat / awk above..
-
-
+- just need the two per run:
 
 The script:
 ```
@@ -908,9 +907,10 @@ rmd_dir=${project_dir}/rmd_dir
 final_bam=${project_dir}/final_bam
 mpileup_dir=${project_dir}/mpileup_dir
 
+population = 1-13,2-15
 cmh_test = /usr/local/popoolation/cmh-test.pl 
 
-perl ${cmh_test} --min-count 3 --min-coverage 10 --max-coverage 250 --population 1-2,3-4,5-6,7-8 --input ${mpileup_dir}/${project_name}_MGD2.sync --output ${mpileup_dir}/${project_name}.cmh.txt
+perl ${cmh_test} --min-count 3 --min-coverage 10 --max-coverage 250 --population ${population} --input ${mpileup_dir}/${project_name}_MGD2.sync --output ${mpileup_dir}/${project_name}_${population}.cmh.txt
 
 perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_Sanger.txt --output ${map_dir}/cmh_Sanger.gwas --min-pvalue 1.0e-20
 ```
