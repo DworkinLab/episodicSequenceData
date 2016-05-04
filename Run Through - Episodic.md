@@ -782,7 +782,21 @@ Comparisons:
 1-5,1-9,1-13,1-14
 2-6,2-10,2-13,2-14
 3-7,3-11,3-13,3-14
-4-8,4-12,4-13,4-14
+4-8,4-12,4-13,4-14*
+
+* Can only have one value a time: need to add (copy) base populations
+* Just copy MGD2 (13.) 3 times at end: should now be 13,15,16,17 that are compared to per generation (4 samples at each time point)
+Code is this: added below to script to copy and paste
+```
+cat ${mpileup_dir}/${project_name}.sync | awk ’BEGIN{OFS="\t"}{print $0,$13,$13,$13}’ > ${mpileup_dir}/${project_name}_MGD2.sync
+```
+
+
+From Script Directory
+```
+nano sync_add_base
+```
+copy into nano
 ```
 #! /bin/bash
 
@@ -809,10 +823,56 @@ rmd_dir=${project_dir}/rmd_dir
 final_bam=${project_dir}/final_bam
 mpileup_dir=${project_dir}/mpileup_dir
 
-sync_file=${mpileup_dir}/${project_name}.sync
+cat ${mpileup_dir}/${project_name}.sync | awk ’BEGIN{OFS="\t"}{print $0,$13,$13,$13}’ > ${mpileup_dir}/${project_name}_MGD2.sync
+```
+change permissions
+```
+chmod +x sync_add_base
+```
+Run on screen with a log
+```
+screen -r
+script catMGD2Screen.log
+sync_add_base
+```
+Stop the screen log
+```
+exit
+```
+
+Now should be able to run the cmh test with comparisions per generation (B = base, B-115 (x4), B-77 (x4), B-38 (X40)
+
+
+
+```
+#! /bin/bash
+
+project_name=episodic_data
+project_dir=/home/paul/episodicData
+raw_dir=${project_dir}/raw_dir
+trimmomatic=/usr/local/trimmomatic
+trim=${trimmomatic}/trimmomatic-0.33.jar
+adapt_path=/usr/local/trimmomatic/adapters
+adapter=${adapt_path}/TruSeq3-PE.fa:2:30:10
+bwa_path=/usr/local/bwa/0.7.8
+pic=/usr/local/picard-tools-1.131/picard.jar
+sync=/usr/local/popoolation/mpileup2sync.jar
+index_dir=${project_dir}/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+trim_dir=${project_dir}/trim_dir
+bwa_dir=${project_dir}/bwa_dir
+sam_dir=${project_dir}/sam_dir
+bam_dir=${project_dir}/bam_dir 
+merged=${project_dir}/merged
+sort_dir=${project_dir}/sort_dir
+tmp=${project_dir}/tmp
+rmd_dir=${project_dir}/rmd_dir
+final_bam=${project_dir}/final_bam
+mpileup_dir=${project_dir}/mpileup_dir
+
 cmh_test = /usr/local/popoolation/cmh-test.pl 
 
-perl ${cmh_test} --min-count 3 --min-coverage 10 --max-coverage 250 --population 1-2,3-4,5-6,7-8 --input ${sync_file} --output ${mpileup_dir}/${project_name}.cmh.txt
+perl ${cmh_test} --min-count 3 --min-coverage 10 --max-coverage 250 --population 1-2,3-4,5-6,7-8 --input ${mpileup_dir}/${project_name}_MGD2.sync --output ${mpileup_dir}/${project_name}.cmh.txt
 
 perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_Sanger.txt --output ${map_dir}/cmh_Sanger.gwas --min-pvalue 1.0e-20
 ```
