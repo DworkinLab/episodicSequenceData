@@ -918,8 +918,11 @@ perl ${cmh_test} --min-count 3 --min-coverage 10 --max-coverage 250 --population
 
 perl ${cmh_gwas} --input ${mpileup_dir}/${project_name}_${population}.cmh.txt --output ${mpileup_dir}/${project_name}_${population}.cmh.gwas --min-pvalue 1.0e-20
 ```
-
-
+Flags:
+  --min-count 3 
+  --min-coverage 10 
+  --max-coverage 250
+: numbers decided with Ian last term!
 
 FST values?
 
