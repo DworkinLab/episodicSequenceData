@@ -910,7 +910,7 @@ mpileup_dir=${project_dir}/mpileup_dir
 
 # Can change here to other comparisons
 
-population = 1-13,2-15
+population=1-13,2-15
 cmh_test=/usr/local/popoolation/cmh-test.pl
 cmh_gwas=/usr/local/popoolation/export/cmh2gwas.pl
 
@@ -923,6 +923,47 @@ Flags:
   --min-coverage 10 
   --max-coverage 250
 : numbers decided with Ian last term!
+
+What is run in terminal (general):
+
+```
+nano cmh_test_${population}
+```
+Copy script from above and change population to aproptiote groupings (and change for the nano above also)
+```
+chmod +x cmh_test_${population}
+```
+screen in scripts is best
+```
+screen -r
+script cmh_${population}_screen.log
+cmh_test_${population}
+```
+
+```
+exit
+```
+
+What is run in terminal (example):
+
+```
+nano cmh_test_1-13,2-15
+```
+Copy script from above and change population to aproptiote groupings (and change for the nano above also)
+```
+chmod +x cmh_test_1-13,2-15
+```
+screen in scripts is best
+```
+screen -r
+script cmh_1-13,2-15_screen.log
+cmh_test_1-13,2-15
+```
+
+```
+exit
+```
+
 
 FST values?
 
