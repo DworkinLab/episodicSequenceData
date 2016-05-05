@@ -881,6 +881,7 @@ Meaning too many MGD2 copied with cat / awk above..
 - just need the two per run:
 
 The script:
+-- Check flags
 ```
 #! /bin/bash
 
@@ -907,14 +908,15 @@ rmd_dir=${project_dir}/rmd_dir
 final_bam=${project_dir}/final_bam
 mpileup_dir=${project_dir}/mpileup_dir
 
+# Can change here to other comparisons
+
 population = 1-13,2-15
-cmh_test = /usr/local/popoolation/cmh-test.pl 
+cmh_test=/usr/local/popoolation/cmh-test.pl
+cmh_gwas=/usr/local/popoolation/export/cmh2gwas.pl
 
 perl ${cmh_test} --min-count 3 --min-coverage 10 --max-coverage 250 --population ${population} --input ${mpileup_dir}/${project_name}_MGD2.sync --output ${mpileup_dir}/${project_name}_${population}.cmh.txt
 
-
-#CHANGE BELOW !!!!!
-perl /usr/local/popoolation/export/cmh2gwas.pl --input ${map_dir}/cmhtest_Sanger.txt --output ${map_dir}/cmh_Sanger.gwas --min-pvalue 1.0e-20
+perl ${cmh_gwas} --input ${mpileup_dir}/${project_name}_${population}.cmh.txt --output ${mpileup_dir}/${project_name}_${population}.cmh.gwas --min-pvalue 1.0e-20
 ```
 
 
