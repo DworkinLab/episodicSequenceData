@@ -910,13 +910,15 @@ mpileup_dir=${project_dir}/mpileup_dir
 
 # Can change here to other comparisons
 
-population=1-13,2-15
+population=11-13,12-15
 cmh_test=/usr/local/popoolation/cmh-test.pl
 cmh_gwas=/usr/local/popoolation/export/cmh2gwas.pl
+mkdir ${mpileup_dir}/${population}
+pop_dir=${mpileup_dir}/${population}
 
-perl ${cmh_test} --min-count 3 --min-coverage 10 --max-coverage 250 --population ${population} --input ${mpileup_dir}/${project_name}_MGD2.sync --output ${mpileup_dir}/${project_name}_${population}.cmh.txt
+perl ${cmh_test} --min-count 3 --min-coverage 10 --max-coverage 250 --population ${population} --input ${mpileup_dir}/${project_name}_MGD2.sync --output ${pop_dir}/${project_name}_${population}.cmh.txt
 
-perl ${cmh_gwas} --input ${mpileup_dir}/${project_name}_${population}.cmh.txt --output ${mpileup_dir}/${project_name}_${population}.cmh.gwas --min-pvalue 1.0e-20
+perl ${cmh_gwas} --input ${pop_dir}/${project_name}_${population}.cmh.txt --output ${pop_dir}/${project_name}_${population}.cmh.gwas --min-pvalue 1.0e-20
 ```
 Flags:
   --min-count 3 
@@ -964,6 +966,14 @@ cmh_test_1-13,2-15
 exit
 ```
 
+script cmh_5-13,6-15_screen.log
+cmh_test_5-13,6-15
+script cmh_7-13,8-15_screen.log
+cmh_test_7-13,8-15
+script cmh_9-13,10-15_screen.log
+cmh_test_9-13,10-15
+script cmh_11-13,12-15_screen.log
+cmh_test_11-13,12-15
 
 FST values?
 
