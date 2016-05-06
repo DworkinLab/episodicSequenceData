@@ -775,7 +775,9 @@ Order? from final_bam
 14. MGD_SO_CAGATC_merged_aligned_pe.final.bam
 ```
 
-CMH Test
+###CMH Test
+
+
 ?? check values and comparisons?
 comparisons are not between same replicates (i.e R1 and R2) but rather based on generations.
 Comparisons:
@@ -966,26 +968,38 @@ cmh_test_1-13,2-15
 exit
 ```
 
+```
+script cmh_3-13,4-15_screen.log
+cmh_test_3-13,4-15
+
 script cmh_5-13,6-15_screen.log
 cmh_test_5-13,6-15
+
 script cmh_7-13,8-15_screen.log
 cmh_test_7-13,8-15
+
 script cmh_9-13,10-15_screen.log
 cmh_test_9-13,10-15
+
 script cmh_11-13,12-15_screen.log
 cmh_test_11-13,12-15
+```
 
-FST values?
+
+
+###FST values?
 
 Check pool size?
-Change popoolation to a short cut.
 etc.
 ```
 #! /bin/bash
 
-map_dir=/home/paul/episodicData/mappedSequence
+project_name=episodic_data
+project_dir=/home/paul/episodicData
+mpileup_dir=${project_dir}/mpileup_dir
+fst_test=/usr/local/popoolation/fst-sliding.pl
 
-perl /usr/local/popoolation/fst-sliding.pl --window-size 500 --step-size 500 --suppress-noninformative --input ${mpileup_dir}/${project_name}.sync --min-covered-fraction 1.0 --min-coverage 10 --max-coverage 250 --min-count 3 --output ${mpileup_dir}/${project_name}.fst.txt --pool-size 60
+perl ${fst_test} --window-size 500 --step-size 500 --suppress-noninformative --input ${mpileup_dir}/${project_name}.sync --min-covered-fraction 1.0 --min-coverage 10 --max-coverage 250 --min-count 3 --output ${mpileup_dir}/${project_name}.fst.txt --pool-size 60
 ```
 
 
