@@ -986,6 +986,34 @@ cmh_test_11-13,12-15
 ```
 
 
+Try to make script to move all to /Users/paulknoops/Sequence_analysis_2016
+1st need to bring all GWAS together into one directory (mkdir all_cmh) and cp all .gwas into it
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/mpileup_dir/all_cmh/* /Users/paulknoops/Sequence_analysis_2016
+```
+Load IGV (java -Xmx750m -jar igv.jar) from igv direcotry on local machine
+Load all files to IGV
+```
+1. F115ConR1_TAGCTT_merged_aligned_pe.final.bam
+2. F115ConR2_GGCTAC_merged_aligned_pe.final.bam
+3. F115SelR1_GTTTCG_merged_aligned_pe.final.bam
+4. F115SelR2_GTGGCC_merged_aligned_pe.final.bam
+5. F38ConR1_ATCACG_merged_aligned_pe.final.bam
+6. F38ConR2_TTAGGC_merged_aligned_pe.final.bam
+7. F38SelR1_ACTTGA_merged_aligned_pe.final.bam
+8. F38SelR2_GATCAG_merged_aligned_pe.final.bam
+9 .F77ConR1_ATGTCA_merged_aligned_pe.final.bam
+10. F77ConR2_ATTCCT_merged_aligned_pe.final.bam
+11. F77SelR1_TTAGGC_merged_aligned_pe.final.bam
+12. F77SelR2_GATCAG_merged_aligned_pe.final.bam
+13. MGD2_SO_CAGATC_merged_aligned_pe.final.bam
+14. MGD_SO_CAGATC_merged_aligned_pe.final.bam
+15. MGD2_SO_CAGATC_merged_aligned_pe.final.bam
+16. MGD2_SO_CAGATC_merged_aligned_pe.final.bam
+17. MGD2_SO_CAGATC_merged_aligned_pe.final.bam
+```
+
+
 
 ###FST values?
 
