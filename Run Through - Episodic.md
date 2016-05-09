@@ -1019,6 +1019,10 @@ Load all files to IGV
 
 Check pool size?
 etc.
+
+```
+nano fst_test
+```
 ```
 #! /bin/bash
 
@@ -1028,6 +1032,17 @@ mpileup_dir=${project_dir}/mpileup_dir
 fst_test=/usr/local/popoolation/fst-sliding.pl
 
 perl ${fst_test} --window-size 500 --step-size 500 --suppress-noninformative --input ${mpileup_dir}/${project_name}.sync --min-covered-fraction 1.0 --min-coverage 10 --max-coverage 250 --min-count 3 --output ${mpileup_dir}/${project_name}.fst.txt --pool-size 60
+```
+```
+chmod +x fst_test
+```
+```
+screen -r
+script fstScreen.log
+fst_test
+```
+```
+exit
 ```
 
 
