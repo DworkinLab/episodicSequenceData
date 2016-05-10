@@ -1045,7 +1045,34 @@ fst_test
 exit
 ```
 
+To view in IGV
 
+```
+nano fst_igv
+```
+```
+#! /bin/bash
+
+project_name=episodic_data
+project_dir=/home/paul/episodicData
+mpileup_dir=${project_dir}/mpileup_dir
+fst_igv=/usr/local/popoolation/export/pwc2igv.pl
+
+perl ${fst_igv} --input ${mpileup_dir}/${project_name}.fst.txt --output ${mpileup_dir}/${project_name}.fst.igv 
+```
+
+```
+chmod +x fst_igv
+```
+```
+screen -r
+script fst_igv_screen.log
+fst_igv
+```
+
+```
+exit
+```
 
 
 
