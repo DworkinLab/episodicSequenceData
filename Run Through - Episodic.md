@@ -1075,6 +1075,53 @@ exit
 ```
 
 
+### Re-run with different mapping software
+```
+cd /home/paul/episodicData
+mkdir bowtie
+```
+remake necessary files in bowtie location (new project dir)
+``` 
+#! /bin/bash
+
+project_dir=/home/paul/episodicData/bowtie
+mkdir ${project_dir}/sam_dir
+mkdir ${project_dir}/bam_dir
+mkdir ${project_dir}/merged
+mkdir ${project_dir}/sort_dir
+mkdir ${project_dir}/tmp
+mkdir ${project_dir}/rmd_dir
+mkdir ${project_dir}/final_bam
+mkdir ${project_dir}/mpileup_dir
+```
+
+All necessary directories from here
+```
+project_name=episodic_data_bowtie
+
+#project dir 1 for trim outputs and referenece genome
+project_dir1=/home/paul/episodicData
+
+project_dir=/home/paul/episodicData/bowtie
+
+pic=/usr/local/picard-tools-1.131/picard.jar
+sync=/usr/local/popoolation/mpileup2sync.jar
+index_dir=${project_dir1}/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+trim_dir=${project_dir1}/trim_dir
+
+bowtie2_dir=/usr/local/bowtie2/2.2.2
+
+sam_dir=${project_dir}/sam_dir
+bam_dir=${project_dir}/bam_dir 
+merged=${project_dir}/merged
+sort_dir=${project_dir}/sort_dir
+tmp=${project_dir}/tmp
+rmd_dir=${project_dir}/rmd_dir
+final_bam=${project_dir}/final_bam
+mpileup_dir=${project_dir}/mpileup_dir
+```
+
 
 
 
