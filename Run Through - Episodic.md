@@ -1123,6 +1123,47 @@ mpileup_dir=${project_dir}/mpileup_dir
 ```
 
 
+Run bowtie 2
+
+need to run twice; once for paired and once for single (than merge)....https://www.biostars.org/p/165333/
+-- Skipped SE on last run through (skip here too? keep consistant.....)
+ 
+```
+#! /bin/bash
+
+project_name=episodic_data_bowtie
+project_dir1=/home/paul/episodicData
+project_dir=/home/paul/episodicData/bowtie
+pic=/usr/local/picard-tools-1.131/picard.jar
+sync=/usr/local/popoolation/mpileup2sync.jar
+index_dir=${project_dir1}/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+trim_dir=${project_dir1}/trim_dir
+bowtie2_dir=/usr/local/bowtie2/2.2.2
+sam_dir=${project_dir}/sam_dir
+bam_dir=${project_dir}/bam_dir 
+merged=${project_dir}/merged
+sort_dir=${project_dir}/sort_dir
+tmp=${project_dir}/tmp
+rmd_dir=${project_dir}/rmd_dir
+final_bam=${project_dir}/final_bam
+mpileup_dir=${project_dir}/mpileup_dir
+
+#Check if correct bowtie2 name?
+# -x indicates "base name" of index..... might need to move index?
+  # try with just ${ref_genome} -1 ${trim_dir}/${base}_ -2 ${trim_dir}/${base}_ -S ${sam_dir}/${base}_bowtie.sam
+
+files=(${trim_dir}/*_R1_PE.fastq.gz)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _R1_PE.fastq.gz`
+${bowtie2_dir}/bowtie2 -x ${ref_genome} -1 ${trim_dir}/${base}_ -2 ${trim_dir}/${base}_ -S ${sam_dir}/${base}_bowtie.sam
+```
+
+Check everything makes sense,
+Run through rest of scripts the same
+Change the project_dir and make sure names will be different in the end...
 
 
 
