@@ -1158,11 +1158,14 @@ for file in ${files[@]}
 do
 name=${file}
 base=`basename ${name} _R1_PE.fastq.gz`
-${bowtie2_dir}/bowtie2 -x ${ref_genome} -1 ${trim_dir}/${base}_ -2 ${trim_dir}/${base}_ -S ${sam_dir}/${base}_bowtie.sam
+${bowtie2_dir}/bowtie2 -x ${ref_genome} -1 ${trim_dir}/${base}_R1_PE.fastq.gz -2 ${trim_dir}/${base}_R2_PE.fastq.gz -S ${sam_dir}/${base}_bowtie_pe.sam
+done
 ```
 
 Check everything makes sense,
+
 Run through rest of scripts the same
+
 Change the project_dir and make sure names will be different in the end...
 
 
