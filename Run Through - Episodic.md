@@ -1266,7 +1266,7 @@ project_dir1=/home/paul/episodicData
 project_dir=/home/paul/episodicData/1misc/Trial
 
 index_dir=${project_dir1}/index_dir
-ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57_2.fasta.gz
 trim_dir=${project_dir}/trim_dir
 bowtie2_dir=/usr/local/bowtie2/2.2.2
 sam_dir=${project_dir}/sam_dir
@@ -1305,9 +1305,27 @@ Warning: Encountered reference sequence with only gaps
 Warning: Encountered empty reference sequence
 Warning: Encountered reference sequence with only gaps
 .... repeated....
+Time reading reference sizes: 00:00:01
+Calculating joined length
+Writing header
+Reserving space for joined string
+Joining reference sequences
+Reference file does not seem to be a FASTA file
+  Time to join reference sequences: 00:00:00
+Total time for call to driver() for forward index: 00:00:01
+Error: Encountered internal Bowtie 2 exception (#1)
+Command: bowtie2-build --wrapper basic-0 /home/paul/episodicData/index_dir/dmel-all-chromosome-r5.57.fasta.gz hg19 
+Deleting "hg19.3.bt2" file written during aborted indexing attempt.
+Deleting "hg19.4.bt2" file written during aborted indexing attempt.
+Deleting "hg19.1.bt2" file written during aborted indexing attempt.
+Deleting "hg19.2.bt2" file written during aborted indexing attempt.
 ```
+b/c the Fasta files are zipped????
 
-
+```
+cp /home/paul/episodicData/index_dir/dmel-all-chromosome-r5.57.fasta.gz /home/paul/episodicData/index_dir/dmel-all-chromosome-r5.57_2.fasta.gz
+gunzip -c /home/paul/episodicData/index_dir/dmel-all-chromosome-r5.57_2.fasta.gz
+```
 
 ### Runthrough
 Run through rest of scripts the same
