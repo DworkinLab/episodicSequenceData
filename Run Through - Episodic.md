@@ -1162,10 +1162,155 @@ ${bowtie2_dir}/bowtie2 -x ${ref_genome} -1 ${trim_dir}/${base}_R1_PE.fastq.gz -2
 done
 ```
 
-Check everything makes sense,
+Check everything makes sense:
 
+###Trial with Bowtie2
+Trial directory make all dir's
+```
+#! /bin/bash
+
+project_dir=/home/paul/episodicData/1misc/Trial
+cd ${project_dir}
+mkdir ${project_dir}/trim_dir
+
+mkdir ${project_dir}/bwa_dir
+mkdir ${project_dir}/sam_dir
+mkdir ${project_dir}/bam_dir
+mkdir ${project_dir}/merged
+mkdir ${project_dir}/sort_dir
+mkdir ${project_dir}/tmp
+mkdir ${project_dir}/rmd_dir
+mkdir ${project_dir}/final_bam
+mkdir ${project_dir}/mpileup_dir
+```
+
+```
+cp /home/paul/episodicData/trim_dir/F115ConR1_TAGCTT_L001_* /home/paul/episodicData/1misc/Trial/trim_dir
+```
+
+Run Bowtie
+```
+nano bowtie_trial
+```
+```
+#! /bin/bash
+
+project_name=episodic_data_bowtie
+project_dir1=/home/paul/episodicData
+project_dir=/home/paul/episodicData/1misc/Trial
+pic=/usr/local/picard-tools-1.131/picard.jar
+sync=/usr/local/popoolation/mpileup2sync.jar
+index_dir=${project_dir1}/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+trim_dir=${project_dir}/trim_dir
+bowtie2_dir=/usr/local/bowtie2/2.2.2
+sam_dir=${project_dir}/sam_dir
+bam_dir=${project_dir}/bam_dir 
+merged=${project_dir}/merged
+sort_dir=${project_dir}/sort_dir
+tmp=${project_dir}/tmp
+rmd_dir=${project_dir}/rmd_dir
+final_bam=${project_dir}/final_bam
+mpileup_dir=${project_dir}/mpileup_dir
+
+files=(${trim_dir}/*_R1_PE.fastq.gz)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _R1_PE.fastq.gz`
+${bowtie2_dir}/bowtie2 -x ${ref_genome} -1 ${trim_dir}/${base}_R1_PE.fastq.gz -2 ${trim_dir}/${base}_R2_PE.fastq.gz -S ${sam_dir}/${base}_bowtie_pe.sam
+done
+```
+
+```
+chmod +x bowtie_trial
+```
+
+```
+screen -r
+script bowtie_trial.log
+bowtie_trial
+```
+
+```
+exit
+```
+ Did not work: 
+ ```
+Could not locate a Bowtie index corresponding to basename "/home/paul/episodicData/index_dir/dmel-all-chromosome-r5.57.fasta.gz"
+Error: Encountered internal Bowtie 2 exception (#1)
+Command: /usr/local/bowtie2/2.2.2/bowtie2-align-s --wrapper basic-0 -x /home/paul/episodicData/index_dir/dmel-all-chromosome-r5.57.fasta.gz -S /home/paul/episodicData/1misc/Trial/sam_dir/F115ConR1_TAGCTT_L001_bowtie_pe.sam -1 /tmp/20100.inpipe1 -2 /tmp/20100.inpipe2
+(ERR): bowtie2-align exited with value 1
+ ```
+ remove the -x (associated with basename of index seqeunce) and test again
+ 
+ ...  
+ 
+ Same error
+ Put the -x back in...
+ Need to use bowtie2-build for the reference?
+ ...
+ bowtie2-build hg19.fa hg19
+...
+
+make a script for it
+- might need it for real trial; so script will be in general episodic direcotry
+
+```
+nano bowtie_build_trial
+```
+```
+#! /bin/bash
+
+project_dir1=/home/paul/episodicData
+project_dir=/home/paul/episodicData/1misc/Trial
+
+index_dir=${project_dir1}/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+trim_dir=${project_dir}/trim_dir
+bowtie2_dir=/usr/local/bowtie2/2.2.2
+sam_dir=${project_dir}/sam_dir
+bam_dir=${project_dir}/bam_dir 
+
+#using hg19 (just common throughout examples online)
+
+${bowtie2_dir}/bowtie2-build ${ref_genome} hg19
+```
+Error
+```
+Settings:
+  Output files: "hg19.*.bt2"
+  Line rate: 6 (line is 64 bytes)
+  Lines per side: 1 (side is 64 bytes)
+  Offset rate: 4 (one in 16)
+  FTable chars: 10
+  Strings: unpacked
+  Max bucket size: default
+  Max bucket size, sqrt multiplier: default
+  Max bucket size, len divisor: 4
+  Difference-cover sample period: 1024
+  Endianness: little
+  Actual local endianness: little
+  Sanity checking: disabled
+  Assertions: disabled
+  Random seed: 0
+  Sizeofs: void*:8, int:4, long:8, size_t:8
+Input files DNA, FASTA:
+  /home/paul/episodicData/index_dir/dmel-all-chromosome-r5.57.fasta.gz
+Building a SMALL index
+Reading reference sizes
+Warning: Encountered reference sequence with only gaps
+Warning: Encountered reference sequence with only gaps
+Warning: Encountered reference sequence with only gaps
+Warning: Encountered empty reference sequence
+Warning: Encountered reference sequence with only gaps
+.... repeated....
+```
+
+
+
+### Runthrough
 Run through rest of scripts the same
-
 Change the project_dir and make sure names will be different in the end...
 
 
