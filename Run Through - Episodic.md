@@ -1360,6 +1360,7 @@ How does the script for bowtie work now with basename index scripts
 ref_genome_base needs to be defined now!
   = /home/paul/episodicData/bowtie/bowtie_indexes
   
+  * may need to move bowtie_indexes to index_dir or other places.... change script as needed....
 This is for the trial directory...
 ```
 #! /bin/bash
