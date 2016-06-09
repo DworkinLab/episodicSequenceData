@@ -1202,7 +1202,7 @@ pic=/usr/local/picard-tools-1.131/picard.jar
 sync=/usr/local/popoolation/mpileup2sync.jar
 index_dir=${project_dir1}/index_dir
 ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
-trim_dir=${project_dir}/trim_dir
+trim_dir=${project_dir1}/trim_dir
 bowtie2_dir=/usr/local/bowtie2/2.2.2
 sam_dir=${project_dir}/sam_dir
 bam_dir=${project_dir}/bam_dir 
@@ -1323,9 +1323,66 @@ Deleting "hg19.2.bt2" file written during aborted indexing attempt.
 b/c the Fasta files are zipped????
 
 ```
+# copy to retain origional
 cp /home/paul/episodicData/index_dir/dmel-all-chromosome-r5.57.fasta.gz /home/paul/episodicData/index_dir/dmel-all-chromosome-r5.57_2.fasta.gz
 gunzip -c /home/paul/episodicData/index_dir/dmel-all-chromosome-r5.57_2.fasta.gz
 ```
+no change in files: still .gz
+try without -c
+```
+gunzip /home/paul/episodicData/index_dir/dmel-all-chromosome-r5.57_2.fasta.gz
+```
+worked: new index = no .gz at end
+
+nano to bowtie_build_trial and edit to new index seqeunece to:
+```
+#! /bin/bash
+
+project_dir1=/home/paul/episodicData
+project_dir=/home/paul/episodicData/1misc/Trial
+
+index_dir=${project_dir1}/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57_2.fasta
+trim_dir=${project_dir}/trim_dir
+bowtie2_dir=/usr/local/bowtie2/2.2.2
+sam_dir=${project_dir}/sam_dir
+bam_dir=${project_dir}/bam_dir 
+
+#Don't use hg19 (examples were just for Humans, no real context
+
+${bowtie2_dir}/bowtie2-build ${ref_genome} dmel-all-chromosome-r5.57_2
+```
+
+Try it out - looks to be working!!!
+
+How does the script for bowtie work now with basename index scripts
+---> nano into bowtie_trial
+ref_genome_base needs to be defined now!
+```
+#! /bin/bash
+
+project_name=episodic_data_bowtie
+project_dir1=/home/paul/episodicData
+project_dir=/home/paul/episodicData/1misc/Trial
+index_dir=${project_dir1}/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+ref_genome_base=dmel-all-chromosome-r5.57.fasta
+trim_dir=${project_dir1}/trim_dir
+bowtie2_dir=/usr/local/bowtie2/2.2.2
+sam_dir=${project_dir}/sam_dir
+
+
+files=(${trim_dir}/*_R1_PE.fastq.gz)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _R1_PE.fastq.gz`
+${bowtie2_dir}/bowtie2 -x ${ref_genome_base} -1 ${trim_dir}/${base}_R1_PE.fastq.gz -2 ${trim_dir}/${base}_R2_PE.fastq.gz -S ${sam_dir}/${base}_bowtie_pe.sam
+done
+```
+
+
+
 
 ### Runthrough
 Run through rest of scripts the same
