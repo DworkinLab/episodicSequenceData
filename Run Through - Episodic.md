@@ -1358,6 +1358,7 @@ Try it out - looks to be working!!!
 How does the script for bowtie work now with basename index scripts
 ---> nano into bowtie_trial
 ref_genome_base needs to be defined now!
+  = /home/paul/episodicData/bowtie/bowtie_indexes
 ```
 #! /bin/bash
 
@@ -1366,7 +1367,7 @@ project_dir1=/home/paul/episodicData
 project_dir=/home/paul/episodicData/1misc/Trial
 index_dir=${project_dir1}/index_dir
 ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
-ref_genome_base=dmel-all-chromosome-r5.57.fasta
+ref_genome_base=/home/paul/episodicData/bowtie/bowtie_indexes/dmel-all-chromosome-r5.57_2
 trim_dir=${project_dir1}/trim_dir
 bowtie2_dir=/usr/local/bowtie2/2.2.2
 sam_dir=${project_dir}/sam_dir
