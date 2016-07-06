@@ -1533,8 +1533,21 @@ samtools merge ${merged}/${base}_merged_bowtie_pe.bam ${bam_dir}/${base}_L001_bo
 done
 ```
 
+```
+nano bowtie_merge
+```
+```
+chmod +x bowtie_merge
+```
 
-
+```
+screen -r
+script bowtie_merge.log
+bowtie_merge
+```
+```
+exit
+```
 
 
 
