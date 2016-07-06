@@ -1548,7 +1548,18 @@ bowtie_merge
 ```
 exit
 ```
+ Picard Sort
+```
+#! /bin/bash
 
+files=(${merged}/*)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} .bam`
+java -Xmx2g -Djava.io.tmpdir=${tmp} -jar ${pic} SortSam I= ${merged}/${base}.bam O= ${sort_dir}/${base}.sort.bam VALIDATION_STRINGENCY=SILENT SO=coordinate TMP_DIR=${tmp}
+done
+```
 
 
 
