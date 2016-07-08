@@ -1552,6 +1552,25 @@ exit
 ```
 #! /bin/bash
 
+project_name=episodic_data_bowtie
+project_dir1=/home/paul/episodicData
+project_dir=/home/paul/episodicData/bowtie
+pic=/usr/local/picard-tools-1.131/picard.jar
+sync=/usr/local/popoolation/mpileup2sync.jar
+index_dir=${project_dir1}/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+ref_genome_base=${project_dir}/bowtie_indexes/dmel-all-chromosome-r5.57_2
+trim_dir=${project_dir1}/trim_dir
+bowtie2_dir=/usr/local/bowtie2/2.2.2
+sam_dir=${project_dir}/sam_dir
+bam_dir=${project_dir}/bam_dir 
+merged=${project_dir}/merged
+sort_dir=${project_dir}/sort_dir
+tmp=${project_dir}/tmp
+rmd_dir=${project_dir}/rmd_dir
+final_bam=${project_dir}/final_bam
+mpileup_dir=${project_dir}/mpileup_dir
+
 files=(${merged}/*)
 for file in ${files[@]}
 do
@@ -1561,6 +1580,19 @@ java -Xmx2g -Djava.io.tmpdir=${tmp} -jar ${pic} SortSam I= ${merged}/${base}.bam
 done
 ```
 
+```
+nano bowtie_picsort
+```
+```
+chmod +x bowtie_picsort
+screen -r
+script bowtie_picsort.log
+bowtie_picsort
+```
+
+```
+exit
+```
 
 
 
