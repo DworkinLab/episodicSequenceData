@@ -1897,3 +1897,25 @@ cmh_test_${population}
 ```
 exit
 ```
+
+```
+script cmh_bowtie_1-13,2-15_screen.log
+cmh_test_bowtie_1-13,2-15
+#Running 1 & 2
+
+script cmh_bowtie_3-13,4-15_screen.log
+cmh_test_bowtie_3-13,4-15
+
+script cmh_bowtie_5-13,6-15_screen.log
+cmh_test_bowtie_5-13,6-15
+
+script cmh_bowtie_7-13,8-15_screen.log
+cmh_test_bowtie_7-13,8-15
+
+script cmh_bowtie_9-13,10-15_screen.log
+cmh_test_bowtie_9-13,10-15
+
+script cmh_bowtie_11-13,12-15_screen.log
+cmh_test_bowtie_11-13,12-15
+
+```
