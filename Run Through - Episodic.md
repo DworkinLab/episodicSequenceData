@@ -1687,6 +1687,24 @@ bowtie_quality
 ```
 exit
 ```
+Layout of final bam dir
+```
+F115ConR1_TAGCTT_merged_bowtie_pe.final.bam
+F115ConR2_GGCTAC_merged_bowtie_pe.final.bam
+F115SelR1_GTTTCG_merged_bowtie_pe.final.bam
+F115SelR2_GTGGCC_merged_bowtie_pe.final.bam
+F38ConR1_ATCACG_merged_bowtie_pe.final.bam
+F38ConR2_TTAGGC_merged_bowtie_pe.final.bam
+F38SelR1_ACTTGA_merged_bowtie_pe.final.bam
+F38SelR2_GATCAG_merged_bowtie_pe.final.bam
+F77ConR1_ATGTCA_merged_bowtie_pe.final.bam
+F77ConR2_ATTCCT_merged_bowtie_pe.final.bam
+F77SelR1_TTAGGC_merged_bowtie_pe.final.bam
+F77SelR2_GATCAG_merged_bowtie_pe.final.bam
+MGD2_SO_CAGATC_merged_bowtie_pe.final.bam
+MGD_SO_CAGATC_merged_bowtie_pe.final.bam
+```
+
 
 mpileup
 ```
@@ -1770,4 +1788,38 @@ bowtie_sync
 exit
 ```
 
+Add MGD2's (cp from 1st run through and edit the project_dir
+```
+#! /bin/bash
 
+project_name=episodic_data_bowtie
+project_dir1=/home/paul/episodicData
+project_dir=/home/paul/episodicData/bowtie
+pic=/usr/local/picard-tools-1.131/picard.jar
+sync=/usr/local/popoolation/mpileup2sync.jar
+index_dir=${project_dir1}/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+ref_genome_base=${project_dir}/bowtie_indexes/dmel-all-chromosome-r5.57_2
+trim_dir=${project_dir1}/trim_dir
+bowtie2_dir=/usr/local/bowtie2/2.2.2
+sam_dir=${project_dir}/sam_dir
+bam_dir=${project_dir}/bam_dir 
+merged=${project_dir}/merged
+sort_dir=${project_dir}/sort_dir
+tmp=${project_dir}/tmp
+rmd_dir=${project_dir}/rmd_dir
+final_bam=${project_dir}/final_bam
+mpileup_dir=${project_dir}/mpileup_dir
+
+cat ${mpileup_dir}/${project_name}.sync | awk 'BEGIN{OFS="\t"}{print $0,$13,$13,$13}' > ${mpileup_dir}/${project_name}_MGD2.sync
+
+```
+
+```
+screen -r
+script_bowtie_addMGD.log
+bowtie_sync_add_base
+```
+```
+exit
+```
