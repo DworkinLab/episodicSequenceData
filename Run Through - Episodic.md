@@ -1823,3 +1823,77 @@ bowtie_sync_add_base
 ```
 exit
 ```
+
+CMH TEST:
+
+```
+MGD2 X F115ConR1 & MGD2 X F115ConR2
+MGD2 X F115SelR1 & MGD2 X F115SelR2
+MGD2 X F38ConR1 & MGD2 X F38ConR2
+MGD2 X F38SelR1 & MGD2 X F38SelR2
+MGD2 X F77ConR1 & MGD2 X F77ConR2
+MGD2 X F77SelR1 & MGD2 X F77SelR2
+```
+Equvilant to:
+```
+13 X 1 & 15 X 2
+13 X 3 & 15 X 4
+13 X 5 & 15 X 6
+13 X 7 & 15 X 8
+13 X 9 & 15 X 10
+13 X 11 & 15 X 12
+```
+
+
+The script:
+
+```
+#! /bin/bash
+
+project_name=episodic_data_bowtie
+project_dir1=/home/paul/episodicData
+project_dir=/home/paul/episodicData/bowtie
+pic=/usr/local/picard-tools-1.131/picard.jar
+sync=/usr/local/popoolation/mpileup2sync.jar
+index_dir=${project_dir1}/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+ref_genome_base=${project_dir}/bowtie_indexes/dmel-all-chromosome-r5.57_2
+trim_dir=${project_dir1}/trim_dir
+bowtie2_dir=/usr/local/bowtie2/2.2.2
+sam_dir=${project_dir}/sam_dir
+bam_dir=${project_dir}/bam_dir 
+merged=${project_dir}/merged
+sort_dir=${project_dir}/sort_dir
+tmp=${project_dir}/tmp
+rmd_dir=${project_dir}/rmd_dir
+final_bam=${project_dir}/final_bam
+mpileup_dir=${project_dir}/mpileup_dir
+
+# Can change here to other comparisons (populations)
+
+population=1-13,2-15
+cmh_test=/usr/local/popoolation/cmh-test.pl
+cmh_gwas=/usr/local/popoolation/export/cmh2gwas.pl
+mkdir ${mpileup_dir}/${population}
+pop_dir=${mpileup_dir}/${population}
+
+perl ${cmh_test} --min-count 3 --min-coverage 10 --max-coverage 250 --population ${population} --input ${mpileup_dir}/${project_name}_MGD2.sync --output ${pop_dir}/${project_name}_${population}.cmh.txt
+
+perl ${cmh_gwas} --input ${pop_dir}/${project_name}_${population}.cmh.txt --output ${pop_dir}/${project_name}_${population}.cmh.gwas --min-pvalue 1.0e-20
+```
+
+What is run in terminal (general):
+
+```
+nano cmh_test_${population}
+```
+Copy script from above and change population to aproptiote groupings (and change for the nano above also)
+```
+chmod +x cmh_test_${population}
+screen -r
+script cmh_${population}_screen.log
+cmh_test_${population}
+```
+```
+exit
+```
