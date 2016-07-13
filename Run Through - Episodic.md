@@ -1817,7 +1817,7 @@ cat ${mpileup_dir}/${project_name}.sync | awk 'BEGIN{OFS="\t"}{print $0,$13,$13,
 
 ```
 screen -r
-script_bowtie_addMGD.log
+script bowtie_addMGD.log
 bowtie_sync_add_base
 ```
 ```
