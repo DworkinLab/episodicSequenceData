@@ -1920,3 +1920,11 @@ script cmh_bowtie_11-13,12-15_screen.log
 cmh_test_bowtie_11-13,12-15
 
 ```
+
+
+
+Move to local machine: all need to be put into relevant dir (mkdir all_bowtie_cmh) in mpileup dir (cp all .gwas from the dirctories to all_bowtie_cmh
+
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/bowtie/mpileup_dir/all_bowtie_cmh/* /Users/paulknoops/Sequence_analysis_2016/bowtie2
+```
