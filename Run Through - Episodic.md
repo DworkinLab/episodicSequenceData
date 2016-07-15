@@ -1897,17 +1897,18 @@ cmh_test_${population}
 ```
 exit
 ```
-
+Running all
 ```
 script cmh_bowtie_1-13,2-15_screen.log
 cmh_test_bowtie_1-13,2-15
-#Running 1 & 2
+
 
 script cmh_bowtie_3-13,4-15_screen.log
 cmh_test_bowtie_3-13,4-15
 
 script cmh_bowtie_5-13,6-15_screen.log
 cmh_test_bowtie_5-13,6-15
+
 
 script cmh_bowtie_7-13,8-15_screen.log
 cmh_test_bowtie_7-13,8-15
