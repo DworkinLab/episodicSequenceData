@@ -1928,3 +1928,9 @@ Move to local machine: all need to be put into relevant dir (mkdir all_bowtie_cm
 ```
 scp paul@info.mcmaster.ca:/home/paul/episodicData/bowtie/mpileup_dir/all_bowtie_cmh/* /Users/paulknoops/Sequence_analysis_2016/bowtie2
 ```
+
+To open IGV...
+
+```
+java -Xmx2g -jar /Users/paulknoops/igv/IGV_2.3.67/igv.jar
+```
