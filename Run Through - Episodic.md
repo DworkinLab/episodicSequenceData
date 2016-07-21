@@ -1934,3 +1934,23 @@ To open IGV...
 ```
 java -Xmx2g -jar /Users/paulknoops/igv/IGV_2.3.67/igv.jar
 ```
+
+
+### Check the F77 zip files
+* The files from Ian had those that failed zipped, and the ones I zipped worked:
+* will try to unzip and rezip all together and test the md5 again
+
+
+```
+mkdir Gen77
+mv F77* Gen77
+mv MDG_* Gen77
+mv md5_F77* Gen77
+mv mdg_MGD* Gen77
+```
+
+```
+screen -r
+gunzip *.gz
+```
+
