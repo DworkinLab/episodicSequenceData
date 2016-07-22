@@ -1954,3 +1954,19 @@ screen -r
 gunzip *.gz
 ```
 
+```
+gzip *.fastq
+```
+
+```
+screen -r
+script md5sum_F77_MGD.log
+md5sum -c md5_F77.txt
+```
+```
+md5sum -c md5_MGD_SO.txt
+```
+```
+exit
+```
+
