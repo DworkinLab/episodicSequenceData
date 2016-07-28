@@ -1973,3 +1973,40 @@ All failed after re-zipping...
 
 
 MGD from Synthetic outbred (most used file for ancestor) all worked!
+
+New md5sum file from Ian;
+
+All working from the head!
+```
+[paul@infoserv ~]$ cd /scratch/dworkinlab_backups/drosophilaPredation/gen0_gen77_sequence/
+[paul@infoserv gen0_gen77_sequence]$ ls
+checklist.chk				 Con_R2_F77_ATTCCT_L004_R2_001.fastq.gz*  Sel_R1_F77_TTAGGC_L004_R1_001.fastq*
+Con_R1_F77_ATGTCA_L003_R1_001.fastq.gz*  MGD_SO_CAGATC_L005_R1_001.fastq.gz*	  Sel_R1_F77_TTAGGC_L004_R2_001.fastq*
+Con_R1_F77_ATGTCA_L003_R2_001.fastq.gz*  MGD_SO_CAGATC_L005_R2_001.fastq*	  Sel_R2_F77_GATCAG_L003_R1_001.fastq.gz*
+Con_R1_F77_ATGTCA_L004_R1_001.fastq.gz*  MGD_SO_CAGATC_L006_R1_001.fastq*	  Sel_R2_F77_GATCAG_L003_R2_001.fastq.gz*
+Con_R1_F77_ATGTCA_L004_R2_001.fastq.gz*  MGD_SO_CAGATC_L006_R2_001.fastq*	  Sel_R2_F77_GATCAG_L004_R1_001.fastq.gz*
+Con_R2_F77_ATTCCT_L003_R1_001.fastq.gz*  readme.txt				  Sel_R2_F77_GATCAG_L004_R2_001.fastq.gz*
+Con_R2_F77_ATTCCT_L003_R2_001.fastq.gz*  Sel_R1_F77_TTAGGC_L003_R1_001.fastq*
+Con_R2_F77_ATTCCT_L004_R1_001.fastq.gz*  Sel_R1_F77_TTAGGC_L003_R2_001.fastq*
+[paul@infoserv gen0_gen77_sequence]$ md5sum -c checklist.chk 
+Con_R1_F77_ATGTCA_L003_R1_001.fastq.gz: OK
+Con_R1_F77_ATGTCA_L003_R2_001.fastq.gz: OK
+Con_R1_F77_ATGTCA_L004_R1_001.fastq.gz: OK
+Con_R1_F77_ATGTCA_L004_R2_001.fastq.gz: OK
+Con_R2_F77_ATTCCT_L003_R1_001.fastq.gz: OK
+Con_R2_F77_ATTCCT_L003_R2_001.fastq.gz: OK
+Con_R2_F77_ATTCCT_L004_R1_001.fastq.gz: OK
+Con_R2_F77_ATTCCT_L004_R2_001.fastq.gz: OK
+MGD_SO_CAGATC_L005_R1_001.fastq.gz: OK
+MGD_SO_CAGATC_L005_R2_001.fastq: OK
+MGD_SO_CAGATC_L006_R1_001.fastq: OK
+MGD_SO_CAGATC_L006_R2_001.fastq: OK
+Sel_R1_F77_TTAGGC_L003_R1_001.fastq: OK
+Sel_R1_F77_TTAGGC_L003_R2_001.fastq: OK
+Sel_R1_F77_TTAGGC_L004_R1_001.fastq: OK
+Sel_R1_F77_TTAGGC_L004_R2_001.fastq: OK
+Sel_R2_F77_GATCAG_L003_R1_001.fastq.gz: OK
+Sel_R2_F77_GATCAG_L003_R2_001.fastq.gz: OK
+Sel_R2_F77_GATCAG_L004_R1_001.fastq.gz: OK
+Sel_R2_F77_GATCAG_L004_R2_001.fastq.gz: OK
+```
