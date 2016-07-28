@@ -1969,4 +1969,7 @@ md5sum -c md5_MGD_SO.txt
 ```
 exit
 ```
+All failed after re-zipping... 
 
+
+MGD from Synthetic outbred (most used file for ancestor) all worked!
