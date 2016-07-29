@@ -2010,3 +2010,10 @@ Sel_R2_F77_GATCAG_L003_R2_001.fastq.gz: OK
 Sel_R2_F77_GATCAG_L004_R1_001.fastq.gz: OK
 Sel_R2_F77_GATCAG_L004_R2_001.fastq.gz: OK
 ```
+
+
+So now have a set working files: no need to worry about them now (still odd with the asterix with them & the files sizes)
+
+###Now:
+Additional comparisons???
+
