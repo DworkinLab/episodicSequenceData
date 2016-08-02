@@ -2017,3 +2017,60 @@ So now have a set working files: no need to worry about them now (still odd with
 ###Now:
 Additional comparisons???
 
+CMH TEST:
+
+```
+F115SelR1 X F115ConR1 & F115SelR2 X F115ConR2
+F38SelR1 X F38ConR1 & F38SelR2 X F38ConR2
+F77SelR1 X F77ConR1 & F77SelR2 X F77ConR2
+```
+Equvilant to:
+```
+1 x 3, 2 x 4
+5 x 7, 6 x 8
+9 x 11, 10 x 12
+```
+
+The script from before for Bowtie
+
+- change population (and change start to match bowtie vs. BWA):
+
+### Possibly need to change coverages etc.
+For now match with before than worry about changes
+
+```
+#! /bin/bash
+
+project_name=episodic_data_bowtie
+project_dir1=/home/paul/episodicData
+project_dir=/home/paul/episodicData/bowtie
+pic=/usr/local/picard-tools-1.131/picard.jar
+sync=/usr/local/popoolation/mpileup2sync.jar
+index_dir=${project_dir1}/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+ref_genome_base=${project_dir}/bowtie_indexes/dmel-all-chromosome-r5.57_2
+trim_dir=${project_dir1}/trim_dir
+bowtie2_dir=/usr/local/bowtie2/2.2.2
+sam_dir=${project_dir}/sam_dir
+bam_dir=${project_dir}/bam_dir 
+merged=${project_dir}/merged
+sort_dir=${project_dir}/sort_dir
+tmp=${project_dir}/tmp
+rmd_dir=${project_dir}/rmd_dir
+final_bam=${project_dir}/final_bam
+mpileup_dir=${project_dir}/mpileup_dir
+
+# Can change here to other comparisons (populations)
+
+population=1-13,2-15
+
+cmh_test=/usr/local/popoolation/cmh-test.pl
+cmh_gwas=/usr/local/popoolation/export/cmh2gwas.pl
+mkdir ${mpileup_dir}/${population}
+pop_dir=${mpileup_dir}/${population}
+
+perl ${cmh_test} --min-count 3 --min-coverage 10 --max-coverage 250 --population ${population} --input ${mpileup_dir}/${project_name}_MGD2.sync --output ${pop_dir}/${project_name}_${population}.cmh.txt
+
+perl ${cmh_gwas} --input ${pop_dir}/${project_name}_${population}.cmh.txt --output ${pop_dir}/${project_name}_${population}.cmh.gwas --min-pvalue 1.0e-20
+```
+
