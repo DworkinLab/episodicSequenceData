@@ -1074,7 +1074,7 @@ fst_igv
 exit
 ```
 
-
+_________________________________________________________________________________________________________
 ### Re-run with different mapping software
 ```
 cd /home/paul/episodicData
@@ -2062,7 +2062,7 @@ mpileup_dir=${project_dir}/mpileup_dir
 
 # Can change here to other comparisons (populations)
 
-population=1-13,2-15
+population=9-11,10-12
 
 cmh_test=/usr/local/popoolation/cmh-test.pl
 cmh_gwas=/usr/local/popoolation/export/cmh2gwas.pl
@@ -2073,4 +2073,109 @@ perl ${cmh_test} --min-count 3 --min-coverage 10 --max-coverage 250 --population
 
 perl ${cmh_gwas} --input ${pop_dir}/${project_name}_${population}.cmh.txt --output ${pop_dir}/${project_name}_${population}.cmh.gwas --min-pvalue 1.0e-20
 ```
+
+General:
+
+```
+nano cmh_test_${population}
+```
+Copy script from above and change population to aproptiote groupings (and change for the nano above also)
+```
+chmod +x cmh_test_${population}
+screen -r
+script cmh_${population}_screen.log
+cmh_test_${population}
+```
+```
+exit
+```
+Running all
+```
+script cmh_bowtie_1-3,2-4_screen.log
+cmh_test_bowtie_1-3,2-4
+
+script cmh_bowtie_5-7,6-8_screen.log
+cmh_test_bowtie_5-7,6-8
+
+script cmh_bowtie_9-11,10-12_screen.log
+cmh_test_bowtie_9-11,10-12
+
+
+```
+
+###On info113
+
+Repeat for non-bowtie
+
+```
+#! /bin/bash
+
+project_name=episodic_data
+project_dir=/home/paul/episodicData
+raw_dir=${project_dir}/raw_dir
+trimmomatic=/usr/local/trimmomatic
+trim=${trimmomatic}/trimmomatic-0.33.jar
+adapt_path=/usr/local/trimmomatic/adapters
+adapter=${adapt_path}/TruSeq3-PE.fa:2:30:10
+bwa_path=/usr/local/bwa/0.7.8
+pic=/usr/local/picard-tools-1.131/picard.jar
+sync=/usr/local/popoolation/mpileup2sync.jar
+index_dir=${project_dir}/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+trim_dir=${project_dir}/trim_dir
+bwa_dir=${project_dir}/bwa_dir
+sam_dir=${project_dir}/sam_dir
+bam_dir=${project_dir}/bam_dir 
+merged=${project_dir}/merged
+sort_dir=${project_dir}/sort_dir
+tmp=${project_dir}/tmp
+rmd_dir=${project_dir}/rmd_dir
+final_bam=${project_dir}/final_bam
+mpileup_dir=${project_dir}/mpileup_dir
+
+# Can change here to other comparisons
+
+population=1-3,2-4
+cmh_test=/usr/local/popoolation/cmh-test.pl
+cmh_gwas=/usr/local/popoolation/export/cmh2gwas.pl
+mkdir ${mpileup_dir}/${population}
+pop_dir=${mpileup_dir}/${population}
+
+perl ${cmh_test} --min-count 3 --min-coverage 10 --max-coverage 250 --population ${population} --input ${mpileup_dir}/${project_name}_MGD2.sync --output ${pop_dir}/${project_name}_${population}.cmh.txt
+
+perl ${cmh_gwas} --input ${pop_dir}/${project_name}_${population}.cmh.txt --output ${pop_dir}/${project_name}_${population}.cmh.gwas --min-pvalue 1.0e-20
+
+```
+
+```
+script cmh_1-3,2-4_screen.log
+cmh_test_1-3,2-4
+
+script cmh_5-7,6-8_screen.log
+cmh_test_5-7,6-8
+
+script cmh_9-11,10-12_screen.log
+cmh_test_9-11,10-12
+
+
+```
+
+
+
+
+Move to local machine: all need to be put into relevant dir (mkdir all_bowtie_cmh) in mpileup dir (cp all .gwas from the dirctories to all_bowtie_cmh
+
+```
+scp paul@info.mcmaster.ca:.......
+```
+
+To open IGV...
+
+```
+java -Xmx2g -jar /Users/paulknoops/igv/IGV_2.3.67/igv.jar
+```
+
+
+Changing the parameters:
+-- may want to change details of cmh test (namely min/max coverage and min p-value)
 
