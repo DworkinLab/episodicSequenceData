@@ -2160,8 +2160,27 @@ cmh_test_9-11,10-12
 
 ```
 Check logs for: bowtie_1-3,2-4 -- Oddity
+- once opened = not complete file!!!!!!
 
+From Screen log
+```
+Script started on Wed 03 Aug 2016 12:27:26 PM EDT
+cmh_test_bowtie_1-3,2-4ESC]0;paul@info113:~/episodicData/bowtie/scriptsESC\[paul@info113 scripts]$ cmh_test_bowtie_1-3,2-4
+Reading sync file and writing temporary R output file
+Calling R, to calculate the Cochran-Mantel-Haenszel test statistic
+Error in mantelhaen.test(array(c(0, 0, 1, 0, 3, 18, 8, 0), dim = c(2,  : 
+  sample size in each stratum must be > 1
+Execution halted
+Parsing R-output and writing output file
+Use of uninitialized value $pvalue in scalar chomp at /usr/local/popoolation/cmh-test.pl line 132, <$ifh> line 3777105.
+Use of uninitialized value $pvalue in substitution (s///) at /usr/local/popoolation/cmh-test.pl line 137, <$ifh> line 3777105.
+Use of uninitialized value $pvalue in numeric gt (>) at /usr/local/popoolation/cmh-test.pl line 138, <$ifh> line 3777105.
+Use of uninitialized value $pvalue in concatenation (.) or string at /usr/local/popoolation/cmh-test.pl line 139, <$ifh> line 3777105.
+Done
+Argument "0:0:73:59:0:0" isn't numeric in numeric lt (<) at /usr/local/popoolation/export/cmh2gwas.pl line 39, <$ifh> line 1888553.
 
+```
+is it the p-value/???? -- error was before that....
 
 pwd each new directory with the file: copy to start of scp (after the "scp paul@info.mcmaster.ca:" and before "/*.gwas /Users/paulknoops/Sequence_analysis_2016"
 
