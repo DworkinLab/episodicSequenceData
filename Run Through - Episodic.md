@@ -2159,15 +2159,16 @@ cmh_test_9-11,10-12
 
 
 ```
+Check logs for: bowtie_1-3,2-4 -- Oddity
 
 
 
-
-Move to local machine: all need to be put into relevant dir (mkdir all_bowtie_cmh) in mpileup dir (cp all .gwas from the dirctories to all_bowtie_cmh
+pwd each new directory with the file: copy to start of scp (after the "scp paul@info.mcmaster.ca:" and before "/*.gwas /Users/paulknoops/Sequence_analysis_2016"
 
 ```
-scp paul@info.mcmaster.ca:.......
+scp paul@info.mcmaster.ca:/home/paul/episodicData/mpileup_dir/9-11,10-12/*.gwas /Users/paulknoops/Sequence_analysis_2016
 ```
+
 
 To open IGV...
 
