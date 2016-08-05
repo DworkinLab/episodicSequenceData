@@ -2182,6 +2182,10 @@ Argument "0:0:73:59:0:0" isn't numeric in numeric lt (<) at /usr/local/popoolati
 ```
 is it the p-value/???? -- error was before that....
 
+Re run-  (log = with retry) = another fail..... same error
+=- But ran with not these two and ran with other (non-bowtie) comparison
+--> ??
+
 pwd each new directory with the file: copy to start of scp (after the "scp paul@info.mcmaster.ca:" and before "/*.gwas /Users/paulknoops/Sequence_analysis_2016"
 
 ```
