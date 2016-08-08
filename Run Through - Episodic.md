@@ -2208,7 +2208,7 @@ Changing the parameters:
 -Make new with changed parameters (cmh_bowtie_5_100_40)?
 
 The script with new parameters: just change population and add something different to names for script (i.e #2 likely for second run)
-
+-- need to change the new mkdir with populations
 Bowtie:
 ```
 #! /bin/bash
@@ -2234,12 +2234,12 @@ mpileup_dir=${project_dir}/mpileup_dir
 
 # Can change here to other comparisons (populations)
 
-population=9-11,10-12
+population=11-13,12-15
 
 cmh_test=/usr/local/popoolation/cmh-test.pl
 cmh_gwas=/usr/local/popoolation/export/cmh2gwas.pl
-mkdir ${mpileup_dir}/${population}
-pop_dir=${mpileup_dir}/${population}
+mkdir ${mpileup_dir}/${population}_2
+pop_dir=${mpileup_dir}/${population}_2
 
 perl ${cmh_test} --min-count 3 --min-coverage 5 --max-coverage 100 --population ${population} --input ${mpileup_dir}/${project_name}_MGD2.sync --output ${pop_dir}/${project_name}_${population}.cmh.txt
 
@@ -2296,11 +2296,11 @@ mpileup_dir=${project_dir}/mpileup_dir
 
 # Can change here to other comparisons
 
-population=1-3,2-4
+population=11-13,12-15
 cmh_test=/usr/local/popoolation/cmh-test.pl
 cmh_gwas=/usr/local/popoolation/export/cmh2gwas.pl
-mkdir ${mpileup_dir}/${population}
-pop_dir=${mpileup_dir}/${population}
+mkdir ${mpileup_dir}/${population}_2
+pop_dir=${mpileup_dir}/${population}_2
 
 perl ${cmh_test} --min-count 3 --min-coverage 5 --max-coverage 100 --population ${population} --input ${mpileup_dir}/${project_name}_MGD2.sync --output ${pop_dir}/${project_name}_${population}.cmh.txt
 
