@@ -2234,7 +2234,7 @@ mpileup_dir=${project_dir}/mpileup_dir
 
 # Can change here to other comparisons (populations)
 
-population=11-13,12-15
+population=5-13,6-15
 
 cmh_test=/usr/local/popoolation/cmh-test.pl
 cmh_gwas=/usr/local/popoolation/export/cmh2gwas.pl
@@ -2266,8 +2266,23 @@ nano cmh_test2_bowtie_9-13,10-15
 nano cmh_test2_bowtie_5-13,6-15
 
 ```
+In the dir
+```
+chmod +x cmh*
+```
+for each seperatly (on a different screen)
+```
+screen
+script cmh_2_bowtie_${population}_screen.log
+cmh_test2_bowtie_${population}
+```
+```
+exit
+```
 
 Non-Bowtie
+
+- could try a loop; runs much longer becuase all in sequence, but easier to make one script?
 ```
 #! /bin/bash
 
@@ -2296,17 +2311,32 @@ mpileup_dir=${project_dir}/mpileup_dir
 
 # Can change here to other comparisons
 
-population=11-13,12-15
+pop[0]=11-13,12-15
+pop[1]=1-13,2-15
+pop[2]=1-3,2-4
+pop[3]=3-13,4-15
+pop[4]=5-13,6-15
+pop[5]=5-7,6-8
+pop[6]=7-13,8-15
+pop[7]=9-11,10-12
+pop[8]=9-13,10-15
+
 cmh_test=/usr/local/popoolation/cmh-test.pl
 cmh_gwas=/usr/local/popoolation/export/cmh2gwas.pl
+
+for population in ${pop[@]}
+do
 mkdir ${mpileup_dir}/${population}_2
 pop_dir=${mpileup_dir}/${population}_2
 
 perl ${cmh_test} --min-count 3 --min-coverage 5 --max-coverage 100 --population ${population} --input ${mpileup_dir}/${project_name}_MGD2.sync --output ${pop_dir}/${project_name}_${population}.cmh.txt
 
 perl ${cmh_gwas} --input ${pop_dir}/${project_name}_${population}.cmh.txt --output ${pop_dir}/${project_name}_${population}.cmh.gwas --min-pvalue 1.0e-40
+
+done
 ```
 
+Forget these individuals (for non-for loop if needed when/If this fails:
 ```
 nano cmh_test2_11-13,12-15
 
@@ -2328,4 +2358,28 @@ nano cmh_test2_9-13,10-15
 ```
 
 
+Script for the for loop:
+in the appropriote dir
+
+```
+nano cmh_test2_FORLOOPS
+```
+```
+chmod +x cmh_test2_FORLOOPS
+```
+```
+screen
+script cmh_test2_FORLOOPS.log
+cmh_test2_FORLOOPS
+```
+dettach and make a note on which screen this is* 
+
+```
+59579.pts-5.info113
+```
+-- seems to be working
+
+```
+exit
+```
 
