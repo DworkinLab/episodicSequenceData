@@ -2280,6 +2280,46 @@ cmh_test2_bowtie_${population}
 exit
 ```
 
+```
+screen
+script cmh_2_bowtie_11-13,12-15_screen.log
+cmh_test2_bowtie_11-13,12-15
+
+screen
+script cmh_2_bowtie_1-13,2-15_screen.log
+cmh_test2_bowtie_1-13,2-15
+
+screen
+script cmh_2_bowtie_1-3,2-4_screen.log
+cmh_test2_bowtie_1-3,2-4
+
+screen
+script cmh_2_bowtie_3-13,4-15_screen.log
+cmh_test2_bowtie_3-13,4-15
+
+screen
+script cmh_2_bowtie_5-13,6-15_screen.log
+cmh_test2_bowtie_5-13,6-15
+
+screen
+script cmh_2_bowtie_5-7,6-8_screen.log
+cmh_test2_bowtie_5-7,6-8
+
+screen
+script cmh_2_bowtie_7-13,8-15_screen.log
+cmh_test2_bowtie_7-13,8-15
+
+screen
+script cmh_2_bowtie_9-11,10-12_screen.log
+cmh_test2_bowtie_9-11,10-12
+
+screen
+script cmh_2_bowtie_9-13,10-15_screen.log
+cmh_test2_bowtie_9-13,10-15
+```
+
+
+
 Non-Bowtie
 
 - could try a loop; runs much longer becuase all in sequence, but easier to make one script?
