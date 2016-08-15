@@ -2423,3 +2423,40 @@ dettach and make a note on which screen this is*
 exit
 ```
 
+Noticed: in script: make sure output is different///// will need to mv to make sure on that (change names)
+Changing names once all in same dir
+for Bowtie:
+```
+mv episodic_data_bowtie_11-13,12-15.cmh.gwas episodic_data_bowtie_2_11-13,12-15.cmh.gwas
+mv episodic_data_bowtie_5-7,6-8.cmh.gwas episodic_data_bowtie_2_5-7,6-8.cmh.gwas
+mv episodic_data_bowtie_1-13,2-15.cmh.gwas episodic_data_bowtie_2_1-13,2-15.cmh.gwas
+mv episodic_data_bowtie_7-13,8-15.cmh.gwas episodic_data_bowtie_2_7-13,8-15.cmh.gwas
+mv episodic_data_bowtie_1-3,2-4.cmh.gwas episodic_data_bowtie_2_1-3,2-4.cmh.gwas
+mv episodic_data_bowtie_9-11,10-12.cmh.gwas episodic_data_bowtie_2_9-11,10-12.cmh.gwas
+mv episodic_data_bowtie_3-13,4-15.cmh.gwas episodic_data_bowtie_2_3-13,4-15.cmh.gwas
+mv episodic_data_bowtie_9-13,10-15.cmh.gwas episodic_data_bowtie_2_9-13,10-15.cmh.gwas
+mv episodic_data_bowtie_5-13,6-15.cmh.gwas episodic_data_bowtie_2_5-13,6-15.cmh.gwas
+```
+For BWA:
+```
+mv episodic_data_11-13,12-15.cmh.gwas episodic_data_2_11-13,12-15.cmh.gwas
+mv episodic_data_5-7,6-8.cmh.gwas episodic_data_2_5-7,6-8.cmh.gwas
+mv episodic_data_1-13,2-15.cmh.gwas episodic_data_2_1-13,2-15.cmh.gwas
+mv episodic_data_7-13,8-15.cmh.gwas episodic_data_2_7-13,8-15.cmh.gwas
+mv episodic_data_1-3,2-4.cmh.gwas episodic_data_2_1-3,2-4.cmh.gwas
+mv episodic_data_9-11,10-12.cmh.gwas episodic_data_2_9-11,10-12.cmh.gwas
+mv episodic_data_3-13,4-15.cmh.gwas episodic_data_2_3-13,4-15.cmh.gwas
+mv episodic_data_9-13,10-15.cmh.gwas episodic_data_2_9-13,10-15.cmh.gwas
+mv episodic_data_5-13,6-15.cmh.gwas episodic_data_2_5-13,6-15.cmh.gwas
+```
+
+Redefine the gwas_dir
+For Bowtie:
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/bowtie/mpileup_dir/all_bowtie_cmh_2 /Users/paulknoops/Sequence_analysis_2016/bowtie_igv_2nd
+```
+For BWA:
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/mpileup_dir/all_cmh_2/*.gwas /Users/paulknoops/Sequence_analysis_2016/bwa_igv_2nd
+```
+
