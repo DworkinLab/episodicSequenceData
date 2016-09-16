@@ -2460,3 +2460,59 @@ For BWA:
 scp paul@info.mcmaster.ca:/home/paul/episodicData/mpileup_dir/all_cmh_2/*.gwas /Users/paulknoops/Sequence_analysis_2016/bwa_igv_2nd
 ```
 
+
+###Getting smaller Sync file to practice:
+
+```
+grep '3R' episodic_data_MGD2.sync > episodic_data_3R.sync
+```
+Has 3RHet:
+
+-v = opposite?
+renames files!
+```
+grep -v 'Het' episodic_data_3R_Het.sync > episodic_data_3R.sync
+```
+IDEA::
+Can remove all with Het and Extra here --> something on the lines of:
+```
+grep -v 'Het' episodic_data.sync > episodic_data_lessHet.sync
+```
+::
+
+```
+wc -l episodic_data_3R.sync
+```
+```
+27293799 episodic_data_3R.sync
+```
+
+Example:
+```
+sed -n '16224,16482 p' orig-data-file > new-file
+```
+For me: random selection --
+```
+sed -n '11111111,11112111 p' episodic_data_3R.sync > episodic_data_Ian_subset.sync
+```
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/mpileup_dir/episodic_data_Ian_subset.sync /Users/paulknoops/Sequence_analysis_2016
+```
+
+#DUMB DUMB Realization: 
+when doing Cat and Awk adding in MGD2:
+Copied $13 BUT that was actually row 10 (one from F77.....)
+  - do the merge and re-run a bunch of stuff
+  - For Ian, give from non-Cat/Awk stuff (redo some of above....)
+
+
+
+### Practice with .txt file (CMH done)
+```
+grep -v 'Het' practice_episodic_data_1-3,2-4.cmh.txt > practice_episodic_data_1-3,2-4_2.cmh.txt
+grep -v 'U' practice_episodic_data_1-3,2-4_2.cmh.txt > practice_episodic_data_1-3,2-4_3.cmh.txt
+```
+
+
+
+
