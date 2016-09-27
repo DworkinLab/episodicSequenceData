@@ -2505,9 +2505,36 @@ Copied $13 BUT that was actually row 10 (one from F77.....)
   - do the merge and re-run a bunch of stuff
   - For Ian, give from non-Cat/Awk stuff (redo some of above....)
 
+Merge MGD and MGD2
+- need to do with final bam files
 
+1st = bwa -mem
+```
+MGD2_SO_CAGATC_merged_aligned_pe.final.bam
+MGD_SO_CAGATC_merged_aligned_pe.final.bam
+```
+from final bam directory:
+```
+samtools merge MGD3_SO_CAGATC_merged_aligned_pe.final.bam MGD2_SO_CAGATC_merged_aligned_pe.final.bam MGD_SO_CAGATC_merged_aligned_pe.final.bam
+```
+
+2nd = bowtie2
+```
+MGD2_SO_CAGATC_merged_bowtie_pe.final.bam
+MGD_SO_CAGATC_merged_bowtie_pe.final.bam
+```
+from bowtie final bam 
+```
+samtools merge MGD3_SO_CAGATC_merged_bowtie_pe.final.bam MGD2_SO_CAGATC_merged_bowtie_pe.final.bam MGD_SO_CAGATC_merged_bowtie_pe.final.bam
+```
+
+For both (before rerunning the mpileup and such scripts) = remove old non merged bases
+  - will change numbers for mpileup......
 
 ### Practice with .txt file (CMH done)
+
+- to remove unneeded areas:
+
 ```
 grep -v 'Het' practice_episodic_data_1-3,2-4.cmh.txt > practice_episodic_data_1-3,2-4_2.cmh.txt
 grep -v 'U' practice_episodic_data_1-3,2-4_2.cmh.txt > practice_episodic_data_1-3,2-4_3.cmh.txt
