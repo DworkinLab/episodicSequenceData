@@ -2505,7 +2505,17 @@ Copied $13 BUT that was actually row 10 (one from F77.....)
   - do the merge and re-run a bunch of stuff
   - For Ian, give from non-Cat/Awk stuff (redo some of above....)
 
-Merge MGD and MGD2
+### Practice with .txt file (CMH done)
+
+- to remove unneeded areas:
+
+```
+grep -v 'Het' practice_episodic_data_1-3,2-4.cmh.txt > practice_episodic_data_1-3,2-4_2.cmh.txt
+grep -v 'U' practice_episodic_data_1-3,2-4_2.cmh.txt > practice_episodic_data_1-3,2-4_3.cmh.txt
+```
+
+
+### Merge MGD and MGD2
 - need to do with final bam files
 
 1st = bwa -mem
@@ -2531,15 +2541,52 @@ samtools merge MGD3_SO_CAGATC_merged_bowtie_pe.final.bam MGD2_SO_CAGATC_merged_b
 For both (before rerunning the mpileup and such scripts) = remove old non merged bases
   - will change numbers for mpileup......
 
-### Practice with .txt file (CMH done)
+As long as old is removed, delete old mpileup and sync and rerun the scripts.
 
-- to remove unneeded areas:
+Layout for BWA
+```
+F115ConR1_TAGCTT_merged_aligned_pe.final.bam
+F115ConR2_GGCTAC_merged_aligned_pe.final.bam
+F115SelR1_GTTTCG_merged_aligned_pe.final.bam
+F115SelR2_GTGGCC_merged_aligned_pe.final.bam
+F38ConR1_ATCACG_merged_aligned_pe.final.bam
+F38ConR2_TTAGGC_merged_aligned_pe.final.bam
+F38SelR1_ACTTGA_merged_aligned_pe.final.bam
+F38SelR2_GATCAG_merged_aligned_pe.final.bam
+F77ConR1_ATGTCA_merged_aligned_pe.final.bam
+F77ConR2_ATTCCT_merged_aligned_pe.final.bam
+F77SelR1_TTAGGC_merged_aligned_pe.final.bam
+F77SelR2_GATCAG_merged_aligned_pe.final.bam
+MGD3_SO_CAGATC_merged_aligned_pe.final.bam
+```
+Run script in screen
 
 ```
-grep -v 'Het' practice_episodic_data_1-3,2-4.cmh.txt > practice_episodic_data_1-3,2-4_2.cmh.txt
-grep -v 'U' practice_episodic_data_1-3,2-4_2.cmh.txt > practice_episodic_data_1-3,2-4_3.cmh.txt
+mpileup_episodic
 ```
 
+Layout for Bowtie
+```
+F115ConR1_TAGCTT_merged_bowtie_pe.final.bam
+F115ConR2_GGCTAC_merged_bowtie_pe.final.bam
+F115SelR1_GTTTCG_merged_bowtie_pe.final.bam
+F115SelR2_GTGGCC_merged_bowtie_pe.final.bam
+F38ConR1_ATCACG_merged_bowtie_pe.final.bam
+F38ConR2_TTAGGC_merged_bowtie_pe.final.bam
+F38SelR1_ACTTGA_merged_bowtie_pe.final.bam
+F38SelR2_GATCAG_merged_bowtie_pe.final.bam
+F77ConR1_ATGTCA_merged_bowtie_pe.final.bam
+F77ConR2_ATTCCT_merged_bowtie_pe.final.bam
+F77SelR1_TTAGGC_merged_bowtie_pe.final.bam
+F77SelR2_GATCAG_merged_bowtie_pe.final.bam
+MGD3_SO_CAGATC_merged_bowtie_pe.final.bam
+```
+
+Run script 
+
+```
+bowtie_mpileup
+```
 
 
 
