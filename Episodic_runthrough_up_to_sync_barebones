@@ -638,7 +638,7 @@ gunzip /home/paul/episodicData/index_dir/dmel-all-chromosome-r5.57_2.fasta.gz
 ```
 
 ```
-mkdir ${project_dir}/bowtie_indexes
+mkdir /home/paul/episodicData/bowtie/bowtie_indexes
 ```
 
 ```
