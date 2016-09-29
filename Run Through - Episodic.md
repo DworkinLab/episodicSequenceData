@@ -2588,5 +2588,12 @@ Run script
 bowtie_mpileup
 ```
 
+Run sync scripts:
+```
+sync_episodic
+```
 
+```
+sync_bowtie
+```
 
