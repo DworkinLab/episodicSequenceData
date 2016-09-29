@@ -2612,6 +2612,60 @@ grep -v 'Het' episodic_data_bowtie.sync > episodic_data_bowtie_less_het.sync
 grep -v 'U' episodic_data_bowtie_less_het.sync > episodic_data_bowtie_removed_U_Het.sync
 ```
 
+Using the subsample synchronized script help::::
+
+```
+perl subsample_synchronized.pl --help
+```
+```
+SUBSAMPLE-SYNCHRONIZEDUser Contributed Perl DocumentaSUBSAMPLE-SYNCHRONIZED(1)
+
+
+
+NAME
+       perl subsample-synchronized.pl - Reduce the coverage of a synchronized file, by random subsampling, to the given target coverage
+
+SYNOPSIS
+       perl subsample-synchronized.pl --input input.sync --output output.sync --target-coverage 50 --max-coverage 2%  --method
+       withoutreplacement
+
+OPTIONS
+       --input
+           The input file in the synchronized format; Mandatory.
+
+       --output
+           The output file, will be a synchronized file  Mandatory.
+
+       --target-coverage
+           Reduce the coverage of the pileup-file to the here provided value; The target coverage also acts as minimum coverage, i.e.: if
+           the coverage in any population is smaller than the targetcoverage the whole pileup entry is discarded. Mandatory
+
+       --max-coverage
+           The maximum coverage; All populations are required to have coverages lower or equal than the maximum coverage; Mandatory The
+           maximum coverage may be provided as one of the following:
+              '500' a maximum coverage of 500 will be used for all populations
+              '300,400,500' a maximum coverage of 300 will be used for the first population, a maximum coverage of 400 for the second population and so on
+            '2%' the 2% highest coverages will be ignored, this value is independently estimated for every population
+
+       --method
+           Specify the method for subsampling of the synchronized file. Either: withreplace, withoutreplace, fraction; Mandatory
+
+            withreplace: subsample with replacement
+            withoutreplace: subsample without replacement
+            fraction: calculate the exact fraction of the allele frequencies and linearly scale them to the C<--target-coverage> and rounding to an integer;
+
+       --help
+           Display help for this script
+
+Details
+
+ Input synchronized
+       A synchronized file
+
+   Output
+       The output will be a reduced coverage synchronized file
+```
+
 
 
 
