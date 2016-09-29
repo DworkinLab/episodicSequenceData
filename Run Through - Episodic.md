@@ -2597,3 +2597,23 @@ sync_episodic
 sync_bowtie
 ```
 
+Possibly do not need to cat/awk Base generation again, can just call same population in Popoolation CMH test
+
+Remove unneeded areas (with 'Het' and 'U')
+BWA:
+```
+grep -v 'Het' episodic_data.sync > episodic_data_less_het.sync
+grep -v 'U' episodic_data_less_het.sync > episodic_data_removed_U_Het.sync
+```
+
+For Bowtie
+```
+grep -v 'Het' episodic_data_bowtie.sync > episodic_data_bowtie_less_het.sync
+grep -v 'U' episodic_data_bowtie_less_het.sync > episodic_data_bowtie_removed_U_Het.sync
+```
+
+
+
+
+
+
