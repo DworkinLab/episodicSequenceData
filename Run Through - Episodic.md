@@ -2604,13 +2604,18 @@ BWA:
 ```
 grep -v 'Het' episodic_data.sync > episodic_data_less_het.sync
 grep -v 'U' episodic_data_less_het.sync > episodic_data_removed_U_Het.sync
+grep -v 'dmel_mitochondrion_genome' episodic_data_removed_U_Het.sync > episodic_data_main.sync
 ```
 
 For Bowtie
 ```
 grep -v 'Het' episodic_data_bowtie.sync > episodic_data_bowtie_less_het.sync
 grep -v 'U' episodic_data_bowtie_less_het.sync > episodic_data_bowtie_removed_U_Het.sync
+grep -v 'dmel_mitochondrion_genome' episodic_data_bowtie_removed_U_Het.sync > episodic_data_bowtie_main.sync
 ```
+
+Remove all old CMH tests that compared with the base generation: copied the incorrect one remember with cat/awk!!!
+
 
 Using the subsample synchronized script help::::
 
@@ -2665,6 +2670,10 @@ Details
    Output
        The output will be a reduced coverage synchronized file
 ```
+
+Not sure how to work with it yet.
+
+Just run CMH tests (or Fisher?) with what I have
 
 
 
