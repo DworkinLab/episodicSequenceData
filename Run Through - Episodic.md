@@ -2673,7 +2673,8 @@ Details
 
 Not sure how to work with it yet.
 
-Just run CMH tests (or Fisher?) with what I have
+Just run CMH tests (or Fst) with what I have
+
 
 
 
