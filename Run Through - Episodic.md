@@ -2670,6 +2670,46 @@ Details
    Output
        The output will be a reduced coverage synchronized file
 ```
+subsample_synchronized.pl
+
+Targer coverage? 50?????
+Ian with a shrug " Do 40".
+
+
+Max-coverage? = 200 ??
+
+Methods?
+```
+perl /usr/local/popoolation/subsample-synchronized.pl --input episodic_data_main.sync --output episodic_data_subsample.sync --target-coverage 40 --max-coverage 200 --method withreplace
+```
+
+Test this with screen
+From mpileup dir for BWA files!
+```
+screen -r
+script subsample_sync_log.log
+perl /usr/local/popoolation/subsample-synchronized.pl --input episodic_data_main.sync --output episodic_data_subsample.sync --target-coverage 40 --max-coverage 200 --method withreplacement
+```
+error
+unknown method for subsampling withreplacement at /usr/local/popoolation/Modules/Subsample.pm line 39.
+withoutrepacement is wrong: should be withreplace (mistake on help page)
+
+```
+screen -r
+script subsample_sync_log.log
+perl /usr/local/popoolation/subsample-synchronized.pl --input episodic_data_main.sync --output episodic_data_subsample.sync --target-coverage 40 --max-coverage 200 --method withreplace
+```
+
+
+
+Idea: make many sync files for comparisons of interst: likely need to do after subsample.sync
+
+$0 prints all again.. just want to prink populations of interst
+- will need to change print...., the output... and possibly the OFS=.....
+
+```
+cat ${mpileup_dir}/${project_name}.sync | awk 'BEGIN{OFS="\t"}{print $0,$13,$13,$13}' > ${mpileup_dir}/${project_name}_MGD2.sync
+```
 
 Not sure how to work with it yet.
 
