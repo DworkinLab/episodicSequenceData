@@ -2760,7 +2760,14 @@ CMH_13_24_target40_script
 ```
 exit
 ```
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/mpileup_dir/1-3,2-4_test/episodic_data_target40_1-3,2-4.cmh.gwas /Users/paulknoops/Sequence_analysis_2016
 
+```
+```
+java -Xmx2g -jar /Users/paulknoops/igv/IGV_2.3.67/igv.jar
+
+```
 
 Idea: make many sync files for comparisons of interst: likely need to do after subsample.sync
 
