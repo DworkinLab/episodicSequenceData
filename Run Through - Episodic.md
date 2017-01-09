@@ -2832,7 +2832,7 @@ MGD3_SO_CAGATC_merged_bowtie_pe.final.bam
 
 - Should removed / move all old CMH outputs and start fresh to be sure everything is working properly.
 - to clean up - moving all those with "target_40" from BWA diretory (keep script in scripts, CMH outputs in "old CMH" dir, )
-- old scripts work??? possibly, but edit exsisting anyway to be sure on directories etc.
+- old scripts work??? possibly, but edit existing anyway to be sure on directories etc.
 - 
 
 
