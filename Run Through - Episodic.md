@@ -2783,8 +2783,8 @@ Not sure how to work with it yet.
 Just run CMH tests (or Fst) with what I have
 
 
-## It has been a few months: back at it:
-#Recap:
+# It has been a few months: back at it:
+### Recap:
 1) have many sync files with merged base generation, removed unneeded areas and can can call the base generation multiple times
 
 BWA
