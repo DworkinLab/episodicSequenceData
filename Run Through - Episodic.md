@@ -2769,7 +2769,7 @@ java -Xmx2g -jar /Users/paulknoops/igv/IGV_2.3.67/igv.jar
 
 ```
 
-Idea: make many sync files for comparisons of interst: likely need to do after subsample.sync
+Idea: make many sync files for comparisons of interst: likely need to do after subsample.syn
 
 $0 prints all again.. just want to prink populations of interst
 - will need to change print...., the output... and possibly the OFS=.....
@@ -2781,6 +2781,60 @@ cat ${mpileup_dir}/${project_name}.sync | awk 'BEGIN{OFS="\t"}{print $0,$13,$13,
 Not sure how to work with it yet.
 
 Just run CMH tests (or Fst) with what I have
+
+
+## It has been a few months: back at it:
+#Recap:
+1) have many sync files with merged base generation, removed unneeded areas and can can call the base generation multiple times
+
+BWA
+```
+episodic_data_main.sync
+```
+Bowtie
+```
+episodic_data_bowtie_main.sync
+```
+Layout for BWA
+```
+F115ConR1_TAGCTT_merged_aligned_pe.final.bam
+F115ConR2_GGCTAC_merged_aligned_pe.final.bam
+F115SelR1_GTTTCG_merged_aligned_pe.final.bam
+F115SelR2_GTGGCC_merged_aligned_pe.final.bam
+F38ConR1_ATCACG_merged_aligned_pe.final.bam
+F38ConR2_TTAGGC_merged_aligned_pe.final.bam
+F38SelR1_ACTTGA_merged_aligned_pe.final.bam
+F38SelR2_GATCAG_merged_aligned_pe.final.bam
+F77ConR1_ATGTCA_merged_aligned_pe.final.bam
+F77ConR2_ATTCCT_merged_aligned_pe.final.bam
+F77SelR1_TTAGGC_merged_aligned_pe.final.bam
+F77SelR2_GATCAG_merged_aligned_pe.final.bam
+MGD3_SO_CAGATC_merged_aligned_pe.final.bam
+```
+Layout for Bowtie
+```
+F115ConR1_TAGCTT_merged_bowtie_pe.final.bam
+F115ConR2_GGCTAC_merged_bowtie_pe.final.bam
+F115SelR1_GTTTCG_merged_bowtie_pe.final.bam
+F115SelR2_GTGGCC_merged_bowtie_pe.final.bam
+F38ConR1_ATCACG_merged_bowtie_pe.final.bam
+F38ConR2_TTAGGC_merged_bowtie_pe.final.bam
+F38SelR1_ACTTGA_merged_bowtie_pe.final.bam
+F38SelR2_GATCAG_merged_bowtie_pe.final.bam
+F77ConR1_ATGTCA_merged_bowtie_pe.final.bam
+F77ConR2_ATTCCT_merged_bowtie_pe.final.bam
+F77SelR1_TTAGGC_merged_bowtie_pe.final.bam
+F77SelR2_GATCAG_merged_bowtie_pe.final.bam
+MGD3_SO_CAGATC_merged_bowtie_pe.final.bam
+```
+
+2) need to rerun all CMH tests and possibly Fst values:
+
+- Should removed / move all old CMH outputs and start fresh to be sure everything is working properly.
+- to clean up - moving all those with "target_40" from BWA diretory (keep script in scripts, CMH outputs in "old CMH" dir, )
+- old scripts work??? possibly, but edit exsisting anyway to be sure on directories etc.
+- 
+
 
 
 
