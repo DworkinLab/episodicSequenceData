@@ -2838,6 +2838,8 @@ ____________________
 First set up smaller sync file for R practice analysis:
 - only 3R (personal favourite)
 
+- Also do 2R -- looks smaller region for BWA
+
 - Need to do with both eventually, starting with just BWA -mem (better according to Scholotterer)
 
 - Doing with more edited and proper .sync files
@@ -2849,13 +2851,19 @@ From mpileup dir
 grep '3R' episodic_data_main.sync > episodic_data_3R.sync
 ```
 
+```
+grep '2R' episodic_data_main.sync > episodic_data_2R.sync
+```
+
 Move to local (then copy/move to git-linked dir)
   - Check the size to make sure not to large for analysis!
+  - Doing 2R (smaller by ~ a Gig == 3.6 G)
+  
 ```
-scp paul@info.mcmaster.ca:/home/paul/episodicData/mpileup_dir/episodic_data_3R.sync /Users/paulknoops/Bioinformatics/Sequence_analysis_2016
+scp paul@info.mcmaster.ca:/home/paul/episodicData/mpileup_dir/episodic_data_2R.sync /Users/paulknoops/Bioinformatics/Sequence_analysis_2016
 ```
 
-
+Playing on R: see R script "sync_file.R"
 
 
 
