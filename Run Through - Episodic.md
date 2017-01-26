@@ -2833,8 +2833,28 @@ MGD3_SO_CAGATC_merged_bowtie_pe.final.bam
 - Should removed / move all old CMH outputs and start fresh to be sure everything is working properly.
 - to clean up - moving all those with "target_40" from BWA diretory (keep script in scripts, CMH outputs in "old CMH" dir, )
 - old scripts work??? possibly, but edit existing anyway to be sure on directories etc.
-- 
 
+____________________
+First set up smaller sync file for R practice analysis:
+- only 3R (personal favourite)
+
+- Need to do with both eventually, starting with just BWA -mem (better according to Scholotterer)
+
+- Doing with more edited and proper .sync files
+
+- Sync files have all het, U and mitochondria removed
+
+From mpileup dir
+```
+grep '3R' episodic_data_main.sync > episodic_data_3R.sync
+```
+
+Move to 
+
+CHANGE PAUL!
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/mpileup_dir/episodic_data_Ian_subset.sync /Users/paulknoops/Sequence_analysis_2016
+```
 
 
 
