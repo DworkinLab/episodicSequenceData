@@ -2849,11 +2849,10 @@ From mpileup dir
 grep '3R' episodic_data_main.sync > episodic_data_3R.sync
 ```
 
-Move to 
-
-CHANGE PAUL!
+Move to local (then copy/move to git-linked dir)
+  - Check the size to make sure not to large for analysis!
 ```
-scp paul@info.mcmaster.ca:/home/paul/episodicData/mpileup_dir/episodic_data_Ian_subset.sync /Users/paulknoops/Sequence_analysis_2016
+scp paul@info.mcmaster.ca:/home/paul/episodicData/mpileup_dir/episodic_data_3R.sync /Users/paulknoops/Bioinformatics/Sequence_analysis_2016
 ```
 
 
