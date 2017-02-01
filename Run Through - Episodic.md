@@ -2862,10 +2862,33 @@ Move to local (then copy/move to git-linked dir)
 ```
 scp paul@info.mcmaster.ca:/home/paul/episodicData/mpileup_dir/episodic_data_2R.sync /Users/paulknoops/Bioinformatics/Sequence_analysis_2016
 ```
+Need to make smaller!
 
+```
+wc -l episodic_data_2R.sync
+```
+```
+20547525 episodic_data_2R.sync
+```
+For me: random selection: 
+Try different sizes
+
+10000 bp
+```
+sed -n ' 10268762, 10278762 p' episodic_data_2R.sync > episodic_data_2R_subset.sync
+```
+File size = 1.8MB
+
+1000bp
+```
+sed -n ' 10273262, 10274262 p' episodic_data_2R.sync > episodic_data_2R_1000_subset.sync
+```
+file size = 184 K
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/mpileup_dir/episodic_data_2R_subset.sync /Users/paulknoops/Bioinformatics/Sequence_analysis_2016 
+```
+
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/mpileup_dir/episodic_data_2R_1000_subset.sync /Users/paulknoops/Bioinformatics/Sequence_analysis_2016
+```
 Playing on R: see R script "sync_file.R"
-
-
-
-
-
