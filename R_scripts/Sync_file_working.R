@@ -52,8 +52,5 @@ Epi_Base <- subset(Epi_rem, Population =="Gen0")
 
 p1 <- ggplot(data = Epi_Base, 
              aes(x = Position, y=Count, colour=Base))
-  
-
 p2 <- (p1 + geom_point(size = 2, alpha=0.5))
-         
 print(p2)
