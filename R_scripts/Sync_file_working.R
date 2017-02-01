@@ -16,12 +16,12 @@ Data_subset <- read.table("episodic_data_2R_subset.sync")
 
 #adjust colnames
 
-colnames(Data_subset) <- c("Chromosome", "Position", "ref", "ConR1_115", "ConR2_115", "SelR1_115", "SelR2_115", "ConR1_38", "ConR2_38", "SelR1_38", "SelR2_38", "ConR1_77", "ConR2_77", "SelR1_77", "SelR2_77", "Base")
+colnames(Data_subset) <- c("Chromosome", "Position", "ref", "ConR1_115", "ConR2_115", "SelR1_115", "SelR2_115", "ConR1_38", "ConR2_38", "SelR1_38", "SelR2_38", "ConR1_77", "ConR2_77", "SelR1_77", "SelR2_77", "Gen0")
 
 print(head(Data_subset))
 
 # Use tidyr --> make long
-Episodic_long <- gather(Data_subset, Population, Allele_Freq , ConR1_115:Base, factor_key=TRUE)
+Episodic_long <- gather(Data_subset, Population, Allele_Freq , ConR1_115:Gen0, factor_key=TRUE)
 
 print(head(Episodic_long))
 
@@ -38,5 +38,9 @@ head(Episodic_seperate)
 longer_Episodic <- gather(Episodic_seperate, Base, Count, A:del, factor_key = TRUE)
 
 head(longer_Episodic)
+summary(longer_Episodic)
 
+
+#Not a good plot
+print(with(longer_Episodic, plot(x=Position[Population=="Base"], y=Count[Population=="Base"], colour = )))
 
