@@ -41,6 +41,3 @@ head(longer_Episodic)
 summary(longer_Episodic)
 
 
-#Not a good plot
-print(with(longer_Episodic, plot(x=Position[Population=="Base"], y=Count[Population=="Base"], colour = )))
-
