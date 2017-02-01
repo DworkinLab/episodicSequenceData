@@ -34,4 +34,9 @@ Episodic_seperate <- arrange(Episodic_seperate, Position)
 
 head(Episodic_seperate)
 
+#Make Longer??
+longer_Episodic <- gather(Episodic_seperate, Base, Count, A:del, factor_key = TRUE)
+
+head(longer_Episodic)
+
 
