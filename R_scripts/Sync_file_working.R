@@ -23,5 +23,6 @@ print(head(Data_subset))
 #Use tidyr --> make long?
 Episodic_long <- gather(Data_subset, Population, Allele_Freq , ConR1_115:Base, factor_key=TRUE)
 print(head(Episodic_long))
+print(tail(Episodic_long))
 
 
