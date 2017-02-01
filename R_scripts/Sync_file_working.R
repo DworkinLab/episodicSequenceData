@@ -24,27 +24,24 @@ print(head(Data_subset))
 # Use tidyr --> make long
 Episodic_long <- gather(Data_subset, Population, Allele_Freq , ConR1_115:Gen0, factor_key=TRUE)
 
-print(head(Episodic_long))
 
 #Seperate the allele counts into independent columns for each base
 Episodic_seperate <- Episodic_long %>% 
   separate(Allele_Freq, c("A","T","C","G","N","del"), ":")
 
-#Order by position
-Episodic_seperate <- arrange(Episodic_seperate, Position)
-
-head(Episodic_seperate)
-
-#Make Longer??
+#Make Longer
 longer_Episodic <- gather(Episodic_seperate, Base, Count, A:del, factor_key = TRUE)
+
+#numeric counts and arrange by position
 longer_Episodic$Count <- as.numeric(longer_Episodic$Count)
-longer_Episodic$Position <- as.numeric(longer_Episodic$Position)
+longer_Episodic <- arrange(longer_Episodic, Position)
 
 #Remove all those with count == 0
 Epi_rem <- subset(longer_Episodic, Count>0)
 head(Epi_rem)
 
 #Plot for base generation: first subset
+
 Epi_Base <- subset(Epi_rem, Population =="Gen0")
 Epi_Base <- arrange(Epi_Base, Position)
 head(Epi_Base)
