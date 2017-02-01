@@ -2885,10 +2885,10 @@ sed -n ' 10273262, 10274262 p' episodic_data_2R.sync > episodic_data_2R_1000_sub
 ```
 file size = 184 K
 ```
-scp paul@info.mcmaster.ca:/home/paul/episodicData/mpileup_dir/episodic_data_2R_subset.sync /Users/paulknoops/Sequence_analysis_2016
+scp paul@info.mcmaster.ca:/home/paul/episodicData/mpileup_dir/episodic_data_2R_subset.sync /Users/paulknoops/Bioinformatics/Sequence_analysis_2016 
 ```
 
 ```
-scp paul@info.mcmaster.ca:/home/paul/episodicData/mpileup_dir/episodic_data_2R_1000_subset.sync /Users/paulknoops/Sequence_analysis_2016
+scp paul@info.mcmaster.ca:/home/paul/episodicData/mpileup_dir/episodic_data_2R_1000_subset.sync /Users/paulknoops/Bioinformatics/Sequence_analysis_2016
 ```
 Playing on R: see R script "sync_file.R"
