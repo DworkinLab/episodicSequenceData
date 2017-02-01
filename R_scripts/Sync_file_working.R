@@ -20,10 +20,17 @@ colnames(Data_subset) <- c("Chromosome", "Position", "ref", "ConR1_115", "ConR2_
 
 print(head(Data_subset))
 
-#Use tidyr --> make long?
+# Use tidyr --> make long
 Episodic_long <- gather(Data_subset, Population, Allele_Freq , ConR1_115:Base, factor_key=TRUE)
+
 print(head(Episodic_long))
-print(tail(Episodic_long))
+
+#Seperate the allele counts into independent columns for each base
+Episodic_seperate <- Episodic_long %>% 
+  separate(Allele_Freq, c("A","T","C","G","N","del"), ":")
+
+head(Episodic_seperate)
+
 
 
 
