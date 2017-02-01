@@ -10,7 +10,9 @@ library(dplyr)
 #Random Region near middle of chromosome == 10000 bp
 # == 1.8 MB -- Note; have a smaller file (184kb)
 
-Data_subset <- read.table("episodic_data_2R_subset.sync")
+
+##Use smaller file to play with data for now!
+Data_subset <- read.table("episodic_data_2R_1000_subset.sync")
 
 #Format of populations ex. 27:0:0:30:0:0 == A-count:T-count:C-count:G-count:N-count:deletion-count
 
@@ -42,6 +44,7 @@ head(longer_Episodic)
 #Remove all those with count == 0
 Epi_rem <- subset(longer_Episodic, Count>0)
 head(Epi_rem)
+
 summary(Epi_rem)
 
 #Plot for base generation: first subset
