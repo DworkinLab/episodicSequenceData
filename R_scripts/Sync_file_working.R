@@ -29,9 +29,9 @@ print(head(Episodic_long))
 Episodic_seperate <- Episodic_long %>% 
   separate(Allele_Freq, c("A","T","C","G","N","del"), ":")
 
+#Order by position
+Episodic_seperate <- arrange(Episodic_seperate, Position)
+
 head(Episodic_seperate)
-
-
-
 
 
