@@ -97,7 +97,30 @@ print(head(Episodic_split))
 
 # Take max from Episodic_split[,6:9]
 #Episodic_split <- for (i in 1:nrow(Episodic_split)) +
-#  (Episodic_split$Major_Allele = max(Episodic_split[i,6:9]))
 
+#Closer but NO
+#i = 1
+#while (i <= nrow(Episodic_split)) {
+#Episodic_split$Major_Allele = max(Episodic_split[i,6:9])
+#i = i+1}
+#Episodic_split$Ref_Allele <- 0
+#for (i in 1:nrows(Episodic_split)) {
+#  if (Episodic_split$ref == "A" {Episodic_split$Ref_allele <- Episodic_split[i,6]}) else
+#  if (Episodic_split$ref == "T"{Episodic_split$Ref_allele <- Episodic_split[i,7]}) else
+#  if (Episodic_split$ref == "C" {Episodic_split$Ref_allele <- Episodic_split[i,8]}) else
+#  if (Episodic_split$ref == "G" {Episodic_split$Ref_allele <- Episodic_split[i,9]}) 
+#}
+  
 
+# THIS WORKS FOR REF_ALLELE!
+Episodic_split <- within(Episodic_split, {
+  Ref_Allele = ifelse (Episodic_split$ref == "A", Episodic_split[,6], Episodic_split$Ref_Allele) } )
+Episodic_split <- within(Episodic_split, {
+  Ref_Allele = ifelse (Episodic_split$ref == "T", Episodic_split[,7], Episodic_split$Ref_Allele) } )
+Episodic_split <- within(Episodic_split, {
+  Ref_Allele = ifelse (Episodic_split$ref == "C", Episodic_split[,8], Episodic_split$Ref_Allele) } )
+Episodic_split <- within(Episodic_split, {
+  Ref_Allele = ifelse (Episodic_split$ref == "G", Episodic_split[,9], Episodic_split$Ref_Allele) } )
+head(Episodic_split)
+tail(Episodic_split)
 
