@@ -30,34 +30,38 @@ print(head(Episodic_long))
 Episodic_seperate <- Episodic_long %>% 
   separate(Allele_Freq, c("A","T","C","G","N","del"), ":")
 
-print(head(Episodic_seperate))
+### Do not need next bit, keeping just in case
+##   Make Longer --
 
-#Make Longer -- may not be needed from here onward until after plots
-longer_Episodic <- gather(Episodic_seperate, Base, Count, A:del, factor_key = TRUE)
-#numeric counts and arrange by position
-longer_Episodic$Count <- as.numeric(longer_Episodic$Count)
-longer_Episodic <- arrange(longer_Episodic, Position)
-#Remove all those with count == 0
-Epi_rem <- subset(longer_Episodic, Count>0)
-#Plot for base generation: first subset
-Epi_Base <- subset(Epi_rem, Population =="BaseR1_0")
-Epi_Base <- arrange(Epi_Base, Position)
-p1 <- ggplot(data = Epi_Base, 
-             aes(x = Position, y=Count, colour=Base))
-p2 <- ggplot(data = Epi_Base, 
-                   aes(x = Position, y=ref, colour=Base))
-p3 <- (p1 + geom_point(size = 2, alpha=0.5))
-p4 <- (p2 + geom_point(alpha=0.5))
-print(p3)
-print(p4)
+#longer_Episodic <- gather(Episodic_seperate, Base, Count, A:del, factor_key = TRUE)
 
-# Keep from here
+##   numeric counts and arrange by position
+
+#longer_Episodic$Count <- as.numeric(longer_Episodic$Count)
+#longer_Episodic <- arrange(longer_Episodic, Position)
+
+##    Remove all those with count == 0
+#Epi_rem <- subset(longer_Episodic, Count>0)
+#   Plot for base generation: first subset
+#Epi_Base <- subset(Epi_rem, Population =="BaseR1_0")
+#Epi_Base <- arrange(Epi_Base, Position)
+#p1 <- ggplot(data = Epi_Base, 
+#             aes(x = Position, y=Count, colour=Base))
+#p2 <- ggplot(data = Epi_Base, 
+#                   aes(x = Position, y=ref, colour=Base))
+#p3 <- (p1 + geom_point(size = 2, alpha=0.5))
+#p4 <- (p2 + geom_point(alpha=0.5))
+#print(p3)
+#print(p4)
+
+### Re-start work from here
 
 #Want to rearrange data: start with Episodic_seperate
+
 print(head(Episodic_seperate))
 
-#Split Population into Treatment, Rep, and Generation
-Episoidic_split <- Episodic_seperate %>%
+#Split Population into Treatment, Rep, and Generation - need to do twice, different seperators (change above??)
+Episodic_split <- Episodic_seperate %>%
   separate(Population, c("Treatment", "Generation"), "_")
 
 Episodic_split <- Episodic_split %>%
@@ -69,6 +73,44 @@ cols.num <- c("Replicate","Generation", "A", "T", "C", "G", "N", "del")
 Episodic_split[cols.num] <- sapply(Episodic_split[cols.num],as.numeric)
 
 #Drop Chromosome
-Epi_Pop_split <- subset(Episodic_split, select = -c(Chromosome) )
+Episodic_split <- subset(Episodic_split, select = -c(Chromosome) )
 
 print(head(Episodic_split))
+
+
+# Two columns for counts: Ref-allele counts and Alternative counts 
+
+# Call only the columns with counts
+#Episodic_split[,6:11]
+
+# Need to find method that if the column name == ref; put count into column, and then find 2nd allele (2nd highest)
+    # what if two alleles are both not ref????
+
+# Make long (TidyR), if ref == Base, counts = Epidosic_split$Ref_allele??
+    # how to call other allele?
+#longer_Episodic <- gather(Episodic_split, Base, Count, A:del, factor_key = TRUE)
+
+#Change values in ref to 6,7,8,9 (the column values of ATCG in Epidosic_split)
+#Episodic_split <- within(Episodic_split, ref <- factor(ref, labels = c(6, 8, 9, 7)))
+#Episodic_split$ref <- as.integer(Episodic_split$ref)
+#head(Episodic_split)
+
+#Call correct column using the ref now
+Episodic_split$Ref_Allele <- 0
+Episodic_split$Ref_Allele <-
+                                   for i in 1:nrow(data) {
+                                     ifelse(Episodic_split$ref == "A", Episodic_split[i,6]) +
+                                     ifelse(ref == "T", Episodic_split[i,7]) +
+                                    ifelse(ref == "C", Episodic_split[i,8]) +
+                                     ifelse(ref == "G", Episodic_split[i,9])}
+)
+                            
+
+Episodic_split2$Ref_Allele <- with(Episodic_split, 
+         ifelse(ref == "A", Episodic_split[,6]) +
+         ifelse(ref == "T", Episodic_split[,7]) +
+         ifelse(ref == "C", Episodic_split[,8]) +
+         ifelse(ref == "G", Episodic_split[,9]))
+         
+head(Episodic_split2)
+
