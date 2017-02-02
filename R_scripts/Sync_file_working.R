@@ -95,3 +95,7 @@ print(head(Episodic_split))
 #Episodic_split$ref <- as.integer(Episodic_split$ref)
 #head(Episodic_split)
 
+# Take max from Episodic_split[,6:9]
+Episodic_split <- for (i in 1:nrow(Episodic_split)) +
+  (Episodic_split$Major_Allele = max(Episodic_split[i,6:9]))
+head(Episodic_split)
