@@ -95,22 +95,3 @@ print(head(Episodic_split))
 #Episodic_split$ref <- as.integer(Episodic_split$ref)
 #head(Episodic_split)
 
-#Call correct column using the ref now
-Episodic_split$Ref_Allele <- 0
-Episodic_split$Ref_Allele <-
-                                   for i in 1:nrow(data) {
-                                     ifelse(Episodic_split$ref == "A", Episodic_split[i,6]) +
-                                     ifelse(ref == "T", Episodic_split[i,7]) +
-                                    ifelse(ref == "C", Episodic_split[i,8]) +
-                                     ifelse(ref == "G", Episodic_split[i,9])}
-)
-                            
-
-Episodic_split2$Ref_Allele <- with(Episodic_split, 
-         ifelse(ref == "A", Episodic_split[,6]) +
-         ifelse(ref == "T", Episodic_split[,7]) +
-         ifelse(ref == "C", Episodic_split[,8]) +
-         ifelse(ref == "G", Episodic_split[,9]))
-         
-head(Episodic_split2)
-
