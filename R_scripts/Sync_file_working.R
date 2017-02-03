@@ -134,6 +134,11 @@ Episodic_split <- within(Episodic_split, {
 head(Episodic_split)
 tail(Episodic_split)
 
+
+
+
+
+
 #within(Episodic_split, max(Episodic_split[,6:9]))
 #
 # if Epidsodic_split[,6:9] != Ref_Allele or 0, 
@@ -142,7 +147,7 @@ tail(Episodic_split)
 #ref_A <- c(7,8,9)
 #if ref = "A", max(Episodic_split[ref_A])
 
-Episodic_split$Alt_Allele = 0
+#Episodic_split$Alt_Allele = 0
 #Episodic_split <- within(Episodic_split, {
 #  Alt_Allele = ifelse (ref == "A", max(Episodic_split[,c(7,8,9)]), ifelse (ref == "T", max(Episodic_split[,c(6,8,9)]), ifelse (ref == "C", max(Episodic_split[c(6,7,9)]), ifelse (ref == "G", max(Episodic_split[,c(7,8,9)]), 0))))})
 
@@ -161,5 +166,35 @@ Episodic_split$Alt_Allele = 0
 #       gain = arr_delay - dep_delay,
 #       speed = distance / air_time * 60)
 
-mutate(Episodic_split, 
-       Alt_Allele = ifelse (ref == "A", max(Episodic_split[,c(7,8,9)]), ifelse (ref == "T", max(Episodic_split[,c(6,8,9)]), ifelse (ref == "C", max(Episodic_split[c(6,7,9)]), ifelse (ref == "G", max(Episodic_split[,c(7,8,9)]), 0)))))
+#mutate(Episodic_split, 
+#       Alt_Allele = ifelse (ref == "A", max(Episodic_split[,c(7,8,9)]), ifelse (ref == "T", max(Episodic_split[,c(6,8,9)]), ifelse (ref == "C", max(Episodic_split[c(6,7,9)]), ifelse (ref == "G", max(Episodic_split[,c(7,8,9)]), 0)))))
+
+#Just make column of 3 alternates - Should work out that every one is represented in the end -> ref = ref, and alternatives vary depending
+# Ref = A, Alt_allele 1 = C, else Alt_allele1 = A, Alt_allele2 =T unless Ref = T, then 2 = C, and 3 = G unless ref = G, then 3 = C
+
+Episodic_split <- within(Episodic_split, {
+  Alt_Allele1 = ifelse (ref == "A", (Episodic_split[,8]), Episodic_split[,6])
+  Alt_Allele2 = ifelse (ref == "T", (Episodic_split[,8]), Episodic_split[,7])
+  Alt_Allele3 = ifelse (ref == "G", (Episodic_split[,8]), Episodic_split[,9])
+})
+
+
+
+#Now run max for those three
+#Episodic_split[,13:15]
+#Episodic_split <- mutate(Episodic_split,
+#   Alt_Allele = max(Episodic_split[,13:15]))
+
+Episodic_split$Alt_Allele <- apply(Episodic_split[,13:15], 1, max)
+
+head(Episodic_split)
+
+#Column to say what the alternative Allele is?
+Episodic_split <- within(Episodic_split, {
+  Alt_Allele_base = ifelse (Alt_Allele == 0, "N/A", ifelse (Alt_Allele == Episodic_split[,6], "A", ifelse (Alt_Allele == (Episodic_split[,7]), "T", ifelse (Alt_Allele == (Episodic_split[,7]), "C", ifelse (Alt_Allele == (Episodic_split[,7]), "G", "N/A" )))))})
+
+
+#Works, remove unneeded columns (6,7,8,9,10,11,13,14,15)
+Episodic_split <- subset(Episodic_split, select = -c(A,T,C,G,N,del,Alt_Allele3,Alt_Allele2, Alt_Allele1) )
+head(Episodic_split)
+Episodic_split
