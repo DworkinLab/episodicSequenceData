@@ -134,3 +134,18 @@ Episodic_split <- within(Episodic_split, {
 head(Episodic_split)
 tail(Episodic_split)
 
+within(Episodic_split, max(Episodic_split[,6:9]))
+#
+# if Epidsodic_split[,6:9] != Ref_Allele or 0, 
+# But what if Ref_Allele and alternative = same thing
+# Make 
+#ref_A <- c(7,8,9)
+#if ref = "A", max(Episodic_split[ref_A])
+
+ref_A <- c(7,8,9)
+ref_T <- c(6,8,9)
+ref_C <- c(6,7,9)
+ref_G <- c(7,8,9)
+
+Episodic_split <- within(Episodic_split, {
+  Alt_Allele = ifelse (ref == "A", max(Episodic_split[ref_A]), ifelse (ref == "T", max(Episodic_split[ref_T]), ifelse (ref == "C", max(Episodic_split[ref_C]), ifelse (ref == "G", max(Episodic_split[ref_G]), 0))))}) 
