@@ -2,8 +2,6 @@ library(tidyr)
 library(ggplot2)
 library(dplyr)
 
-
-
 #Data from subset of the Right arm of the 2nd Chromosome
 #Random Region near middle of chromosome == 10000 bp
 # == 1.8 MB -- Note; have a smaller file (184kb)
