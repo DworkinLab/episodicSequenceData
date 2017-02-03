@@ -111,18 +111,26 @@ print(head(Episodic_split))
 #  if (Episodic_split$ref == "G" {Episodic_split$Ref_allele <- Episodic_split[i,9]}) 
 #}
 
-# THIS WORKS FOR REF_ALLELE!
+# THIS WORKS FOR REF_ALLELE! -- Long version
+#Episodic_split$Ref_Allele <- 0
+
+#Episodic_split <- within(Episodic_split, {
+# Ref_Allele = ifelse (Episodic_split$ref == "A", Episodic_split[,6], Episodic_split$Ref_Allele) } )
+#Episodic_split <- within(Episodic_split, {
+#  Ref_Allele = ifelse (Episodic_split$ref == "T", Episodic_split[,7], Episodic_split$Ref_Allele) } )
+#Episodic_split <- within(Episodic_split, {
+#  Ref_Allele = ifelse (Episodic_split$ref == "C", Episodic_split[,8], Episodic_split$Ref_Allele) } )
+#Episodic_split <- within(Episodic_split, {
+#  Ref_Allele = ifelse (Episodic_split$ref == "G", Episodic_split[,9], Episodic_split$Ref_Allele) } )
+
+
+#Short version !
+
 Episodic_split$Ref_Allele <- 0
 
 Episodic_split <- within(Episodic_split, {
-  Ref_Allele = ifelse (Episodic_split$ref == "A", Episodic_split[,6], Episodic_split$Ref_Allele) } )
-Episodic_split <- within(Episodic_split, {
-  Ref_Allele = ifelse (Episodic_split$ref == "T", Episodic_split[,7], Episodic_split$Ref_Allele) } )
-Episodic_split <- within(Episodic_split, {
-  Ref_Allele = ifelse (Episodic_split$ref == "C", Episodic_split[,8], Episodic_split$Ref_Allele) } )
-Episodic_split <- within(Episodic_split, {
-  Ref_Allele = ifelse (Episodic_split$ref == "G", Episodic_split[,9], Episodic_split$Ref_Allele) } )
+  Ref_Allele = ifelse (ref == "A", Episodic_split[,6], ifelse (ref == "T", Episodic_split[,7], ifelse (ref == "C", Episodic_split[,8], ifelse (ref == "G", Episodic_split[,9], Episodic_split$Ref_Allele)  )))})
+
 head(Episodic_split)
 tail(Episodic_split)
 
-Episodic_split
