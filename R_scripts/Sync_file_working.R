@@ -134,7 +134,7 @@ Episodic_split <- within(Episodic_split, {
 head(Episodic_split)
 tail(Episodic_split)
 
-within(Episodic_split, max(Episodic_split[,6:9]))
+#within(Episodic_split, max(Episodic_split[,6:9]))
 #
 # if Epidsodic_split[,6:9] != Ref_Allele or 0, 
 # But what if Ref_Allele and alternative = same thing
@@ -142,10 +142,24 @@ within(Episodic_split, max(Episodic_split[,6:9]))
 #ref_A <- c(7,8,9)
 #if ref = "A", max(Episodic_split[ref_A])
 
-ref_A <- c(7,8,9)
-ref_T <- c(6,8,9)
-ref_C <- c(6,7,9)
-ref_G <- c(7,8,9)
+Episodic_split$Alt_Allele = 0
+#Episodic_split <- within(Episodic_split, {
+#  Alt_Allele = ifelse (ref == "A", max(Episodic_split[,c(7,8,9)]), ifelse (ref == "T", max(Episodic_split[,c(6,8,9)]), ifelse (ref == "C", max(Episodic_split[c(6,7,9)]), ifelse (ref == "G", max(Episodic_split[,c(7,8,9)]), 0))))})
 
-Episodic_split <- within(Episodic_split, {
-  Alt_Allele = ifelse (ref == "A", max(Episodic_split[ref_A]), ifelse (ref == "T", max(Episodic_split[ref_T]), ifelse (ref == "C", max(Episodic_split[ref_C]), ifelse (ref == "G", max(Episodic_split[ref_G]), 0))))}) 
+
+#Episodic_split$Alt_Allele <- within (Episodic_split, {ifelse (ref == "A", pmax(Episodic_split[,c(7,8,9)]), ifelse (ref == "T", pmax(Episodic_split[,c(6,8,9)]), ifelse (ref == "C", pmax(Episodic_split[c(6,7,9)]), ifelse (ref == "G", pmax(Episodic_split[,c(7,8,9)]), 0))))})
+
+#head(Episodic_split)
+
+
+#dat <- transform(dat, min = pmin(Parm1, Parm2))
+
+#Episodic_split <- transform(Episodic_split, {
+#  Alt_Allele = ifelse (ref == "A", max(Episodic_split[,c(7,8,9)]), ifelse (ref == "T", max(Episodic_split[,c(6,8,9)]), ifelse (ref == "C", max(Episodic_split[c(6,7,9)]), ifelse (ref == "G", max(Episodic_split[,c(7,8,9)]), 0))))})
+
+#mutate(flights,
+#       gain = arr_delay - dep_delay,
+#       speed = distance / air_time * 60)
+
+mutate(Episodic_split, 
+       Alt_Allele = ifelse (ref == "A", max(Episodic_split[,c(7,8,9)]), ifelse (ref == "T", max(Episodic_split[,c(6,8,9)]), ifelse (ref == "C", max(Episodic_split[c(6,7,9)]), ifelse (ref == "G", max(Episodic_split[,c(7,8,9)]), 0)))))
