@@ -110,9 +110,10 @@ print(head(Episodic_split))
 #  if (Episodic_split$ref == "C" {Episodic_split$Ref_allele <- Episodic_split[i,8]}) else
 #  if (Episodic_split$ref == "G" {Episodic_split$Ref_allele <- Episodic_split[i,9]}) 
 #}
-  
 
 # THIS WORKS FOR REF_ALLELE!
+Episodic_split$Ref_Allele <- 0
+
 Episodic_split <- within(Episodic_split, {
   Ref_Allele = ifelse (Episodic_split$ref == "A", Episodic_split[,6], Episodic_split$Ref_Allele) } )
 Episodic_split <- within(Episodic_split, {
@@ -124,3 +125,4 @@ Episodic_split <- within(Episodic_split, {
 head(Episodic_split)
 tail(Episodic_split)
 
+Episodic_split
