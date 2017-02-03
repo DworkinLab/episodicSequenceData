@@ -191,7 +191,7 @@ head(Episodic_split)
 
 #Column to say what the alternative Allele is?
 Episodic_split <- within(Episodic_split, {
-  Alt_Allele_base = ifelse (Alt_Allele == 0, "N/A", ifelse (Alt_Allele == Episodic_split[,6], "A", ifelse (Alt_Allele == (Episodic_split[,7]), "T", ifelse (Alt_Allele == (Episodic_split[,7]), "C", ifelse (Alt_Allele == (Episodic_split[,7]), "G", "N/A" )))))})
+  Alt_Allele_base = ifelse (Alt_Allele == 0, "N/A", ifelse (Alt_Allele == Episodic_split[,6], "A", ifelse (Alt_Allele == (Episodic_split[,7]), "T", ifelse (Alt_Allele == (Episodic_split[,8]), "C", ifelse (Alt_Allele == (Episodic_split[,9]), "G", "N/A" )))))})
 
 
 #Works, remove unneeded columns (6,7,8,9,10,11,13,14,15)
