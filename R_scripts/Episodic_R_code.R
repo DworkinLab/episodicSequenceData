@@ -84,16 +84,15 @@ Episodic_split <- subset(Episodic_split, select = -c(A,T,C,G,N,del,Alt_Allele3,A
 print(head(Episodic_split))
 print(tail(Episodic_split))
 
-#Plots for fun
+#Simple plot showing alternative allele counts by postion
 
 p1 <- ggplot(data = Episodic_split, 
              aes(x = Position, y=Alt_Allele, colour=Alt_Allele_base))
-p2 <- ggplot(data = Episodic_split,
-             aes(x=Position, y=Ref_Allele,colour = ref))
-p3 <- (p1 + geom_point(size = 2, alpha = 0.5))
-p4 <- (p2 + geom_point(size = 2,alpha = 0.5))
-print(p3)
-print(p4)
+
+p2 <- (p1 + geom_point(size = 2, alpha = 0.5))
+
+print(p2)
+
 
 
 
