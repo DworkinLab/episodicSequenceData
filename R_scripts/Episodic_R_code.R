@@ -8,7 +8,7 @@ library(dplyr)
 
 ##Using smaller file to play with data for now (1000bp)
 
-Data_subset <- read.table("episodic_data_2R_1000_subset.sync")
+Data_subset <- read.table("episodic_data_2R_subset.sync")
 
 #Format of populations ex. 27:0:0:30:0:0 == A-count:T-count:C-count:G-count:N-count:deletion-count
 
