@@ -112,3 +112,37 @@ p5 <- ggplot(data = Episodic_split,
 p6 <- (p5 + geom_point(size = 2, alpha = 0.5))
 
 print(p6)
+
+#FIX BELOW
+#Remove all those = 0
+Episodic_split_2 <- Episodic_split[Episodic_split$Alt_Allele!=0]
+
+
+p1 <- ggplot(data = Episodic_split2, 
+             aes(x = Position, y=Alt_Allele, colour=Alt_Allele_base))
+
+p2 <- (p1 + geom_point(size = 2, alpha = 0.5))
+
+print(p2)
+
+
+
+
+p3 <- ggplot(data = Episodic_split, 
+             aes(x=Position, y = Alt_Allele, colour= Treatment))
+
+
+p4 <- (p3 + geom_point(size = 2, alpha = 0.5))
+
+print(p4)
+
+#Allele Frequencies:
+Episodic_split$Ref_Allele_freq <- with(Episodic_split, Ref_Allele/(Ref_Allele+Alt_Allele))
+head(Episodic_split)
+Episodic_split
+
+p5 <- ggplot(data = Episodic_split, 
+             aes(x=Position, y = Ref_Allele_freq, colour = Treatment))
+p6 <- (p5 + geom_point(size = 2, alpha = 0.5))
+
+print(p6)
