@@ -8,14 +8,13 @@ library(dplyr)
 
 ##Using smaller file to play with data for now (1000bp)
 
-Data_subset <- read.table("episodic_data_2R_subset.sync")
+Data_subset <- read.table("../R_Data/episodic_data_2R_subset.sync")
 
 #Format of populations ex. 27:0:0:30:0:0 == A-count:T-count:C-count:G-count:N-count:deletion-count
 
 #adjust colnames
-
-colnames(Data_subset) <- c("Chromosome", "Position", "ref", "ConR1_115", "ConR2_115", "SelR1_115", "SelR2_115", "ConR1_38", "ConR2_38", "SelR1_38", "SelR2_38", "ConR1_77", "ConR2_77", "SelR1_77", "SelR2_77", "AncestorR1_0")
-
+name.Columns <- c("Chromosome", "Position", "ref", "ConR1_115", "ConR2_115", "SelR1_115", "SelR2_115", "ConR1_38", "ConR2_38", "SelR1_38", "SelR2_38", "ConR1_77", "ConR2_77", "SelR1_77", "SelR2_77", "AncestorR1_0")
+colnames(Data_subset) <- name.Columns
 print(head(Data_subset))
 
 
@@ -27,6 +26,7 @@ Episodic_long <- gather(Data_subset, Population, Allele_Freq , ConR1_115:Ancesto
 #Seperate the allele counts into independent columns for each base
 Episodic_seperate <- Episodic_long %>% 
   separate(Allele_Freq, c("A","T","C","G","N","del"), ":")
+
 
 #Want to rearrange data:
 
@@ -48,6 +48,10 @@ Episodic_split[cols.num] <- sapply(Episodic_split[cols.num],as.numeric)
 Episodic_split <- subset(Episodic_split, select = -c(Chromosome) )
 
 # Two columns for counts: Ref-allele counts and Alternative counts 
+
+#Look at one position
+#Position_10635875 <- Episodic_split[ which(Episodic_split$Position==10635875), ]
+#Position_10635875
 
 #Ref_Allele:
 
@@ -72,12 +76,15 @@ Episodic_split$Alt_Allele <- apply(Episodic_split[,13:15], 1, max)
 #Column to say what the alternative Allele is:
 
 Episodic_split <- within(Episodic_split, {
-  Alt_Allele_base = ifelse (Alt_Allele == 0, "N/A", ifelse (Alt_Allele == Episodic_split[,6], "A", ifelse (Alt_Allele == (Episodic_split[,7]), "T", ifelse (Alt_Allele == (Episodic_split[,8]), "C", ifelse (Alt_Allele == (Episodic_split[,9]), "G", "N/A" )))))})
+  alt = ifelse (Alt_Allele == 0, "N/A", ifelse (Alt_Allele == Episodic_split[,6], "A", ifelse (Alt_Allele == (Episodic_split[,7]), "T", ifelse (Alt_Allele == (Episodic_split[,8]), "C", ifelse (Alt_Allele == (Episodic_split[,9]), "G", "N/A" )))))})
 
 
 # Remove unneeded columns (6,7,8,9,10,11,13,14,15)
 Episodic_split <- subset(Episodic_split, select = -c(A,T,C,G,N,del,Alt_Allele3,Alt_Allele2, Alt_Allele1) )
 
+#Look at one position
+#Position_10635875_2 <- Episodic_split[ which(Episodic_split$Position==10635875), ]
+#Position_10635875_2
 
 print(head(Episodic_split))
 print(tail(Episodic_split))
@@ -146,3 +153,42 @@ p5 <- ggplot(data = Episodic_split,
 p6 <- (p5 + geom_point(size = 2, alpha = 0.5))
 
 print(p6)
+
+
+
+
+
+##Package == sync_to_frequencies
+#install.packages("sync_to_frequencies")
+#install.packages('haploReconstruct')
+#library(haploReconstruct)
+#??sync_to_frequencies
+# c("ConR1_115", "ConR2_115", "SelR1_115", "SelR2_115", "ConR1_38", "ConR2_38", "SelR1_38", "SelR2_38", "ConR1_77", "ConR2_77", "SelR1_77", "SelR2_77", "AncestorR1_0")
+
+#Works like this:
+base.pops=rep(c(rep(FALSE,12),TRUE))
+dat <- sync_to_frequencies("episodic_data_2R_1000_subset.sync", base.pops, header = F)
+
+#https://www.rdocumentation.org/packages/haploReconstruct/versions/0.1.2/topics/ex_dat
+
+dat
+#with(dat, plot(pos, majallele))
+#with(dat, plot(majallele))
+#with(dat, plot(majallele, minallele))
+#with(dat, plot(pos, basePops))
+#with(dat, plot(pos, L1))
+#with(dat, plot(pos, L2))
+#with(dat, plot(pos, L3))
+#with(dat, plot(pos, L4))
+#with(dat, plot(pos, L5))
+#with(dat, plot(pos, L6))
+#with(dat, plot(pos, L7))
+#with(dat, plot(pos, L8))
+#with(dat, plot(pos, L9))
+#with(dat, plot(pos, L10))
+#with(dat, plot(pos, L11))
+#with(dat, plot(pos, L12))
+#with(dat, plot(pos, L13))
+#with(dat, plot(pos, L13))
+
+#dim(dat)
