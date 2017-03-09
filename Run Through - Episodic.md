@@ -2892,3 +2892,8 @@ scp paul@info.mcmaster.ca:/home/paul/episodicData/mpileup_dir/episodic_data_2R_s
 scp paul@info.mcmaster.ca:/home/paul/episodicData/mpileup_dir/episodic_data_2R_1000_subset.sync /Users/paulknoops/Bioinformatics/Sequence_analysis_2016
 ```
 Playing on R: see R script "sync_file.R"
+
+
+
+
+Want to look at uniform coverage! says slide 16: http://drrobertkofler.wikispaces.com/file/view/pooledAnalysis_part2.pdf/489488298/pooledAnalysis_part2.pdf
