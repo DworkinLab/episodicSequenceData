@@ -1,54 +1,7 @@
 #Read episodics as frequencies
-#install.packages('dplyr')
-library(dplyr)
 
-#install.packages('tidyr')
-library(tidyr)
-
-#install.packages('ggplot2')
-library(ggplot2)
-
-#install.packages('haploReconstruct')
-library(haploReconstruct)
-
-#Multiplot:
-multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
-  library(grid)
-  
-  # Make a list from the ... arguments and plotlist
-  plots <- c(list(...), plotlist)
-  
-  numPlots = length(plots)
-  
-  # If layout is NULL, then use 'cols' to determine layout
-  if (is.null(layout)) {
-    # Make the panel
-    # ncol: Number of columns of plots
-    # nrow: Number of rows needed, calculated from # of cols
-    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
-                     ncol = cols, nrow = ceiling(numPlots/cols))
-  }
-  
-  if (numPlots==1) {
-    print(plots[[1]])
-    
-  } else {
-    # Set up the page
-    grid.newpage()
-    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
-    
-    # Make each plot, in the correct location
-    for (i in 1:numPlots) {
-      # Get the i,j matrix positions of the regions that contain this subplot
-      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
-      
-      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
-                                      layout.pos.col = matchidx$col))
-    }
-  }
-}
-
-
+#packages:
+source('episodic_packages.R')
 
 #Working Dir ==Scripts
 episodic_freq <- sync_to_frequencies(file="../R_Data/episodic_data_2R_subset.sync", base.pops=c(rep(FALSE,12), TRUE), header= FALSE)
@@ -57,7 +10,7 @@ colnames(episodic_freq) <- c("chr", "pos", "ref","minallele","majallele", 'baseP
 #Remove any that have all populations minor allele frequency of 0
 episodic_freq$sum <- rowSums(episodic_freq[,6:19])
 head(episodic_freq)
-episodic_freq_sub <- episodic_freq[ -which(episodic_freq$sum==0),]
+episodic_freq_sub <- episodic_freq[ -which(episodic_freq$sum<=0.25),]
 
 head(episodic_freq_sub)
 
@@ -69,94 +22,6 @@ dat <- episodic_freq_sub
 print(head(dat))
 dat_long <- gather(dat, population, min_all_freq, basePops:AncR1_0)
 print(dat_long)
-
-
-#dat_long
-
-
-
-#Hashed out all below: fixed and made neat in epidosic_plots.R 
-
-#Long based on each population average minor allele frequency:
-
-#dat2 <- dat_long %>%
-#  group_by(population) %>%
-#  summarise(avg_allele=mean(min_all_freq))
-
-#dat2 <- dat2[-c(2),]
-#dat2
-#dat2 <- dat2 %>% 
-#  separate(population, c('Treatment', "Generation"), "_")
-
-#dat2$Generation <- as.numeric(dat2$Generation)
-#dat2 <- dat2[order(dat2$Generation),]
-#dat2$Generation <- as.character(dat2$Generation)
-
-#dat2 <- as.data.frame(dat2)
-#Plot of average minor allele frequencies across full genome:
-#g1 <- ggplot(dat2, aes(x=Generation, y=avg_allele, colour=Treatment))
-#g2 <- g1+geom_point(size = 5)
-#g2
-
-#Long with grouping population and the minor allele, for the average minor allele frequencies in each population based on the allele.
-
-#dat3 <- dat_long %>%
-#  group_by(population, minallele) %>%
-#  summarise(avg_allele=mean(min_all_freq))
-#dat3
-#dat3 <- dat3[-c(5:8),]
-
-#dat3 <- dat3 %>% 
-#  separate(population, c('Treatment', "Generation"), "_")
-
-#g3 <- ggplot(dat3, aes(x=population, y = avg_allele, colour = minallele))
-#g4 <- g3 + geom_point(size = 5)
-#g4
-
-#Change from base generation -- average for all (from dat2) -- most imformative -- better version in episodic_plots.R
-#dat2$change <- dat2$avg_allele - dat2[1,3]
-#dat2
-#g5 <- ggplot(dat2, aes(x=Generation, y = change, colour = Treatment))
-#g6 <- g5 + geom_point(size = 8)
-#g6 + geom_line()
-
-#Per base change; using dat3, change for each minor allele from the base pop.
-
-
-#dat3 <- as.data.frame(dat3)
-#dat3$change <- 0
-#dat3
-#dat3$change <- ifelse(dat3$minallele=="A", dat3$avg_allele - dat3[1,3], ifelse(dat3$minallele=="C", dat3$avg_allele - dat3[2,3], ifelse(dat3$minallele=="G", dat3$avg_allele - dat3[3,3],ifelse(dat3$minallele=="T", dat3$avg_allele - dat3[4,3], dat3$change))))
-
-
-#Split up the population into Treatment and Generation for plot of minor allele change at each generation:
-#BAD
-#dat4 <- dat3 %>% 
-#  separate(population, c('Treatment', "Generation"), "_")
-
-
-#dat4$Generation <- as.numeric(dat4$Generation)
-#g7 <- ggplot(dat4, aes(x=Generation, y = change, colour = minallele))
-#g8 <- g7 + geom_jitter(size = 8)
-#g8
-
-
-
-
-
-
-#Plot of each position and the accompaning minor allele frequency for all populations: Better version in episodic_plots.R
-#dat_long$pos <- as.character(dat_long$pos)
-#p1 <- ggplot(dat_long, aes(x= pos, y = min_all_freq, colour = population))
-#p2 <- p1+geom_point()
-#print(p2)
-
-
-
-
-
-
-
 
 #Change per position:
 #Group by position before making long: take the minor allele frequency and subtract the base == Change
