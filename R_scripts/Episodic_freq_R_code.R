@@ -10,18 +10,23 @@ colnames(episodic_freq) <- c("chr", "pos", "ref","minallele","majallele", 'baseP
 #Remove any that have all populations minor allele frequency of 0
 episodic_freq$sum <- rowSums(episodic_freq[,6:19])
 head(episodic_freq)
-episodic_freq_sub <- episodic_freq[ -which(episodic_freq$sum<=0.25),]
+episodic_freq_sub <- episodic_freq[ -which(episodic_freq$sum<0.25),]
 
-head(episodic_freq_sub)
+summary(episodic_freq_sub)
 
 episodic_freq_sub <- subset(episodic_freq_sub, select = -c(sum) )
 ##Copied
 
 
-dat <- episodic_freq_sub
-print(head(dat))
+dat <- na.omit(episodic_freq_sub)
+summary((dat))
 dat_long <- gather(dat, population, min_all_freq, basePops:AncR1_0)
 print(dat_long)
+
+#dat_plot <- ggplot(dat_long, aes(x= pos, y = min_all_freq, colour = population))
+#dat_plot2 <- dat_plot+geom_point() + ggtitle("all") 
+#+ guides(colour=FALSE)
+#print(dat_plot2)
 
 #Change per position:
 #Group by position before making long: take the minor allele frequency and subtract the base == Change
@@ -39,6 +44,7 @@ ddiff_long <- ddiff_long[ -which(ddiff_long$minallele_freq==0),]
 
 
 #head(ddiff_long)
+#ddiff_long$pos <- as.character(ddiff_long$pos)
 #plot of every position, and the change from the base generation (0 == base generation)
 ddiff_plot <- ggplot(ddiff_long, aes(x= pos, y = minallele_freq, colour = population_diff))
 ddiff_plot2 <- ddiff_plot+geom_point() + ggtitle("all") 
@@ -104,9 +110,9 @@ multiplot(plot2_sel, plot2_con, cols =2)
 ###### Changes from previous generation
 genDiff <- dat %>%
   group_by(pos) %>%
-  summarise(ref=ref, minallele=minallele, majallele=majallele, ConR1_115=ConR1_115-ConR1_77, ConR2_115=ConR2_115-ConR2_77, SelR1_115=SelR1_115-SelR1_77, SelR2_115=SelR2_115-SelR2_77, ConR1_38=ConR1_38-AncR1_0, ConR2_38=ConR2_38-AncR1_0, SelR1_38=SelR1_38-AncR1_0, SelR2_38=SelR2_38-AncR1_0, ConR1_77=ConR1_77-ConR1_38, ConR2_77=ConR2_77-ConR2_38, SelR1_77=SelR1_77-SelR1_38, SelR2_77=SelR2_77-SelR2_38, AncR1_0=AncR1_0-AncR1_0)
+  summarise(ref=ref, minallele=minallele, majallele=majallele, ConR1_115=ConR1_115-ConR1_77, ConR2_115=ConR2_115-ConR2_77, SelR1_115=SelR1_115-SelR1_77, SelR2_115=SelR2_115-SelR2_77, ConR1_38=ConR1_38-AncR1_0, ConR2_38=ConR2_38-AncR1_0, SelR1_38=SelR1_38-AncR1_0, SelR2_38=SelR2_38-AncR1_0, ConR1_77=ConR1_77-ConR1_38, ConR2_77=ConR2_77-ConR2_38, SelR1_77=SelR1_77-SelR1_38, SelR2_77=SelR2_77-SelR2_38)
 
-genDiff_long <- gather(genDiff, population_diff, minallele_freq, ConR1_115:AncR1_0)
+genDiff_long <- gather(genDiff, population_diff, minallele_freq, ConR1_115:SelR2_77)
 
 #Removes 0 values 
 genDiff_long <- genDiff_long[ -which(genDiff_long$minallele_freq==0),]
