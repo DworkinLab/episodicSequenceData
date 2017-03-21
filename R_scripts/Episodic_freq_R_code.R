@@ -49,7 +49,7 @@ ddiff_long <- ddiff_long[ -which(ddiff_long$minallele_freq==0),]
 ddiff_plot <- ggplot(ddiff_long, aes(x= pos, y = minallele_freq, colour = population_diff))
 ddiff_plot2 <- ddiff_plot+geom_point() + ggtitle("all") 
 #+ guides(colour=FALSE)
-print(ddiff_plot2)
+#print(ddiff_plot2)
 
 
 #Split population into Treatment and Generation
@@ -69,21 +69,23 @@ ddiff_115 <- ddiff_long2[ which(ddiff_long2$Generation==115),]
 #head(ddiff_115)
 plot_115 <- ggplot(ddiff_115, aes(x= pos, y = minallele_freq, colour = Treatment))
 plot2_115 <- plot_115+geom_point() + ggtitle(115)
-print(plot2_115)
+#print(plot2_115)
 
 
 #head(ddiff_38)
 plot_38 <- ggplot(ddiff_38, aes(x= pos, y = minallele_freq, colour = Treatment))
 plot2_38 <- plot_38+geom_point() + ggtitle(38)
-print(plot2_38)
+#print(plot2_38)
 
 #head(ddiff_77)
 plot_77 <- ggplot(ddiff_77, aes(x= pos, y = minallele_freq, colour = Treatment))
 plot2_77 <- plot_77+geom_point() + ggtitle(77)
-print(plot2_77)
+#print(plot2_77)
 
 #Combine plots together to show in one window:
-multiplot(ddiff_plot2, plot2_77, plot2_38, plot2_115,cols=2)
+
+
+#multiplot(ddiff_plot2, plot2_77, plot2_38, plot2_115,cols=2)
 
 
 #Split by Treatment:
@@ -101,8 +103,7 @@ plot_con <- ggplot(ddiff_con, aes(x= pos, y = minallele_freq, colour = Generatio
 plot2_con <- plot_con+geom_point() + ggtitle("Control")
 #print(plot2_con)
 
-multiplot(plot2_sel, plot2_con, cols =2)
-#Group by position== average per replicate?
+#multiplot(plot2_sel, plot2_con, cols =2)
 
 
 
@@ -120,7 +121,7 @@ genDiff_long <- genDiff_long[ -which(genDiff_long$minallele_freq==0),]
 #head(genDiff_long)
 gendiff_plot <- ggplot(genDiff_long, aes(x= pos, y = minallele_freq, colour = population_diff))
 gendiff_plot2 <- gendiff_plot+geom_point() + ggtitle("Generation Differences; 115-77, 77-38, 38-base")
-print(gendiff_plot2)
+#print(gendiff_plot2)
 
 #gendiff_long2
 gendiff_long2 <- genDiff_long %>% 
@@ -135,21 +136,21 @@ gendiff_long2$Generation <- as.factor(gendiff_long2$Generation)
 
 
 gendiff_plot55 <- ggplot(gendiff_long2, aes(x=Generation, y=minallele_freq, colour=Treatment))
-gendiff_plot56 <- gendiff_plot55 + geom_jitter() + ggtitle('Generation Spread') 
+gendiff_plot56 <- gendiff_plot55 + geom_jitter() + ggtitle('Generational change in allele frequency') 
 #+ guides(colour=T)
-print(gendiff_plot56)
+#print(gendiff_plot56)
 
 gendiff_plot44 <- ggplot(gendiff_long2, aes(x=Treatment, y=minallele_freq, colour=Generation))
 gendiff_plot45 <- gendiff_plot44 + geom_jitter() + ggtitle('Generation Spread')
 #+ guides(colour=T)
-print(gendiff_plot45)
+#print(gendiff_plot45)
 
 #gendiff_long2$Generation <- as.numeric(gendiff_long2$Generation)
 #gendiff_plot66 <- ggplot(gendiff_long2, aes(x=Generation, y=minallele_freq, colour=pos))
 #gendiff_plot65 <- gendiff_plot66 + geom_point() + ggtitle('Generation') + geom_
 #+ guides(colour=T)
 #print(gendiff_plot65)
-dat
+#dat
 
 
 
@@ -163,21 +164,32 @@ dat_long2 <- dat_long %>%
   separate(population, c('Treatment', "Generation"), "_")
 head(dat_long2)
 with(dat_long2, cor(min_all_freq[Treatment =="SelR1"], min_all_freq[Treatment=="SelR2"]))
-with(dat_long2, plot(x=min_all_freq[Treatment =="SelR1"],y= min_all_freq[Treatment=="SelR2"]))
+#with(dat_long2, plot(x=min_all_freq[Treatment =="SelR1"],y= min_all_freq[Treatment=="SelR2"]))
 
-head(dat_long)
-with(dat_long, plot(x=min_all_freq[population=="SelR1_115"],y= min_all_freq[population=="SelR2_77"]))
+#head(dat_long)
+#par(mfrow=c(3,2))
+#with(dat_long, plot(x=min_all_freq[population=="SelR1_115"],y= min_all_freq[population=="SelR2_77"], xlab = "SelR1_115", ylab= "SelR2_77",cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5))
+#with(dat_long, plot(x=min_all_freq[population=="SelR2_115"],y= min_all_freq[population=="SelR2_77"], xlab = "SelR2_115", ylab= "SelR2_77",cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5))
+#with(dat_long, plot(x=min_all_freq[population=="SelR1_115"],y= min_all_freq[population=="SelR1_77"], xlab = "SelR1_115", ylab= "SelR1_77",cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5))
 
-head(ddiff_115)
-with(ddiff_115,plot(x=minallele_freq[Treatment=="SelR1"], y= minallele_freq[Treatment=="SelR2"]))
+#with(dat_long, plot(x=min_all_freq[population=="SelR1_77"],y= min_all_freq[population=="SelR2_38"], xlab = "SelR1_77", ylab= "SelR2_38",cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5))
+#with(dat_long, plot(x=min_all_freq[population=="SelR2_77"],y= min_all_freq[population=="SelR2_38"], xlab = "SelR2_77", ylab= "SelR2_38",cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5))
+#with(dat_long, plot(x=min_all_freq[population=="SelR1_77"],y= min_all_freq[population=="SelR1_38"], xlab = "SelR1_77", ylab= "SelR1_38",cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5))
 
 
 
+#par(mfrow=c(3,1))
+#with(ddiff_115,plot(x=minallele_freq[Treatment=="SelR1"], y= minallele_freq[Treatment=="SelR2"], main = "Generation 115 Selection Lineages"))
+#with(ddiff_77,plot(x=minallele_freq[Treatment=="SelR1"], y= minallele_freq[Treatment=="SelR2"], main = "Generation 77 Selection Lineages"))
+#with(ddiff_38,plot(x=minallele_freq[Treatment=="SelR1"], y= minallele_freq[Treatment=="SelR2"], main = "Generation 38 Selection Lineages"))
+
+
+par(mfrow=c(1,1))
 
 
 d_plot <- ggplot(dat_long, aes(x= pos, y = min_all_freq, colour = population))
 d_plot2 <- d_plot+geom_point() + ggtitle("all") 
-print(d_plot2)
+#print(d_plot2)
 
 #Spliting each generation:
 d_38 <- dat_long2[ which(dat_long2$Generation==38),]
@@ -187,18 +199,54 @@ d_115 <- dat_long2[ which(dat_long2$Generation==115),]
 #head(ddiff_115)
 pl_115 <- ggplot(d_115, aes(x= pos, y = min_all_freq, colour = Treatment))
 pl2_115 <- pl_115+geom_point() + ggtitle(115)
-print(pl2_115)
+#print(pl2_115)
 
 
 #head(ddiff_38)
 pl_38 <- ggplot(d_38, aes(x= pos, y = min_all_freq, colour = Treatment))
 pl2_38 <- pl_38+geom_point() + ggtitle(38)
-print(pl2_38)
+#print(pl2_38)
 
 #head(ddiff_77)
 pl_77 <- ggplot(d_77, aes(x= pos, y = min_all_freq, colour = Treatment))
 pl2_77 <- pl_77+geom_point() + ggtitle(77)
-print(pl2_77)
+#print(pl2_77)
 
 #Combine plots together to show in one window:
+#multiplot(d_plot2, pl2_77, pl2_38, pl2_115,cols=2)
+
+
+#Plots for analysis
+plot_sel_2 <- ggplot(ddiff_sel, aes(x= pos, y = minallele_freq, colour = Generation, shape = Replicate))
+plot2_sel_2 <- plot_sel_2+geom_point() + ggtitle("Selection")
+
+#Plots for analysis:
+
+#Selection
+print(plot2_sel_2)
+
+print(gendiff_plot56)
+
+#Plot of allele frequencies
 multiplot(d_plot2, pl2_77, pl2_38, pl2_115,cols=2)
+
+#Plot of differences from base generation
+multiplot(ddiff_plot2, plot2_77, plot2_38, plot2_115,cols=2)
+
+#Correlation Plots
+par(mfrow=c(3,2))
+with(dat_long, plot(x=min_all_freq[population=="SelR1_115"],y= min_all_freq[population=="SelR2_77"], xlab = "SelR1_115", ylab= "SelR2_77",cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5))
+with(dat_long, plot(x=min_all_freq[population=="SelR2_115"],y= min_all_freq[population=="SelR2_77"], xlab = "SelR2_115", ylab= "SelR2_77",cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5))
+with(dat_long, plot(x=min_all_freq[population=="SelR1_115"],y= min_all_freq[population=="SelR1_77"], xlab = "SelR1_115", ylab= "SelR1_77",cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5))
+
+with(dat_long, plot(x=min_all_freq[population=="SelR1_77"],y= min_all_freq[population=="SelR2_38"], xlab = "SelR1_77", ylab= "SelR2_38",cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5))
+with(dat_long, plot(x=min_all_freq[population=="SelR2_77"],y= min_all_freq[population=="SelR2_38"], xlab = "SelR2_77", ylab= "SelR2_38",cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5))
+with(dat_long, plot(x=min_all_freq[population=="SelR1_77"],y= min_all_freq[population=="SelR1_38"], xlab = "SelR1_77", ylab= "SelR1_38",cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5))
+
+
+
+par(mfrow=c(3,1))
+with(ddiff_115,plot(x=minallele_freq[Treatment=="SelR1"], y= minallele_freq[Treatment=="SelR2"], main = "Generation 115 Selection Lineages"))
+with(ddiff_77,plot(x=minallele_freq[Treatment=="SelR1"], y= minallele_freq[Treatment=="SelR2"], main = "Generation 77 Selection Lineages"))
+with(ddiff_38,plot(x=minallele_freq[Treatment=="SelR1"], y= minallele_freq[Treatment=="SelR2"], main = "Generation 38 Selection Lineages"))
+
