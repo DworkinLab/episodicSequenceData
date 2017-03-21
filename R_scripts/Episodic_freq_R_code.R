@@ -153,4 +153,52 @@ dat
 
 
 
+##Correlations:
 
+#with(DGRP_sub, cor(prop_spider[Sex == "Female"],prop_spider[Sex == "Male"] ))
+#with(DGRP_sub, plot(x = prop_spider[Sex == "Female"],y = prop_spider[Sex == "Male"], xlab = "Females", ylab = "Males", abline(line2), main = "Male Female correlation: proportion with spider"))
+dat_long <- dat_long[ -which(dat_long$population=="basePops"),]
+
+dat_long2 <- dat_long %>% 
+  separate(population, c('Treatment', "Generation"), "_")
+head(dat_long2)
+with(dat_long2, cor(min_all_freq[Treatment =="SelR1"], min_all_freq[Treatment=="SelR2"]))
+with(dat_long2, plot(x=min_all_freq[Treatment =="SelR1"],y= min_all_freq[Treatment=="SelR2"]))
+
+head(dat_long)
+with(dat_long, plot(x=min_all_freq[population=="SelR1_115"],y= min_all_freq[population=="SelR2_77"]))
+
+head(ddiff_115)
+with(ddiff_115,plot(x=minallele_freq[Treatment=="SelR1"], y= minallele_freq[Treatment=="SelR2"]))
+
+
+
+
+
+d_plot <- ggplot(dat_long, aes(x= pos, y = min_all_freq, colour = population))
+d_plot2 <- d_plot+geom_point() + ggtitle("all") 
+print(d_plot2)
+
+#Spliting each generation:
+d_38 <- dat_long2[ which(dat_long2$Generation==38),]
+d_77 <- dat_long2[ which(dat_long2$Generation==77),]
+d_115 <- dat_long2[ which(dat_long2$Generation==115),]
+
+#head(ddiff_115)
+pl_115 <- ggplot(d_115, aes(x= pos, y = min_all_freq, colour = Treatment))
+pl2_115 <- pl_115+geom_point() + ggtitle(115)
+print(pl2_115)
+
+
+#head(ddiff_38)
+pl_38 <- ggplot(d_38, aes(x= pos, y = min_all_freq, colour = Treatment))
+pl2_38 <- pl_38+geom_point() + ggtitle(38)
+print(pl2_38)
+
+#head(ddiff_77)
+pl_77 <- ggplot(d_77, aes(x= pos, y = min_all_freq, colour = Treatment))
+pl2_77 <- pl_77+geom_point() + ggtitle(77)
+print(pl2_77)
+
+#Combine plots together to show in one window:
+multiplot(d_plot2, pl2_77, pl2_38, pl2_115,cols=2)
