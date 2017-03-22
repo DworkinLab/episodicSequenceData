@@ -11,9 +11,10 @@ summary(episodic_freq)
 #Remove any that have all populations minor allele frequency of 0
 episodic_freq$sum <- rowSums(episodic_freq[,6:19])
 head(episodic_freq)
-episodic_freq_sub <- episodic_freq[ -which(episodic_freq$sum<0.25),]
+episodic_freq_sub <- episodic_freq[ -which(episodic_freq$sum<0.05),]
 
 summary(episodic_freq_sub)
+dim(episodic_freq_sub)
 #171 sites of 10000 that have allele frequncies over 25%
 
 episodic_freq_sub <- subset(episodic_freq_sub, select = -c(sum) )
