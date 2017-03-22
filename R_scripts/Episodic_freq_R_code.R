@@ -226,7 +226,7 @@ pl2_77 <- pl_77+geom_point() + ggtitle(77)
 
 #Plots for analysis
 plot_sel_2 <- ggplot(ddiff_sel, aes(x= pos, y = minallele_freq, colour = Generation, shape = Replicate))
-plot2_sel_2 <- plot_sel_2+geom_point() + ggtitle("Selection")
+plot2_sel_2 <- plot_sel_2+geom_point() + ggtitle("Selection difference from base generation")
 
 #Plots for analysis:
 
