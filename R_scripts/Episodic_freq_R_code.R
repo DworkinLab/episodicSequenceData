@@ -2,24 +2,32 @@
 
 #packages:
 source('episodic_packages.R')
-
+#??haplotype
 #Working Dir ==Scripts
 episodic_freq <- sync_to_frequencies(file="../R_Data/episodic_data_2R_subset.sync", base.pops=c(rep(FALSE,12), TRUE), header= FALSE)
 colnames(episodic_freq) <- c("chr", "pos", "ref","minallele","majallele", 'basePops' ,"ConR1_115", "ConR2_115", "SelR1_115", "SelR2_115", "ConR1_38", "ConR2_38", "SelR1_38", "SelR2_38", "ConR1_77", "ConR2_77", "SelR1_77", "SelR2_77", "AncR1_0") 
 
+summary(episodic_freq)
 #Remove any that have all populations minor allele frequency of 0
 episodic_freq$sum <- rowSums(episodic_freq[,6:19])
 head(episodic_freq)
 episodic_freq_sub <- episodic_freq[ -which(episodic_freq$sum<0.25),]
 
 summary(episodic_freq_sub)
+#171 sites of 10000 that have allele frequncies over 25%
 
 episodic_freq_sub <- subset(episodic_freq_sub, select = -c(sum) )
 ##Copied
 
+#Why some with N/A
+episodic_freq[pos==10635699]
+
+#Remove na with na.omit
 
 dat <- na.omit(episodic_freq_sub)
-summary((dat))
+
+
+#summary((dat))
 dat_long <- gather(dat, population, min_all_freq, basePops:AncR1_0)
 print(dat_long)
 
@@ -47,7 +55,7 @@ ddiff_long <- ddiff_long[ -which(ddiff_long$minallele_freq==0),]
 #ddiff_long$pos <- as.character(ddiff_long$pos)
 #plot of every position, and the change from the base generation (0 == base generation)
 ddiff_plot <- ggplot(ddiff_long, aes(x= pos, y = minallele_freq, colour = population_diff))
-ddiff_plot2 <- ddiff_plot+geom_point() + ggtitle("all") 
+ddiff_plot2 <- ddiff_plot+geom_point() + ggtitle("All sequences change from base generation") 
 #+ guides(colour=FALSE)
 #print(ddiff_plot2)
 
@@ -68,18 +76,18 @@ ddiff_115 <- ddiff_long2[ which(ddiff_long2$Generation==115),]
 
 #head(ddiff_115)
 plot_115 <- ggplot(ddiff_115, aes(x= pos, y = minallele_freq, colour = Treatment))
-plot2_115 <- plot_115+geom_point() + ggtitle(115)
+plot2_115 <- plot_115+geom_point() + ggtitle("delta115")
 #print(plot2_115)
 
 
 #head(ddiff_38)
 plot_38 <- ggplot(ddiff_38, aes(x= pos, y = minallele_freq, colour = Treatment))
-plot2_38 <- plot_38+geom_point() + ggtitle(38)
+plot2_38 <- plot_38+geom_point() + ggtitle("dalta38")
 #print(plot2_38)
 
 #head(ddiff_77)
 plot_77 <- ggplot(ddiff_77, aes(x= pos, y = minallele_freq, colour = Treatment))
-plot2_77 <- plot_77+geom_point() + ggtitle(77)
+plot2_77 <- plot_77+geom_point() + ggtitle("delta77")
 #print(plot2_77)
 
 #Combine plots together to show in one window:
@@ -250,3 +258,9 @@ with(ddiff_115,plot(x=minallele_freq[Treatment=="SelR1"], y= minallele_freq[Trea
 with(ddiff_77,plot(x=minallele_freq[Treatment=="SelR1"], y= minallele_freq[Treatment=="SelR2"], main = "Generation 77 Selection Lineages"))
 with(ddiff_38,plot(x=minallele_freq[Treatment=="SelR1"], y= minallele_freq[Treatment=="SelR2"], main = "Generation 38 Selection Lineages"))
 
+
+
+#par(mfrow=c(3,1))
+#with(d_115,plot(x=min_all_freq[Treatment=="SelR1"], y= min_all_freq[Treatment=="SelR2"], main = "Generation 115 Selection Lineages minor allele frequencies"))
+#with(d_77,plot(x=min_all_freq[Treatment=="SelR1"], y= min_all_freq[Treatment=="SelR2"], main = "Generation 77 Selection Lineages minor allele frequencies"))
+#with(d_38,plot(x=min_all_freq[Treatment=="SelR1"], y= min_all_freq[Treatment=="SelR2"], main = "Generation 38 Selection Lineages minor allele frequencies"))
