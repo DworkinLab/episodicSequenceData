@@ -2897,3 +2897,13 @@ Playing on R: see R script "sync_file.R"
 
 
 Want to look at uniform coverage! says slide 16: http://drrobertkofler.wikispaces.com/file/view/pooledAnalysis_part2.pdf/489488298/pooledAnalysis_part2.pdf
+
+
+
+Viewing in IGV on brians machine:
+Load IGV (java -Xmx750m -jar igv.jar) from igv direcotry on machine
+"current" in brians machine??/usr/local/igv/current
+
+```
+java -Xmx2g -jar /usr/local/igv/current/igv.jar
+```
