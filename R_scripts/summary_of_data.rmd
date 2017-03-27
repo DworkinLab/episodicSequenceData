@@ -1,0 +1,7 @@
+---
+title: "Sequence Data: Paul Knoops"
+---
+
+```{r, warning=FALSE, echo=FALSE, include=FALSE}
+source("episodic_sub5.R")
+```

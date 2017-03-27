@@ -252,12 +252,15 @@ with(dat_long, plot(x=min_all_freq[population=="SelR1_77"],y= min_all_freq[popul
 with(dat_long, plot(x=min_all_freq[population=="SelR2_77"],y= min_all_freq[population=="SelR2_38"], xlab = "SelR2_77", ylab= "SelR2_38",cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5))
 with(dat_long, plot(x=min_all_freq[population=="SelR1_77"],y= min_all_freq[population=="SelR1_38"], xlab = "SelR1_77", ylab= "SelR1_38",cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5))
 
+par(mfrow=c(2,2))
 
+with(dat_long, plot(x=min_all_freq[population=="SelR2_115"],y= min_all_freq[population=="SelR1_77"], xlab = "SelR2_115", ylab= "SelR1_77",cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5))
+with(dat_long, plot(x=min_all_freq[population=="SelR1_115"],y= min_all_freq[population=="SelR2_77"], xlab = "SelR1_115", ylab= "SelR2_77",cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5))
 
 par(mfrow=c(3,1))
-with(ddiff_115,plot(x=minallele_freq[Treatment=="SelR1"], y= minallele_freq[Treatment=="SelR2"], main = "Generation 115 Selection Lineages"))
-with(ddiff_77,plot(x=minallele_freq[Treatment=="SelR1"], y= minallele_freq[Treatment=="SelR2"], main = "Generation 77 Selection Lineages"))
-with(ddiff_38,plot(x=minallele_freq[Treatment=="SelR1"], y= minallele_freq[Treatment=="SelR2"], main = "Generation 38 Selection Lineages"))
+with(d_115,plot(x=min_all_freq[Treatment=="SelR1"], y= min_all_freq[Treatment=="SelR2"], main = "Generation 115 Selection Lineages"))
+with(d_77,plot(x=min_all_freq[Treatment=="SelR1"], y= min_all_freq[Treatment=="SelR2"], main = "Generation 77 Selection Lineages"))
+with(d_38,plot(x=min_all_freq[Treatment=="SelR1"], y= min_all_freq[Treatment=="SelR2"], main = "Generation 38 Selection Lineages"))
 
 
 
