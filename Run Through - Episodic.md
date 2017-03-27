@@ -2895,6 +2895,63 @@ Playing on R: see R script "sync_file.R"
 
 
 
+Break the 2R for R
+```
+wc -l episodic_data_2R.sync
+```
+```
+20547525 episodic_data_2R.sync
+```
+
+10000 bp == File size = 1.8MB
+example:
+```
+sed -n ' 10268762, 10278762 p' episodic_data_2R.sync > episodic_data_2R_subset.sync
+```
+Try 100000
+20547525/20 == 1027376
+
+0,1027376,2054752,3082128,4109504,5136880,6164256,7191632,8219008,9246384,10273760,11301136,12328512,13355888,14383264,15410640,16438016,17465392,18492768,19520144,20547525
+
+input = ../episodic_data_2R.sync
+Run from outputs: /home/paul/episodicData/mpileup_dir/episodic_data2R_subsetting/
+```
+sed -n ' 1, 1027376 p' ../episodic_data_2R.sync > episodic_data_2R_1.sync
+```
+== 179 MB
+
+Try One up ==360MB (remove the one above)
+0,2054752,4109504,6164256,8219008,10273760,12328512,14383264,16438016,18492768,20547525
+```
+sed -n ' 1, 2054752 p' ../episodic_data_2R.sync > episodic_data_2R_1.sync
+```
+
+```
+#scp paul@info.mcmaster.ca:/home/paul/episodicData/mpileup_dir/episodic_data2R_subsetting/episodic_data_2R_1.sync ~/MyDocuments/episodic_local_work
+```
+After filtering: still 22 Mb
+
+#Next section:
+```
+sed -n ' 2054753, 4109504 p' ../episodic_data_2R.sync > episodic_data_2R_2.sync
+```
+```
+The rest:
+```
+sed -n ' 4109505, 6164256 p' ../episodic_data_2R.sync > episodic_data_2R_3.sync
+sed -n ' 6164257, 8219008 p' ../episodic_data_2R.sync > episodic_data_2R_4.sync
+sed -n ' 8219009, 10273760 p' ../episodic_data_2R.sync > episodic_data_2R_5.sync
+sed -n ' 10273761, 12328512 p' ../episodic_data_2R.sync > episodic_data_2R_6.sync
+sed -n ' 12328513, 14383264 p' ../episodic_data_2R.sync > episodic_data_2R_7.sync
+sed -n ' 14383265, 16438016 p' ../episodic_data_2R.sync > episodic_data_2R_8.sync
+sed -n ' 16438017, 18492768 p' ../episodic_data_2R.sync > episodic_data_2R_9.sync
+sed -n ' 18492769, 20547525 p' ../episodic_data_2R.sync > episodic_data_2R_10.sync
+```
+From local
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/mpileup_dir/episodic_data2R_subsetting/*.sync ~/MyDocuments/episodic_local_work
+```
+
 
 Want to look at uniform coverage! says slide 16: http://drrobertkofler.wikispaces.com/file/view/pooledAnalysis_part2.pdf/489488298/pooledAnalysis_part2.pdf
 
@@ -2907,3 +2964,5 @@ Load IGV (java -Xmx750m -jar igv.jar) from igv direcotry on machine
 ```
 java -Xmx2g -jar /usr/local/igv/current/igv.jar
 ```
+
+
