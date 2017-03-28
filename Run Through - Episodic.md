@@ -2935,7 +2935,7 @@ After filtering: still 22 Mb
 ```
 sed -n ' 2054753, 4109504 p' ../episodic_data_2R.sync > episodic_data_2R_2.sync
 ```
-```
+
 The rest:
 ```
 sed -n ' 4109505, 6164256 p' ../episodic_data_2R.sync > episodic_data_2R_3.sync
@@ -2964,5 +2964,9 @@ Load IGV (java -Xmx750m -jar igv.jar) from igv direcotry on machine
 ```
 java -Xmx2g -jar /usr/local/igv/current/igv.jar
 ```
-
-
+Need to index bam files:
+```
+samtools index *.bam
+#Do individually
+```
+Odd error with F115ConR2.....? something with SAM file....
