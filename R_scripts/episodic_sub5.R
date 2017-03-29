@@ -15,8 +15,11 @@ episodic_freq_sub <- subset(episodic_freq_sub, select = -c(max) )
 head(episodic_freq_sub)
 dim(episodic_freq_sub)
 
-#ep_long <- gather(episodic_freq, population, min_all_freq, basePops:AncR1_0)
-#ep_long <- ep_long[ -which(ep_long$population=="basePops"),]
-#head(ep_long)
-#ep_long2 <- ep_long[ which(ep_long$min_all_freq>0.9),]
-#ep_long2
+ep_long <- gather(episodic_freq, population, min_all_freq, basePops:AncR1_0)
+ep_long <- ep_long[ -which(ep_long$population=="basePops"),]
+head(ep_long)
+ep_long2 <- ep_long[ which(ep_long$min_all_freq>0.9),]
+ep_long2
+
+
+10636163
