@@ -2970,3 +2970,7 @@ samtools index *.bam
 #Do individually
 ```
 Odd error with F115ConR2.....? something with SAM file....
+
+Same with F77: fixed with 115, had another copy that could be opened
+samtools index: failed to open "F77ConR2_ATTCCT_merged_aligned_pe.final.bam": Exec format error
+
