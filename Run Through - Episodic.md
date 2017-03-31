@@ -2975,3 +2975,4 @@ Same with F77: fixed with 115, had another copy that could be opened
 samtools index: failed to open "F77ConR2_ATTCCT_merged_aligned_pe.final.bam": Exec format error
 Error looked to be small file size, when edditing and moving, must have removed the real file: run through again ?
 Had an extra copy of F115, but not F77; need to run F77 again (from Trim_dir)
+Run Regular scripts; just make a new trim dir with a copu of F77ConR2.
