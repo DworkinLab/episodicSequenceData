@@ -12,25 +12,62 @@ ex. mkdir novoalign (project), and mkdir novo_dir (mapping outputs)
 
 ex. /usr/local/novoalign
 
-3) Novoindex referenece
 
+3) Make a scripts directory to house scripts to run 
 
+ex. mkdir novo_scripts
 
+4) Novoindex reference
 
+Need index dir: mkdir novo_index
 
-Modify example script
+Example Script:
+```
+#! /bin/bash
+
+#Create variable for location of reference genome
+ref_genome=/home/paul/episodicData/index_dir/dmel-all-chromosome-r5.57_2.fasta
+
+#Variables for project, novoalign, and output directory
+project_dir=/home/paul/episodicData/Novoalign
+novoalign=/usr/local/novoalign
+novo_index=${project_dir}/novo_index
+
+#Index the reference
+${novoalign}/novoindex ${novo_index}/dmel-all-chromosome-r5.57_2.nix  ${ref_genome}
+```
+
+5) Run Novoalign
+
+Flags
+-d
+-f
+-i
+###,##
+-o
 
 ```
 novoalign -d hg18.nix -f SRR040810_1.fastq.gz SRR040810_2.fastq.gz -i 200,50 -o SAM > alignments.sam > log.txt
 ```
+
 ```
 #! /bin/bash
 
+#Variable for project:
 project_dir=/home/paul/episodicData/Novoalign
-index_dir=${project_dir}/index_dir
-ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+
+#Create variable for reference genome
+novo_index=${project_dir}/novo_index/dmel-all-chromosome-r5.57_2.nix
+
+#Variable for path to Novoalign
+novoalign=/usr/local/novoalign
+
+#Path the trim outputs to be mapped
 trim_dir=${project_dir}/trim_dir
-novoalign=/usr/local/novoalign/novoalign
+
+#Path to output directory
 novo_dir=${project_dir}/novo_dir
+
+${novoalign}/novoalign -d ${novo_index} -f input_1.gz input_2.gz -i ###,## -o SAM > output_1.sam > log.txt
 
 ```
