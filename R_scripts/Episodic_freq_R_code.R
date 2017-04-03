@@ -5,7 +5,9 @@ source('episodic_packages.R')
 #??haplotype
 #Working Dir ==Scripts
 episodic_freq <- sync_to_frequencies(file="../R_Data/episodic_data_2R_subset.sync", base.pops=c(rep(FALSE,12), TRUE), header= FALSE)
-colnames(episodic_freq) <- c("chr", "pos", "ref","minallele","majallele", 'basePops' ,"ConR1_115", "ConR2_115", "SelR1_115", "SelR2_115", "ConR1_38", "ConR2_38", "SelR1_38", "SelR2_38", "ConR1_77", "ConR2_77", "SelR1_77", "SelR2_77", "AncR1_0") 
+#Changes selR1 and selR2
+
+colnames(episodic_freq) <- c("chr", "pos", "ref","minallele","majallele", 'basePops' ,"ConR1_115", "ConR2_115", "SelR2_115", "SelR1_115", "ConR1_38", "ConR2_38", "SelR1_38", "SelR2_38", "ConR1_77", "ConR2_77", "SelR1_77", "SelR2_77", "AncR1_0") 
 
 summary(episodic_freq)
 #Remove any that have all populations minor allele frequency of 0
@@ -268,3 +270,15 @@ with(d_38,plot(x=min_all_freq[Treatment=="SelR1"], y= min_all_freq[Treatment=="S
 #with(d_115,plot(x=min_all_freq[Treatment=="SelR1"], y= min_all_freq[Treatment=="SelR2"], main = "Generation 115 Selection Lineages minor allele frequencies"))
 #with(d_77,plot(x=min_all_freq[Treatment=="SelR1"], y= min_all_freq[Treatment=="SelR2"], main = "Generation 77 Selection Lineages minor allele frequencies"))
 #with(d_38,plot(x=min_all_freq[Treatment=="SelR1"], y= min_all_freq[Treatment=="SelR2"], main = "Generation 38 Selection Lineages minor allele frequencies"))
+
+
+
+#Ancestor base natural starting variation
+dat <- episodic_freq
+datbase <- subset(dat,select = c(pos, minallele, AncR1_0))
+
+
+head(datbase)
+gbase <- ggplot(datbase, aes(x=pos, y=AncR1_0))
+gbase2 <- gbase +geom_point() + ylab("Minor Allele Frequency") + xlab("2R Position")
+gbase2
