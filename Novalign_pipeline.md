@@ -29,7 +29,7 @@ Example Script:
 ref_genome=/home/paul/episodicData/index_dir/dmel-all-chromosome-r5.57_2.fasta
 
 #Variables for project, novoalign, and output directory
-project_dir=/home/paul/episodicData/Novoalign
+project_dir=/home/paul/episodicData/novoalign
 novoalign=/usr/local/novoalign
 novo_index=${project_dir}/novo_index
 
@@ -40,15 +40,13 @@ ${novoalign}/novoindex ${novo_index}/dmel-all-chromosome-r5.57_2.nix  ${ref_geno
 5) Run Novoalign
 
 Flags
--d
--f
--i
-###,##
--o
+-d == Full pathname of indexed reference sequence from novoindex
+-f == Files containing the read sequences to be aligned
+-o == Specifies output report format and options (SAM)
 
-```
-novoalign -d hg18.nix -f SRR040810_1.fastq.gz SRR040810_2.fastq.gz -i 200,50 -o SAM > alignments.sam > log.txt
-```
+-i ###,## ==
+Sets fragment orientation and approximate fragment length for proper pairs.
+ex. -i 250 50  Defaults to paired end Illumina or Mate Pair ABI with 250bp insert and 50bp standard deviation
 
 ```
 #! /bin/bash
@@ -63,11 +61,19 @@ novo_index=${project_dir}/novo_index/dmel-all-chromosome-r5.57_2.nix
 novoalign=/usr/local/novoalign
 
 #Path the trim outputs to be mapped
-trim_dir=${project_dir}/trim_dir
+trim_dir=${project_dir}/../trim_dir
 
 #Path to output directory
 novo_dir=${project_dir}/novo_dir
 
-${novoalign}/novoalign -d ${novo_index} -f input_1.gz input_2.gz -i ###,## -o SAM > output_1.sam > log.txt
 
+files=(${trim_dir}/*_R1_PE.fastq.gz)
+
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _R1_PE.fastq.gz`
+${novoalign}/novoalign -d ${novo_index} -f  ${trim_dir}/${base}_R1_PE.fastq.gz ${trim_dir}/${base}_R2_PE.fastq.gz -i 200,50 -o SAM > ${novo_dir}/${base}_novo.sam > log.txt
+
+done
 ```
