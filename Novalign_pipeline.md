@@ -38,8 +38,14 @@ ${novoalign}/novoindex ${novo_index}/dmel-all-chromosome-r5.57_2.nix  ${ref_geno
 ```
 
 5) Run Novoalign
+Note: Compressed read files are not supported in unlicensed versions.
 
-Flags
+Need to unzip (in trimmomatic output dir)
+```
+gunzip *.gz
+```
+
+Novoalign Flags
 -d == Full pathname of indexed reference sequence from novoindex
 -f == Files containing the read sequences to be aligned
 -o == Specifies output report format and options (SAM)
@@ -47,12 +53,14 @@ Flags
 -i ###,## ==
 Sets fragment orientation and approximate fragment length for proper pairs.
 ex. -i 250 50  Defaults to paired end Illumina or Mate Pair ABI with 250bp insert and 50bp standard deviation
+See Kofler *et al.* 2016 for some idea of different flags 
 
+The script
 ```
 #! /bin/bash
 
 #Variable for project:
-project_dir=/home/paul/episodicData/Novoalign
+project_dir=/home/paul/episodicData/novoalign
 
 #Create variable for reference genome
 novo_index=${project_dir}/novo_index/dmel-all-chromosome-r5.57_2.nix
@@ -61,19 +69,25 @@ novo_index=${project_dir}/novo_index/dmel-all-chromosome-r5.57_2.nix
 novoalign=/usr/local/novoalign
 
 #Path the trim outputs to be mapped
-trim_dir=${project_dir}/../trim_dir
+trim_dir=/home/paul/episodicData/trim_dir
 
 #Path to output directory
 novo_dir=${project_dir}/novo_dir
 
 
-files=(${trim_dir}/*_R1_PE.fastq.gz)
+files=(${trim_dir}/*_R1_PE.fastq)
 
 for file in ${files[@]}
 do
 name=${file}
-base=`basename ${name} _R1_PE.fastq.gz`
-${novoalign}/novoalign -d ${novo_index} -f  ${trim_dir}/${base}_R1_PE.fastq.gz ${trim_dir}/${base}_R2_PE.fastq.gz -i 200,50 -o SAM > ${novo_dir}/${base}_novo.sam > log.txt
+base=`basename ${name} _R1_PE.fastq`
+${novoalign}/novoalign -d ${novo_index} -f  ${trim_dir}/${base}_R1_PE.fastq ${trim_dir}/${base}_R2_PE.fastq -i 200,50 -o SAM > ${novo_dir}/${base}_novo.sam > log_novomap.txt
 
 done
+```
+
+
+Rezip files in trim_dir (saves space)
+```
+gzip *.fastq
 ```
