@@ -85,28 +85,14 @@ ${novoalign}/novoalign -d ${novo_index} -f ${trim_dir}/${base}_R1_PE.fastq ${tri
 
 done
 ```
+Takes a long time: Only uses 1 thread (100% computer)
+From novoalign reference manual: -c 99 Sets the number of threads to be used. On licensed versions it defaults 
+to the number of CPUs as reported by sysinfo(). On free version the 
+option is disabled
+
 
 
 Rezip files in trim_dir (saves space)
 ```
 gzip *.fastq
-```
-```
-F115ConR1_TAGCTT_L001_R1_PE.fastq
-F115ConR1_TAGCTT_L001_R1_SE.fastq
-F115ConR1_TAGCTT_L001_R2_PE.fastq
-F115ConR1_TAGCTT_L001_R2_SE.fastq
-F115ConR1_TAGCTT_L002_R1_PE.fastq 
-F115ConR1_TAGCTT_L002_R1_SE.fastq 
-F115ConR1_TAGCTT_L002_R2_PE.fastq 
-F115ConR1_TAGCTT_L002_R2_SE.fastq
-
-F115ConR2_GGCTAC_L001_R1_PE.fastq  
-F115ConR2_GGCTAC_L001_R1_SE.fastq 
-F115ConR2_GGCTAC_L001_R2_PE.fastq  
-F115ConR2_GGCTAC_L001_R2_SE.fastq
-F115ConR2_GGCTAC_L002_R1_PE.fastq 
-F115ConR2_GGCTAC_L002_R1_SE.fastq
-F115ConR2_GGCTAC_L002_R2_PE.fastq 
-F115ConR2_GGCTAC_L002_R2_SE.fastq
 ```
