@@ -81,7 +81,7 @@ for file in ${files[@]}
 do
 name=${file}
 base=`basename ${name} _R1_PE.fastq`
-${novoalign}/novoalign -d ${novo_index} -f  ${trim_dir}/${base}_R1_PE.fastq ${trim_dir}/${base}_R2_PE.fastq -i 200,50 -o SAM > ${novo_dir}/${base}_novo.sam > log_novomap.txt
+${novoalign}/novoalign -d ${novo_index} -f ${trim_dir}/${base}_R1_PE.fastq ${trim_dir}/${base}_R2_PE.fastq -i 200,50 -o SAM > ${novo_dir}/${base}_novo.sam
 
 done
 ```
@@ -90,4 +90,23 @@ done
 Rezip files in trim_dir (saves space)
 ```
 gzip *.fastq
+```
+```
+F115ConR1_TAGCTT_L001_R1_PE.fastq
+F115ConR1_TAGCTT_L001_R1_SE.fastq
+F115ConR1_TAGCTT_L001_R2_PE.fastq
+F115ConR1_TAGCTT_L001_R2_SE.fastq
+F115ConR1_TAGCTT_L002_R1_PE.fastq 
+F115ConR1_TAGCTT_L002_R1_SE.fastq 
+F115ConR1_TAGCTT_L002_R2_PE.fastq 
+F115ConR1_TAGCTT_L002_R2_SE.fastq
+
+F115ConR2_GGCTAC_L001_R1_PE.fastq  
+F115ConR2_GGCTAC_L001_R1_SE.fastq 
+F115ConR2_GGCTAC_L001_R2_PE.fastq  
+F115ConR2_GGCTAC_L001_R2_SE.fastq
+F115ConR2_GGCTAC_L002_R1_PE.fastq 
+F115ConR2_GGCTAC_L002_R1_SE.fastq
+F115ConR2_GGCTAC_L002_R2_PE.fastq 
+F115ConR2_GGCTAC_L002_R2_SE.fastq
 ```
