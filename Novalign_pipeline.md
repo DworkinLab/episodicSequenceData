@@ -117,6 +117,6 @@ for file in ${files[@]}
 do
 name=${file}
 base=`basename ${name} .sam`
-samtools view -b -S -q 20 ${novo_dir}/${base}.sam | samtools sort - ${novo_bam}/${base}.bam
+samtools view -b -S -q 20 ${novo_dir}/${base}.sam | samtools sort -o ${novo_bam}/${base}.bam
 done
 ```
