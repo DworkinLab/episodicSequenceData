@@ -124,9 +124,15 @@ done
 
 Next Steps:
 > Merge
+
   -- merge the base multiply
+  
 > Picard Sort
+
 > Remove Duplicates
+
 > More QC
+
 > Create mpileup
+
 > Create .sync file
