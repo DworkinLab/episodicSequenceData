@@ -123,10 +123,10 @@ done
 
 
 Next Steps:
-Merge
+> Merge
   -- merge the base multiply
-Picard Sort
-Remove Duplicates
-More QC
-Create mpileup
-Create .sync file
+> Picard Sort
+> Remove Duplicates
+> More QC
+> Create mpileup
+> Create .sync file
