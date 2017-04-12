@@ -123,9 +123,7 @@ done
 
 
 Next Steps:
-> Merge
-
-  -- merge the base multiply
+> Merge; merge the base multiply
   
 > Picard Sort
 
