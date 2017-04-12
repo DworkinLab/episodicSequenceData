@@ -118,7 +118,7 @@ for file in ${files[@]}
 do
 name=${file}
 base=`basename ${name} _R1_PE.fastq`
-echo "${novoalign}/novoalign -d ${novo_index} -f ${trim_dir}/${base}_R1_PE.fastq ${trim_dir}/${base}_R2_PE.fastq -i 200,50 -o SAM > ${novo_dir}/${base}_novo.sam" > ${base}.sh
+echo "${novoalign}/novoalign -d ${novo_index} -f ${trim_dir}/${base}_R1_PE.fastq ${trim_dir}/${base}_R2_PE.fastq -i 400,100 -o SAM > ${novo_dir}/${base}_novo.sam" > ${base}.sh
 
 done
 ```
