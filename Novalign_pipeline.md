@@ -92,12 +92,26 @@ option is disabled
 
 Running in parallel
 
-for f in {a..z} {A..Z} {0..99}
-do
-    echo hello > "$f.txt"
-done
 
+Run in scripts folder
 ```
+#! /bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Create variable for reference genome
+novo_index=${project_dir}/novo_index/dmel-all-chromosome-r5.57_2.nix
+
+#Variable for path to Novoalign
+novoalign=/usr/local/novoalign
+
+#Path the trim outputs to be mapped
+trim_dir=/home/paul/episodicData/trim_dir
+
+#Path to output directory
+novo_dir=${project_dir}/novo_dir
+
 files=(${trim_dir}/*_R1_PE.fastq)
 
 for file in ${files[@]}
