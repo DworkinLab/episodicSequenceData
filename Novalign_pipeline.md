@@ -120,3 +120,13 @@ base=`basename ${name} .sam`
 samtools view -b -S -q 20 ${novo_dir}/${base}.sam | samtools sort -o ${novo_bam}/${base}.bam
 done
 ```
+
+
+Next Steps:
+Merge
+  -- merge the base multiply
+Picard Sort
+Remove Duplicates
+More QC
+Create mpileup
+Create .sync file
