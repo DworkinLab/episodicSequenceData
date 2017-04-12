@@ -90,6 +90,25 @@ From novoalign reference manual: -c 99 Sets the number of threads to be u
 to the number of CPUs as reported by sysinfo(). On free version the 
 option is disabled
 
+Running in parallel
+
+for f in {a..z} {A..Z} {0..99}
+do
+    echo hello > "$f.txt"
+done
+
+```
+files=(${trim_dir}/*_R1_PE.fastq)
+
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _R1_PE.fastq`
+echo "${novoalign}/novoalign -d ${novo_index} -f ${trim_dir}/${base}_R1_PE.fastq ${trim_dir}/${base}_R2_PE.fastq -i 200,50 -o SAM > ${novo_dir}/${base}_novo.sam" > ${base}.sh
+
+done
+```
+
 
 
 Rezip files in trim_dir (saves space)
