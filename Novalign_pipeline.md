@@ -90,10 +90,12 @@ From novoalign reference manual: -c 99 Sets the number of threads to be u
 to the number of CPUs as reported by sysinfo(). On free version the 
 option is disabled
 
-Running in parallel
+To avoid this problem, run scripts for each in parallel
 
-
-Run in scripts folder
+1) make the script to make multiple scripts
+Make dir for all output scripts:
+./split_mappingScripts/
+Run in Scripts dir ( not split_mappingScripts)
 ```
 #! /bin/bash
 
@@ -118,7 +120,7 @@ for file in ${files[@]}
 do
 name=${file}
 base=`basename ${name} _R1_PE.fastq`
-echo "${novoalign}/novoalign -d ${novo_index} -f ${trim_dir}/${base}_R1_PE.fastq ${trim_dir}/${base}_R2_PE.fastq -i 400,100 -o SAM > ${novo_dir}/${base}_novo.sam" > ${base}.sh
+echo "${novoalign}/novoalign -d ${novo_index} -f ${trim_dir}/${base}_R1_PE.fastq ${trim_dir}/${base}_R2_PE.fastq -i 400,100 -o SAM > ${novo_dir}/${base}_novo.sam" > ./split_mappingScripts/${base}.sh
 
 done
 ```
