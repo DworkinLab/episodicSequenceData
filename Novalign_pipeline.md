@@ -53,6 +53,7 @@ Novoalign Flags
 -i ###,## ==
 Sets fragment orientation and approximate fragment length for proper pairs.
 ex. -i 250 50  Defaults to paired end Illumina or Mate Pair ABI with 250bp insert and 50bp standard deviation
+- Using 400,100 based on initial mapping with novoalign first run through
 See Kofler *et al.* 2016 for some idea of different flags 
 
 The script
@@ -81,7 +82,7 @@ for file in ${files[@]}
 do
 name=${file}
 base=`basename ${name} _R1_PE.fastq`
-${novoalign}/novoalign -d ${novo_index} -f ${trim_dir}/${base}_R1_PE.fastq ${trim_dir}/${base}_R2_PE.fastq -i 200,50 -o SAM > ${novo_dir}/${base}_novo.sam
+${novoalign}/novoalign -d ${novo_index} -f ${trim_dir}/${base}_R1_PE.fastq ${trim_dir}/${base}_R2_PE.fastq -i 400,100 -o SAM > ${novo_dir}/${base}_novo.sam
 
 done
 ```
@@ -156,7 +157,8 @@ gzip *.fastq
 ```
 
 sam-bam files: need bam directory (mkdir novo_bam)
-
+Flags:
+- b == output = .bam, -S = input .sam, -q 20 = quality mapping score of 20 (standard throughout all experiments)
 ```
 #! /bin/bash
 
@@ -182,8 +184,10 @@ done
 
 Next Steps:
 > Merge; merge the base multiply
+    > no flags
   
 > Picard Sort
+    > java -Xmx2g -Djava.io.tmpdir=${tmp} -jar ${pic} SortSam I= ${merged}/${base}.bam O= ${sort_dir}/${base}.sort.bam VALIDATION_STRINGENCY=SILENT SO=coordinate TMP_DIR=${tmp}
 
 > Remove Duplicates
 
