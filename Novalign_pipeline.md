@@ -407,14 +407,23 @@ novo_final=${project_dir}/novo_final
 #Path to output directory
 novo_GATK=${project_dir}/novo_GATK
 
-#Variable for reference genome (non-indexed for novoAlign)
+#Variable for reference genome (non-zipped)
 index_dir=/home/paul/episodicData/index_dir
-ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta
 
 #Path to GATK
 gatk=/usr/local/gatk/GenomeAnalysisTK.jar
 
-java -Xmx8g -jar ${gatk} -I ${novo_final}/*.bam -R ${ref_genome} -T RealignerTargetCreator -o ${novo_GATK}/${project_name}.intervals
 
-java -Xmx8g -jar ${gatk} -I ${novo_final}/*.bam -R ${ref_genome} -T IndelRealigner -targetIntervals ${novo_GATK}/${project_name}.intervals -o ${novo_final}/*_realigned.bam
+files=(${novo_final}/*.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} .bam`
+
+java -Xmx8g -jar ${gatk} -I ${novo_final}/${base}.bam -R ${ref_genome} -T RealignerTargetCreator -o ${novo_GATK}/${base}.intervals
+
+java -Xmx8g -jar ${gatk} -I ${novo_final}/${base}.bam -R ${ref_genome} -T IndelRealigner -targetIntervals ${novo_GATK}/${base}.intervals -o ${novo_GATK}/${base}_realigned.bam
+
+done
 ```
