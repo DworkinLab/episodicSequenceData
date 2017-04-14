@@ -45,17 +45,15 @@ Need to unzip (in trimmomatic output dir)
 gunzip *.gz
 ```
 
-Novoalign Flags
--d == Full pathname of indexed reference sequence from novoindex 
-
--f == Files containing the read sequences to be aligned  
-
--o == Specifies output report format and options (SAM)  
+    > Novoalign Flags
+        -d == Full pathname of indexed reference sequence from novoindex
+        -f == Files containing the read sequences to be aligned  
+        -o == Specifies output report format and options (SAM)  
 
 -i ###,## ==
 Sets fragment orientation and approximate fragment length for proper pairs.
 
-    ex. -i 250 50  Defaults to paired end Illumina or Mate Pair ABI with 250bp insert and 50bp standard deviation
+   ex. -i 250 50  Defaults to paired end Illumina or Mate Pair ABI with 250bp insert and 50bp standard deviation
     - Using 400,100 based on initial mapping with novoalign first run through
 
 
@@ -89,6 +87,7 @@ ${novoalign}/novoalign -d ${novo_index} -f ${trim_dir}/${base}_R1_PE.fastq ${tri
 
 done
 ```
+
 Takes a long time: Only uses 1 thread (100% computer)
 
 From novoalign reference manual: -c 99 Sets the number of threads to be used. On licensed versions it defaults 
@@ -101,6 +100,7 @@ To avoid this problem, run scripts for each in parallel
 Make dir for all output scripts: mkdir split_mappingScripts
 
 Run in Scripts dir ( not split_mappingScripts)
+
 ```
 #! /bin/bash
 
@@ -162,14 +162,13 @@ gzip *.fastq
 ```
 
 ### sam-bam files: 
-    need bam directory (mkdir novo_bam)
+-- need bam directory (mkdir novo_bam)
 
-Flags:
--b == output = .bam
-
--S = input .sam
-
--q 20 = quality mapping score of 20 (standard throughout all experiments)
+    >Flags:
+        -b == output = .bam
+        -S = input .sam
+        -q 20 = quality mapping score of 20 (standard throughout all experiments)
+        
 
 ```
 #! /bin/bash
