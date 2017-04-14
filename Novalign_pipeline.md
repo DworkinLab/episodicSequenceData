@@ -149,7 +149,7 @@ echo "${map_scripts}/${base}.sh &" > ${scripts}/novo_parallel_map.sh
 
 done
 ```
-
+Change permissions and run novo_parallel_map.sh to run all files at once (can change input parametes to run subsets on different days)
 
 Rezip files in trim_dir (saves space)
 ```
@@ -185,6 +185,31 @@ done
 Next Steps:
 > Merge; merge the base multiply
     > no flags
+    > mkdir novo_merge
+
+
+```    
+#!/bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to input directory
+novo_dir=${project_dir}/novo_bam
+
+#Path to output directory
+novo_bam=${project_dir}/novo_merge
+
+
+files=(${bam_dir}/*_L001_novo.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _L001_novo.bam`
+samtools merge ${merged}/${base}_novo_merge.bam ${bam_dir}/${base}_L001_novo.bam ${bam_dir}/${base}_L002_novo.bam
+done
+
+```
   
 > Picard Sort
     > java -Xmx2g -Djava.io.tmpdir=${tmp} -jar ${pic} SortSam I= ${merged}/${base}.bam O= ${sort_dir}/${base}.sort.bam VALIDATION_STRINGENCY=SILENT SO=coordinate TMP_DIR=${tmp}
