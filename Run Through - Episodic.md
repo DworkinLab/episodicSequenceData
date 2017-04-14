@@ -2976,3 +2976,47 @@ samtools index: failed to open "F77ConR2_ATTCCT_merged_aligned_pe.final.bam": Ex
 Error looked to be small file size, when edditing and moving, must have removed the real file: run through again ?
 Had an extra copy of F115, but not F77; need to run F77 again (from Trim_dir)
 Run Regular scripts; just make a new trim dir with a copu of F77ConR2.
+
+
+
+Test for running in paralle: have two data sets for F115ConR1 and F115ConR2 bam files to be merged
+Run each in parallel:
+Make each into seperate scripts (F115ConR1_merge.sh and F115ConR2_merge.sh)
+```
+#!/bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to input directory
+novo_bam=${project_dir}/novo_bam
+
+#Path to output directory
+novo_merge=${project_dir}/novo_merge
+
+samtools merge ${novo_merge}/F115ConR1_TAGCTT_novo_merge.bam ${novo_bam}/F115ConR1_TAGCTT_L001_novo.bam ${novo_bam}/F115ConR1_TAGCTT_L002_novo.bam
+```
+
+```
+#!/bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to input directory
+novo_bam=${project_dir}/novo_bam
+
+#Path to output directory
+novo_merge=${project_dir}/novo_merge
+
+samtools merge ${novo_merge}/F115ConR2_GGCTAC_novo_merge.bam ${novo_bam}/F115ConR2_GGCTAC_L001_novo.bam ${novo_bam}/F115ConR2_GGCTAC_L002_novo.bam
+```
+
+Make new script == Parallel_merge.sh
+```
+F115ConR1_merge.sh &
+F115ConR2_merge.sh &
+
+wait
+echo "both merged"
+```
