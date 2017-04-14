@@ -46,10 +46,10 @@ gunzip *.gz
 ```
 
     > Novoalign Flags
-        -d == Full pathname of indexed reference sequence from novoindex
-        -f == Files containing the read sequences to be aligned  
-        -o == Specifies output report format and options (SAM)  
-        -i ###,## == Sets fragment orientation and approximate fragment length for proper pairs.
+        - d -- Full pathname of indexed reference sequence from novoindex
+        - f -- Files containing the read sequences to be aligned  
+        - o -- Specifies output report format and options (SAM)  
+        - i ###,## -- Sets fragment orientation and approximate fragment length for proper pairs.
              ex. -i 250 50  Defaults to paired end Illumina or Mate Pair ABI with 250bp insert and 50bp standard deviation
                 - Using 400,100 based on initial mapping with novoalign first run through
 
@@ -162,9 +162,9 @@ gzip *.fastq
 -- need bam directory (mkdir novo_bam)
 
     >Flags:
-        -b == output = .bam
-        -S = input .sam
-        -q 20 = quality mapping score of 20 (standard throughout all experiments)
+        - b -- output is .bam
+        - S -- input is .sam
+        - q 20 -- quality mapping score of 20 (standard throughout all experiments)
         
 
 ```
@@ -194,10 +194,8 @@ done
 
 ### Merge 
 --  mkdir novo_merge
-
-    > no flags
-    
-    > be sure to merge the base generation seperatly (two sequence runs)
+> no flags
+> be sure to merge the base generation seperatly (two sequence runs)
 
 ```    
 #!/bin/bash
@@ -226,13 +224,12 @@ done
 -- mkdir novo_pic and mkdir novo_tmp (was helpful, explained in flags)
 
     > Flags; 
-        -Xmx2g 
-        -Djava.io.tmpdir=${tmp}
-        -jar ${pic}
-        - I=  
-        - O= 
-        - VALIDATION_STRINGENCY=SILENT 
-        - SO=coordinate
+        - Xmx2g -- 2 Gb of memory allocated
+        - Djava.io.tmpdir=${tmp} -- using my temporary direcory due to errors in space allocation to avoid errors while running (not necessary)
+        - I -- input
+        - O -- output
+        - VALIDATION_STRINGENCY=SILENT -- stops Picard from reporting every issue that would ultimately be displayed
+        - SO=coordinate -- sort order based on coordinate
     
 ```
 #!/bin/bash
@@ -266,14 +263,13 @@ done
 -- mkdir novo_rmd
 
     > Flags;
-        -Xmx2g 
-        -jar
-        -MarkDuplicates
-        -I
-        -O
-        -M
-        -VALIDATION_STRINGENCY=SILENT
-        -REMOVE_DUPLICATES= true
+        - Xmx2g -- ""
+        - MarkDuplicates -- ""
+        - I -- ""
+        - O -- ""
+        - M -- creates an output file of statistics of duplicates found
+        - VALIDATION_STRINGENCY=SILENT -- ""
+        - REMOVE_DUPLICATES= true -- get rid of any found duplicated regions
 
 ```
 #!/bin/bash
@@ -303,9 +299,9 @@ done
 -- mkdir novo_final
 
     > Flags;
-        -q 20
-        -F 0x0004
-        -b
+        -q 20 -- ""
+        -F 0x0004 -- remove any unmapped reads (hexidecimal value for unmapped = 0x0004)
+        -b -- ""
 
 ```
 #!/bin/bash
@@ -333,9 +329,9 @@ done
 -- mkdir novo_mpileup
 
     > Flags;
-        -B
-        -Q
-        -f
+        -B -- disable BAQ (base alignment quality) computation, helps to stop false SNPs passing through due to misalignment
+        -Q -- minimum base quality (already filtered for 20, default is 13, just set to 0 and not worry about it)
+        -f -- path to reference sequence
         
 
 - Needs the reference genome: indexed version or not?
@@ -366,14 +362,12 @@ samtools mpileup -B -Q 0 -f ${ref_genome} ${novo_final}/*.bam > ${novo_mpileup}/
 --use mpileup dir
 
     > Flags;
-        -ea
-        -Xmx7g
-        -jar
-        --input
-        --output
-        --fastq=type
-        --min-qual 20
-        --threads 2
+        -Xmx7g -- ""
+        --input -- ""
+        --output -- ""
+        --fastq-type -- needed for base encoding
+        --min-qual 20 -- already set to 20 before, but since custome script, use 20 as safer assumption
+        --threads 2 -- ""
         
 ```
 #!/bin/bash
