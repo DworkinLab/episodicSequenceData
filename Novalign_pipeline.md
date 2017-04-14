@@ -49,12 +49,9 @@ gunzip *.gz
         -d == Full pathname of indexed reference sequence from novoindex
         -f == Files containing the read sequences to be aligned  
         -o == Specifies output report format and options (SAM)  
-
--i ###,## ==
-Sets fragment orientation and approximate fragment length for proper pairs.
-
-   ex. -i 250 50  Defaults to paired end Illumina or Mate Pair ABI with 250bp insert and 50bp standard deviation
-    - Using 400,100 based on initial mapping with novoalign first run through
+        -i ###,## == Sets fragment orientation and approximate fragment length for proper pairs.
+             ex. -i 250 50  Defaults to paired end Illumina or Mate Pair ABI with 250bp insert and 50bp standard deviation
+                - Using 400,100 based on initial mapping with novoalign first run through
 
 
 The script
