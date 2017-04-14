@@ -427,3 +427,5 @@ java -Xmx8g -jar ${gatk} -I ${novo_final}/${base}.bam -R ${ref_genome} -T IndelR
 
 done
 ```
+- samtools workflow with GATK:               http://www.htslib.org/workflow/
+- CRISP:                     https://github.com/vibansal/crisp
