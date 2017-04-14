@@ -4,20 +4,20 @@ Starting with sequence files that have already been inspected with md5sum and fa
 
 Novoalign link tutorial: http://www.novocraft.com/documentation/novoalign-2/novoalign-ngs-quick-start-tutorial/basic-short-read-mapping/
 
-1) Need to create directory for project (project_dir) and to house mapping outputs
+### Need to create directory for project (project_dir) and to house mapping outputs
 
 ex. mkdir novoalign (project), and mkdir novo_dir (mapping outputs)
 
-2) Find path to call Novoalign
+### Find path to call Novoalign
 
 ex. /usr/local/novoalign
 
 
-3) Make a scripts directory to house scripts to run 
+### Make a scripts directory to house scripts to run 
 
 ex. mkdir novo_scripts
 
-4) Novoindex reference
+### Novoindex reference
 
 Need index dir: mkdir novo_index
 
@@ -37,7 +37,7 @@ novo_index=${project_dir}/novo_index
 ${novoalign}/novoindex ${novo_index}/dmel-all-chromosome-r5.57_2.nix  ${ref_genome}
 ```
 
-5) Run Novoalign
+### Run Novoalign
 Note: Compressed read files are not supported in unlicensed versions.
 
 Need to unzip (in trimmomatic output dir)
@@ -46,15 +46,18 @@ gunzip *.gz
 ```
 
 Novoalign Flags
--d == Full pathname of indexed reference sequence from novoindex  
+-d == Full pathname of indexed reference sequence from novoindex 
+
 -f == Files containing the read sequences to be aligned  
+
 -o == Specifies output report format and options (SAM)  
 
 -i ###,## ==
 Sets fragment orientation and approximate fragment length for proper pairs.
-ex. -i 250 50  Defaults to paired end Illumina or Mate Pair ABI with 250bp insert and 50bp standard deviation
-- Using 400,100 based on initial mapping with novoalign first run through
-See Kofler *et al.* 2016 for some idea of different flags 
+
+    ex. -i 250 50  Defaults to paired end Illumina or Mate Pair ABI with 250bp insert and 50bp standard deviation
+    - Using 400,100 based on initial mapping with novoalign first run through
+
 
 The script
 ```
@@ -87,15 +90,16 @@ ${novoalign}/novoalign -d ${novo_index} -f ${trim_dir}/${base}_R1_PE.fastq ${tri
 done
 ```
 Takes a long time: Only uses 1 thread (100% computer)
+
 From novoalign reference manual: -c 99 Sets the number of threads to be used. On licensed versions it defaults 
-to the number of CPUs as reported by sysinfo(). On free version the 
-option is disabled
+to the number of CPUs as reported by sysinfo(). On free version the option is disabled
 
 To avoid this problem, run scripts for each in parallel
 
 1) make the script to make multiple scripts
-Make dir for all output scripts:
-./split_mappingScripts/
+
+Make dir for all output scripts: mkdir split_mappingScripts
+
 Run in Scripts dir ( not split_mappingScripts)
 ```
 #! /bin/bash
@@ -125,7 +129,8 @@ echo "${novoalign}/novoalign -d ${novo_index} -f ${trim_dir}/${base}_R1_PE.fastq
 
 done
 ```
-2) Create script to call all and run in parallel (us & which puts job in background
+
+2) Create script to call all and run in parallel (us & which puts job in background)
 ```
 #! /bin/bash
 
@@ -156,9 +161,16 @@ Rezip files in trim_dir (saves space)
 gzip *.fastq
 ```
 
-sam-bam files: need bam directory (mkdir novo_bam)
+### sam-bam files: 
+    need bam directory (mkdir novo_bam)
+
 Flags:
-- b == output = .bam, -S = input .sam, -q 20 = quality mapping score of 20 (standard throughout all experiments)
+-b == output = .bam
+
+-S = input .sam
+
+-q 20 = quality mapping score of 20 (standard throughout all experiments)
+
 ```
 #! /bin/bash
 
@@ -182,9 +194,13 @@ done
 ```
 
 
-Next Steps:
-> Merge --  mkdir novo_merge
+## Next Steps:
+
+### Merge 
+--  mkdir novo_merge
+
     > no flags
+    
     > be sure to merge the base generation seperatly (two sequence runs)
 
 ```    
@@ -210,7 +226,9 @@ done
 
 ```
   
-> Picard Sort -- mkdir novo_pic and mkdir novo_tmp (was helpful, explained in flags)
+### Picard Sort 
+-- mkdir novo_pic and mkdir novo_tmp (was helpful, explained in flags)
+
     > Flags; 
         -Xmx2g 
         -Djava.io.tmpdir=${tmp}
@@ -248,7 +266,9 @@ java -Xmx2g -Djava.io.tmpdir=${novo_tmp} -jar ${pic} SortSam I= ${novo_merge}/${
 done
 ```
 
-> Remove Duplicates -- mkdir novo_rmd
+### Remove Duplicates 
+-- mkdir novo_rmd
+
     > Flags;
         -Xmx2g 
         -jar
@@ -283,8 +303,9 @@ java -Xmx2g -jar ${pic} MarkDuplicates I= ${novo_pic}/${base}_novo_sort.bam O= $
 done
 ```
 
-> More QC -- mkdir novo_final
-    > final bam files, filtered, sorted and high quality
+### More QC and make final bam files
+-- mkdir novo_final
+
     > Flags;
         -q 20
         -F 0x0004
@@ -312,14 +333,16 @@ samtools view -q 20 -F 0x0004 -b ${novo_rmd}/${base}_novo_rmd.bam > ${novo_final
 done
 ```
 
-> Create mpileup -- mkdir novo_mpileup
+### Create mpileup
+-- mkdir novo_mpileup
+
     > Flags;
         -B
         -Q
         -f
         
 
-Needs the reference genome: indexed version or not?
+- Needs the reference genome: indexed version or not?
 
 ```
 #!/bin/bash
@@ -343,7 +366,9 @@ ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
 samtools mpileup -B -Q 0 -f ${ref_genome} ${novo_final}/*.bam > ${novo_mpileup}/${project_name}.mpileup
 ```
 
-> Create .sync file -- use mpileup dir
+### Create .sync file 
+--use mpileup dir
+
     > Flags;
         -ea
         -Xmx7g
@@ -353,6 +378,7 @@ samtools mpileup -B -Q 0 -f ${ref_genome} ${novo_final}/*.bam > ${novo_mpileup}/
         --fastq=type
         --min-qual 20
         --threads 2
+        
 ```
 #!/bin/bash
 
