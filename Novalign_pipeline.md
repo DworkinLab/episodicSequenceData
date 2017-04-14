@@ -46,9 +46,9 @@ gunzip *.gz
 ```
 
 Novoalign Flags
--d == Full pathname of indexed reference sequence from novoindex
--f == Files containing the read sequences to be aligned
--o == Specifies output report format and options (SAM)
+-d == Full pathname of indexed reference sequence from novoindex  
+-f == Files containing the read sequences to be aligned  
+-o == Specifies output report format and options (SAM)  
 
 -i ###,## ==
 Sets fragment orientation and approximate fragment length for proper pairs.
@@ -183,10 +183,9 @@ done
 
 
 Next Steps:
-> Merge; merge the base multiply
+> Merge --  mkdir novo_merge
     > no flags
-    > mkdir novo_merge
-
+    > be sure to merge the base generation seperatly (two sequence runs)
 
 ```    
 #!/bin/bash
@@ -211,13 +210,163 @@ done
 
 ```
   
-> Picard Sort
-    > java -Xmx2g -Djava.io.tmpdir=${tmp} -jar ${pic} SortSam I= ${merged}/${base}.bam O= ${sort_dir}/${base}.sort.bam VALIDATION_STRINGENCY=SILENT SO=coordinate TMP_DIR=${tmp}
+> Picard Sort -- mkdir novo_pic and mkdir novo_tmp (was helpful, explained in flags)
+    > Flags; 
+        -Xmx2g 
+        -Djava.io.tmpdir=${tmp}
+        -jar ${pic}
+        - I=  
+        - O= 
+        - VALIDATION_STRINGENCY=SILENT 
+        - SO=coordinate
+    
+```
+#!/bin/bash
 
-> Remove Duplicates
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
 
-> More QC
+#Path to input directory
+novo_merge=${project_dir}/novo_merge
 
-> Create mpileup
+#Path to Picard
+pic=/usr/local/picard-tools-1.131/picard.jar
 
-> Create .sync file
+#Path to output directory
+novo_pic=${project_dir}/novo_pic
+
+#Path to tmp
+novo_tmp=${project_dir}/novo_tmp
+
+
+files=(${novo_merge}/*)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} .bam`
+java -Xmx2g -Djava.io.tmpdir=${novo_tmp} -jar ${pic} SortSam I= ${novo_merge}/${base}.bam O= ${novo_pic}/${base}_novo_sort.bam VALIDATION_STRINGENCY=SILENT SO=coordinate TMP_DIR=${novo_tmp}
+done
+```
+
+> Remove Duplicates -- mkdir novo_rmd
+    > Flags;
+        -Xmx2g 
+        -jar
+        -MarkDuplicates
+        -I
+        -O
+        -M
+        -VALIDATION_STRINGENCY=SILENT
+        -REMOVE_DUPLICATES= true
+
+```
+#!/bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to input directory
+novo_pic=${project_dir}/novo_pic
+
+#Path to Picard
+pic=/usr/local/picard-tools-1.131/picard.jar
+
+#Path to output directory
+novo_rmd=${project_dir}/novo_rmd
+
+files=(${novo_pic}/*)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _novo_sort.bam`
+java -Xmx2g -jar ${pic} MarkDuplicates I= ${novo_pic}/${base}_novo_sort.bam O= ${novo_rmd}/${base}_novo_rmd.bam M= ${novo_rmd}/dupstat.txt VALIDATION_STRINGENCY=SILENT REMOVE_DUPLICATES= true
+done
+```
+
+> More QC -- mkdir novo_final
+    > final bam files, filtered, sorted and high quality
+    > Flags;
+        -q 20
+        -F 0x0004
+        -b
+
+```
+#!/bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to input directory
+novo_rmd=${project_dir}/novo_rmd
+
+#Path to output directory
+novo_final=${project_dir}/novo_final
+
+
+files=(${novo_rmd}/*_novo_rmd.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _novo_rmd.bam`
+samtools view -q 20 -F 0x0004 -b ${novo_rmd}/${base}_novo_rmd.bam > ${novo_final}/${base}_novo_final.bam
+done
+```
+
+> Create mpileup -- mkdir novo_mpileup
+    > Flags;
+        -B
+        -Q
+        -f
+        
+
+Needs the reference genome: indexed version or not?
+
+```
+#!/bin/bash
+
+#Variable for project name (title of mpileup file)
+project_name=novo_episodic
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to input directory
+novo_final=${project_dir}/novo_final
+
+#Path to output directory
+novo_mpileup=${project_dir}/novo_mpileup
+
+#Variable for reference genome (non-indexed for novoAlign)
+index_dir=/home/paul/episodicData/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
+
+samtools mpileup -B -Q 0 -f ${ref_genome} ${novo_final}/*.bam > ${novo_mpileup}/${project_name}.mpileup
+```
+
+> Create .sync file -- use mpileup dir
+    > Flags;
+        -ea
+        -Xmx7g
+        -jar
+        --input
+        --output
+        --fastq=type
+        --min-qual 20
+        --threads 2
+```
+#!/bin/bash
+
+#Variable for project name (title of mpileup file)
+project_name=novo_episodic
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to input/output directory
+novo_mpileup=${project_dir}/novo_mpileup
+
+#Path and variable for script from PoPoolation to create .sync files
+sync=/usr/local/popoolation/mpileup2sync.jar
+
+java -ea -Xmx7g -jar ${sync} --input ${novo_mpileup}/${project_name}.mpileup --output ${novo_mpileup}/${project_name}.sync --fastq-type sanger --min-qual 20 --threads 2
+```
