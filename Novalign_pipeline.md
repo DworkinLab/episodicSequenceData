@@ -409,7 +409,7 @@ novo_GATK=${project_dir}/novo_GATK
 
 #Variable for reference genome (non-zipped)
 index_dir=/home/paul/episodicData/index_dir
-ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57_2.fasta
 
 #Path to GATK
 gatk=/usr/local/gatk/GenomeAnalysisTK.jar
@@ -427,5 +427,41 @@ java -Xmx8g -jar ${gatk} -I ${novo_final}/${base}.bam -R ${ref_genome} -T IndelR
 
 done
 ```
+Error with reference
+need .dict (java -jar CreateSequenceDictionary.jar R= Homo_sapiens_assembly18.fasta O= Homo_sapiens_assembly18.dict)
+also need .fai (have but rerun? -- samtools faidx Homo_sapiens_assembly18.fasta )
+
+
+Needs a readgroup (dummy can work)
+java -jar picard.jar AddOrReplaceReadGroups I=input.bam O=output.bam RGID=4 RGLB=lib1 RGPL=illumina RGPU=unit1 RGSM=20
+
+```
+#! /bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to Picard
+pic=/usr/local/picard-tools-1.131/picard.jar
+
+#Path to .bam files
+novo_final=${project_dir}/novo_final
+
+files=(${novo_final}/*.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} .bam`
+
+java -jar ${pic} AddOrReplaceReadGroups I=${novo_final}/${base}.bam O=${novo_final}/${base}_RG.bam RGID=L001_L002 RGLB=library1 RGPL=illumina RGPU=None RGSM=${base}
+
+done
+
+```
+
+java -jar /usr/local/picard-tools-1.131/picard.jar AddOrReplaceReadGroups I=${novo_final}/${base}.bam O=${novo_final}/${base}_RG.bam RGID=L001_L002 RGLB=library1 RGPL=illumina RGPU=None RGSM=${base}
+
+
+
 - samtools workflow with GATK:               http://www.htslib.org/workflow/
 - CRISP:                     https://github.com/vibansal/crisp
