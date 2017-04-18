@@ -127,6 +127,9 @@ echo "${novoalign}/novoalign -d ${novo_index} -f ${trim_dir}/${base}_R1_PE.fastq
 done
 ```
 
+
+
+
 2) Create script to call all and run in parallel (us & which puts job in background)
 ```
 #! /bin/bash
