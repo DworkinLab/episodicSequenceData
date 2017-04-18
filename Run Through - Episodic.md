@@ -3020,3 +3020,6 @@ F115ConR2_merge.sh &
 wait
 echo "both merged"
 ```
+
+
+NOTE: editing names (remove A_ and add it to the back): for file in *; do mv "${file}" "${file/A_/}_A"; done
