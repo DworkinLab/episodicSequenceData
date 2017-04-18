@@ -514,5 +514,7 @@ java -Xmx8g -jar ${gatk} -I ${novo_final}/${base}_RG.bam -R ${ref_genome} -T Ind
 
 done
 ```
+
+Carful with basenames (don't make the outputs novo_aligned_novo_mapped_novo_final.bam etc.
 - samtools workflow with GATK:               http://www.htslib.org/workflow/
 - CRISP:                     https://github.com/vibansal/crisp
