@@ -11,7 +11,7 @@ library(GWASTools)
 
 #Can change to locations of files (i.e Sequence_Analysis_2016)
 getwd()
-setwd("/Users/paulknoops/Bioinformatics/Sequence_Analysis_2016/Data")
+#setwd("/Users/paulknoops/Bioinformatics/Sequence_Analysis_2016/Data")
 #Give each a unique name to work with and bring in Data
 Bowtie_13_24_2 <- read.table("episodic_data_bowtie_2_1-3,2-4.cmh.csv",h=T)
 # Can view data
