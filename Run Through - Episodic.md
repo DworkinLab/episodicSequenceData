@@ -3023,3 +3023,44 @@ echo "both merged"
 
 
 NOTE: editing names (remove A_ and add it to the back): for file in *; do mv "${file}" "${file/A_/}_A"; done
+
+### Running GATK on final.bam files for BWA-mem?
+For BWA-mem; can add a readgroup at that time; (look into adding for new run through!)
+
+1) Need an unzipped version of reference genome (make sure unzipped -- gunzip)
+2) need to make sure the index directory has a .dict (done already for novoalign practice)
+```
+#! /bin/bash
+
+pic=/usr/local/picard-tools-1.131/picard.jar
+index_dir=/home/paul/episodicData/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57_2.fasta
+
+java -jar ${pic} CreateSequenceDictionary R=${ref_genome} O=${index_dir}/dmel-all-chromosome-r5.57_2.dict
+
+```
+3) 
+```
+#! /bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to Picard
+pic=/usr/local/picard-tools-1.131/picard.jar
+
+#Path to .bam files
+novo_final=${project_dir}/novo_final
+
+files=(${novo_final}/*.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} .bam`
+
+java -jar ${pic} AddOrReplaceReadGroups I=${novo_final}/${base}.bam O=${novo_final}/${base}_RG.bam RGID=L001_L002 RGLB=library1 RGPL=illumina RGPU=None RGSM=${base}
+
+done
+```
+
+
