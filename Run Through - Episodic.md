@@ -3025,10 +3025,14 @@ echo "both merged"
 NOTE: editing names (remove A_ and add it to the back): for file in *; do mv "${file}" "${file/A_/}_A"; done
 
 ### Running GATK on final.bam files for BWA-mem?
-For BWA-mem; can add a readgroup at that time; (look into adding for new run through!)
+
+For BWA-mem; can add a readgroup at that time; (look into adding for new run through)
 
 1) Need an unzipped version of reference genome (make sure unzipped -- gunzip)
-2) need to make sure the index directory has a .dict (done already for novoalign practice)
+
+2) make a gatk directory (mkdir gatk_dir)
+
+3) need to make sure the index directory has a .dict (done already for novoalign practice == location of script below)
 ```
 #! /bin/bash
 
@@ -3039,18 +3043,24 @@ ref_genome=${index_dir}/dmel-all-chromosome-r5.57_2.fasta
 java -jar ${pic} CreateSequenceDictionary R=${ref_genome} O=${index_dir}/dmel-all-chromosome-r5.57_2.dict
 
 ```
-3) 
+
+4) Need Read Groups for GATK to run: So far as I can tell, the read groups can be anything, they just need to be there; Can edit them after the fact
+  - RGID --Read Group Identifier; for Illumina, are composed using the flowcell + lane name and number [using Lanes L001_L002 for now]
+  - RGLB -- DNA Preperation Library Identifier [library1 as place holder]
+  - RGPL - platform/technology used to produce the read [Illumina]
+  - RGPU -- Platform Unit; details on the sequencing unit (i.e run barcode) [None, used for practice]
+  - RGSM -- Sample [Using the basename which is each unique sequence]
 ```
 #! /bin/bash
 
 #Variable for project:
-project_dir=/home/paul/episodicData/novoalign
+project_dir=/home/paul/episodicData
 
 #Path to Picard
 pic=/usr/local/picard-tools-1.131/picard.jar
 
 #Path to .bam files
-novo_final=${project_dir}/novo_final
+novo_final=${project_dir}/final_bam
 
 files=(${novo_final}/*.bam)
 for file in ${files[@]}
@@ -3063,4 +3073,37 @@ java -jar ${pic} AddOrReplaceReadGroups I=${novo_final}/${base}.bam O=${novo_fin
 done
 ```
 
+5) Run GATK indelrealigner:
 
+```
+#!/bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData
+
+#Path to input directory
+final_bam=${project_dir}/final_bam
+
+#Path to output directory
+gatk_dir=${project_dir}/gatk_dir
+
+#Variable for reference genome (non-zipped)
+index_dir=/home/paul/episodicData/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57_2.fasta
+
+#Path to GATK
+gatk=/usr/local/gatk/GenomeAnalysisTK.jar
+
+
+files=(${novo_final}/*_RG.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _RG.bam`
+
+java -Xmx8g -jar ${gatk} -I ${final_bam}/${base}_RG.bam -R ${ref_genome} -T RealignerTargetCreator -o ${gatk_dir}/${base}.intervals
+
+java -Xmx8g -jar ${gatk} -I ${final_bam}/${base}_RG.bam -R ${ref_genome} -T IndelRealigner -targetIntervals ${gatk_dir}/${base}.intervals -o ${gatk_dir}/${base}_realigned.bam
+
+done
+```
