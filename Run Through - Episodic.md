@@ -3116,6 +3116,8 @@ Getting CRISP onto Brians Machine:
 3) Unpack file (```  tar xvzf CRISP-122713.tar.gz ```) 
 
 Running CRISP: For Novoalign files test:
+https://bansal-lab.github.io/software/crisp.html
+https://github.com/vibansal/crisp
 Example from Bergland:
  
  ```
