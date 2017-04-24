@@ -3107,6 +3107,7 @@ java -Xmx8g -jar ${gatk} -I ${final_bam}/${base}_RG.bam -R ${ref_genome} -T Inde
 
 done
 ```
+### Delay running GATK for now; may either change parameters, may not be working, or may ned to use Unified Genotyper
 
 
 Getting CRISP onto Brians Machine
