@@ -3110,7 +3110,65 @@ done
 ### Delay running GATK for now; may either change parameters, may not be working, or may ned to use Unified Genotyper
 
 
-Getting CRISP onto Brians Machine
+Getting CRISP onto Brians Machine:
 1) download crisp onto local machine (.tar.gz): download from https://bansal-lab.github.io/software/crisp.html
 2) SCP to remote location (``` scp CRISP-122713.tar.gz paul@info.mcmaster.ca:/home/paul ```)
 3) Unpack file (```  tar xvzf CRISP-122713.tar.gz ```) 
+
+Running CRISP: For Novoalign files test:
+Example from Bergland:
+ 
+ ```
+  	baseDir=/mnt/Alan_Backup/bam
+ 	for i in 2L 2R 3L 3R X; do
+ 		for j in $(seq 1 1500000 30000000); do
+ 			CRISP --bam $baseDir/FL_rep1.sort.rmdup.realign.bam \
+ 				--bam $baseDir/FL_rep2.sort.rmdup.realign.bam \
+ 				--bam $baseDir/GA.sort.rmdup.realign.bam \
+ 				--bam $baseDir/SC.sort.rmdup.realign.bam \
+ 				--bam $baseDir/NC.sort.rmdup.realign.bam \
+ 				--bam $baseDir/ME_rep1.sort.rmdup.realign.bam \
+ 				--bam $baseDir/ME_rep2.sort.rmdup.realign.bam \
+ 				--bam $baseDir/PA_7_2009_run2.sort.rmdup.realign.bam \
+ 				--bam $baseDir/PA_11_2009.sort.rmdup.realign.bam \
+ 				--bam $baseDir/PA_7_2010.sort.rmdup.realign.bam \
+ 				--bam $baseDir/PA_11_2010.sort.rmdup.realign.bam \
+ 				--bam $baseDir/PA_7_2011.merged_run1_run2.rmdup.realign.bam \
+ 				--bam $baseDir/PA_10_2011.sort.rmdup.realign.bam \
+ 				--bam $baseDir/PA_11_2011.merged_run1_run2.rmdup.realign.bam \
+ 				--ref /mnt/Alan/dmel_reference/all_dmel.fasta \
+ 				--poolsize 100 \
+ 				--perms 1000 \
+ 				--filterreads 0 \
+ 				--regions $i:$j-$((j+1500000-1)) \
+ 				--qvoffset 33 \
+ 				--mbq 10 \
+ 				--mmq 10 \
+ 				--minc 4 \
+ 				--VCF /mnt/Alan/new_alignments/vcf2/6d_v7.2.crisp.vcf_$i\_$j > 6d_v7.2.log_$i\_$j & 
+ 		done
+ 		wait
+ 	done
+ ```
+```
+./CRISP [options] --bams file_bam_paths --ref reference.fasta --VCF variantcalls.VCF --poolsize poolsize --bed targets.bed > variantcalls.log
+```
+
+mkdir novo_crisp
+```
+#! /bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to CRISP
+pic=/home/paul/CRISP-122713/CRISP
+
+#Path to .bam files from GATK
+novo_final=${project_dir}/novo_GATK
+
+#Output
+novo_crisp=${project_dir}/novo_crisp
+
+
+```
