@@ -3107,3 +3107,9 @@ java -Xmx8g -jar ${gatk} -I ${final_bam}/${base}_RG.bam -R ${ref_genome} -T Inde
 
 done
 ```
+
+
+Getting CRISP onto Brians Machine
+1) download crisp onto local machine (.tar.gz): download from https://bansal-lab.github.io/software/crisp.html
+2) SCP to remote location (``` scp CRISP-122713.tar.gz paul@info.mcmaster.ca:/home/paul ```)
+3) Unpack file (```  tar xvzf CRISP-122713.tar.gz ```) 
