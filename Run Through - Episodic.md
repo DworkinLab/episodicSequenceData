@@ -3186,6 +3186,27 @@ FLAGS:
 
 --VCF: VCF file to which the variant calls will be output 
 ```
+Need a list of all bam files with path names:
+```
+#! /bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to .bam files from GATK
+novo_gatk=${project_dir}/novo_GATK
+
+
+files=(${novo_gatk}/*_realigned.bam)
+
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _realigned.bam`
+echo "${novo_gatk}/${base}_realigned.bam" >> ${novo_gatk}/novo_list.bam
+
+done
+```
 
 ```
 #! /bin/bash
@@ -3215,7 +3236,7 @@ novo_crisp=${project_dir}/novo_crisp
 #name=${file}
 #base=`basename ${name} _novo_merge_novo_final_realigned.bam`
 
-${crisp} --bam ${novo_gatk}/*
+${crisp} --bams ${novo_gatk}/novo_list.bam \
 			--ref ${ref_genome} \
  				--poolsize 120 \
  				--perms 1000 \
