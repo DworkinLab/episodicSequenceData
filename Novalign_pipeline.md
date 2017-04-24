@@ -90,7 +90,8 @@ Takes a long time: Only uses 1 thread (100% computer)
 From novoalign reference manual: -c 99 Sets the number of threads to be used. On licensed versions it defaults 
 to the number of CPUs as reported by sysinfo(). On free version the option is disabled
 
-To avoid this problem, run scripts for each in parallel
+### To avoid this problem, run scripts for each in parallel
+*** alternative that may be an option: add the & after the code in the for Loop (before the done) and it should push that "for" to the background and run the next file in sequence. *** 
 
 1) make the script to make multiple scripts
 
