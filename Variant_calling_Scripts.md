@@ -1,14 +1,23 @@
 # Running Variant Calling packages: scripts
 
->CRISP
+### CRISP
 
->Varscan
+https://bansal-lab.github.io/software/crisp.html
 
->SnpEff
+https://github.com/vibansal/crisp
 
->LoFreq
+### Varscan
 
->Snape
+### SnpEff
+
+### LoFreq
+
+### Snape
+
+### FreeBayes
+
+________________________________________________________________________
+
 
 ### CRISP
 
@@ -65,7 +74,7 @@ project_dir=/home/paul/episodicData/novoalign
 #Path to CRISP
 crisp=/home/paul/CRISP-122713/CRISP
 
-#Variable for reference genome (non-zipped) ## .faidx indexed with samtools? .fai present
+#Variable for reference genome
 index_dir=/home/paul/episodicData/index_dir
 ref_genome=${index_dir}/dmel-all-chromosome-r5.57_2.fasta
 
@@ -76,24 +85,26 @@ input=${project_dir}/novo_GATK
 output=${project_dir}/novo_crisp
 
 
-files=(${input}/*_realigned.bam)
+files=(${input}/*.bam)
 
 for file in ${files[@]}
 do
 name=${file}
-base=`basename ${name} _realigned.bam`
-echo "${input}/${base}_realigned.bam" >> ${input}/${project_name}_BAMlist.txt
+base=`basename ${name} .bam`
+echo "${input}/${base}.bam" >> ${input}/${project_name}_BAMlist.txt
 
 done
 
 ${crisp} --bams ${input}/${project_name}_BAMlist.txt \
 			--ref ${ref_genome} \
- 				--poolsize 120 \
- 				--perms 1000 \
- 				--filterreads 0 \
- 				--qvoffset 33 \
- 				--mbq 10 \
- 				--mmq 10 \
- 				--minc 4 \
- 				--VCF ${output}/${project_name}.vcf > ${output}/${project_name}_variantcalls.log
+ 			--poolsize 120 \
+ 			--perms 1000 \
+ 			--filterreads 0 \
+ 			--qvoffset 33 \
+			--mbq 10 \
+			--mmq 10 \
+ 			--minc 4 \
+ 			--VCF ${output}/${project_name}.vcf > ${output}/${project_name}_variantcalls.log
 ```
+
+
