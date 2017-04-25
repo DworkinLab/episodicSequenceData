@@ -3115,9 +3115,14 @@ Getting CRISP onto Brians Machine:
 2) SCP to remote location (``` scp CRISP-122713.tar.gz paul@info.mcmaster.ca:/home/paul ```)
 3) Unpack file (```  tar xvzf CRISP-122713.tar.gz ```) 
 
-Running CRISP: For Novoalign files test:
+Running CRISP: 
+
+For Novoalign files test:
+
 https://bansal-lab.github.io/software/crisp.html
+
 https://github.com/vibansal/crisp
+
 Example from Bergland:
  
  ```
@@ -3155,10 +3160,11 @@ Example from Bergland:
 ```
 ./CRISP [options] --bams file_bam_paths --ref reference.fasta --VCF variantcalls.VCF --poolsize poolsize --bed targets.bed > variantcalls.log
 ```
+Need a direcory for outputs:
 
 mkdir novo_crisp
 
-FLAGS:
+Flags when running CRISP:
 ```
 --bams/bam: bams == textfile with list of bam file paths (one for each pool), bam == bam file for one pool, specify filename for each pool using --bam pool1.bam --bam pool2.bam .... --bam pooln.bam
 
@@ -3188,7 +3194,9 @@ FLAGS:
 
 --VCF: VCF file to which the variant calls will be output 
 ```
-Need a list of all bam files with path names:
+
+Need a list of all bam files with path names: script to call files from .bam file dir (realigned with GATK better)
+
 ```
 #! /bin/bash
 
@@ -3209,6 +3217,8 @@ echo "${novo_gatk}/${base}_realigned.bam" >> ${novo_gatk}/novo_list.bam
 
 done
 ```
+
+Running CRISP:
 
 ```
 #! /bin/bash
@@ -3251,13 +3261,16 @@ ${crisp} --bams ${novo_gatk}/novo_list.bam \
 ```
 
 Example output in VCF file
+
 ```
 #CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  F115ConR1_TAGCTT_novo_merge_novo_final_realigned        F115ConR2_GGCTAC_novo_merge_novo_final_realigned
 
 2L      891237  .       C       A       1844    LowDepth        NP=2;DP=54,61,2;VT=SNV;CT=-inf;VP=2;VF=EMpass;AC=121;AF=0.50515;EMstats=184.47:-89.69;HWEstats=-0.0;MQS=0,0,0,117;FLANKSEQ=tactaatctc:C:atatcaacat      MLAC:GQ:DP:ADf:ADr:ADb  .:0:72:12,23:17,19:1,0  .:0:45:11,8:16,9:0,1   
 ```
 
-Others to look at:
+
+
+
 
 Varscan> 
 -- mpileup2snp (following Huang et al. Evaluation of variant detection software for pooled next-generation sequence data)
