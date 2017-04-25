@@ -8,13 +8,25 @@ https://github.com/vibansal/crisp
 
 ### Varscan
 
+http://dkoboldt.github.io/varscan/
+
 ### SnpEff
+
+http://snpeff.sourceforge.net/SnpEff_manual.html#run
 
 ### LoFreq
 
+http://csb5.github.io/lofreq/installation/#binary
+
 ### Snape
 
+https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-13-239
+
+https://code.google.com/archive/p/snape-pooled/
+
 ### FreeBayes
+
+https://github.com/ekg/freebayes
 
 ________________________________________________________________________
 
