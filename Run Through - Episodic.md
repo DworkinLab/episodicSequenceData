@@ -3109,7 +3109,9 @@ done
 ```
 ### Delay running GATK for now; may either change parameters, may not be working, or may ned to use Unified Genotyper
 
-
+## Testing some variant callers:
+__________________
+### CRISP
 Getting CRISP onto Brians Machine:
 1) download crisp onto local machine (.tar.gz): download from https://bansal-lab.github.io/software/crisp.html
 2) SCP to remote location (``` scp CRISP-122713.tar.gz paul@info.mcmaster.ca:/home/paul ```)
@@ -3270,16 +3272,37 @@ Example output in VCF file
 
 
 
-
-
-Varscan> 
+### Varscan> 
 -- mpileup2snp (following Huang et al. Evaluation of variant detection software for pooled next-generation sequence data)
 
-SnpEff>
+### SnpEff>
 --
 
-LoFreq>
---
+### LoFreq>
 
-Snape>
+https://github.com/CSB5/lofreq
+
+http://csb5.github.io/lofreq/commands/
+
+Downloading LoFreq:
+1) download most recent loFreq onto local machine (lofreq_star-2.1.2_linux-x86-64.tgz): download from https://sourceforge.net/projects/lofreq/files/
+2) SCP to remote location (``` scp lofreq_star-2.1.2_linux-x86-64.tgz paul@info.mcmaster.ca:/home/paul ```)
+3) Unpack file (```  tar xvzf lofreq_star-2.1.2_linux-x86-64.tgz	 ```) 
+
+Running LoFreq:
+
+
+> Huang et al. “Evaluation of variant detection software for pooled next-generation sequence data”:
+
+*Lofreq version 2.0.0-rc-1 (commit 2.0.0-rc-1-3-g63449f7) was installed and run in “call” mode.*
+
+
+> From LoFreq Paper (Wilm et al. 2012)
+
+LoFreq
+
+LoFreq takes a samtools pileup as input (samtools mpileup; Version 0.1.18). By default samtools applies a coverage cap and we set this to be sufficiently high to avoid filtering reads in a sample (-d 100000). Whenever indels were not allowed for read mapping, we switched off samtools BAQ computation (-B). SNVs were called with a Bonferroni-corrected P-value threshold of 0.05 and the same threshold was applied for calling somatic variants with the binomial test. Unless stated otherwise, we removed variant positions with a significant strand bias (Holm–Bonferroni-corrected P-value < 0.05) from LoFreq predictions.
+
+
+### Snape>
 --
