@@ -1,16 +1,23 @@
 # Running Variant Calling packages: scripts
 
-CRISP>
-Varscan>
-SnpEff>
-LoFreq>
-Snape>
+>CRISP
+
+>Varscan
+
+>SnpEff
+
+>LoFreq
+
+>Snape
 
 ### CRISP
 
 Requirements:
+
 -- fasta reference genome (with .fai indexed)
+
 -- input .bam files (better if used with GATK indel realigner)
+
 -- CRISP available (download or on ssh already)
 
 FLAGS:
