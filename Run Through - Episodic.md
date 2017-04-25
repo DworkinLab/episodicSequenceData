@@ -3249,3 +3249,24 @@ ${crisp} --bams ${novo_gatk}/novo_list.bam \
  				--minc 4 \
  				--VCF ${novo_crisp}/${project_name}.vcf > ${project_name}_variantcalls.log
 ```
+
+Example output in VCF file
+```
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  F115ConR1_TAGCTT_novo_merge_novo_final_realigned        F115ConR2_GGCTAC_novo_merge_novo_final_realigned
+
+2L      891237  .       C       A       1844    LowDepth        NP=2;DP=54,61,2;VT=SNV;CT=-inf;VP=2;VF=EMpass;AC=121;AF=0.50515;EMstats=184.47:-89.69;HWEstats=-0.0;MQS=0,0,0,117;FLANKSEQ=tactaatctc:C:atatcaacat      MLAC:GQ:DP:ADf:ADr:ADb  .:0:72:12,23:17,19:1,0  .:0:45:11,8:16,9:0,1   
+```
+
+Others to look at:
+
+Varscan> 
+-- mpileup2snp (following Huang et al. Evaluation of variant detection software for pooled next-generation sequence data)
+
+SnpEff>
+--
+
+LoFreq>
+--
+
+Snape>
+--
