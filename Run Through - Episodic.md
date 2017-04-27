@@ -3378,8 +3378,27 @@ java -jar ${pic} AddOrReplaceReadGroups I=${input}/${base}.bam O=${input}/${base
 
 done
 ```
+5) 
+Index RG.bams
+```
+#! /bin/bash
 
-5) Run GATK indelrealigner:
+#Variable for project:
+project_dir=/home/paul/episodicData
+
+#Path to input directory
+input=${project_dir}/final_bam
+
+files=(${input}/*_RG.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _RG.bam`
+samtools index ${input}/${base}_RG.bam
+done
+```
+
+6) Run GATK indelrealigner:
 
 ```
 #!/bin/bash
@@ -3388,7 +3407,7 @@ done
 project_dir=/home/paul/episodicData
 
 #Path to input directory
-inpuut=${project_dir}/final_bam
+input=${project_dir}/final_bam
 
 #Path to output directory
 output=${project_dir}/gatk_dir
@@ -3440,8 +3459,26 @@ java -jar ${pic} AddOrReplaceReadGroups I=${input}/${base}.bam O=${input}/${base
 
 done
 ```
+3) Index RG.bams
+```
+#! /bin/bash
 
-3) Run Gatk
+#Variable for project:
+project_dir=/home/paul/episodicData/bowtie
+
+#Path to input directory
+input=${project_dir}/final_bam
+
+files=(${input}/*_RG.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _RG.bam`
+samtools index ${input}/${base}_RG.bam
+done
+```
+
+4) Run Gatk
 ```
 #!/bin/bash
 
@@ -3449,7 +3486,7 @@ done
 project_dir=/home/paul/episodicData/bowtie
 
 #Path to input directory
-inpuut=${project_dir}/final_bam
+input=${project_dir}/final_bam
 
 #Path to output directory
 output=${project_dir}/gatk_bowtie
