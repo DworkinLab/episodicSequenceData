@@ -3322,3 +3322,214 @@ Create script to create individual scripts per Bam file (similar to Novoalign sc
 
 ### Snape>
 --
+
+
+### Dropping the packages Test:
+Just using the GATK indel Realigner and CRISP for now: get them going on bowtie and BWA-mem packages:
+
+## BWA GatK:
+Copied from Above:
+
+Running GATK on final.bam files for BWA-mem?
+
+For BWA-mem; can add a readgroup at that time; (look into adding for new run through)
+
+1) Need an unzipped version of reference genome (make sure unzipped -- gunzip)
+
+2) make a gatk directory (mkdir gatk_dir)
+
+3) need to make sure the index directory has a .dict (done already for novoalign practice == location of script below)
+```
+#! /bin/bash
+
+pic=/usr/local/picard-tools-1.131/picard.jar
+index_dir=/home/paul/episodicData/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57_2.fasta
+
+java -jar ${pic} CreateSequenceDictionary R=${ref_genome} O=${index_dir}/dmel-all-chromosome-r5.57_2.dict
+
+```
+
+4) Need Read Groups for GATK to run: So far as I can tell, the read groups can be anything, they just need to be there; Can edit them after the fact
+  - RGID --Read Group Identifier; for Illumina, are composed using the flowcell + lane name and number [using Lanes L001_L002 for now]
+  - RGLB -- DNA Preperation Library Identifier [library1 as place holder]
+  - RGPL - platform/technology used to produce the read [Illumina]
+  - RGPU -- Platform Unit; details on the sequencing unit (i.e run barcode) [None, used for practice]
+  - RGSM -- Sample [Using the basename which is each unique sequence]
+```
+#! /bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData
+
+#Path to Picard
+pic=/usr/local/picard-tools-1.131/picard.jar
+
+#Path to .bam files
+input=${project_dir}/final_bam
+
+files=(${input}/*.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} .bam`
+
+java -jar ${pic} AddOrReplaceReadGroups I=${input}/${base}.bam O=${input}/${base}_RG.bam RGID=L001_L002 RGLB=library1 RGPL=illumina RGPU=None RGSM=${base}
+
+done
+```
+
+5) Run GATK indelrealigner:
+
+```
+#!/bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData
+
+#Path to input directory
+inpuut=${project_dir}/final_bam
+
+#Path to output directory
+output=${project_dir}/gatk_dir
+
+#Variable for reference genome (non-zipped)
+index_dir=/home/paul/episodicData/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57_2.fasta
+
+#Path to GATK
+gatk=/usr/local/gatk/GenomeAnalysisTK.jar
+
+
+files=(${input}/*_RG.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _RG.bam`
+
+java -Xmx8g -jar ${gatk} -I ${input}/${base}_RG.bam -R ${ref_genome} -T RealignerTargetCreator -o ${output}/${base}.intervals
+
+java -Xmx8g -jar ${gatk} -I ${input}/${base}_RG.bam -R ${ref_genome} -T IndelRealigner -targetIntervals ${output}/${base}.intervals -o ${output}/${base}_realigned.bam
+
+done
+```
+
+## Bowtie2 GatK
+
+1) Create GATK output dir2
+2) Read Groups
+```
+#! /bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/bowtie
+
+#Path to Picard
+pic=/usr/local/picard-tools-1.131/picard.jar
+
+#Path to .bam files
+input=${project_dir}/final_bam
+
+files=(${input}/*.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} .bam`
+
+java -jar ${pic} AddOrReplaceReadGroups I=${input}/${base}.bam O=${input}/${base}_RG.bam RGID=L001_L002 RGLB=library1 RGPL=illumina RGPU=None RGSM=${base}
+
+done
+```
+
+3) Run Gatk
+```
+#!/bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/bowtie
+
+#Path to input directory
+inpuut=${project_dir}/final_bam
+
+#Path to output directory
+output=${project_dir}/gatk_bowtie
+
+#Variable for reference genome (non-zipped)
+index_dir=/home/paul/episodicData/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57_2.fasta
+
+#Path to GATK
+gatk=/usr/local/gatk/GenomeAnalysisTK.jar
+
+
+files=(${input}/*_RG.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _RG.bam`
+
+java -Xmx8g -jar ${gatk} -I ${input}/${base}_RG.bam -R ${ref_genome} -T RealignerTargetCreator -o ${output}/${base}.intervals
+
+java -Xmx8g -jar ${gatk} -I ${input}/${base}_RG.bam -R ${ref_genome} -T IndelRealigner -targetIntervals ${output}/${base}.intervals -o ${output}/${base}_realigned.bam
+
+done
+```
+
+### CRISP
+
+```
+#! /bin/bash
+
+#Variable for project name (file name)
+
+project_name=episodic_data
+#project_name=episodic_data_bowtie
+
+
+
+#Variable for project:
+
+project_dir=/home/paul/episodicData
+#project_dir=/home/paul/episodicData/bowtie
+
+
+#Path to CRISP
+crisp=/home/paul/CRISP-122713/CRISP
+
+#Variable for reference genome
+index_dir=/home/paul/episodicData/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57_2.fasta
+
+#Path to .bam files from GATK
+
+input=${project_dir}/gatk_dir
+#input=${project_dir}/gatk_bowtie
+
+
+#Output
+
+output=${project_dir}/CRISP
+#output=${project_dir}/CRISP_Bowtie
+
+
+files=(${input}/*.bam)
+
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} .bam`
+echo "${input}/${base}.bam" >> ${input}/${project_name}_BAMlist.txt
+
+done
+
+${crisp} --bams ${input}/${project_name}_BAMlist.txt \
+			--ref ${ref_genome} \
+ 			--poolsize 120 \
+ 			--perms 1000 \
+ 			--filterreads 0 \
+ 			--qvoffset 33 \
+			--mbq 10 \
+			--mmq 10 \
+ 			--minc 4 \
+ 			--VCF ${output}/${project_name}.vcf > ${output}/${project_name}_variantcalls.log
+```
