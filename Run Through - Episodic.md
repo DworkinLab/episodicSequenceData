@@ -3273,10 +3273,21 @@ Example output in VCF file
 
 
 ### Varscan> 
--- mpileup2snp (following Huang et al. Evaluation of variant detection software for pooled next-generation sequence data)
+-- 
+1) download latest version of Varscan (VarScan.v2.3.9.jar --> https://sourceforge.net/projects/varscan/files/)
+2) scp onto Brians machine: (``` scp VarScan.v2.3.9.jar paul@info.mcmaster.ca:/home/paul   ```)
+3) scp the txt file onto machine: ( ``` scp VarScan.v2.3.9.description.txt paul@info.mcmaster.ca:/home/paul   ```)
+4) Can now run in command line with java -jar VarScan.jar
+
+-- Manual http://dkoboldt.github.io/varscan/doc/index.html
+
+mpileup2snp (following Huang et al. Evaluation of variant detection software for pooled next-generation sequence data)
+
 
 ### SnpEff>
 --
+
+
 
 ### LoFreq>
 
@@ -3296,6 +3307,7 @@ Running LoFreq:
 
 *Lofreq version 2.0.0-rc-1 (commit 2.0.0-rc-1-3-g63449f7) was installed and run in “call” mode.*
 
+"One program, LoFreq, only permitted the analysis of one pool of samples at a time, and another, CRISP, would only run on groups of pools."
 
 > From LoFreq Paper (Wilm et al. 2012)
 
@@ -3303,6 +3315,10 @@ LoFreq
 
 LoFreq takes a samtools pileup as input (samtools mpileup; Version 0.1.18). By default samtools applies a coverage cap and we set this to be sufficiently high to avoid filtering reads in a sample (-d 100000). Whenever indels were not allowed for read mapping, we switched off samtools BAQ computation (-B). SNVs were called with a Bonferroni-corrected P-value threshold of 0.05 and the same threshold was applied for calling somatic variants with the binomial test. Unless stated otherwise, we removed variant positions with a significant strand bias (Holm–Bonferroni-corrected P-value < 0.05) from LoFreq predictions.
 
+> Confusing: most documentation uses input as a .bam file (sems to be a single .bam), but the paper (and only from the paper) is mpileup mentioned....https://github.com/CSB5/lofreq/issues/32
+
+Need to run one per .bam file?
+Create script to create individual scripts per Bam file (similar to Novoalign scripts to run novoalign seperate)
 
 ### Snape>
 --
