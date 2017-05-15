@@ -3513,21 +3513,22 @@ done
 ```
 
 ### CRISP
+Change the hash between the two;
 
 ```
 #! /bin/bash
 
 #Variable for project name (file name)
 
-project_name=episodic_data
-#project_name=episodic_data_bowtie
+#project_name=episodic_data
+project_name=episodic_data_bowtie
 
 
 
 #Variable for project:
 
-project_dir=/home/paul/episodicData
-#project_dir=/home/paul/episodicData/bowtie
+#project_dir=/home/paul/episodicData
+project_dir=/home/paul/episodicData/bowtie
 
 
 #Path to CRISP
@@ -3539,14 +3540,14 @@ ref_genome=${index_dir}/dmel-all-chromosome-r5.57_2.fasta
 
 #Path to .bam files from GATK
 
-input=${project_dir}/gatk_dir
-#input=${project_dir}/gatk_bowtie
+#input=${project_dir}/gatk_dir
+input=${project_dir}/gatk_bowtie
 
 
 #Output
 
-output=${project_dir}/CRISP
-#output=${project_dir}/CRISP_Bowtie
+#output=${project_dir}/CRISP
+output=${project_dir}/CRISP_Bowtie
 
 
 files=(${input}/*.bam)
@@ -3565,8 +3566,28 @@ ${crisp} --bams ${input}/${project_name}_BAMlist.txt \
  			--perms 1000 \
  			--filterreads 0 \
  			--qvoffset 33 \
-			--mbq 10 \
-			--mmq 10 \
  			--minc 4 \
  			--VCF ${output}/${project_name}.vcf > ${output}/${project_name}_variantcalls.log
 ```
+Flags:
+```
+--bams/bam: bams == textfile with list of bam file paths (one for each pool)
+--ref: Indexed Reference Sequence file (fasta)
+--poolsize: poolsize (number of haploid genomes in each pool), for diploid genomes: 2 x # individuals [pool = 60, == 120]
+--perms: maximum number of permutations for calculating contingency table p-value, default 20,000 [Bergland example used 1000, keeps run times lower for this many samples]
+--filterreads: filter reads with excessive number of mismatches/gaps compared to the reference sequence, Default==1, 0 to disable [0, filtered enough before, keep what is left]
+--qvoffset: quality value offset, 33 for Sanger format, 64 for Illumina 1.3+ format [33, Illumina (6) far above failed?]
+--mbq: minimum base quality to consider a base for variant calling, default 10 [default < previous filtering]
+--mmq: minimum read mapping quality to consider a read for variant calling, default 20 [default == previous filtering]
+--minc: minimum number of reads with alternate allele required for calling a variant, default 4 [stick with default]
+--ctpval: threshold on the contingency table p-value for calling position as variant (specified as log10), default is -3.5, increase this threshold as number of pools increases [not specified in Bergland, leave at deafault? == Bergland Pool == 100 (close enough)]
+--qvpval: threshold on the quality values based p-value for calling position as variant (specified as log10), default is -5 [stick with default]
+--VCF: VCF file to which the variant calls will be output 
+```
+
+In appropriate scripts directory
+```
+nano bwa_Crisp.sh
+nano bowtie_Crisp.sh
+```
+Run on own screen with logs. (Running on Info115)
