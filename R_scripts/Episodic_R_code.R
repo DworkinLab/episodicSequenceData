@@ -28,6 +28,21 @@ Episodic_seperate <- Episodic_long %>%
   separate(Allele_Freq, c("A","T","C","G","N","del"), ":")
 
 
+head(Episodic_seperate)
+Episodic_seperate$A <- as.numeric(Episodic_seperate$A)
+Episodic_seperate$T <- as.numeric(Episodic_seperate$T)
+Episodic_seperate$C <- as.numeric(Episodic_seperate$C)
+Episodic_seperate$G <- as.numeric(Episodic_seperate$G)
+Episodic_seperate$N <- as.numeric(Episodic_seperate$N)
+Episodic_seperate$del <- as.numeric(Episodic_seperate$del)
+Episodic_seperate$sum <- (rowSums(Episodic_seperate[,5:10]))
+head(Episodic_seperate)
+
+summs <- Episodic_seperate$sum
+summ <- sum(summs)
+
+average <- summ/length(summs)
+average
 #Want to rearrange data:
 
 #Split Population into Treatment, Rep, and Generation - need to do twice, different seperators (change above??)
