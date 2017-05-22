@@ -1,5 +1,8 @@
 #Packages:
 
+#https://artax.karlin.mff.cuni.cz/r-help/library/CGEN/html/snp.logistic.html
+
+
 #install.packages('dplyr')
 library(dplyr)
 
