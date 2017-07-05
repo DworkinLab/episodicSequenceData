@@ -3591,3 +3591,111 @@ nano bwa_Crisp.sh
 nano bowtie_Crisp.sh
 ```
 Run on own screen with logs. (Running on Info115)
+________________________
+Using VCFtools???
+```
+/usr/local/vcftools --vcf episodic_data.vcf
+/usr/local/vcftools --vcf episodic_data_bowtie.vcf
+#Top two do not work: make sure path has the vcftools within (this is src, also a perl option??)
+
+/usr/local/vcftools/src/cpp/vcftools --vcf episodic_data_bowtie.vcf
+/usr/local/vcftools/src/cpp/vcftools --vcf episodic_data.vcf
+```
+
+Bergland Script for After .VCF made with CRISP
+
+```
+## merge subvcf files
+
+	# extract header
+	head -n200 $(ls 6d_v7.2.crisp* | head -n1) | grep "#" > vcf.header
+	
+	# strip headers
+	nHeaderLines=$(wc -l vcf.header | grep -Eo "[0-9]+")
+	sed -i "1,$nHeaderLines d" 6d_v7.2.crisp*
+	
+	# merge
+	cat vcf.header 6d_v7.2.crisp* > 6d_v7.2.crisp.vcf
+	
+	# move sub bits for backup
+	mkdir vcfBits
+	mv 6d_v7.2.crisp.vcf_* vcfBits/
+	mv 6d_v7.2.log* vcfBits/
+
+
+## remove SNPs in repetative regions
+	/home/alan/vcftools_0.1.7/bin/vcftools --vcf 6d_v7.2.crisp.vcf --out 6d_v7.2.crisp.norepeats --exclude-bed /mnt/Alan/new_alignments/vcf2/repetative/rm.edit.bed --recode --recode-INFO-all
+	mv 6d_v7.2.crisp.norepeats.recode.vcf 6d_v7.2.crisp.norepeats.vcf
+	
+# ## run through awk converstion script; this strips out triallelic sites, calculated average allele freq and converts population columns to AF:DP format
+	### here is contents of crisp_vcf_conv.awk:
+	
+	# 		{
+# 			# Copy file header unchanged
+# 				if(substr($1, 1, 1)=="#") {
+# 					print $0
+# 				} else {
+# 					if(match($5, ",")==0) {
+# 						# Maintains first 7 columns (pos, chr, etc.)			
+# 						for(i=1; i<=7; i++) {
+# 							printf $i"\t"
+# 						}
+# 						
+# 						# get total allele frequency
+# 						np = 0
+# 						af = 0
+# 						for(i=10; i<=NF; i++) {
+# 							split($i, alleleCounts, ":")
+# 							split(alleleCounts[3], forwardCounts, ",")
+# 							split(alleleCounts[4], reverseCounts, ",")
+# 							
+# 							altCounts[i-9] = forwardCounts[2] + reverseCounts[2]
+# 							rd[i-9] = forwardCounts[1] + reverseCounts[1] + forwardCounts[2] + reverseCounts[2]
+# 							if(rd[i-9]>0) {
+# 								af += altCounts[i-9]/rd[i-9]
+# 								np++
+# 							}
+# 						}
+# 						
+# 						# print info column
+# 						printf "AF="af/np";"$8"\t"
+# 						
+# 						# print format column
+# 						printf "AF:DP\t"
+# 						
+# 						#print population columns
+# 						for(i=10; i<=NF; i++) {
+# 							if(rd[i-9] > 0) printf altCounts[i-9]/rd[i-9]":"rd[i-9]
+# 							if(rd[i-9] == 0) printf "0:0"
+# 							if(i<NF) printf "\t"
+# 							if(i==NF) printf "\n"
+# 						}
+# 					}
+# 				}
+# 			}
+				
+	awk -f /mnt/Alan/new_alignments/vcf2/helperScripts/crisp_vcf_conv.awk < 6d_v7.2.crisp.norepeats.vcf > 6d_v7.2.norepeats.vcf
+	wait
+	
+	
+	
+	
+## split SNPs and INDELs, and flag SNPs wihtin 5bp of indel
+	awk -F ';VT=SNV;' '{if(NF==2) print > "6d_v7.2.norepeats.snps.vcf"; if(NF==1) print > "6d_v7.2.norepeats.indels.vcf" }' < 6d_v7.2.norepeats.vcf
+	sort -k1,1 -k2,2n -T /mnt/Alan_Backup --parallel 10 6d_v7.2.norepeats.snps.vcf > 6d_v7.2.norepeats.snps.vcf.sort
+	rm 6d_v7.2.norepeats.snps.vcf 
+	mv 6d_v7.2.norepeats.snps.vcf.sort 6d_v7.2.norepeats.snps.vcf
+
+	sort -k1,1 -k2,2n -T /mnt/Alan_Backup --parallel 10 6d_v7.2.norepeats.indels.vcf > 6d_v7.2.norepeats.indels.vcf.sort
+	rm 6d_v7.2.norepeats.indels.vcf 
+	mv 6d_v7.2.norepeats.indels.vcf.sort 6d_v7.2.norepeats.indels.vcf
+
+	
+	/usr/bin/closestBed -D ref -t first -a 6d_v7.2.norepeats.snps.vcf -b 6d_v7.2.norepeats.indels.vcf | awk '{for(i=1; i<=7; i++) printf $i"\t"; printf "D2I="$NF";"$8"\t"$9"\t"; for(i=10; i<=23; i++) {printf $i; if(i<23) printf "\t"; if(i==23) printf "\n" }}' > 6d_v7.2.d2i.norepeats.vcf
+	wait
+
+
+###	
+	
+
+```
