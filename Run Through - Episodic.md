@@ -3677,9 +3677,6 @@ Bergland Script for After .VCF made with CRISP
 	awk -f /mnt/Alan/new_alignments/vcf2/helperScripts/crisp_vcf_conv.awk < 6d_v7.2.crisp.norepeats.vcf > 6d_v7.2.norepeats.vcf
 	wait
 	
-	
-	
-	
 ## split SNPs and INDELs, and flag SNPs wihtin 5bp of indel
 	awk -F ';VT=SNV;' '{if(NF==2) print > "6d_v7.2.norepeats.snps.vcf"; if(NF==1) print > "6d_v7.2.norepeats.indels.vcf" }' < 6d_v7.2.norepeats.vcf
 	sort -k1,1 -k2,2n -T /mnt/Alan_Backup --parallel 10 6d_v7.2.norepeats.snps.vcf > 6d_v7.2.norepeats.snps.vcf.sort
@@ -3693,9 +3690,96 @@ Bergland Script for After .VCF made with CRISP
 	
 	/usr/bin/closestBed -D ref -t first -a 6d_v7.2.norepeats.snps.vcf -b 6d_v7.2.norepeats.indels.vcf | awk '{for(i=1; i<=7; i++) printf $i"\t"; printf "D2I="$NF";"$8"\t"$9"\t"; for(i=10; i<=23; i++) {printf $i; if(i<23) printf "\t"; if(i==23) printf "\n" }}' > 6d_v7.2.d2i.norepeats.vcf
 	wait
+```
 
 
-###	
+My Modifactions: 
+
+1) awk converstion script; this strips out triallelic sites, calculated average allele freq and converts population columns to AF:DP format (Completely from Bergland)
+```	
+{
+ 	# Copy file header unchanged
+			if(substr($1, 1, 1)=="#") {
+ 				print $0
+ 			} else {
+ 				if(match($5, ",")==0) {
+ 					# Maintains first 7 columns (pos, chr, etc.)			
+ 					for(i=1; i<=7; i++) {
+						printf $i"\t"
+ 					}
+ 						
+ 			# get total allele frequency
+ 				np = 0
+				af = 0
+ 				for(i=10; i<=NF; i++) {
+ 					split($i, alleleCounts, ":")
+ 					split(alleleCounts[3], forwardCounts, ",")
+ 					split(alleleCounts[4], reverseCounts, ",")
+ 						
+ 						altCounts[i-9] = forwardCounts[2] + reverseCounts[2]
+ 						rd[i-9] = forwardCounts[1] + reverseCounts[1] + forwardCounts[2] + reverseCounts[2]
+ 						if(rd[i-9]>0) {
+ 						af += altCounts[i-9]/rd[i-9]
+						np++
+							}
+						}
+				
+						# print info column
+ 						printf "AF="af/np";"$8"\t"
+ 						
+ 						# print format column
+ 						printf "AF:DP\t"
+ 						
+ 						#print population columns
+ 						for(i=10; i<=NF; i++) {
+ 							if(rd[i-9] > 0) printf altCounts[i-9]/rd[i-9]":"rd[i-9]
+ 							if(rd[i-9] == 0) printf "0:0"
+ 							if(i<NF) printf "\t"
+ 							if(i==NF) printf "\n"
+ 						}
+ 					}
+ 				}
+ 			}
+
+```
+
+2) Run Awk script:
+```
+
+# awk -f /mnt/Alan/new_alignments/vcf2/helperScripts/crisp_vcf_conv.awk < 6d_v7.2.crisp.norepeats.vcf > 6d_v7.2.norepeats.vcf
+
+#BWA
+awk -f /home/paul/episodicData/CRISP/crisp_vcf_conv.awk < episodic_data.vcf  > episodic_data.norepeats.vcf
+
+#Bowtie
+awk -f /home/paul/episodicData/CRISP/crisp_vcf_conv.awk < episodic_data_bowtie.vcf  > episodic_data_bowtie.norepeats.vcf
+
+```
+
+5) split SNPs and INDELs, and flag SNPs wihtin 5bp of indel
+
+```
+awk -F ';VT=SNV;' '{if(NF==2) print > "episodic_data.norepeats.snps.vcf"; if(NF==1) print > "episodic_data.norepeats.indels.vcf" }' < episodic_data.norepeats.vcf
 	
+	#SNPs
+	#-T == use temporary directory???
+	
+	sort -k1,1 -k2,2n -T /home/paul/episodicData/CRISP/Paul_Backup episodic_data.norepeats.snps.vcf > episodic_data.norepeats.snps.vcf.sort
+	
+	#rm episodic_data.norepeats.snps.vcf
+	
+	#mv episodic_data.norepeats.snps.vcf.sort episodic_data.norepeats.snps.vcf
+
+	#Indels
+	
+	sort -k1,1 -k2,2n -T /home/paul/episodicData/CRISP/Paul_Backup episodic_data.norepeats.indels.vcf > episodic_data.norepeats.indels.vcf.sort
+	
+	#rm episodic_data.norepeats.indels.vcf
+	
+	#mv episodic_data.norepeats.indels.vcf.sort episodic_data.norepeats.indels.vcf
+
+	#Does not work?
+	
+	/usr/bin/closestBed -D ref -t first -a episodic_data.norepeats.snps.vcf -b episodic_data.norepeats.indels.vcf | awk '{for(i=1; i<=7; i++) printf $i"\t"; printf "D2I="$NF";"$8"\t"$9"\t"; for(i=10; i<=23; i++) {printf $i; if(i<23) printf "\t"; if(i==23) printf "\n" }}' > episodic_data.norepeats.vcf
 
 ```
