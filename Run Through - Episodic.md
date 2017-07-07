@@ -3783,3 +3783,13 @@ awk -F ';VT=SNV;' '{if(NF==2) print > "episodic_data.norepeats.snps.vcf"; if(NF=
 	/usr/bin/closestBed -D ref -t first -a episodic_data.norepeats.snps.vcf -b episodic_data.norepeats.indels.vcf | awk '{for(i=1; i<=7; i++) printf $i"\t"; printf "D2I="$NF";"$8"\t"$9"\t"; for(i=10; i<=23; i++) {printf $i; if(i<23) printf "\t"; if(i==23) printf "\n" }}' > episodic_data.norepeats.vcf
 
 ```
+
+Have 2 .vcf files: one for SNPS and one for Indels:
+
+Open Java (NEW VERSION)
+```
+java -Xmx2g -jar /Users/paulknoops/Bioinformatics/IGV_2.3.94.app/Contents/Java/igv.jar
+```
+
+Can make a mpileup and sync with the .bam realigned with GATK!
+
