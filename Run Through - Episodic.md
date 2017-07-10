@@ -3824,7 +3824,7 @@ gatk=${project_dir}/gatk_bowtie
 
 sync=/usr/local/popoolation/mpileup2sync.jar
 
-samtools mpileup -B -Q 0 -f ${ref_genome} ${gatk}/*.bam > ${gatk}/${project_name}.mpileup
+samtools mpileup -B -Q 0 -f ${ref_genome} ${gatk}/*.bam > ${gatk}/${project_name}.gatk.mpileup
 
 ```
 
@@ -3834,13 +3834,13 @@ Sync: Hash between!
 
 ## Variable for project name (file name)
 
-#project_name=episodic_data
-project_name=episodic_data_bowtie
+project_name=episodic_data
+#project_name=episodic_data_bowtie
 
 ## Variable for project:
 
-#project_dir=/home/paul/episodicData
-project_dir=/home/paul/episodicData/bowtie
+project_dir=/home/paul/episodicData
+#project_dir=/home/paul/episodicData/bowtie
 
 ## Variable for reference genome
 
@@ -3849,11 +3849,11 @@ ref_genome=${index_dir}/dmel-all-chromosome-r5.57_2.fasta
 
 ## Path to .bam files from GATK
 
-#gatk=${project_dir}/gatk_dir
-gatk=${project_dir}/gatk_bowtie
+gatk=${project_dir}/gatk_dir
+#gatk=${project_dir}/gatk_bowtie
 
 sync=/usr/local/popoolation/mpileup2sync.jar
 
-java -ea -Xmx7g -jar ${sync} --input ${gatk}/${project_name}.mpileup --output ${gatk}/${project_name}.sync --fastq-type sanger --min-qual 20 --threads 2
+java -ea -Xmx7g -jar ${sync} --input ${gatk}/${project_name}.gatk.mpileup --output ${gatk}/${project_name}.gatk.sync --fastq-type sanger --min-qual 20 --threads 2
 ```
 
