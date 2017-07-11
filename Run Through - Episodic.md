@@ -3857,3 +3857,58 @@ sync=/usr/local/popoolation/mpileup2sync.jar
 java -ea -Xmx7g -jar ${sync} --input ${gatk}/${project_name}.gatk.mpileup --output ${gatk}/${project_name}.gatk.sync --fastq-type sanger --min-qual 20 --threads 2
 ```
 
+Remove unneeded areas (with 'Het' and 'U')
+
+-- One script: in BWA Script dir
+
+```
+#! /bin/bash
+
+## Variable for project name (file name)
+project_name=episodic_data
+project_name_2=episodic_data_bowtie
+
+## Variable for project:
+project_dir=/home/paul/episodicData
+project_dir_2=/home/paul/episodicData/bowtie
+
+## Path to .bam files from GATK
+gatk=${project_dir}/gatk_dir
+gatk_2=${project_dir_2}/gatk_bowtie
+
+grep -v 'Het' ${gatk}/${project_name}.gatk.sync > ${gatk}/${project_name}_less_het.sync
+
+wait
+
+grep -v 'U' ${gatk}/${project_name}_less_het.sync > ${gatk}/${project_name}_removed_U_Het.sync
+
+wait
+
+grep -v 'dmel_mitochondrion_genome' ${gatk}/${project_name}_removed_U_Het.sync > ${gatk}/${project_name}_main.gatk.sync
+
+wait
+
+rm -f ${gatk}/${project_name}_less_het.sync
+
+rm -f ${gatk}/${project_name}_removed_U_Het.sync
+
+grep -v 'Het' ${gatk_2}/${project_name_2}.gatk.sync > ${gatk_2}/${project_name_2}_less_het.sync
+
+wait
+
+grep -v 'U' ${gatk_2}/${project_name_2}_less_het.sync > ${gatk_2}/${project_name_2}_removed_U_Het.sync
+
+wait
+
+grep -v 'dmel_mitochondrion_genome' ${gatk_2}/${project_name_2}_removed_U_Het.sync > ${gatk_2}/${project_name_2}_main.gatk.sync
+
+wait
+
+
+rm -f ${gatk_2}/${project_name_2}_less_het.sync
+
+rm -f ${gatk_2}/${project_name_2}_removed_U_Het.sync
+
+```
+
+
