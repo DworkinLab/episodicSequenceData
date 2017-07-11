@@ -3915,13 +3915,14 @@ Random subset for work:
 ```
 grep '2R' episodic_data_main.gatk.sync > episodic_data_2R.gatk.sync
 ```
+
 ```
 grep '2R' episodic_data_bowtie_main.gatk.sync > episodic_data_bowtie_2R.gatk.sync
 ```
 
 Move to test directory:
 ```
-mkdir /home/paul/episodicData/subsetting
+#mkdir /home/paul/episodicData/subsetting
 
 mv /home/paul/episodicData/gatk_dir/episodic_data_2R.gatk.sync /home/paul/episodicData/subsetting
 mv /home/paul/episodicData/bowtie/gatk_bowtie/episodic_data_bowtie_2R.gatk.sync /home/paul/episodicData/subsetting
@@ -3945,4 +3946,52 @@ sed -n ' 10268762, 10278762 p' episodic_data_bowtie_2R.gatk.sync > episodic_data
 ```
 Test everything from here (both full and subset??)
 
+Test CMH:
+```
+! /bin/bash
 
+## Variable for project name (file name)
+
+#project_name=episodic_data_2R_subset
+project_name=episodic_data_bowtie_2R_subset
+
+## Variable for project:
+
+project_dir=/home/paul/episodicData/subsetting
+
+# Can change here to other comparisons
+
+pop[0]=11-13,12-13
+pop[1]=1-13,2-13
+pop[2]=1-3,2-4
+pop[3]=3-13,4-13
+pop[4]=5-13,6-13
+pop[5]=5-7,6-8
+pop[6]=7-13,8-13
+pop[7]=9-11,10-12
+pop[8]=9-13,10-13
+
+cmh_test=/usr/local/popoolation/cmh-test.pl
+cmh_gwas=/usr/local/popoolation/export/cmh2gwas.pl
+
+for population in ${pop[@]}
+do
+mkdir ${project_dir}/${project_name}_${population}
+pop_dir=${project_dir}/${project_name}_${population}
+
+perl ${cmh_test} --min-count 3 --min-coverage 5 --max-coverage 100 --population ${population} --input ${project_dir}/${project_name}.gatk.sync --output ${pop_dir}/${project_name}_${population}.cmh.txt
+
+perl ${cmh_gwas} --input ${pop_dir}/${project_name}_${population}.cmh.txt --output ${pop_dir}/${project_name}_${population}.cmh.gwas --min-pvalue 1.0e-40
+
+mv ${pop_dir}/${project_name}_${population}.cmh.gwas ${project_dir}/gwas_dir
+
+done
+```
+(in a pinch with two many directories (which I will have --> rm -rf ${dir} to force remove full directories)
+
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/subsetting/gwas_dir/*.gwas /Users/paulknoops/Bioinformatics/2Rsubset_cmhGWAS
+```
+```
+java -Xmx2g -jar /Users/paulknoops/Bioinformatics/IGV_2.3.94.app/Contents/Java/igv.jar
+```
