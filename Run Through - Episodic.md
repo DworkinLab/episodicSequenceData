@@ -3911,4 +3911,38 @@ rm -f ${gatk_2}/${project_name_2}_removed_U_Het.sync
 
 ```
 
+Random subset for work:
+```
+grep '2R' episodic_data_main.gatk.sync > episodic_data_2R.gatk.sync
+```
+```
+grep '2R' episodic_data_bowtie_main.gatk.sync > episodic_data_bowtie_2R.gatk.sync
+```
+
+Move to test directory:
+```
+mkdir /home/paul/episodicData/subsetting
+
+mv /home/paul/episodicData/gatk_dir/episodic_data_2R.gatk.sync /home/paul/episodicData/subsetting
+mv /home/paul/episodicData/bowtie/gatk_bowtie/episodic_data_bowtie_2R.gatk.sync /home/paul/episodicData/subsetting
+```
+
+Need to make smaller!
+```
+wc -l episodic_data_2R.gatk.sync
+```
+== 20547525
+```
+wc -l episodic_data_bowtie_2R.gatk.sync
+```
+== 20420127
+
+
+For me: random selection: 10000 bp (different b/w bowtie and bwa???)
+```
+sed -n ' 10268762, 10278762 p' episodic_data_2R.gatk.sync > episodic_data_2R_subset.gatk.sync
+sed -n ' 10268762, 10278762 p' episodic_data_bowtie_2R.gatk.sync > episodic_data_bowtie_2R_subset.gatk.sync
+```
+Test everything from here (both full and subset??)
+
 
