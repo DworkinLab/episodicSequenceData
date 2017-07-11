@@ -3995,3 +3995,9 @@ scp paul@info.mcmaster.ca:/home/paul/episodicData/subsetting/gwas_dir/*.gwas /Us
 ```
 java -Xmx2g -jar /Users/paulknoops/Bioinformatics/IGV_2.3.94.app/Contents/Java/igv.jar
 ```
+
+Subset files to SCP:
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/subsetting/episodic_data_2R_subset.gatk.sync /Users/paulknoops/Bioinformatics/episodic_practice
+scp paul@info.mcmaster.ca:/home/paul/episodicData/subsetting/episodic_data_bowtie_2R_subset.gatk.sync /Users/paulknoops/Bioinformatics/episodic_practice
+```
