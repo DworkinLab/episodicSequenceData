@@ -4001,3 +4001,15 @@ Subset files to SCP:
 scp paul@info.mcmaster.ca:/home/paul/episodicData/subsetting/episodic_data_2R_subset.gatk.sync /Users/paulknoops/Bioinformatics/episodic_practice
 scp paul@info.mcmaster.ca:/home/paul/episodicData/subsetting/episodic_data_bowtie_2R_subset.gatk.sync /Users/paulknoops/Bioinformatics/episodic_practice
 ```
+
+Getting Haploreconstruct onto brians machine:
+```
+#install.packages(path_to_file, repos = NULL, type="source")
+install.packages("/home/paul/R-packages/haploReconstruct_0.1.2.tar.gz", repos=NULL,type="source") 
+#Does not work
+
+#try from command line
+R CMD INSTALL haploReconstruct_0.1.2.tar.gz
+
+#e-mailed brian
+```
