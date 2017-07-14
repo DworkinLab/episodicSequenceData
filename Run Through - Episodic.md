@@ -115,7 +115,7 @@ F38ConR1_ATCACG_L001_R1_001.fastq.gz OK
 F38ConR1_ATCACG_L001_R2_001.fastq.gz OK
 F38ConR1_ATCACG_L002_R1_001.fastq.gz OK
 F38ConR1_ATCACG_L002_R2_001.fastq.gz OK
-F38ConR2_TTAGGC_L001_R1_001.fastq.gz OK
+F38ConR2_TTAGGC_L001_R1_001.fastq.gzx OK
 F38ConR2_TTAGGC_L001_R2_001.fastq.gz OK
 F38ConR2_TTAGGC_L002_R1_001.fastq.gz OK
 F38ConR2_TTAGGC_L002_R2_001.fastq.gz OK
@@ -4012,4 +4012,44 @@ install.packages("/home/paul/R-packages/haploReconstruct_0.1.2.tar.gz", repos=NU
 R CMD INSTALL haploReconstruct_0.1.2.tar.gz
 
 #e-mailed brian
+```
+
+###FST values? old:
+```
+#! /bin/bash
+
+## Variable for project name (file name)
+
+#project_name=episodic_data_2R_subset
+project_name=episodic_data_bowtie_2R_subset
+
+## Variable for project:
+
+project_dir=/home/paul/episodicData/subsetting
+
+
+
+fst_test=/usr/local/popoolation/fst-sliding.pl
+fst_igv=/usr/local/popoolation/export/pwc2igv.pl
+
+perl ${fst_test} --window-size 500 --step-size 500 --suppress-noninformative --input ${project_dir}/${project_name}.gatk.sync --min-covered-fraction 1.0 --min-coverage 10 --max-coverage 250 --min-count 3 --output ${project_dir}/${project_name}_gatk.fst.txt --pool-size 60
+
+wait
+
+#To view in IGV
+perl ${fst_igv} --input ${project_dir}/${project_name}_gatk.fst.txt --output ${project_dir}/${project_name}_gatk.fst.igv
+```
+
+#Fishers; old (failed) from Bio 720 (2 years ago!)
+
+```
+#! /bin/bash
+
+map_dir=/home/paul/episodicData/mappedSequence
+
+perl /usr/local/popoolation/fisher-test.pl --input ${map_dir}/episodicData_Sanger.sync --output ${map_dir}/episodicData_Sanger.fet --min-count 3 --min-coverage 10 --max-coverage 250 --suppress-noninformative
+
+perl /usr/local/popoolation/export/pwc2igv.pl --input ${map_dir}/episodicData_Sanger.fet --output ${map_dir}/episodicData_Sanger.fet.igv
+
+# Load to IGV java -Xmx2g -jar /usr/local/igv/IGV_2.1.21/igv.jar
 ```
