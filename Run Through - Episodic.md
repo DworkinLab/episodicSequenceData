@@ -4034,8 +4034,6 @@ fst_igv=/usr/local/popoolation/export/pwc2igv.pl
 
 perl ${fst_test} --window-size 500 --step-size 500 --suppress-noninformative --input ${project_dir}/${project_name}.gatk.sync --min-covered-fraction 1.0 --min-coverage 10 --max-coverage 250 --min-count 3 --output ${project_dir}/${project_name}_gatk.fst.txt --pool-size 60
 
-wait
-
 #To view in IGV
 perl ${fst_igv} --input ${project_dir}/${project_name}_gatk.fst.txt --output ${project_dir}/${project_name}_gatk.fst.igv
 ```
@@ -4045,11 +4043,21 @@ perl ${fst_igv} --input ${project_dir}/${project_name}_gatk.fst.txt --output ${p
 ```
 #! /bin/bash
 
-map_dir=/home/paul/episodicData/mappedSequence
+## Variable for project name (file name)
 
-perl /usr/local/popoolation/fisher-test.pl --input ${map_dir}/episodicData_Sanger.sync --output ${map_dir}/episodicData_Sanger.fet --min-count 3 --min-coverage 10 --max-coverage 250 --suppress-noninformative
+project_name=episodic_data_2R_subset
+#project_name=episodic_data_bowtie_2R_subset
 
-perl /usr/local/popoolation/export/pwc2igv.pl --input ${map_dir}/episodicData_Sanger.fet --output ${map_dir}/episodicData_Sanger.fet.igv
+## Variable for project:
+
+project_dir=/home/paul/episodicData/subsetting
+
+fisher=/usr/local/popoolation/fisher-test.pl
+fisher_igv=/usr/local/popoolation/export/pwc2igv.pl
+
+perl ${fisher} --input ${project_dir}/${project_name}.gatk.sync --output ${project_dir}/${project_name}.gatk.fet --min-count 3 --min-coverage 10 --max-coverage 250 --suppress-noninformative
+
+perl ${fisher_igv} --input ${project_dir}/${project_name}.gatk.fet Pop--output ${project_dir}/${project_name}.gatk.fet.igv
 
 # Load to IGV java -Xmx2g -jar /usr/local/igv/IGV_2.1.21/igv.jar
 ```
