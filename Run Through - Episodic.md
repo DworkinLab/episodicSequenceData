@@ -4000,6 +4000,7 @@ Subset files to SCP:
 ```
 scp paul@info.mcmaster.ca:/home/paul/episodicData/subsetting/episodic_data_2R_subset.gatk.sync /Users/paulknoops/Bioinformatics/episodic_practice
 scp paul@info.mcmaster.ca:/home/paul/episodicData/subsetting/episodic_data_bowtie_2R_subset.gatk.sync /Users/paulknoops/Bioinformatics/episodic_practice
+
 ```
 
 Getting Haploreconstruct onto brians machine:
@@ -4036,6 +4037,13 @@ perl ${fst_test} --window-size 500 --step-size 500 --suppress-noninformative --i
 
 #To view in IGV
 perl ${fst_igv} --input ${project_dir}/${project_name}_gatk.fst.txt --output ${project_dir}/${project_name}_gatk.fst.igv
+```
+
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/subsetting/episodic_data_2R_subset_gatk.fst.igv /Users/paulknoops/Bioinformatics/episodic_practice
+scp paul@info.mcmaster.ca:/home/paul/episodicData/subsetting/episodic_data_bowtie_2R_subset_gatk.fst.igv /Users/paulknoops/Bioinformatics/episodic_practice
+
+java -Xmx2g -jar /Users/paulknoops/Bioinformatics/IGV_2.3.94.app/Contents/Java/igv.jar
 ```
 
 #Fishers; old (failed) from Bio 720 (2 years ago!)
