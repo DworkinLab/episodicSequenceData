@@ -4065,7 +4065,38 @@ fisher_igv=/usr/local/popoolation/export/pwc2igv.pl
 
 perl ${fisher} --input ${project_dir}/${project_name}.gatk.sync --output ${project_dir}/${project_name}.gatk.fet --min-count 3 --min-coverage 10 --max-coverage 250 --suppress-noninformative
 
-perl ${fisher_igv} --input ${project_dir}/${project_name}.gatk.fet Pop--output ${project_dir}/${project_name}.gatk.fet.igv
+perl ${fisher_igv} --input ${project_dir}/${project_name}.gatk.fet --output ${project_dir}/${project_name}.gatk.fet.igv
 
 # Load to IGV java -Xmx2g -jar /usr/local/igv/IGV_2.1.21/igv.jar
 ```
+
+Same subset??
+```
+[paul@info115 subsetting]$ sed -n ' 10268762 p' episodic_data_2R.gatk.sync 
+2R      10635452        C       0:0:55:0:0:0    0:0:26:0:0:0    0:0:37:0:0:0    0:0:45:0:0:0    0:0:48:0:0:0    0:0:43:0:0:0    0:0:69:0:0:0  0:0:53:0:0:0    0:0:107:0:0:0   0:0:130:0:0:0   0:0:152:0:0:0   0:0:111:0:0:0   0:0:41:0:0:0
+[paul@info115 subsetting]$ sed -n ' 10268762 p' episodic_data_bowtie_2R.gatk.sync 
+2R      10755361        C       0:0:15:0:0:0    0:0:21:0:0:0    0:0:15:0:0:0    0:0:18:0:0:0    0:0:20:0:0:0    0:0:23:0:0:0    0:0:27:0:0:0  0:0:26:0:0:0    0:0:158:0:0:0   0:0:143:0:0:0   0:0:177:0:0:0   0:0:152:1:0:0   0:0:49:0:0:0
+```
+119909 diff == 10148853
+```
+[paul@info115 subsetting]$ sed -n ' 10148853 p' episodic_data_bowtie_2R.gatk.sync
+2R      10635445        C       0:0:9:0:0:0     0:0:5:0:0:0     0:0:5:0:0:0     0:0:3:0:0:0     0:0:11:0:0:0    0:0:6:0:0:0     0:0:15:0:0:0  0:0:7:0:0:0     0:0:19:0:0:0    0:0:39:0:0:0    0:0:36:0:0:0    0:0:22:0:0:0    0:0:11:0:0:0
+```
+A little less but okay none the less: so re subset bowtie (delete old)
+```
+#Old:
+#sed -n ' 10268762, 10278762 p' episodic_data_bowtie_2R.gatk.sync > episodic_data_bowtie_2R_subset.gatk.sync
+
+#New:
+sed -n ' 10148853, 10158853 p' episodic_data_bowtie_2R.gatk.sync > episodic_data_bowtie_2R_subset.gatk.sync
+
+scp paul@info.mcmaster.ca:/home/paul/episodicData/subsetting/episodic_data_bowtie_2R_subset.gatk.sync /Users/paulknoops/Bioinformatics/episodic_practice
+```
+All the fishers, Fst and CMH are NOT the same place as BWA
+
+
+
+
+
+
+
