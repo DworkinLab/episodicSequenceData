@@ -115,7 +115,7 @@ F38ConR1_ATCACG_L001_R1_001.fastq.gz OK
 F38ConR1_ATCACG_L001_R2_001.fastq.gz OK
 F38ConR1_ATCACG_L002_R1_001.fastq.gz OK
 F38ConR1_ATCACG_L002_R2_001.fastq.gz OK
-F38ConR2_TTAGGC_L001_R1_001.fastq.gz OK
+F38ConR2_TTAGGC_L001_R1_001.fastq.gzx OK
 F38ConR2_TTAGGC_L001_R2_001.fastq.gz OK
 F38ConR2_TTAGGC_L002_R1_001.fastq.gz OK
 F38ConR2_TTAGGC_L002_R2_001.fastq.gz OK
@@ -3824,7 +3824,7 @@ gatk=${project_dir}/gatk_bowtie
 
 sync=/usr/local/popoolation/mpileup2sync.jar
 
-samtools mpileup -B -Q 0 -f ${ref_genome} ${gatk}/*.bam > ${gatk}/${project_name}.mpileup
+samtools mpileup -B -Q 0 -f ${ref_genome} ${gatk}/*.bam > ${gatk}/${project_name}.gatk.mpileup
 
 ```
 
@@ -3834,13 +3834,13 @@ Sync: Hash between!
 
 ## Variable for project name (file name)
 
-#project_name=episodic_data
-project_name=episodic_data_bowtie
+project_name=episodic_data
+#project_name=episodic_data_bowtie
 
 ## Variable for project:
 
-#project_dir=/home/paul/episodicData
-project_dir=/home/paul/episodicData/bowtie
+project_dir=/home/paul/episodicData
+#project_dir=/home/paul/episodicData/bowtie
 
 ## Variable for reference genome
 
@@ -3849,11 +3849,254 @@ ref_genome=${index_dir}/dmel-all-chromosome-r5.57_2.fasta
 
 ## Path to .bam files from GATK
 
-#gatk=${project_dir}/gatk_dir
-gatk=${project_dir}/gatk_bowtie
+gatk=${project_dir}/gatk_dir
+#gatk=${project_dir}/gatk_bowtie
 
 sync=/usr/local/popoolation/mpileup2sync.jar
 
-java -ea -Xmx7g -jar ${sync} --input ${gatk}/${project_name}.mpileup --output ${gatk}/${project_name}.sync --fastq-type sanger --min-qual 20 --threads 2
+java -ea -Xmx7g -jar ${sync} --input ${gatk}/${project_name}.gatk.mpileup --output ${gatk}/${project_name}.gatk.sync --fastq-type sanger --min-qual 20 --threads 2
 ```
+
+Remove unneeded areas (with 'Het' and 'U')
+
+-- One script: in BWA Script dir
+
+```
+#! /bin/bash
+
+## Variable for project name (file name)
+project_name=episodic_data
+project_name_2=episodic_data_bowtie
+
+## Variable for project:
+project_dir=/home/paul/episodicData
+project_dir_2=/home/paul/episodicData/bowtie
+
+## Path to .bam files from GATK
+gatk=${project_dir}/gatk_dir
+gatk_2=${project_dir_2}/gatk_bowtie
+
+grep -v 'Het' ${gatk}/${project_name}.gatk.sync > ${gatk}/${project_name}_less_het.sync
+
+wait
+
+grep -v 'U' ${gatk}/${project_name}_less_het.sync > ${gatk}/${project_name}_removed_U_Het.sync
+
+wait
+
+grep -v 'dmel_mitochondrion_genome' ${gatk}/${project_name}_removed_U_Het.sync > ${gatk}/${project_name}_main.gatk.sync
+
+wait
+
+rm -f ${gatk}/${project_name}_less_het.sync
+
+rm -f ${gatk}/${project_name}_removed_U_Het.sync
+
+grep -v 'Het' ${gatk_2}/${project_name_2}.gatk.sync > ${gatk_2}/${project_name_2}_less_het.sync
+
+wait
+
+grep -v 'U' ${gatk_2}/${project_name_2}_less_het.sync > ${gatk_2}/${project_name_2}_removed_U_Het.sync
+
+wait
+
+grep -v 'dmel_mitochondrion_genome' ${gatk_2}/${project_name_2}_removed_U_Het.sync > ${gatk_2}/${project_name_2}_main.gatk.sync
+
+wait
+
+
+rm -f ${gatk_2}/${project_name_2}_less_het.sync
+
+rm -f ${gatk_2}/${project_name_2}_removed_U_Het.sync
+
+```
+
+Random subset for work:
+```
+grep '2R' episodic_data_main.gatk.sync > episodic_data_2R.gatk.sync
+```
+
+```
+grep '2R' episodic_data_bowtie_main.gatk.sync > episodic_data_bowtie_2R.gatk.sync
+```
+
+Move to test directory:
+```
+#mkdir /home/paul/episodicData/subsetting
+
+mv /home/paul/episodicData/gatk_dir/episodic_data_2R.gatk.sync /home/paul/episodicData/subsetting
+mv /home/paul/episodicData/bowtie/gatk_bowtie/episodic_data_bowtie_2R.gatk.sync /home/paul/episodicData/subsetting
+```
+
+Need to make smaller!
+```
+wc -l episodic_data_2R.gatk.sync
+```
+== 20547525
+```
+wc -l episodic_data_bowtie_2R.gatk.sync
+```
+== 20420127
+
+
+For me: random selection: 10000 bp (different b/w bowtie and bwa???)
+```
+sed -n ' 10268762, 10278762 p' episodic_data_2R.gatk.sync > episodic_data_2R_subset.gatk.sync
+sed -n ' 10268762, 10278762 p' episodic_data_bowtie_2R.gatk.sync > episodic_data_bowtie_2R_subset.gatk.sync
+```
+Test everything from here (both full and subset??)
+
+Test CMH:
+```
+! /bin/bash
+
+## Variable for project name (file name)
+
+#project_name=episodic_data_2R_subset
+project_name=episodic_data_bowtie_2R_subset
+
+## Variable for project:
+
+project_dir=/home/paul/episodicData/subsetting
+
+# Can change here to other comparisons
+
+pop[0]=11-13,12-13
+pop[1]=1-13,2-13
+pop[2]=1-3,2-4
+pop[3]=3-13,4-13
+pop[4]=5-13,6-13
+pop[5]=5-7,6-8
+pop[6]=7-13,8-13
+pop[7]=9-11,10-12
+pop[8]=9-13,10-13
+
+cmh_test=/usr/local/popoolation/cmh-test.pl
+cmh_gwas=/usr/local/popoolation/export/cmh2gwas.pl
+
+for population in ${pop[@]}
+do
+mkdir ${project_dir}/${project_name}_${population}
+pop_dir=${project_dir}/${project_name}_${population}
+
+perl ${cmh_test} --min-count 3 --min-coverage 5 --max-coverage 100 --population ${population} --input ${project_dir}/${project_name}.gatk.sync --output ${pop_dir}/${project_name}_${population}.cmh.txt
+
+perl ${cmh_gwas} --input ${pop_dir}/${project_name}_${population}.cmh.txt --output ${pop_dir}/${project_name}_${population}.cmh.gwas --min-pvalue 1.0e-40
+
+mv ${pop_dir}/${project_name}_${population}.cmh.gwas ${project_dir}/gwas_dir
+
+done
+```
+(in a pinch with two many directories (which I will have --> rm -rf ${dir} to force remove full directories)
+
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/subsetting/gwas_dir/*.gwas /Users/paulknoops/Bioinformatics/2Rsubset_cmhGWAS
+```
+```
+java -Xmx2g -jar /Users/paulknoops/Bioinformatics/IGV_2.3.94.app/Contents/Java/igv.jar
+```
+
+Subset files to SCP:
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/subsetting/episodic_data_2R_subset.gatk.sync /Users/paulknoops/Bioinformatics/episodic_practice
+scp paul@info.mcmaster.ca:/home/paul/episodicData/subsetting/episodic_data_bowtie_2R_subset.gatk.sync /Users/paulknoops/Bioinformatics/episodic_practice
+
+```
+
+Getting Haploreconstruct onto brians machine:
+```
+#install.packages(path_to_file, repos = NULL, type="source")
+install.packages("/home/paul/R-packages/haploReconstruct_0.1.2.tar.gz", repos=NULL,type="source") 
+#Does not work
+
+#try from command line
+R CMD INSTALL haploReconstruct_0.1.2.tar.gz
+
+#e-mailed brian
+```
+
+###FST values? old:
+```
+#! /bin/bash
+
+## Variable for project name (file name)
+
+#project_name=episodic_data_2R_subset
+project_name=episodic_data_bowtie_2R_subset
+
+## Variable for project:
+
+project_dir=/home/paul/episodicData/subsetting
+
+
+
+fst_test=/usr/local/popoolation/fst-sliding.pl
+fst_igv=/usr/local/popoolation/export/pwc2igv.pl
+
+perl ${fst_test} --window-size 500 --step-size 500 --suppress-noninformative --input ${project_dir}/${project_name}.gatk.sync --min-covered-fraction 1.0 --min-coverage 10 --max-coverage 250 --min-count 3 --output ${project_dir}/${project_name}_gatk.fst.txt --pool-size 60
+
+#To view in IGV
+perl ${fst_igv} --input ${project_dir}/${project_name}_gatk.fst.txt --output ${project_dir}/${project_name}_gatk.fst.igv
+```
+
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/subsetting/episodic_data_2R_subset_gatk.fst.igv /Users/paulknoops/Bioinformatics/episodic_practice
+scp paul@info.mcmaster.ca:/home/paul/episodicData/subsetting/episodic_data_bowtie_2R_subset_gatk.fst.igv /Users/paulknoops/Bioinformatics/episodic_practice
+
+java -Xmx2g -jar /Users/paulknoops/Bioinformatics/IGV_2.3.94.app/Contents/Java/igv.jar
+```
+
+#Fishers; old (failed) from Bio 720 (2 years ago!)
+
+```
+#! /bin/bash
+
+## Variable for project name (file name)
+
+project_name=episodic_data_2R_subset
+#project_name=episodic_data_bowtie_2R_subset
+
+## Variable for project:
+
+project_dir=/home/paul/episodicData/subsetting
+
+fisher=/usr/local/popoolation/fisher-test.pl
+fisher_igv=/usr/local/popoolation/export/pwc2igv.pl
+
+perl ${fisher} --input ${project_dir}/${project_name}.gatk.sync --output ${project_dir}/${project_name}.gatk.fet --min-count 3 --min-coverage 10 --max-coverage 250 --suppress-noninformative
+
+perl ${fisher_igv} --input ${project_dir}/${project_name}.gatk.fet --output ${project_dir}/${project_name}.gatk.fet.igv
+
+# Load to IGV java -Xmx2g -jar /usr/local/igv/IGV_2.1.21/igv.jar
+```
+
+Same subset??
+```
+[paul@info115 subsetting]$ sed -n ' 10268762 p' episodic_data_2R.gatk.sync 
+2R      10635452        C       0:0:55:0:0:0    0:0:26:0:0:0    0:0:37:0:0:0    0:0:45:0:0:0    0:0:48:0:0:0    0:0:43:0:0:0    0:0:69:0:0:0  0:0:53:0:0:0    0:0:107:0:0:0   0:0:130:0:0:0   0:0:152:0:0:0   0:0:111:0:0:0   0:0:41:0:0:0
+[paul@info115 subsetting]$ sed -n ' 10268762 p' episodic_data_bowtie_2R.gatk.sync 
+2R      10755361        C       0:0:15:0:0:0    0:0:21:0:0:0    0:0:15:0:0:0    0:0:18:0:0:0    0:0:20:0:0:0    0:0:23:0:0:0    0:0:27:0:0:0  0:0:26:0:0:0    0:0:158:0:0:0   0:0:143:0:0:0   0:0:177:0:0:0   0:0:152:1:0:0   0:0:49:0:0:0
+```
+119909 diff == 10148853
+```
+[paul@info115 subsetting]$ sed -n ' 10148853 p' episodic_data_bowtie_2R.gatk.sync
+2R      10635445        C       0:0:9:0:0:0     0:0:5:0:0:0     0:0:5:0:0:0     0:0:3:0:0:0     0:0:11:0:0:0    0:0:6:0:0:0     0:0:15:0:0:0  0:0:7:0:0:0     0:0:19:0:0:0    0:0:39:0:0:0    0:0:36:0:0:0    0:0:22:0:0:0    0:0:11:0:0:0
+```
+A little less but okay none the less: so re subset bowtie (delete old)
+```
+#Old:
+#sed -n ' 10268762, 10278762 p' episodic_data_bowtie_2R.gatk.sync > episodic_data_bowtie_2R_subset.gatk.sync
+
+#New:
+sed -n ' 10148853, 10158853 p' episodic_data_bowtie_2R.gatk.sync > episodic_data_bowtie_2R_subset.gatk.sync
+
+scp paul@info.mcmaster.ca:/home/paul/episodicData/subsetting/episodic_data_bowtie_2R_subset.gatk.sync /Users/paulknoops/Bioinformatics/episodic_practice
+```
+All the fishers, Fst and CMH are NOT the same place as BWA
+
+
+
+
+
+
 
