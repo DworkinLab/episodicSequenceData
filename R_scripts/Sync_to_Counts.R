@@ -1,5 +1,7 @@
 #Test Dir == /home/paul/episodicData/subsetting
 
+## killed for unknown reason...
+
 # To run: open R (> R) and source this script (be sure to edit based on file used). 
 
 ## Convert a .sync file into long format, filter somewhat, and have only position, treatment, Cage, Generation and Maj/Min counts
