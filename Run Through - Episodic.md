@@ -4095,8 +4095,19 @@ scp paul@info.mcmaster.ca:/home/paul/episodicData/subsetting/episodic_data_bowti
 All the fishers, Fst and CMH are NOT the same place as BWA
 
 
+### R stuff
 
+Moved the episodic_main.gatk.sync to R_dir for creating a .csv file for R use
 
+2 scripts: sync_to_counts_bowtie.R and sync_to_counts_bwa.R
+
+Open screen and start a script,
+
+Start R
+```
+R
+```
+and source the file (should require("tidyr") first to make sure it is in there).
 
 
 
