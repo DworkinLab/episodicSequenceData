@@ -21,11 +21,21 @@ require('tidyr')
 #3) Need to change most importantly for analysis the read in and read out names 
 
 
-#Read in data:
+#Read in data: subset testing:
 
 #episodic_counts <- read.table("/home/paul/episodicData/subsetting/episodic_data_bowtie_2R_subset.gatk.sync")
 
-episodic_counts <- read.table("/home/paul/episodicData/subsetting/episodic_data_2R_subset.gatk.sync")
+#episodic_counts <- read.table("/home/paul/episodicData/subsetting/episodic_data_2R_subset.gatk.sync")
+
+# Read in Data: Big Data Sets
+
+#BWA:
+episodic_counts <- read.table("/home/paul/episodicData/R_dir/episodic_data_main.gatk.sync")
+
+#Bowtie:
+
+#episodic_counts <- read.table("/home/paul/episodicData/bowtie/R_bowtie/episodic_data_bowtie_main.gatk.sync")
+
 
 
 #adjust colnames
@@ -168,5 +178,5 @@ cols.num <- c("Cage", "Generation", "Major_count", "Minor_count")
 episodic_long[cols.num] <- sapply(episodic_long[cols.num],as.numeric) 
 
 
-write.csv(episodic_long, file="episodic_bwa_counts.csv", row.names = FALSE)
-#write.csv(episodic_long, file="episodic_bowtie_counts.csv", row.names = FALSE)
+write.csv(episodic_long, file="episodic_bwa_main_counts.csv", row.names = FALSE)
+#write.csv(episodic_long, file="episodic_bowtie_main_counts.csv", row.names = FALSE)
