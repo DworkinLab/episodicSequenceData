@@ -1,6 +1,3 @@
-#Test Dir == /home/paul/episodicData/subsetting
-
-## killed for unknown reason...
 
 # To run: open R (> R) and source this script (be sure to edit based on file used). 
 
@@ -22,7 +19,6 @@ require('tidyr')
 
 #3) Need to change most importantly for analysis the read in and read out names 
 
-
 #Read in data: subset testing:
 
 #episodic_counts <- read.table("/home/paul/episodicData/subsetting/episodic_data_bowtie_2R_subset.gatk.sync")
@@ -32,12 +28,41 @@ require('tidyr')
 # Read in Data: Big Data Sets
 
 #BWA:
-episodic_counts <- read.table("/home/paul/episodicData/R_dir/episodic_data_main.gatk.sync")
+#episodic_counts <- read.table("/home/paul/episodicData/R_dir/episodic_data_main.gatk.sync")
+
+#episodic_data_3R.gatk.sync
+#episodic_data_2R.gatk.sync
+#episodic_data_3L.gatk.sync
+#episodic_data_2L.gatk.sync 
+#episodic_data_4.gatk.sync 
+#episodic_data_X.gatk.sync
+
+#episodic_counts <- read.table("/home/paul/episodicData/R_dir/episodic_data_3R.gatk.sync")
+#episodic_counts <- read.table("/home/paul/episodicData/R_dir/episodic_data_2R.gatk.sync") 
+#episodic_counts <- read.table("/home/paul/episodicData/R_dir/episodic_data_3L.gatk.sync") 
+#episodic_counts <- read.table("/home/paul/episodicData/R_dir/episodic_data_2L.gatk.sync") 
+#episodic_counts <- read.table("/home/paul/episodicData/R_dir/episodic_data_4.gatk.sync") 
+#episodic_counts <- read.table("/home/paul/episodicData/R_dir/episodic_data_X.gatk.sync")
+
+
 
 #Bowtie:
 
 #episodic_counts <- read.table("/home/paul/episodicData/bowtie/R_bowtie/episodic_data_bowtie_main.gatk.sync")
+#episodic_data_bowtie_3R.gatk.sync
+#episodic_data_bowtie_2R.gatk.sync
+#episodic_data_bowtie_3L.gatk.sync
+#episodic_data_bowtie_2L.gatk.sync
+#episodic_data_bowtie_4.gatk.sync
+#episodic_data_bowtie_X.gatk.sync
 
+
+#episodic_counts <- read.table("/home/paul/episodicData/bowtie/R_bowtie/episodic_data_bowtie_3R.gatk.sync")
+#episodic_counts <- read.table("/home/paul/episodicData/bowtie/R_bowtie/episodic_data_bowtie_2R.gatk.sync")
+#episodic_counts <- read.table("/home/paul/episodicData/bowtie/R_bowtie/episodic_data_bowtie_3L.gatk.sync")
+#episodic_counts <- read.table("/home/paul/episodicData/bowtie/R_bowtie/episodic_data_bowtie_2L.gatk.sync")
+#episodic_counts <- read.table("/home/paul/episodicData/bowtie/R_bowtie/episodic_data_bowtie_4.gatk.sync")
+#episodic_counts <- read.table("/home/paul/episodicData/bowtie/R_bowtie/episodic_data_bowtie_X.gatk.sync")
 
 
 #adjust colnames
@@ -57,6 +82,9 @@ episodic_counts$Ancestor <- episodic_counts$SelR1_0
 # Make long by bring populations down
 long_episodic <- gather(episodic_counts, Population, Allele_Freq , ConR1_115:ConR2_0, factor_key=TRUE)
 
+rm(episodic_counts)
+
+
 #Error???
 
 # All geneneric below for sync files (only real issue through file is population naming convention)
@@ -65,6 +93,9 @@ long_episodic <- gather(episodic_counts, Population, Allele_Freq , ConR1_115:Con
 #Seperate the allele counts into independent columns for each base
 Episodic_seperate <- long_episodic %>% 
   separate(Allele_Freq, c("A","T","C","G","N","del"), ":")
+
+rm(long_episodic)
+
 
 #Seperate the ancestor to base later things on
 Episodic_seperate <- Episodic_seperate %>% 
@@ -81,6 +112,8 @@ Episodic_seperate$sum <- (rowSums(Episodic_seperate[,11:16]))
 
 #Renamed incase of error:
 Episodic_split_2 <- Episodic_seperate
+
+rm(Episodic_seperate)
 
 #Ancestor Major_Allele and minor allele:
 
@@ -145,6 +178,7 @@ Episodic_split_2<- subset( Episodic_split_2, select = -sum)
 
 Episodic_split_3 <- Episodic_split_2
 
+rm(Episodic_split_2)
 
 ## Depends on the filter method:
 
@@ -157,10 +191,12 @@ grp <- Episodic_split_3 %>%
 grp2 <- grp[which(grp$sum<=5),]
 Episodic_split_3 <- Episodic_split_3[!(Episodic_split_3$pos %in% grp2$pos),]
 
+
 #check that the number of obs for episodic_long2 == obs for those without 0's sum (*16 for number of "populations") (needed later as well == grp3)
 
 #grp3 <- grp[-which(grp$sum<=5),]
-
+rm(grp)
+rm(grp2)
 
 #################################################
 #Should be all genetic above (from start specificed)
@@ -173,6 +209,9 @@ Episodic_split_3 <- Episodic_split_3[!(Episodic_split_3$pos %in% grp2$pos),]
 episodic_long <- Episodic_split_3 %>%
   separate(Population, c("Treatment", "Generation"), "_")
 
+rm(Episodic_split_3)
+
+
 episodic_long <- episodic_long %>%
   separate(Treatment, c("Treatment", "Cage"), "R")
 
@@ -180,5 +219,34 @@ cols.num <- c("Cage", "Generation", "Major_count", "Minor_count")
 episodic_long[cols.num] <- sapply(episodic_long[cols.num],as.numeric) 
 
 
-write.csv(episodic_long, file="episodic_bwa_main_counts.csv", row.names = FALSE)
+#write.csv(episodic_long, file="episodic_bwa_main_counts.csv", row.names = FALSE)
+#episodic_data_3R.gatk.sync
+#episodic_data_2R.gatk.sync
+#episodic_data_3L.gatk.sync
+#episodic_data_2L.gatk.sync 
+#episodic_data_4.gatk.sync 
+#episodic_data_X.gatk.sync
+
+#write.csv(episodic_long, file="episodic_data_3R.csv", row.names = FALSE)
+#write.csv(episodic_long, file="episodic_data_2R.csv", row.names = FALSE)
+#write.csv(episodic_long, file="episodic_data_3L.csv", row.names = FALSE)
+#write.csv(episodic_long, file="episodic_data_2L.csv", row.names = FALSE)
+#write.csv(episodic_long, file="episodic_data_4.csv", row.names = FALSE)
+#write.csv(episodic_long, file="episodic_data_X.csv", row.names = FALSE)
+
+
 #write.csv(episodic_long, file="episodic_bowtie_main_counts.csv", row.names = FALSE)
+#episodic_data_bowtie_3R.gatk.sync
+#episodic_data_bowtie_2R.gatk.sync
+#episodic_data_bowtie_3L.gatk.sync
+#episodic_data_bowtie_2L.gatk.sync
+#episodic_data_bowtie_4.gatk.sync
+#episodic_data_bowtie_X.gatk.sync
+
+#write.csv(episodic_long, file="episodic_data_bowtie_3R.csv", row.names = FALSE)
+#write.csv(episodic_long, file="episodic_data_bowtie_2R.csv", row.names = FALSE)
+#write.csv(episodic_long, file="episodic_data_bowtie_3L.csv", row.names = FALSE)
+#write.csv(episodic_long, file="episodic_data_bowtie_2L.csv", row.names = FALSE)
+#write.csv(episodic_long, file="episodic_data_bowtie_4.csv", row.names = FALSE)
+#write.csv(episodic_long, file="episodic_data_bowtie_X.csv", row.names = FALSE)
+
