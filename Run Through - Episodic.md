@@ -4109,5 +4109,76 @@ R
 ```
 and source the file (should require("tidyr") first to make sure it is in there).
 
+Did not work: 
+Do by chrsomosome
+
+```
+grep '3R' episodic_data_main.gatk.sync > episodic_data_3R.gatk.sync &
+grep '2R' episodic_data_main.gatk.sync > episodic_data_2R.gatk.sync &
+grep '3L' episodic_data_main.gatk.sync > episodic_data_3L.gatk.sync &
+grep '2L' episodic_data_main.gatk.sync > episodic_data_2L.gatk.sync &
+grep '^4' episodic_data_main.gatk.sync > episodic_data_4.gatk.sync &
+grep 'X' episodic_data_main.gatk.sync > episodic_data_X.gatk.sync
+```
+
+```
+grep '3R' episodic_data_bowtie_main.gatk.sync > episodic_data_bowtie_3R.gatk.sync &
+grep '2R' episodic_data_bowtie_main.gatk.sync > episodic_data_bowtie_2R.gatk.sync &
+grep '3L' episodic_data_bowtie_main.gatk.sync > episodic_data_bowtie_3L.gatk.sync &
+grep '2L' episodic_data_bowtie_main.gatk.sync > episodic_data_bowtie_2L.gatk.sync &
+grep '^4' episodic_data_bowtie_main.gatk.sync > episodic_data_bowtie_4.gatk.sync &
+grep 'X' episodic_data_bowtie_main.gatk.sync > episodic_data_bowtie_X.gatk.sync
+```
+Make a script for each arm of the chromosome to write a .csv file:
 
 
+
+Open screen and source package: do each in unison
+
+Start R
+```
+R
+```
+and source the file (should require("tidyr") first to make sure it is in there).
+
+Change all scripts to remove intermediate data.frames etc. and only have the current form worked on..
+```
+require("tidyr")
+source("sync_to_counts_bowtie_3R.R")
+#Possible fail; not outright kill?
+
+require("tidyr")
+source("sync_to_counts_bowtie_2R.R")
+#Killed?
+
+require("tidyr")
+source("sync_to_counts_bowtie_3L.R")
+#Killed?
+
+require("tidyr")
+source("sync_to_counts_bowtie_2L.R")
+
+require("tidyr")
+source("sync_to_counts_bowtie_4.R")
+#Worked: Weird warning - could not allocate memory
+
+require("tidyr")
+source("sync_to_counts_bowtie_X.R")
+```
+
+Screen 
+Start R
+```
+R
+```
+and source the file (should require("tidyr") first to make sure it is in there).
+
+source package: do each in unison
+```
+source("sync_to_counts_3R.R")
+source("sync_to_counts_2R.R")
+source("sync_to_counts_3L.R")
+source("sync_to_counts_2L.R")
+source("sync_to_counts_4.R")
+source("sync_to_counts_X.R")
+```
