@@ -4141,7 +4141,6 @@ R
 ```
 and source the file (should require("tidyr") first to make sure it is in there).
 
-Change all scripts to remove intermediate data.frames etc. and only have the current form worked on..
 ```
 require("tidyr")
 source("sync_to_counts_bowtie_3R.R")
@@ -4155,17 +4154,38 @@ require("tidyr")
 source("sync_to_counts_bowtie_3L.R")
 #Killed?
 
+
 require("tidyr")
 source("sync_to_counts_bowtie_2L.R")
+#Long Run Time
 
 require("tidyr")
 source("sync_to_counts_bowtie_4.R")
-#Worked: Weird warning - could not allocate memory
+#Worked: Weird warning - could not allocate memory -- but have a .csv
 
 require("tidyr")
 source("sync_to_counts_bowtie_X.R")
+# Long run time
 ```
 
+Rerunning with removing intermediate steps (Change all scripts to remove intermediate data.frames etc. and only have the current form worked on)
+
+```
+require("tidyr")
+source("sync_to_counts_bowtie_3R.R")
+
+
+require("tidyr")
+source("sync_to_counts_bowtie_2R.R")
+
+
+require("tidyr")
+source("sync_to_counts_bowtie_3L.R")
+```
+
+
+
+### BWA
 Screen 
 Start R
 ```
