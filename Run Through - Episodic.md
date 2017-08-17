@@ -4157,7 +4157,7 @@ source("sync_to_counts_bowtie_3L.R")
 
 require("tidyr")
 source("sync_to_counts_bowtie_2L.R")
-#Long Run Time
+#Killed
 
 require("tidyr")
 source("sync_to_counts_bowtie_4.R")
@@ -4181,6 +4181,9 @@ source("sync_to_counts_bowtie_2R.R")
 
 require("tidyr")
 source("sync_to_counts_bowtie_3L.R")
+
+require("tidyr")
+source("sync_to_counts_bowtie_2L.R")
 ```
 
 
