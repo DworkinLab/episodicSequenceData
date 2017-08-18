@@ -1,12 +1,5 @@
 #Episodic data analysis:
 
-source("episodic_packages.R")
-
-
-#episodic_long <- read.csv("X", h=TRUE)
-
-  
-
 ### BWA
   
 #episodic_data_3R.csv
@@ -24,9 +17,10 @@ source("episodic_packages.R")
 #episodic_data_bowtie_4.csv
 #episodic_data_bowtie_X.csv
 
-#The Data: in long format, each position with Treatment, Cage and Generation, along with the Major and Mnor allele counts correponding to the ancestral major/minor allele
+episodic_long <- read.csv("episodic_data_bowtie_4.csv", h=TRUE)
+#The .csv files will be in an odd format: may need to loop like with Sync_to_counts_smallerSyncs.R
 
-#head(episodic_long)
+#The Data: in long format, each position with Treatment, Cage and Generation, along with the Major and Mnor allele counts correponding to the ancestral major/minor allele
 
 #The full model:
 
@@ -35,7 +29,7 @@ position <- unique(episodic_long$pos)
 no.pos <- length(position)
 
 #Remove N/A's -- possibly not needed so hashed out.
-#episodic_long <- na.omit(episodic_long)
+episodic_long <- na.omit(episodic_long)
 
 #Make list to store model
 modlist_2 <- as.list(1:no.pos)
@@ -60,10 +54,7 @@ for(i in position){
         data = tmp2, family = "binomial")
   
   #Turn this model into a data frame of coefficients
-  x <- as.data.frame(summary(modlist_2[[i]] )$coefficients, row.names = FALSE)
-  
-  #Name the columns for the model; i.e the levels of Effects
-  x$Effects <- c("Intercept", "TreatmentSel", "Generation", "TreatmentsSel:Generation")
+  x <- as.data.frame(summary(modlist_2[[i]] )$coefficients)
   
   #Name the position of this model results with i
   x$position <- i
@@ -75,14 +66,37 @@ for(i in position){
   rm(i)
 }
 
+#Change column names to workable
+colnames(coeffs_df) <- c("Estimate", "Standard_error", "z-value", "p-value", "position")
 
-#head(coeffs_df)
+coeffs_df$Effects<-rownames(coeffs_df)
+
+
+coeffs_df$Effects_2 <- ifelse(grepl("TreatmentSel:Generation",coeffs_df$Effects),'T_Sel:Gen', ifelse(grepl("Intercept",coeffs_df$Effects),'Int', coeffs_df$Effects ))
+
+coeffs_df$Effects_2 <- ifelse(grepl("TreatmentSel",coeffs_df$Effects_2),'T_Sel', ifelse(grepl("Generation",coeffs_df$Effects_2),'Gen', coeffs_df$Effects_2))
+
+
+rownames(coeffs_df) <- c()
 
 #Make the p-values into -log10 p values
-coeffs_df$log_p <- -log10(coeffs_df$`Pr(>|z|)`)
+coeffs_df$log_p <- -log10(coeffs_df$`p-value`)
 
-#Save data frame???
+coeffs_df <- subset(coeffs_df, select = -c(Effects))
+
+coeffs_df$Effects <- ifelse(coeffs_df$Effects_2=='T_Sel', 'TreatmentSel', ifelse(coeffs_df$Effects_2=='Gen', 'Generation', ifelse(coeffs_df$Effects_2=='Int', 'Intercept', 'TreatmentSel:Generation')))
+
+coeffs_df <- subset(coeffs_df, select = -c(Effects_2))
 
 
-#gg1 <- ggplot(data = coeffs_df, aes(x=position, y=log_p, colour=Effects))
-#gg1 + geom_point(size = 1) + geom_hline(yintercept = 1.5)
+coeffs_df <- coeffs_df[-which(coeffs_df$log_p==0),]
+
+#coeffs_df <- coeffs_df[grep("Treatment", coeffs_df$Effects), ]
+#coeffs_df <- coeffs_df[which(coeffs_df$Effects=="TreatmentSel"),]
+
+
+#Save as Data frame
+#Change based on the data input!
+
+write.csv(coeffs_df, file="episodic_bowtie_4_coeffs.csv", row.names = FALSE)
+
