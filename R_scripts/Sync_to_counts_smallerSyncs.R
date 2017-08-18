@@ -79,6 +79,7 @@ for (dir in mydirs){
     # as.numeric to multiple columns:
     cols.num <- c("A_0", "T_0", "C_0", "G_0", "N_0", "del_0", "A", "T", "C", "G", "N", "del")
     
+    #This step took a shit ton of time?
     Episodic_split_2[cols.num] <- sapply(Episodic_split_2[cols.num],as.numeric)
     
     #Get the sum of all the rows (all the different bases) for each population position:
