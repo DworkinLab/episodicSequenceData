@@ -4141,7 +4141,6 @@ R
 ```
 and source the file (should require("tidyr") first to make sure it is in there).
 
-Change all scripts to remove intermediate data.frames etc. and only have the current form worked on..
 ```
 require("tidyr")
 source("sync_to_counts_bowtie_3R.R")
@@ -4155,17 +4154,41 @@ require("tidyr")
 source("sync_to_counts_bowtie_3L.R")
 #Killed?
 
+
 require("tidyr")
 source("sync_to_counts_bowtie_2L.R")
+#Killed
 
 require("tidyr")
 source("sync_to_counts_bowtie_4.R")
-#Worked: Weird warning - could not allocate memory
+#Worked: Weird warning - could not allocate memory -- but have a .csv
 
 require("tidyr")
 source("sync_to_counts_bowtie_X.R")
+# Long run time
 ```
 
+Rerunning with removing intermediate steps (Change all scripts to remove intermediate data.frames etc. and only have the current form worked on)
+
+```
+require("tidyr")
+source("sync_to_counts_bowtie_3R.R")
+
+
+require("tidyr")
+source("sync_to_counts_bowtie_2R.R")
+
+
+require("tidyr")
+source("sync_to_counts_bowtie_3L.R")
+
+require("tidyr")
+source("sync_to_counts_bowtie_2L.R")
+```
+
+
+
+### BWA
 Screen 
 Start R
 ```
@@ -4182,3 +4205,34 @@ source("sync_to_counts_2L.R")
 source("sync_to_counts_4.R")
 source("sync_to_counts_X.R")
 ```
+
+
+How to break up the chromosomes into smaller pieces to work with>
+Break the 2R for R
+```
+wc -l episodic_data_2R.sync
+```
+
+wc -l episodic_data_2R.sync/ X == Managable sizes
+
+Ex for 2R split every ~20,000:
+0,2054752,4109504,6164256,8219008,10273760,12328512,14383264,16438016,18492768,20547525
+```
+sed -n ' 1, 2054752 p' ../episodic_data_2R.sync > episodic_data_2R_1.sync
+sed -n ' 2054753, 4109504 p' ../episodic_data_2R.sync > episodic_data_2R_2.sync
+sed -n ' 4109505, 6164256 p' ../episodic_data_2R.sync > episodic_data_2R_3.sync
+sed -n ' 6164257, 8219008 p' ../episodic_data_2R.sync > episodic_data_2R_4.sync
+sed -n ' 8219009, 10273760 p' ../episodic_data_2R.sync > episodic_data_2R_5.sync
+sed -n ' 10273761, 12328512 p' ../episodic_data_2R.sync > episodic_data_2R_6.sync
+sed -n ' 12328513, 14383264 p' ../episodic_data_2R.sync > episodic_data_2R_7.sync
+sed -n ' 14383265, 16438016 p' ../episodic_data_2R.sync > episodic_data_2R_8.sync
+sed -n ' 16438017, 18492768 p' ../episodic_data_2R.sync > episodic_data_2R_9.sync
+sed -n ' 18492769, 20547525 p' ../episodic_data_2R.sync > episodic_data_2R_10.sync
+```
+
+R script to run model test: episodic_data_bowtie_4.csv
+- doing on local to have a look at it;
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/bowtie/R_bowtie/R_scripts/episodic_data_bowtie_4.csv /Users/paulknoops/Bioinformatics/episodic_practice
+```
+Looking at the data; looks weird and repeated similarites across positions ...
