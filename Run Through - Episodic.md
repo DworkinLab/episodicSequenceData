@@ -4350,6 +4350,10 @@ source("R_loop_sync_to_counts.R")
 
 which can be seen with BWA below (which is edited for BWA
 
+For this run: most of 3R not done (the _2 was killed).
+	- means the X failed as well
+	- move to own dir in that one and rerun script with changed dir call.
+
 Will need to rename .csv files; will have 50 .csv files to combine later as well....
 
 should have removed all intermediate things at the end again.. but oh well
@@ -4462,7 +4466,7 @@ require('tidyr')
 
 mydirs <- list.dirs(path = "/home/paul/episodicData/R_dir/bwa_subsetDirectories", recursive = FALSE)
 
-#includes that actual dir..
+#includes that actual dir.. not with recursive = FALSE
 
 for (dir in mydirs){
 
