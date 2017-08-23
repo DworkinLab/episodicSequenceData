@@ -4732,20 +4732,26 @@ write.csv(coeffs_df, file="episodic_bowtie_4_coeffs.csv", row.names = FALSE)
 
 
 
-Worked; need to make a loop script for the non 4th chromo ones:
-
+Worked; need to make a loop for each directory: change working directory?
 
 ```
 #Episodic data analysis: loop .csv files to run model:
 
 #change to directory holding all directories:
 
-mydirs <- list.dirs(path = "/home/paul/episodicData/bowtie/R_bowtie/subsettingDirectories", recursive = FALSE)
+#mydirs <- list.dirs(path = "/home/paul/episodicData/R_dir/bwa_subsetDirectories", recursive = FALSE)
 
 
-for (dir in mydirs){
+#for (dir in mydirs){
   
-  setwd(dir)
+#setwd(dir)
+
+setwd("episodic_data_2L_dir")
+#setwd("episodic_data_2R_dir")
+#setwd("episodic_data_3L_dir")
+#setwd("episodic_data_3R_dir")
+#setwd("episodic_data_4_dir")
+#setwd("episodic_data_X_dir")
   
   mycsvs <- list.files(pattern=".csv")
   
@@ -4844,6 +4850,8 @@ for (dir in mydirs){
     rm(no.pos)
     rm(position)
   }
-}
+#}
 
 ```
+Running Bowtie is a large loop (should stop)
+running BWA per chromosome in a loop
