@@ -4861,3 +4861,11 @@ name screens:
 ```
 screen -S NAME
 ```
+
+the 4th chromsome finished first: bring to local to practice:
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/bowtie/R_bowtie/bowtie_subset_Ranalysis/episodic_data_bowtie_4_dir/episodic_data_bowtie_4.csv.coeffs.csv /Users/paulknoops/Bioinformatics/episodic_practice
+
+scp paul@info.mcmaster.ca:/home/paul/episodicData/R_dir/bwa_subsetDirectories/episodic_data_4_dir/episodic_data_4.gatk.sync.csv.coeffs.csv /Users/paulknoops/Bioinformatics/episodic_practice
+
+```
