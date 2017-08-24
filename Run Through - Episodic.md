@@ -4744,14 +4744,14 @@ Worked; need to make a loop for each directory: change working directory?
 
 #for (dir in mydirs){
   
-#setwd(dir)
+#setwd('/home/paul/episodicData/bowtie/R_bowtie/bowtie_subset_Ranalysis/')
 
-setwd("episodic_data_2L_dir")
-#setwd("episodic_data_2R_dir")
-#setwd("episodic_data_3L_dir")
-#setwd("episodic_data_3R_dir")
-#setwd("episodic_data_4_dir")
-#setwd("episodic_data_X_dir")
+# make script into '/home/paul/episodicData/bowtie/R_bowtie/bowtie_subset_Ranalysis/' and open from same direcotry screen/R
+#setwd("episodic_data_bowtie_2R_dir")
+#setwd("episodic_data_bowtie_3L_dir")
+setwd("episodic_data_bowtie_3R_dir")
+#setwd("episodic_data_bowtie_4_dir")
+#setwd("episodic_data_bowtie_X_dir")
   
   mycsvs <- list.files(pattern=".csv")
   
@@ -4853,5 +4853,11 @@ setwd("episodic_data_2L_dir")
 #}
 
 ```
-Running Bowtie is a large loop (should stop)
+Running Bowtie is a large loop (should stop): moved the other directories (Not 2L which is first) to own directory and making own loop (above)
+
 running BWA per chromosome in a loop
+
+name screens:
+```
+screen -S NAME
+```
