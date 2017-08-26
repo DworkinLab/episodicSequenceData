@@ -4854,6 +4854,8 @@ setwd("episodic_data_bowtie_3R_dir")
 
 ```
 Running Bowtie is a large loop (should stop): moved the other directories (Not 2L which is first) to own directory and making own loop (above)
+	-- "Running entity: 20598073 which is 59410 out of 343990 file= episodic_data_bowtie_3R_10.sync.csv"
+	-- Stuck here; .... used ctrl X and it restarted....?
 
 running BWA per chromosome in a loop
 	-- FWI: 2R for bwa number 11 was so small and nothing was left after filtering (so removed)
