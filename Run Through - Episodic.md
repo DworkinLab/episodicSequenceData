@@ -4872,3 +4872,36 @@ scp paul@info.mcmaster.ca:/home/paul/episodicData/bowtie/R_bowtie/bowtie_subset_
 scp paul@info.mcmaster.ca:/home/paul/episodicData/R_dir/bwa_subsetDirectories/episodic_data_4_dir/episodic_data_4.gatk.sync.csv.coeffs.csv /Users/paulknoops/Bioinformatics/episodic_practice
 
 ```
+
+
+Ancestral Pi (run from new Ancestral directory)
+```
+#Make pileup first for only MGD3
+samtools mpileup MGD3_SO_CAGATC_merged_aligned_pe.final_realigned.bam  > MGD3.pileup
+```
+run variance sliding
+```
+perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input MGD3.pileup --output MGD3.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120
+```
+
+Visualize:
+```
+perl /home/paul/popoolation_1.2.2/Visualise-output.pl --input MGD3.pi --output MGD3.pi.pdf --ylab pi --chromosomes "X 2L 2R 3L 3R 4"
+```
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/Ancestor/MGD3.pi.pdf /Users/paulknoops/Bioinformatics/episodic_practice
+scp paul@info.mcmaster.ca:/home/paul/episodicData/Ancestor/MGD3.pi /Users/paulknoops/Bioinformatics/episodic_practice
+```
+
+Bowtie: full script:
+```
+#! /bin/bash
+
+input=/home/paul/episodicData/bowtie/MDG3_bow
+samtools mpileup ${input}/MGD3_SO_CAGATC_merged_bowtie_pe.final_realigned.bam > ${input}/MGD3_bowtie.pileup
+
+perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${input}/MGD3_bowtie.pileup --output ${input}/MGD3_bowtie.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120
+
+perl /home/paul/popoolation_1.2.2/Visualise-output.pl --input ${input}/MGD3_bowtie.pi --output ${input}/MGD3_bowtie.pi.pdf --ylab pi --chromosomes "X 2L 2R 3L 3R 4"
+
+```
