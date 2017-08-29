@@ -4903,5 +4903,8 @@ samtools mpileup ${input}/MGD3_SO_CAGATC_merged_bowtie_pe.final_realigned.bam > 
 perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${input}/MGD3_bowtie.pileup --output ${input}/MGD3_bowtie.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120
 
 perl /home/paul/popoolation_1.2.2/Visualise-output.pl --input ${input}/MGD3_bowtie.pi --output ${input}/MGD3_bowtie.pi.pdf --ylab pi --chromosomes "X 2L 2R 3L 3R 4"
-
+```
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/bowtie/MDG3_bow/MGD3_bowtie.pi.pdf /Users/paulknoops/Bioinformatics/episodic_practice
+scp paul@info.mcmaster.ca:/home/paul/episodicData/bowtie/MDG3_bow/MGD3_bowtie.pi /Users/paulknoops/Bioinformatics/episodic_practice
 ```
