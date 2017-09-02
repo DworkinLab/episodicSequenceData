@@ -4908,3 +4908,10 @@ perl /home/paul/popoolation_1.2.2/Visualise-output.pl --input ${input}/MGD3_bowt
 scp paul@info.mcmaster.ca:/home/paul/episodicData/bowtie/MDG3_bow/MGD3_bowtie.pi.pdf /Users/paulknoops/Bioinformatics/episodic_practice
 scp paul@info.mcmaster.ca:/home/paul/episodicData/bowtie/MDG3_bow/MGD3_bowtie.pi /Users/paulknoops/Bioinformatics/episodic_practice
 ```
+
+```
+
+scp paul@info.mcmaster.ca:/home/paul/Chromosomes/*.csv /Users/paulknoops/Bioinformatics/episodic_practice/DATA
+
+scp paul@info.mcmaster.ca:/home/paul/Chromosomes/*plots.R /Users/paulknoops/Bioinformatics/episodic_practice/DATA
+```
