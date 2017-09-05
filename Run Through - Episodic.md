@@ -4915,3 +4915,23 @@ scp paul@info.mcmaster.ca:/home/paul/Chromosomes/*.csv /Users/paulknoops/Bioinfo
 
 scp paul@info.mcmaster.ca:/home/paul/Chromosomes/*plots.R /Users/paulknoops/Bioinformatics/episodic_practice/DATA
 ```
+
+
+```
+#! /bin/bash
+
+input=/home/paul/episodicData/gatk_dir
+output=/home/paul/episodicData/115
+#samtools mpileup ${input}/F115ConR1_TAGCTT_merged_aligned_pe.final_realigned.bam > ${output}/F115ConR1bwa.pileup
+#samtools mpileup ${input}/F115ConR2_GGCTAC_merged_aligned_pe.final_realigned.bam > ${output}/F115ConR2bwa.pileup
+#samtools mpileup ${input}/F115SelR1_GTTTCG_merged_aligned_pe.final_realigned.bam > ${output}/F115SelR1bwa.pileup
+samtools mpileup ${input}/F115SelR2_GTGGCC_merged_aligned_pe.final_realigned.bam > ${output}/F115SelR2bwa.pileup
+
+#perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${output}/F115ConR1bwa.pileup --output ${output}/F115ConR1bwa.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120
+
+#perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${output}/F115ConR2bwa.pileup --output ${output}/F115ConR2bwa.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120
+
+#perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${output}/F115SelR1bwa.pileup --output ${output}/F115SelR1bwa.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120
+
+perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${output}/F115SelR2bwa.pileup --output ${output}/F115SelR2bwa.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120
+```
