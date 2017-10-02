@@ -4936,6 +4936,9 @@ samtools mpileup ${input}/F115SelR2_GTGGCC_merged_aligned_pe.final_realigned.bam
 perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${output}/F115SelR2bwa.pileup --output ${output}/F115SelR2bwa.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120
 ```
 
+
 ```
 scp paul@info.mcmaster.ca:/home/paul/episodicData/115/*.pi /Users/paulknoops/Bioinformatics/episodic_practice/F115
 ```
+
+ALL Failed: Try Again (change coverage/quality?)
