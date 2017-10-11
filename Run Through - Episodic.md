@@ -4963,6 +4963,8 @@ samtools mpileup ${input}/F115SelR2_GTGGCC_merged_bowtie_pe.final_realigned.bam 
 
 perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${output}/F115SelR2bowtie.pileup --output ${output}/F115SelR2bowtie.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120
 ```
+Check Encoding: could be sanger again issue????
+
 Lots of NA's ?? mpileup issue, or coverage issue? or what....
 samtools mpileup -B -Q 0 -f wg/dmel-2R-short.
 fasta pe.q20.rmd.sort.bam > pe.mpileup
