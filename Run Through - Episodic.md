@@ -4963,4 +4963,29 @@ samtools mpileup ${input}/F115SelR2_GTGGCC_merged_bowtie_pe.final_realigned.bam 
 
 perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${output}/F115SelR2bowtie.pileup --output ${output}/F115SelR2bowtie.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120
 ```
+Lots of NA's ?? mpileup issue, or coverage issue? or what....
+samtools mpileup -B -Q 0 -f wg/dmel-2R-short.
+fasta pe.q20.rmd.sort.bam > pe.mpileup
+```
 
+#! /bin/bash
+
+input=/home/paul/episodicData/bowtie/gatk_bowtie
+output=/home/paul/episodicData/bowtie/bowtie_pileups
+index_dir=/home/paul/episodicData/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57_2.fasta
+
+files=(${input}/*_pe.final_realigned.bam)
+
+for file in ${files[@]}
+
+do
+
+name=${file}
+
+base=`basename ${name} _pe.final_realigned.bam`
+
+samtools mpileup -B -Q 0 -f ${ref_genome} ${input}/${base}_pe.final_realigned.bam > ${output}/${base}.pileup
+
+done
+```
