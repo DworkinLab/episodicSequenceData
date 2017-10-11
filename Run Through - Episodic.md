@@ -4942,3 +4942,25 @@ scp paul@info.mcmaster.ca:/home/paul/episodicData/115/*.pi /Users/paulknoops/Bio
 ```
 
 ALL Failed: Try Again (change coverage/quality?)
+Try Bowtie:
+
+```
+#! /bin/bash
+
+input=/home/paul/episodicData/bowtie/gatk_bowtie
+output=/home/paul/episodicData/bowtie/115_bow
+
+#samtools mpileup ${input}/F115ConR1_TAGCTT_merged_bowtie_pe.final_realigned.bam > ${output}/F115ConR1bowtie.pileup
+#samtools mpileup ${input}/F115ConR2_GGCTAC_merged_bowtie_pe.final_realigned.bam > ${output}/F115ConR2bowtie.pileup
+#samtools mpileup ${input}/F115SelR1_GTTTCG_merged_bowtie_pe.final_realigned.bam > ${output}/F115SelR1bowtie.pileup
+samtools mpileup ${input}/F115SelR2_GTGGCC_merged_bowtie_pe.final_realigned.bam > ${output}/F115SelR2bowtie.pileup
+
+#perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${output}/F115ConR1bowtie.pileup --output ${output}/F115ConR1bowtie.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120
+
+#perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${output}/F115ConR2bowtie.pileup --output ${output}/F115ConR2bowtie.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120
+
+#perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${output}/F115SelR1bowtie.pileup --output ${output}/F115SelR1bowtie.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120
+
+perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${output}/F115SelR2bowtie.pileup --output ${output}/F115SelR2bowtie.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120
+```
+
