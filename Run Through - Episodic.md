@@ -4966,8 +4966,7 @@ perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${output}/F115SelR
 Check Encoding: could be sanger again issue????
 
 Lots of NA's ?? mpileup issue, or coverage issue? or what....
-samtools mpileup -B -Q 0 -f wg/dmel-2R-short.
-fasta pe.q20.rmd.sort.bam > pe.mpileup
+
 ```
 
 #! /bin/bash
@@ -4988,6 +4987,28 @@ name=${file}
 base=`basename ${name} _pe.final_realigned.bam`
 
 samtools mpileup -B -Q 0 -f ${ref_genome} ${input}/${base}_pe.final_realigned.bam > ${output}/${base}.pileup
+
+done
+```
+
+```
+
+#! /bin/bash
+
+input=/home/paul/episodicData/bowtie/bowtie_pileups
+output=/home/paul/episodicData/bowtie/bowtie_pi
+
+files=(${input}/*_merged_bowtie.pileup)
+
+for file in ${files[@]}
+
+do
+
+name=${file}
+
+base=`basename ${name} _merged_bowtie.pileup`
+
+perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${input}/${base}_merged_bowtie.pileup --output ${output}/${base}.bowtie.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120
 
 done
 ```
