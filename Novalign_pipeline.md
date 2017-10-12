@@ -1,4 +1,6 @@
-# Running Novoalign mapper
+# Mapping with Novoalign and the subsequent steps to clean data:
+_________________________________________________________________________________________________________________________
+## Running Novoalign mapper
 
 Starting with sequence files that have already been inspected with md5sum and fastqc and have been trimmed using trimmomatic (See other files for running trimmomatic)
 
@@ -109,7 +111,7 @@ MEDIAN_INSERT_SIZE|MEDIAN_ABSOLUTE_DEVIATION|MIN_INSERT_SIZE|MAX_INSERT_SIZE|MEA
 For generation 115 alone: mean = 542, SD = 156
 ```
 
-### Running Novoalign
+### Running Novoalign (File By File)
 
 This process will run one file at a time
 
@@ -148,22 +150,26 @@ done
 
 This takes a long time, as the unlicensed version can only uses 1 thread (100% computer)
 
-***From novoalign reference manual: -c 99 Sets the number of threads to be used. On licensed versions it defaults 
-to the number of CPUs as reported by sysinfo(). On free version the option is disabled***
+*** From novoalign reference manual: -c 99 Sets the number of threads to be used. On licensed versions it defaults 
+to the number of CPUs as reported by sysinfo(). On free version the option is disabled ***
 
-### Run scripts for each in parallel
+### Running Novoalign (in parallel)
 
 A solution to run each file seperatly in a simple splitting method
 
 *** alternative that may be an option: add the & after the code in the for Loop (before the done) and it should push that "for" to the background and run the next file in sequence *** 
 
-1) Make the script to make multiple scripts
+__1) Make the script to make multiple scripts__
 
-Make dir for all output scripts: mkdir split_mappingScripts
+Make dir for all output scripts: 
 
-*Run in Scripts dir (not split_mappingScripts)
+```
+mkdir split_mappingScripts
+```
 
-This will create many scripts that are layed out for each different file (i.e for each base above) and put them into a seperate script folder to run from
+Script to create many scripts
+
+- each different file normally looped through one by one above are put into a seperate script
 
 ```
 #! /bin/bash
@@ -194,10 +200,9 @@ echo "${novoalign}/novoalign -d ${novo_index} -f ${trim_dir}/${base}_R1_PE.fastq
 done
 ```
 
+__2) Create script to call all and run in parallel (use "&" which puts job in background then multiple can run at a time)__
 
-2) Create script to call all and run in parallel (use "&" which puts job in background then multiple can run at a time)
-
-This creates a file that has all the scripts made in step 1) in a list with & at the end to run in parrallel
+This creates a file that has all the scripts made in step 1) in a list with ''&'' at the end to run in parrallel
 
 One method to run only half is make files/basename based on lane (i.e 001 or 002)
 
@@ -227,10 +232,12 @@ done
 
 3) Change permissions and run novo_parallel_map.sh
 
-If needed based on the computer space available, change input parametes to run subsets on different days
+If needed based on the computer space available, change input parametes to run subsets on different days (one option above)
 
 Run on screen
-Screen can be named with -S (ex. screen -S Novo_parallelMapping)
+
+Screen can be named with -S (ex. screen -S IDENTIFIERTITLE)
+
 Can save all outputs of screen using script (ex. script LOGTITLE.log) and finish script with "exit"
 
 ```
@@ -248,6 +255,8 @@ From the trim_dir:
 gzip *.fastq
 ```
 
+## Steps used for all mapping outputs: changing parameters for input/output directories
+____________________________________________________________________________________________________________________________________
 ### Change SAM files to BAM files: 
 
 -- Saves space (BAM files are binary compressed versions of SAM files)
@@ -280,9 +289,6 @@ base=`basename ${name} .sam`
 samtools view -b -S -q 20 ${novo_dir}/${base}.sam | samtools sort -o ${novo_bam}/${base}.bam
 done
 ```
-
-
-## Next Steps:
 
 ### Merge 
 --  mkdir novo_merge
