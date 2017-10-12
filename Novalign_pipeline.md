@@ -21,38 +21,62 @@ ex. mkdir novo_scripts
 
 Need index dir: mkdir novo_index
 
+The reference genome needs to be indexed for novoalign mapping (with novoindex)
+
 Example Script:
 ```
 #! /bin/bash
 
-#Create variable for location of reference genome
+#Create variable for location of reference genome (fasta vs. fasta.gz?)
 ref_genome=/home/paul/episodicData/index_dir/dmel-all-chromosome-r5.57_2.fasta
 
-#Variables for project, novoalign, and output directory
+#Variable for project
 project_dir=/home/paul/episodicData/novoalign
+
+#Variable for novoalign
 novoalign=/usr/local/novoalign
+
+#Variable for output directory
 novo_index=${project_dir}/novo_index
 
 #Index the reference
 ${novoalign}/novoindex ${novo_index}/dmel-all-chromosome-r5.57_2.nix  ${ref_genome}
 ```
 
-### Run Novoalign
+
+### Unzip Files
 Note: Compressed read files are not supported in unlicensed versions.
 
 Need to unzip (in trimmomatic output dir)
+
 ```
 gunzip *.gz
 ```
 
-    > Novoalign Flags
-        - d -- Full pathname of indexed reference sequence from novoindex
-        - f -- Files containing the read sequences to be aligned  
-        - o -- Specifies output report format and options (SAM)  
-        - i ###,## -- Sets fragment orientation and approximate fragment length for proper pairs.
-             ex. -i 250 50  Defaults to paired end Illumina or Mate Pair ABI with 250bp insert and 50bp standard deviation
-                - Using 400,100 based on initial mapping with novoalign first run through
+### Novoalign Flags
+ - d -- Full pathname of indexed reference sequence from novoindex
+ - f -- Files containing the read sequences to be aligned  
+ - o -- Specifies output report format and options (SAM)  
+ - i ###,## -- Sets fragment orientation and approximate fragment length for proper pairs.
+    ex. -i 250 50  Defaults to paired end Illumina or Mate Pair ABI with 250bp insert and 50bp standard deviation (possible check below)
+     - Using 400,100 based on initial mapping with novoalign first run through
 
+### Checking insert Size
+Using output from Picard Sort, if available from Bowtie2 or BWA mem previously (before removing duplicates), use picard-tools/CollectInsertSizeMetrics.jar to get summary statistics on file for insert size and other information
+
+If other mappers not available, use subsample or confirm after using defaults
+
+Ex.
+```
+java -jar /usr/local/picard-tools-1.131/picard.jar CollectInsertSizeMetrics \
+    I=/home/paul/episodicData/novoalign/novo_rmd/F115ConR1_TAGCTT_novo_merge_novo_rmd.bam \
+    O=/home/paul/episodicData/novoalign/novo_rmd/insert_size_metrics.txt \
+    H=/home/paul/episodicData/novoalign/novo_rmd/insert_size_histogram.pdf
+```
+
+### Running Novoalign
+
+This process will run one file at a time
 
 The script
 ```
@@ -70,9 +94,8 @@ novoalign=/usr/local/novoalign
 #Path the trim outputs to be mapped
 trim_dir=/home/paul/episodicData/trim_dir
 
-#Path to output directory
+#Path to output directory for mapped files
 novo_dir=${project_dir}/novo_dir
-
 
 files=(${trim_dir}/*_R1_PE.fastq)
 
@@ -80,7 +103,10 @@ for file in ${files[@]}
 do
 name=${file}
 base=`basename ${name} _R1_PE.fastq`
-${novoalign}/novoalign -d ${novo_index} -f ${trim_dir}/${base}_R1_PE.fastq ${trim_dir}/${base}_R2_PE.fastq -i 400,100 -o SAM > ${novo_dir}/${base}_novo.sam
+
+${novoalign}/novoalign -d ${novo_index} \
+    -f ${trim_dir}/${base}_R1_PE.fastq ${trim_dir}/${base}_R2_PE.fastq \ 
+    -i 400,100 -o SAM > ${novo_dir}/${base}_novo.sam
 
 done
 ```
@@ -90,14 +116,19 @@ Takes a long time: Only uses 1 thread (100% computer)
 From novoalign reference manual: -c 99 Sets the number of threads to be used. On licensed versions it defaults 
 to the number of CPUs as reported by sysinfo(). On free version the option is disabled
 
-### To avoid this problem, run scripts for each in parallel
-*** alternative that may be an option: add the & after the code in the for Loop (before the done) and it should push that "for" to the background and run the next file in sequence. *** 
+### Run scripts for each in parallel
 
-1) make the script to make multiple scripts
+A solution to run each file seperatly in a simple splitting method
+
+*** alternative that may be an option: add the & after the code in the for Loop (before the done) and it should push that "for" to the background and run the next file in sequence *** 
+
+1) Make the script to make multiple scripts
 
 Make dir for all output scripts: mkdir split_mappingScripts
 
-Run in Scripts dir ( not split_mappingScripts)
+*Run in Scripts dir (not split_mappingScripts)
+
+This will create many scripts that are layed out for each different file (i.e for each base above) and put them into a seperate script folder to run from
 
 ```
 #! /bin/bash
@@ -129,9 +160,10 @@ done
 ```
 
 
+2) Create script to call all and run in parallel (use "&" which puts job in background then multiple can run at a time)
 
+This creates a file that has all the scripts made in step 1) in a list with & at the end to run in parrallel
 
-2) Create script to call all and run in parallel (us & which puts job in background)
 ```
 #! /bin/bash
 
@@ -155,9 +187,26 @@ echo "${map_scripts}/${base}.sh &" > ${scripts}/novo_parallel_map.sh
 
 done
 ```
-Change permissions and run novo_parallel_map.sh to run all files at once (can change input parametes to run subsets on different days)
+
+3) Change permissions and run novo_parallel_map.sh
+
+If needed based on the computer space available, change input parametes to run subsets on different days
+
+Run on screen
+Screen can be named with -S (ex. screen -S Novo_parallelMapping)
+Can save all outputs of screen using script (ex. script LOGTITLE.log) and finish script with "exit"
+
+```
+novo_parallel_map.sh
+```
+
+ This should map each file seperate in unison
+
+### Save space again with trimmed files: Rezip
 
 Rezip files in trim_dir (saves space)
+
+From the trim_dir:
 ```
 gzip *.fastq
 ```
