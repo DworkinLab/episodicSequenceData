@@ -223,15 +223,17 @@ From the trim_dir:
 gzip *.fastq
 ```
 
-### sam-bam files: 
--- need bam directory (mkdir novo_bam)
+### Change SAM files to BAM files: 
 
-    >Flags:
+-- Saves space (BAM files are binary compressed versions of SAM files)
+
+-- need bam directory for .bam files (mkdir novo_bam)
+
+    > Flags:
         - b -- output is .bam
         - S -- input is .sam
         - q 20 -- quality mapping score of 20 (standard throughout all experiments)
         
-
 ```
 #! /bin/bash
 
