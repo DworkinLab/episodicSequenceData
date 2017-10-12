@@ -1,5 +1,7 @@
 # Mapping with Novoalign and the subsequent steps to clean data:
 _________________________________________________________________________________________________________________________
+_________________________________________________________________________________________________________________________
+
 ## Running Novoalign mapper
 
 Starting with sequence files that have already been inspected with md5sum and fastqc and have been trimmed using trimmomatic (See other files for running trimmomatic)
@@ -153,7 +155,7 @@ This takes a long time, as the unlicensed version can only uses 1 thread (100% c
 *** From novoalign reference manual: -c 99 Sets the number of threads to be used. On licensed versions it defaults 
 to the number of CPUs as reported by sysinfo(). On free version the option is disabled ***
 
-### Running Novoalign (in parallel)
+### Running Novoalign (Running In Parallel)
 
 A solution to run each file seperatly in a simple splitting method
 
@@ -230,7 +232,7 @@ echo "${map_scripts}/${base}.sh &" >> ${scripts}/novo_parallel_map.sh
 done
 ```
 
-3) Change permissions and run novo_parallel_map.sh
+__3) Change permissions and run novo_parallel_map.sh__
 
 If needed based on the computer space available, change input parametes to run subsets on different days (one option above)
 
@@ -244,7 +246,8 @@ Can save all outputs of screen using script (ex. script LOGTITLE.log) and finish
 novo_parallel_map.sh
 ```
 
- This should map each file seperate in unison
+This should map each file seperate in unison
+
 
 ### Save space again with trimmed files: Rezip
 
@@ -255,8 +258,14 @@ From the trim_dir:
 gzip *.fastq
 ```
 
-## Steps used for all mapping outputs: changing parameters for input/output directories
+### Left with mapped sequences with Novoalign: can continue with cleaning the sequence data to final .bam files
 ____________________________________________________________________________________________________________________________________
+_________________________________________________________________________________________________________________________
+
+## Cleaning the aligned Data
+
+__Steps used for all mapping outputs: changing parameters for input/output directories__
+
 ### Change SAM files to BAM files: 
 
 -- Saves space (BAM files are binary compressed versions of SAM files)
@@ -291,10 +300,11 @@ done
 ```
 
 ### Merge 
---  mkdir novo_merge
-> no flags
-> be sure to merge the base generation seperatly (two sequence runs)
+```
+mkdir novo_merge
+```
 
+The script: no flags, just merging the two lanes of the illumina sequencing run
 ```    
 #!/bin/bash
 
@@ -315,20 +325,39 @@ name=${file}
 base=`basename ${name} _L001_novo.bam`
 samtools merge ${novo_merge}/${base}_novo_merge.bam ${novo_bam}/${base}_L001_novo.bam ${novo_bam}/${base}_L002_novo.bam
 done
-
 ```
+
+__Need to merge the base generation additionaly (two sequence runs for ancestor need to merge: MGD0 and MGD)__
+
+
   
 ### Picard Sort 
--- mkdir novo_pic and mkdir novo_tmp (was helpful, explained in flags)
 
-    > Flags; 
-        - Xmx2g -- 2 Gb of memory allocated
-        - Djava.io.tmpdir=${tmp} -- using my temporary direcory due to errors in space allocation to avoid errors while running (not necessary)
-        - I -- input
-        - O -- output
-        - VALIDATION_STRINGENCY=SILENT -- stops Picard from reporting every issue that would ultimately be displayed
-        - SO=coordinate -- sort order based on coordinate
-    
+Need to sord with Picard to mark and remove duplicates
+
+Need a directory for outputs, and a temporary directory for space allocation
+```
+mkdir novo_pic
+
+mkdir novo_tmp
+```
+
+Flags:
+
+ - Xmx2g -- 2 Gb of memory allocated
+ 
+ - Djava.io.tmpdir=${tmp} -- using my temporary direcory due to errors in space allocation to avoid errors while running (not necessary)
+
+ - I -- input
+ 
+ - O -- output
+
+ - VALIDATION_STRINGENCY=SILENT -- stops Picard from reporting every issue that would ultimately be displayed
+
+ - SO=coordinate -- sort order based on coordinate
+  
+ Script:
+ 
 ```
 #!/bin/bash
 
@@ -357,10 +386,12 @@ java -Xmx2g -Djava.io.tmpdir=${novo_tmp} -jar ${pic} SortSam I= ${novo_merge}/${
 done
 ```
 
-### Remove Duplicates 
--- mkdir novo_rmd
+### Remove Duplicates
 
-    > Flags;
+```
+mkdir novo_rmd
+```
+Flags:
         - Xmx2g -- ""
         - MarkDuplicates -- ""
         - I -- ""
@@ -369,6 +400,7 @@ done
         - VALIDATION_STRINGENCY=SILENT -- ""
         - REMOVE_DUPLICATES= true -- get rid of any found duplicated regions
 
+Script:
 ```
 #!/bin/bash
 
@@ -394,13 +426,16 @@ done
 ```
 
 ### More QC and make final bam files
--- mkdir novo_final
+```
+mkdir novo_final
+```
 
-    > Flags;
+Flags:
         -q 20 -- ""
         -F 0x0004 -- remove any unmapped reads (hexidecimal value for unmapped = 0x0004)
         -b -- ""
 
+Script:
 ```
 #!/bin/bash
 
@@ -424,16 +459,16 @@ done
 ```
 
 ### Create mpileup
--- mkdir novo_mpileup
 
-    > Flags;
+```
+mkdir novo_mpileup
+```
+Flags;
         -B -- disable BAQ (base alignment quality) computation, helps to stop false SNPs passing through due to misalignment
         -Q -- minimum base quality (already filtered for 20, default is 13, just set to 0 and not worry about it)
         -f -- path to reference sequence
-        
-
-- Needs the reference genome: indexed version or not?
-
+       
+Script:
 ```
 #!/bin/bash
 
@@ -457,9 +492,10 @@ samtools mpileup -B -Q 0 -f ${ref_genome} ${novo_final}/*.bam > ${novo_mpileup}/
 ```
 
 ### Create .sync file 
+
 --use mpileup dir
 
-    > Flags;
+Flags;
         -Xmx7g -- ""
         --input -- ""
         --output -- ""
@@ -485,7 +521,7 @@ sync=/usr/local/popoolation/mpileup2sync.jar
 java -ea -Xmx7g -jar ${sync} --input ${novo_mpileup}/${project_name}.mpileup --output ${novo_mpileup}/${project_name}.sync --fastq-type sanger --min-qual 20 --threads 2
 ```
 
-
+______________________________________________
 
 ### Testing out GATK
 -- mkdir novo_GATK
