@@ -59,7 +59,7 @@ gunzip *.gz
  - o -- Specifies output report format and options (SAM)  
  - i ###,## -- Sets fragment orientation and approximate fragment length for proper pairs.
     ex. -i 250 50  Defaults to paired end Illumina or Mate Pair ABI with 250bp insert and 50bp standard deviation (possible check below)
-     - Using 400,100 based on initial mapping with novoalign first run through
+     - Using 400, 100 based on initial mapping with novoalign first run through
 
 ### Checking insert Size
 Using output from Picard Sort, if available from Bowtie2 or BWA mem previously (before removing duplicates), use picard-tools/CollectInsertSizeMetrics.jar to get summary statistics on file for insert size and other information
@@ -73,6 +73,16 @@ java -jar /usr/local/picard-tools-1.131/picard.jar CollectInsertSizeMetrics \
     O=/home/paul/episodicData/novoalign/novo_rmd/insert_size_metrics.txt \
     H=/home/paul/episodicData/novoalign/novo_rmd/insert_size_histogram.pdf
 ```
+Example output:
+```
+MEDIAN_INSERT_SIZE|MEDIAN_ABSOLUTE_DEVIATION|MIN_INSERT_SIZE|MAX_INSERT_SIZE|MEAN_INSERT_SIZE|STANDARD_DEVIATION|READ_PAIRS|PAIR_ORIENTATION|WIDTH_OF_10_PERCENT|WIDTH_OF_20_PERCENT|WIDTH_OF_30_PERCENT|WIDTH_OF_40_PERCENT|WIDTH_OF_50_PERCENT|WIDTH_OF_60_PERCENT|WIDTH_OF_70_PERCENT|WIDTH_OF_80_PERCENT|WIDTH_OF_90_PERCENT|WIDTH_OF_99_PERCENT|SAMPLE|LIBRARY|READ_GROUP
+
+542|94|30|28389293|542.112611|156.897954|25505882|FR|35|69|107|145|189|241|305|391|533|893  
+     
+For generation 115 alone: mean = 542, SD = 156
+```
+
+Note: I am running with -i 500 150
 
 ### Running Novoalign
 
@@ -106,7 +116,7 @@ base=`basename ${name} _R1_PE.fastq`
 
 ${novoalign}/novoalign -d ${novo_index} \
     -f ${trim_dir}/${base}_R1_PE.fastq ${trim_dir}/${base}_R2_PE.fastq \ 
-    -i 400,100 -o SAM > ${novo_dir}/${base}_novo.sam
+    -i 500,150 -o SAM > ${novo_dir}/${base}_novo.sam
 
 done
 ```
@@ -154,7 +164,7 @@ for file in ${files[@]}
 do
 name=${file}
 base=`basename ${name} _R1_PE.fastq`
-echo "${novoalign}/novoalign -d ${novo_index} -f ${trim_dir}/${base}_R1_PE.fastq ${trim_dir}/${base}_R2_PE.fastq -i 400,100 -o SAM > ${novo_dir}/${base}_novo.sam" > ./split_mappingScripts/${base}.sh
+echo "${novoalign}/novoalign -d ${novo_index} -f ${trim_dir}/${base}_R1_PE.fastq ${trim_dir}/${base}_R2_PE.fastq -i 500,150 -o SAM > ${novo_dir}/${base}_novo.sam" > ./split_mappingScripts/${base}.sh
 
 done
 ```
@@ -163,6 +173,8 @@ done
 2) Create script to call all and run in parallel (use "&" which puts job in background then multiple can run at a time)
 
 This creates a file that has all the scripts made in step 1) in a list with & at the end to run in parrallel
+
+One method to run only half is make files/basename based on lane (i.e 001 or 002)
 
 ```
 #! /bin/bash
@@ -183,7 +195,7 @@ for file in ${files[@]}
 do
 name=${file}
 base=`basename ${name} .sh`
-echo "${map_scripts}/${base}.sh &" > ${scripts}/novo_parallel_map.sh
+echo "${map_scripts}/${base}.sh &" >> ${scripts}/novo_parallel_map.sh
 
 done
 ```
