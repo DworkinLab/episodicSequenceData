@@ -3032,7 +3032,9 @@ For BWA-mem; can add a readgroup at that time; (look into adding for new run thr
 
 2) make a gatk directory (mkdir gatk_dir)
 
-3) need to make sure the index directory has a .dict (done already for novoalign practice == location of script below)
+3) need to make sure the index directory has a .dict (done already for novoalign practice == location of script below) (novo_dict_index.sh*)
+
+	- Note: copied reference to _2 at end to have one zipped copy and one unzipped
 ```
 #! /bin/bash
 
