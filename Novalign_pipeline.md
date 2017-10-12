@@ -4,26 +4,42 @@ Starting with sequence files that have already been inspected with md5sum and fa
 
 Novoalign link tutorial: http://www.novocraft.com/documentation/novoalign-2/novoalign-ngs-quick-start-tutorial/basic-short-read-mapping/
 
-### Need to create directory for project (project_dir) and to house mapping outputs
+### Need to create directory for project and to house mapping outputs
 
-ex. mkdir novoalign (project), and mkdir novo_dir (mapping outputs)
+```
+# Project Directory
+mkdir novoalign 
+```
 
-### Find path to call Novoalign
+```
+# mapping outputs
+mkdir novo_dir
+```
 
-ex. /usr/local/novoalign
+### Find path to call Novoalign variable
+
+```
+#Variable for novoalign
+novoalign=/usr/local/novoalign
+```
 
 
-### Make a scripts directory to house scripts to run 
+### Make a scripts directory to house scripts be ran 
 
-ex. mkdir novo_scripts
+```
+mkdir novo_scripts
+```
 
 ### Novoindex reference
 
-Need index dir: mkdir novo_index
+Need index dir for novoindex files
+
+```
+mkdir novo_index
+```
 
 The reference genome needs to be indexed for novoalign mapping (with novoindex)
 
-Example Script:
 ```
 #! /bin/bash
 
@@ -39,41 +55,52 @@ novoalign=/usr/local/novoalign
 #Variable for output directory
 novo_index=${project_dir}/novo_index
 
-#Index the reference
+#Index the reference with novoindex
+
 ${novoalign}/novoindex ${novo_index}/dmel-all-chromosome-r5.57_2.nix  ${ref_genome}
+
 ```
 
 
 ### Unzip Files
+
 Note: Compressed read files are not supported in unlicensed versions.
 
-Need to unzip (in trimmomatic output dir)
+ - The unlicensed version of Novoalign (used here) does not support the zipped files, so need to unzip trimmomatic outputs
 
 ```
+#From trim_dir
+
 gunzip *.gz
 ```
 
-### Novoalign Flags
+### Novoalign Flags: 
+
  - d -- Full pathname of indexed reference sequence from novoindex
- - f -- Files containing the read sequences to be aligned  
- - o -- Specifies output report format and options (SAM)  
- - i ###,## -- Sets fragment orientation and approximate fragment length for proper pairs.
+
+- f -- Files containing the read sequences to be aligned  
+
+- o -- Specifies output report format and options (SAM)  
+
+- i ###,## -- Sets fragment orientation and approximate fragment length for proper pairs.
     ex. -i 250 50  Defaults to paired end Illumina or Mate Pair ABI with 250bp insert and 50bp standard deviation (possible check below)
-     - Using 400, 100 based on initial mapping with novoalign first run through
+     - 400, 100 found based on initial mapping with novoalign first run through
+     - using 500, 150 (below)
 
 ### Checking insert Size
-Using output from Picard Sort, if available from Bowtie2 or BWA mem previously (before removing duplicates), use picard-tools/CollectInsertSizeMetrics.jar to get summary statistics on file for insert size and other information
 
-If other mappers not available, use subsample or confirm after using defaults
+Using output from Picard Sort (if available) from Bowtie2 or BWA mem previously (before removing duplicates) use Picard CollectInsertSizeMetrics.jar to get summary statistics on file for insert size and other information
 
-Ex.
+If other mappers not available, map using defaults or extreme insert / SD values (i.e. 0, 500) and then run this script on .bam files (needs to be sorted with Picard)
 ```
 java -jar /usr/local/picard-tools-1.131/picard.jar CollectInsertSizeMetrics \
     I=/home/paul/episodicData/novoalign/novo_rmd/F115ConR1_TAGCTT_novo_merge_novo_rmd.bam \
     O=/home/paul/episodicData/novoalign/novo_rmd/insert_size_metrics.txt \
     H=/home/paul/episodicData/novoalign/novo_rmd/insert_size_histogram.pdf
 ```
+
 Example output:
+
 ```
 MEDIAN_INSERT_SIZE|MEDIAN_ABSOLUTE_DEVIATION|MIN_INSERT_SIZE|MAX_INSERT_SIZE|MEAN_INSERT_SIZE|STANDARD_DEVIATION|READ_PAIRS|PAIR_ORIENTATION|WIDTH_OF_10_PERCENT|WIDTH_OF_20_PERCENT|WIDTH_OF_30_PERCENT|WIDTH_OF_40_PERCENT|WIDTH_OF_50_PERCENT|WIDTH_OF_60_PERCENT|WIDTH_OF_70_PERCENT|WIDTH_OF_80_PERCENT|WIDTH_OF_90_PERCENT|WIDTH_OF_99_PERCENT|SAMPLE|LIBRARY|READ_GROUP
 
@@ -82,13 +109,11 @@ MEDIAN_INSERT_SIZE|MEDIAN_ABSOLUTE_DEVIATION|MIN_INSERT_SIZE|MAX_INSERT_SIZE|MEA
 For generation 115 alone: mean = 542, SD = 156
 ```
 
-Note: I am running with -i 500 150
-
 ### Running Novoalign
 
 This process will run one file at a time
 
-The script
+The script:
 ```
 #! /bin/bash
 
@@ -121,10 +146,10 @@ ${novoalign}/novoalign -d ${novo_index} \
 done
 ```
 
-Takes a long time: Only uses 1 thread (100% computer)
+This takes a long time, as the unlicensed version can only uses 1 thread (100% computer)
 
-From novoalign reference manual: -c 99 Sets the number of threads to be used. On licensed versions it defaults 
-to the number of CPUs as reported by sysinfo(). On free version the option is disabled
+***From novoalign reference manual: -c 99 Sets the number of threads to be used. On licensed versions it defaults 
+to the number of CPUs as reported by sysinfo(). On free version the option is disabled***
 
 ### Run scripts for each in parallel
 
