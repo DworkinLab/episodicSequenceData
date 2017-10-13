@@ -122,7 +122,10 @@ Need to make a directory for the 4th chromosome (same location of the basedir's 
 Now have many .sync files in sized able to be used, each in seperate directory within one larger directory (and should be only directories within large directory): this is important for later!
 
 
-## Running In R
+## Running In R (remote machine)
+
+__For all R functions on remote machine (after using screen): type R to initiate R and work from R to run scripts (source("X"))__
+
 
 ### Packages:
 
@@ -543,12 +546,11 @@ rm(coeffs_bwa)
 
 #Need to split based on chosed Effect:
 
+#Choose the effect of interest:
+
 X2 <- X[which(X$Effects=="TreatmentSel"),]
-
 #X2 <- X[which(X$Effects=="TreatmentSel:Generation"),]
-
 #X2 <- X[which(X$Effects=="Intercept"),]
-
 #X2 <- X[which(X$Effects=="Generation"),]
 
 #Title <- as.character(X2$Effects[1])
@@ -584,3 +586,16 @@ rm(coeffs_treatment)
 print('Done and everything gone')
 
 ```
+
+Now have a seperate chromosome file with combined mappers:
+
+### Move to local machine for further analysis:
+
+```
+scp ......
+```
+
+### Plotting:
+
+
+
