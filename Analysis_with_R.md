@@ -7,6 +7,8 @@ Layout of work done with R on generated .sync files
 
 The .sync files are generated using Popoolation2 depending on the data cleaning done to generate .bam files 
 
+### Remove unneccessary chromosomal locations
+
 The .sync files used can have the unused regions removed for R analysis: use grep
 ```
 #Remove Heterochromatin regions ('Het'), the Unmapped Regions ('U'), and the Mitochondria genome ('dmel_mitochondrion_genome'):
@@ -25,6 +27,8 @@ rm -f ${sync}/${project_name}_removed_U_Het.sync
 
 Left with a .sync file with only the 3R, 3L, 2R, 2L, X and 4 chromosomal arms
 
+### Split into individual chromosomal arms:
+
 Split these more: split into individual files based on chromosome using grep
 ```
 # ${sync} == path to the location of sync files
@@ -40,7 +44,9 @@ grep '^4' ${sync}/${project_name}_main.sync > ${sync}/${project_name}_4.sync &
 grep 'X' ${sync}/${project_name}_main.sync > ${sync}/${project_name}_X.sync
 ```
 
-.sync files for each different chromsome
+Have a .sync files for each different chromsome
+
+### Split into differently sized files
 
 Depending on the size, these may be able to run individually (likely possible with small 4th) but R only works if using smaller data sets: may need to break up further
 
@@ -55,6 +61,8 @@ First need a directory for the subset base_dir directories: change based on chos
 ```
 mkdir /home/paul/episodicData/bowtie/R_bowtie/bowtie_subset
 ```
+
+Then a script to split the file
 
 ```
 #! /bin/bash
@@ -112,6 +120,7 @@ Need to make a directory for the 4th chromosome (same location of the basedir's 
 
 
 Now have many .sync files in sized able to be used, each in seperate directory within one larger directory (and should be only directories within large directory): this is important for later!
+
 
 ## Running In R
 
@@ -347,5 +356,231 @@ for (dir in mydirs){
 
 ```
 
+### Model Running:
+
 Have a .csv file that can be used to running the model:
 
+This one takes a very long time: look into parrallelizing
+
+```
+#Episodic data analysis: loop .csv files to run model:
+
+#change to directory holding all directories:
+####### Hashed out in favour of running each seperatly:
+
+#mydirs <- list.dirs(path = "/home/paul/episodicData/R_dir/bwa_subsetDirectories", recursive = FALSE)
+#for (dir in mydirs){
+#setwd('/home/paul/episodicData/bowtie/R_bowtie/bowtie_subset_Ranalysis/')
+
+
+# make script into '/home/paul/episodicData/bowtie/R_bowtie/bowtie_subset_Ranalysis/' and open from same direcotry screen/R
+
+setwd("episodic_data_bowtie_2L_dir")
+#setwd("episodic_data_bowtie_2R_dir")
+#setwd("episodic_data_bowtie_3L_dir")
+#setwd("episodic_data_bowtie_3R_dir")
+#setwd("episodic_data_bowtie_4_dir")
+#setwd("episodic_data_bowtie_X_dir")
+
+  #Changing the working directory 
+  mycsvs <- list.files(pattern=".csv")
+  
+  for (file in mycsvs){
+    
+    episodic_long <- read.csv(file, h=T)
+    
+    #The Data: in long format, each position with Treatment, Cage and Generation, along with the Major and Mnor allele counts correponding to the ancestral major/minor allele
+    
+    #The full model:
+    
+    #Call each position
+    
+    position <- unique(episodic_long$pos)
+    
+    no.pos <- length(position)
+    
+    #Remove N/A's -- possibly not needed so hashed out.
+    
+    episodic_long <- na.omit(episodic_long)
+    
+    #Make list to store model
+    
+    modlist_2 <- as.list(1:no.pos)
+    
+    #Each model of a position, named for each mod will be position
+    
+    names(modlist_2) <- position
+    
+    #Empty Data Frame to store all coeffecients of model
+    
+    coeffs_df <- data.frame(NULL)
+    
+    #Run the  model for each position
+    
+    for(i in position){
+      print(paste("Running entity:", i, "which is", which(position==i), "out of", no.pos, "file=", file))
+      
+      #Temporary data frame for only the one position
+      
+      tmp2 <- episodic_long[episodic_long$pos == i,]
+      
+      #The model: major vs. minor counts by Treatment, Generation and Treatment:Generation
+      
+      modlist_2[[i]] <- 
+        glm(cbind(Major_count, Minor_count) ~ Treatment*Generation, 
+            data = tmp2, family = "binomial")
+      
+      #Turn this model into a data frame of coefficients
+      
+      x <- as.data.frame(summary(modlist_2[[i]] )$coefficients)
+      
+      #Name the position of this model results with i
+      
+      x$position <- i
+      x$chr <- tmp2$chr[1]
+      #Add to data frame (total for the whole data set == coeffs_df + the newly made X)
+      
+      coeffs_df <- rbind(coeffs_df, x)
+      
+      #Remove i for safety and it starts over
+      
+      rm(i)
+    }
+    
+    #Change column names to workable
+    
+    colnames(coeffs_df) <- c("Estimate", "Standard_error", "z-value", "p-value", "position", "chr")
+    
+    coeffs_df$Effects<-rownames(coeffs_df)
+    
+    coeffs_df$Effects_2 <- ifelse(grepl("TreatmentSel:Generation",coeffs_df$Effects),'T_Sel:Gen', ifelse(grepl("Intercept",coeffs_df$Effects),'Int', coeffs_df$Effects ))
+    
+    coeffs_df$Effects_2 <- ifelse(grepl("TreatmentSel",coeffs_df$Effects_2),'T_Sel', ifelse(grepl("Generation",coeffs_df$Effects_2),'Gen', coeffs_df$Effects_2))
+    
+    rownames(coeffs_df) <- c()
+    
+    #Make the p-values into -log10 p values
+    coeffs_df$log_p <- -log10(coeffs_df$`p-value`)
+    
+    coeffs_df <- subset(coeffs_df, select = -c(Effects))
+    
+    coeffs_df$Effects <- ifelse(coeffs_df$Effects_2=='T_Sel', 'TreatmentSel', ifelse(coeffs_df$Effects_2=='Gen', 'Generation', ifelse(coeffs_df$Effects_2=='Int', 'Intercept', 'TreatmentSel:Generation')))
+    
+    coeffs_df <- subset(coeffs_df, select = -c(Effects_2))
+    
+    coeffs_df <- coeffs_df[-which(coeffs_df$log_p==0),]
+    
+    
+    
+    #Write a .coeffs.csv file with the output of the model:
+    write.csv(coeffs_df, file=paste(file,".coeffs.csv", sep=""))
+    
+    
+    
+    
+    rm(coeffs_df)
+    rm(tmp2)
+    rm(x)
+    rm(modlist_2)
+    rm(episodic_long)
+    rm(no.pos)
+    rm(position)
+  }
+#}
+```
+
+### Combine mappers through R:
+
+```
+#combine .coeffs.csv for two mappers
+require(dplyr)
+
+##%%%%%%%%%%%%%%%%%%%%%%%##
+#Change Based on chromosome in X locations
+# 1) mapper #1: ex. setwd('/home/paul/episodicData/R_dir/bwa_subsetDirectories/episodic_data_3R_dir/coeffs')
+# 2) mapper #2: ex. setwd('/home/paul/episodicData/bowtie/R_bowtie/bowtie_subset_Ranalysis/episodic_data_bowtie_3R_dir/coeffs')
+# 3) writing the .csv file (at the end): ex. write.csv(coeffs_treatment, file="Chromosome_3R.csv", row.names = FALSE)
+
+# Have a directory somewhere for all data to be together (here named Chromosomes)
+
+# Example below == 3R Chromosome:
+
+
+#Read BWA mapped files
+print("Read BWA files")
+setwd('/home/paul/episodicData/R_dir/bwa_subsetDirectories/episodic_data_3R_dir/coeffs')
+mycsvs <- list.files(pattern=".coeffs.csv")
+coeffs_bwa <- NULL
+for (file in mycsvs){
+  print(file)
+  coeffs1 <- read.csv(file, h=T)
+  coeffs1$mapper <- "bwa"
+  coeffs_bwa <- rbind(coeffs_bwa, coeffs1)
+  rm(coeffs1)
+}
+
+
+# Read Bowtie2 mapped files
+print('Read Bowtie2 Files')
+
+setwd('/home/paul/episodicData/bowtie/R_bowtie/bowtie_subset_Ranalysis/episodic_data_bowtie_3R_dir/coeffs')
+mycsvs <- list.files(pattern=".coeffs.csv")
+coeffs_bowtie <- NULL
+for (file in mycsvs){
+  print(file)
+  coeffs2 <- read.csv(file, h=T)
+  coeffs2$mapper <- "bowtie"
+  coeffs_bowtie <- rbind(coeffs_bowtie, coeffs2)
+  rm(coeffs2)
+}
+
+#Combine these two into one large data set 
+X <- rbind(coeffs_bowtie, coeffs_bwa)
+rm(coeffs_bowtie)
+rm(coeffs_bwa)
+
+## Possibly better to write a .csv here: then can manipulate later????
+
+#Need to split based on chosed Effect:
+
+X2 <- X[which(X$Effects=="TreatmentSel"),]
+
+#X2 <- X[which(X$Effects=="TreatmentSel:Generation"),]
+
+#X2 <- X[which(X$Effects=="Intercept"),]
+
+#X2 <- X[which(X$Effects=="Generation"),]
+
+#Title <- as.character(X2$Effects[1])
+
+rm(X)
+
+# Call the two mappers for the positions called in file:
+
+DF <- X2 %>%
+  group_by(position) %>%
+  summarise(mapper_1 = mapper[1], mapper_2=mapper[2])
+
+# Only keep those with both mappers at a position:
+DF2 <- DF[which(DF$mapper_2=="bwa" & DF$mapper_1=="bowtie"),]
+
+# only keep positions from main data with both mappers
+coeffs_treatment <- X2[(X2$position %in% DF2$position),]
+
+rm(DF)
+
+rm(DF2)
+
+print('writing CSV')
+
+#Where the output should be:
+
+setwd('/home/paul/Chromosomes')
+
+write.csv(coeffs_treatment, file="Chromosome_3R.csv", row.names = FALSE)
+
+rm(coeffs_treatment)
+
+print('Done and everything gone')
+
+```
