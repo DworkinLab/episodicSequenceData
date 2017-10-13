@@ -5014,3 +5014,27 @@ perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${input}/${base}_m
 
 done
 ```
+Still na's throughout:
+
+Issue advice from https://sourceforge.net/p/popoolation/wiki/Manual/ comments:
+
+	"Values of 0 and na in my case came from using a bam file generated from reads using phred33 scores when the default of the Variance-sliding.pl script is to use phred64 encoding. Specify "--fastq-type sanger" to use the phred33 scoring scheme."
+	
+Sanger Test:
+--fastq-type sanger
+```
+perl /home/paul/popoolation_1.2.2/Variance-sliding.pl \
+	--input /home/paul/episodicData/bowtie/bowtie_pileups/F115ConR1_TAGCTT_merged_bowtie.pileup \
+	--output /home/paul/episodicData/bowtie/bowtie_pi/Test_F115ConR1_TAGCTT_merged_bowtie.pi \
+	--measure pi \
+	--window-size 10000 \
+	--step-size 10000 \
+	--min-count 2 \
+	--min-coverage 4 \
+	--max-coverage 400 \
+	--min-qual 20 \
+	--pool-size 120 \
+	--fastq-type sanger
+```
+
+
