@@ -5036,5 +5036,37 @@ perl /home/paul/popoolation_1.2.2/Variance-sliding.pl \
 	--pool-size 120 \
 	--fastq-type sanger
 ```
+WORKED!
 
+```
+#! /bin/bash
 
+input=/home/paul/episodicData/bowtie/bowtie_pileups
+output=/home/paul/episodicData/bowtie/bowtie_pi
+
+files=(${input}/*_merged_bowtie.pileup)
+
+for file in ${files[@]}
+
+do
+
+name=${file}
+
+base=`basename ${name} _merged_bowtie.pileup`
+
+perl /home/paul/popoolation_1.2.2/Variance-sliding.pl \
+	--input ${input}/${base}_merged_bowtie.pileup \
+	--output ${output}/${base}.bowtie.pi \
+	--measure pi \
+	--window-size 10000 \
+	--step-size 10000 \
+	--min-count 2 \
+	--min-coverage 4 \
+	--max-coverage 400 \
+	--min-qual 20 \
+	--pool-size 120 \
+	--fastq-type sanger
+
+done
+
+```
