@@ -59,8 +59,10 @@ mkdir trim_dir
 ```
 
 Need to find the path to the adapter and create a variable for the adapter for sequences
-  > The adapter should be provided from sequecing center (excel sheet for my data)
-  > Trimmomatic should has common adapters within a adapter directory to call as a variable
+
+  * The adapter should be provided from sequecing center (excel sheet for my data)
+
+  * Trimmomatic should has common adapters within a adapter directory to call as a variable
 
 Flags;
   
