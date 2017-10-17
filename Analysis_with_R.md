@@ -542,8 +542,14 @@ X <- rbind(coeffs_bowtie, coeffs_bwa)
 rm(coeffs_bowtie)
 rm(coeffs_bwa)
 
-## Possibly better to write a .csv here: then can manipulate later????
+write.csv(coeffs_treatment, file="Chromosome_3R.csv", row.names = FALSE)
 
+```
+
+
+
+Taking this model and 
+```
 #Need to split based on chosed Effect:
 
 #Choose the effect of interest:
@@ -587,7 +593,7 @@ print('Done and everything gone')
 
 ```
 
-Now have a seperate chromosome file with combined mappers:
+Now have a seperate chromosome file with combined mappers
 
 ### Move to local machine for further analysis:
 
