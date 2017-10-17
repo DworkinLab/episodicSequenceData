@@ -71,6 +71,7 @@ Flags;
   *-MAXINFO:40:0.5 == adaptive quality (balance b/w length and quality)*
 
   *-IlluminaClip == adapter removal*
+  
         - Need to find the path to the adapter (trimmomatic directory has adapters) and create a variable for the adapter for sequences 
    
 
