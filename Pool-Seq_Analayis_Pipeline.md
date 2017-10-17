@@ -19,7 +19,7 @@ The first step is to check if the data uploaded correctly using md5sum. Using th
 
 Flags; 
   
-  **-c == report if checksums match contents of files (OK)**
+  *-c == report if checksums match contents of files (OK)*
   
 ```
 md5sum - c md5.txt
@@ -34,7 +34,7 @@ Mistakes can occur with sequencing and using Fastqc allows one to view the quali
 
 Flags;
 
-  **-o == sends all output files to output directory**
+  *-o == sends all output files to output directory*
   
 ```
 mkdir ${project_dir}/fastqcOutputs
@@ -60,17 +60,17 @@ mkdir trim_dir
 
 Flags;
   
-  **-phred33 == may not need to be specified (actually important for later if 33 used)**
+  *-phred33 == may not need to be specified (actually important for later if 33 used)*
   
-  **-trimlog == log of trim outputs**
+  *-trimlog == log of trim outputs*
   
-  **-LEADING:3 & TRAILING:3 == removal at start end end if below quality**
+  *-LEADING:3 & TRAILING:3 == removal at start end end if below quality*
   
-  **-MINLEN:36 == minimum length of 36**
+  *-MINLEN:36 == minimum length of 36*
   
-  **-MAXINFO:40:0.5 == adaptive quality (balance b/w length and quality)**
+  *-MAXINFO:40:0.5 == adaptive quality (balance b/w length and quality)*
 
-  **-IlluminaClip == adapter removal**
+  *-IlluminaClip == adapter removal*
    
    --> Need to find the path to the adapter (trimmomatic directory has adapters) and create a variable for this (${adapter}) 
    
