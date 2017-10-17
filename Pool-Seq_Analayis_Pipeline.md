@@ -19,11 +19,9 @@ The first step is to check if the data uploaded correctly using md5sum. Using th
 
 Flags; 
   
-  -c == report if checksums match contents of files (OK).
+  **-c == report if checksums match contents of files (OK)**
   
 ```
-#Within raw_dir
-
 md5sum - c md5.txt
 ```
 
@@ -36,44 +34,64 @@ Mistakes can occur with sequencing and using Fastqc allows one to view the quali
 
 Flags;
 
-  -o == sends all output files to output directory.
+  **-o == sends all output files to output directory**
   
 ```
 mkdir ${project_dir}/fastqcOutputs
 fastqc -o ${project_dir}/fastqcOutputs ${project_dir}/${raw_dir}/*.fastq.gz
 ```
-The process will output two files (fastqc.html and fastqc.zip). The fastqc.html can be loaded to local machine and opened in web browser to view files.
+
+The process will output two files (fastqc.html and fastqc.zip). 
+
+The fastqc.html can be loaded to local machine and opened in web browser to view files.
 
 ```
-#While on local machine!
-
 scp paul@info.mcmaster.ca:${project_dir}/fastqcOutputs/*_fastqc.html ${LOCAL_PROJECT_DIR}/fastqcOutputs
 ```
 
 ### Trimmomatic:
 Trimmomatic
 
-Flags;
-  -phred33 == may not need to be specified (actually important for later if 33 used)
-  
-  -trimlog == log of trim outputs 
-  
-  -LEADING:3 & TRAILING:3 == removal at start end end if below quality 
-  
-  -MINLEN:36 == minimum length of 36 
-  
-  -MAXINFO:40:0.5 == adaptive quality (balance b/w length and quality)
+Need to make an output directory for trimmomatic outputs: ${trim_dir}
 
-  -IlluminaClip == adapter removal
+```
+mkdir trim_dir
+```
+
+Flags;
   
-      Need to find the path to the adapter (trimmomatic directory has adapters) and create a variable for this (${adapter}) 
-      
-      In this case: Adapter == TruSeq3-PE.fa:2:30:10
+  **-phred33 == may not need to be specified (actually important for later if 33 used)**
+  
+  **-trimlog == log of trim outputs**
+  
+  **-LEADING:3 & TRAILING:3 == removal at start end end if below quality**
+  
+  **-MINLEN:36 == minimum length of 36**
+  
+  **-MAXINFO:40:0.5 == adaptive quality (balance b/w length and quality)**
+
+  **-IlluminaClip == adapter removal**
    
-      adapter=/usr/local/trimmomatic/adapters/TruSeq3-PE.fa:2:30:10
+   --> Need to find the path to the adapter (trimmomatic directory has adapters) and create a variable for this (${adapter}) 
+   
+   --> In this case: Adapter == TruSeq3-PE.fa:2:30:10 (adapter=/usr/local/trimmomatic/adapters/TruSeq3-PE.fa:2:30:10)
 
 ```
 #! /bin/bash
+# Project directory variable:
+project_dir=/home/paul/episodicData
+
+# make variable for trimmomatic program location
+trim=/usr/local/trimmomatic
+
+# make input directory for raw reads
+raw_dir=${project_dir}/raw_dir
+
+# make output directory from trimmomatic outputs
+trim_dir=/${project_dir}/trim_dir
+
+# make path to adapter sequences (to be used with ILLUMINACLIP)
+adapter=${trim}/adapters/TruSeq3-PE.fa:2:30:10
 
 files=(${raw_dir}/*_R1_001.fastq.gz)
 for file in ${files[@]} 
