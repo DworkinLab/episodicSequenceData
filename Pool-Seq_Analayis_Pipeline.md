@@ -71,10 +71,8 @@ Flags;
   *-MAXINFO:40:0.5 == adaptive quality (balance b/w length and quality)*
 
   *-IlluminaClip == adapter removal*
+        - Need to find the path to the adapter (trimmomatic directory has adapters) and create a variable for the adapter for sequences 
    
-   --> Need to find the path to the adapter (trimmomatic directory has adapters) and create a variable for this (${adapter}) 
-   
-   --> In this case: Adapter == TruSeq3-PE.fa:2:30:10 (adapter=/usr/local/trimmomatic/adapters/TruSeq3-PE.fa:2:30:10)
 
 ```
 #! /bin/bash
@@ -93,11 +91,15 @@ trim_dir=/${project_dir}/trim_dir
 # make path to adapter sequences (to be used with ILLUMINACLIP)
 adapter=${trim}/adapters/TruSeq3-PE.fa:2:30:10
 
+#list all files to be read (all raw data)
 files=(${raw_dir}/*_R1_001.fastq.gz)
+
+#For loop over every file
 for file in ${files[@]} 
 do
 name=${file}
 base=`basename ${name} _R1_001.fastq.gz`
+
 java -jar ${trim} PE -phred33 \
   -trimlog ${trim_dir}/trimlog.txt \
   ${raw_dir}/${base}_R1_001.fastq.gz \
