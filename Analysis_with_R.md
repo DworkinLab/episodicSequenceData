@@ -542,7 +542,7 @@ X <- rbind(coeffs_bowtie, coeffs_bwa)
 rm(coeffs_bowtie)
 rm(coeffs_bwa)
 
-write.csv(coeffs_treatment, file="Chromosome_3R.csv", row.names = FALSE)
+write.csv(X, file="Chromosome_3R.csv", row.names = FALSE)
 
 ```
 
