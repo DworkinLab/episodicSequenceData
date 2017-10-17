@@ -58,6 +58,10 @@ Need to make an output directory for trimmomatic outputs: ${trim_dir}
 mkdir trim_dir
 ```
 
+Need to find the path to the adapter and create a variable for the adapter for sequences
+  > The adapter should be provided from sequecing center (excel sheet for my data)
+  > Trimmomatic should has common adapters within a adapter directory to call as a variable
+
 Flags;
   
   *-phred33 == may not need to be specified (actually important for later if 33 used)*
@@ -72,9 +76,6 @@ Flags;
 
   *-IlluminaClip == adapter removal*
   
-        - Need to find the path to the adapter (trimmomatic directory has adapters) and create a variable for the adapter for sequences 
-   
-
 ```
 #! /bin/bash
 # Project directory variable:
