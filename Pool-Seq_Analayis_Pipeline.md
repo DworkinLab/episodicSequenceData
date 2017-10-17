@@ -6,12 +6,46 @@ DNA extraction of populations occurred at MSU by Dr. Michael DeNieu and Mauricio
 
 A total of 13 sequences were run through Illumina sequencing, the shared ancestor and the 4 treatments/replicates at generation 38, generation 77 and generation 115.
 
+### Step 1: Project Directory
 
-### Initial Analysis: Quality Control
+Create a project directory (variable ${project_dir}) for all analysis to be completed within. Many sub directories will be used so proper naming to know each section is vital.
 
-The first step is to insepect the raw sequence reads available using md5sum and Fastqc
+Within this directory, you can create a raw data directory (i.e. raw_dir) for a personal copy of the data or (if the data is to large), links to the locations of the raw data may be more convinient. For explination from here, the variable ${raw_dir} refers to the location of the raw files.
+
+### Quality Control: md5sum
+
+The first step is to check if the data uploaded correctly using md5sum. Using the md5.txt file for the sequence reads will output either "FAILED" or "OK" to know if the raw reads match the line in the md5.txt file, to signify a correct or incorrect transfer.
+
+Flags; 
+  
+  -c == report if checksums match contents of files (OK).
+  
+```
+md5sum - c md5.txt
+```
+
+### Quality Control: Fastqc
+
+Using Fastqc from Babraham Bioinformatics (2015), the quality of the reads can be measures. 
+
+Mistakes can occur with sequencing and using Fastqc allows one to view the quality of the reads that the sequencer has found.
 
 
+Flags;
+
+  -o == sends all output files to output directory.
+  
+```
+mkdir ${project_dir}/fastqcOutputs
+fastqc -o ${project_dir}/fastqcOutputs ${project_dir}/${raw_dir}/*.fastq.gz
+```
+The process will output two files (fastqc.html and fastqc.zip). The fastqc.html can be loaded to local machine and opened in web browser to view files.
+
+```
+#While on local machine!
+
+scp paul@info.mcmaster.ca:${project_dir}/fastqcOutputs/*_fastqc.html ${LOCAL_PROJECT_DIR}/fastqcOutputs
+```
 
 
 
