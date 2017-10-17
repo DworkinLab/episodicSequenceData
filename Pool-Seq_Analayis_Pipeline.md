@@ -55,12 +55,22 @@ Trimmomatic
 
 Flags;
   -phred33 == may not need to be specified (actually important for later if 33 used)
+  
   -trimlog == log of trim outputs 
-  -IlluminaClip == adapter removal
-      Need to find the path to the adapter and create a variable for this (${adapter}) 
+  
   -LEADING:3 & TRAILING:3 == removal at start end end if below quality 
+  
   -MINLEN:36 == minimum length of 36 
+  
   -MAXINFO:40:0.5 == adaptive quality (balance b/w length and quality)
+
+  -IlluminaClip == adapter removal
+  
+      Need to find the path to the adapter (trimmomatic directory has adapters) and create a variable for this (${adapter}) 
+      
+      In this case: Adapter == TruSeq3-PE.fa:2:30:10
+   
+      adapter=/usr/local/trimmomatic/adapters/TruSeq3-PE.fa:2:30:10
 
 ```
 #! /bin/bash
