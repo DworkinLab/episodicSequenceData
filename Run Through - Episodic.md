@@ -3032,7 +3032,9 @@ For BWA-mem; can add a readgroup at that time; (look into adding for new run thr
 
 2) make a gatk directory (mkdir gatk_dir)
 
-3) need to make sure the index directory has a .dict (done already for novoalign practice == location of script below)
+3) need to make sure the index directory has a .dict (done already for novoalign practice == location of script below) (novo_dict_index.sh*)
+
+	- Note: copied reference to _2 at end to have one zipped copy and one unzipped
 ```
 #! /bin/bash
 
@@ -4908,3 +4910,247 @@ perl /home/paul/popoolation_1.2.2/Visualise-output.pl --input ${input}/MGD3_bowt
 scp paul@info.mcmaster.ca:/home/paul/episodicData/bowtie/MDG3_bow/MGD3_bowtie.pi.pdf /Users/paulknoops/Bioinformatics/episodic_practice
 scp paul@info.mcmaster.ca:/home/paul/episodicData/bowtie/MDG3_bow/MGD3_bowtie.pi /Users/paulknoops/Bioinformatics/episodic_practice
 ```
+
+```
+
+scp paul@info.mcmaster.ca:/home/paul/Chromosomes/*.csv /Users/paulknoops/Bioinformatics/episodic_practice/DATA
+
+scp paul@info.mcmaster.ca:/home/paul/Chromosomes/*plots.R /Users/paulknoops/Bioinformatics/episodic_practice/DATA
+```
+
+
+```
+#! /bin/bash
+
+input=/home/paul/episodicData/gatk_dir
+output=/home/paul/episodicData/115
+#samtools mpileup ${input}/F115ConR1_TAGCTT_merged_aligned_pe.final_realigned.bam > ${output}/F115ConR1bwa.pileup
+#samtools mpileup ${input}/F115ConR2_GGCTAC_merged_aligned_pe.final_realigned.bam > ${output}/F115ConR2bwa.pileup
+#samtools mpileup ${input}/F115SelR1_GTTTCG_merged_aligned_pe.final_realigned.bam > ${output}/F115SelR1bwa.pileup
+samtools mpileup ${input}/F115SelR2_GTGGCC_merged_aligned_pe.final_realigned.bam > ${output}/F115SelR2bwa.pileup
+
+#perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${output}/F115ConR1bwa.pileup --output ${output}/F115ConR1bwa.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120
+
+#perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${output}/F115ConR2bwa.pileup --output ${output}/F115ConR2bwa.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120
+
+#perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${output}/F115SelR1bwa.pileup --output ${output}/F115SelR1bwa.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120
+
+perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${output}/F115SelR2bwa.pileup --output ${output}/F115SelR2bwa.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120
+```
+
+
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/115/*.pi /Users/paulknoops/Bioinformatics/episodic_practice/F115
+```
+
+ALL Failed: Try Again (change coverage/quality?)
+Try Bowtie:
+
+```
+#! /bin/bash
+
+input=/home/paul/episodicData/bowtie/gatk_bowtie
+output=/home/paul/episodicData/bowtie/115_bow
+
+#samtools mpileup ${input}/F115ConR1_TAGCTT_merged_bowtie_pe.final_realigned.bam > ${output}/F115ConR1bowtie.pileup
+#samtools mpileup ${input}/F115ConR2_GGCTAC_merged_bowtie_pe.final_realigned.bam > ${output}/F115ConR2bowtie.pileup
+#samtools mpileup ${input}/F115SelR1_GTTTCG_merged_bowtie_pe.final_realigned.bam > ${output}/F115SelR1bowtie.pileup
+samtools mpileup ${input}/F115SelR2_GTGGCC_merged_bowtie_pe.final_realigned.bam > ${output}/F115SelR2bowtie.pileup
+
+#perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${output}/F115ConR1bowtie.pileup --output ${output}/F115ConR1bowtie.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120
+
+#perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${output}/F115ConR2bowtie.pileup --output ${output}/F115ConR2bowtie.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120
+
+#perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${output}/F115SelR1bowtie.pileup --output ${output}/F115SelR1bowtie.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120
+
+perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${output}/F115SelR2bowtie.pileup --output ${output}/F115SelR2bowtie.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120
+```
+Check Encoding: could be sanger again issue????
+
+Lots of NA's ?? mpileup issue, or coverage issue? or what....
+
+```
+
+#! /bin/bash
+
+input=/home/paul/episodicData/bowtie/gatk_bowtie
+output=/home/paul/episodicData/bowtie/bowtie_pileups
+index_dir=/home/paul/episodicData/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57_2.fasta
+
+files=(${input}/*_pe.final_realigned.bam)
+
+for file in ${files[@]}
+
+do
+
+name=${file}
+
+base=`basename ${name} _pe.final_realigned.bam`
+
+samtools mpileup -B -Q 0 -f ${ref_genome} ${input}/${base}_pe.final_realigned.bam > ${output}/${base}.pileup
+
+done
+```
+
+```
+
+#! /bin/bash
+
+input=/home/paul/episodicData/bowtie/bowtie_pileups
+output=/home/paul/episodicData/bowtie/bowtie_pi
+
+files=(${input}/*_merged_bowtie.pileup)
+
+for file in ${files[@]}
+
+do
+
+name=${file}
+
+base=`basename ${name} _merged_bowtie.pileup`
+
+perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input ${input}/${base}_merged_bowtie.pileup --output ${output}/${base}.bowtie.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120
+
+done
+```
+Still na's throughout:
+
+Issue advice from https://sourceforge.net/p/popoolation/wiki/Manual/ comments:
+
+	"Values of 0 and na in my case came from using a bam file generated from reads using phred33 scores when the default of the Variance-sliding.pl script is to use phred64 encoding. Specify "--fastq-type sanger" to use the phred33 scoring scheme."
+	
+Sanger Test:
+--fastq-type sanger
+```
+perl /home/paul/popoolation_1.2.2/Variance-sliding.pl \
+	--input /home/paul/episodicData/bowtie/bowtie_pileups/F115ConR1_TAGCTT_merged_bowtie.pileup \
+	--output /home/paul/episodicData/bowtie/bowtie_pi/Test_F115ConR1_TAGCTT_merged_bowtie.pi \
+	--measure pi \
+	--window-size 10000 \
+	--step-size 10000 \
+	--min-count 2 \
+	--min-coverage 4 \
+	--max-coverage 400 \
+	--min-qual 20 \
+	--pool-size 120 \
+	--fastq-type sanger
+```
+WORKED!
+
+```
+#! /bin/bash
+
+input=/home/paul/episodicData/bowtie/bowtie_pileups
+output=/home/paul/episodicData/bowtie/bowtie_pi
+
+files=(${input}/*_merged_bowtie.pileup)
+
+for file in ${files[@]}
+
+do
+
+name=${file}
+
+base=`basename ${name} _merged_bowtie.pileup`
+
+perl /home/paul/popoolation_1.2.2/Variance-sliding.pl \
+	--input ${input}/${base}_merged_bowtie.pileup \
+	--output ${output}/${base}.bowtie.pi \
+	--measure pi \
+	--window-size 10000 \
+	--step-size 10000 \
+	--min-count 2 \
+	--min-coverage 4 \
+	--max-coverage 400 \
+	--min-qual 20 \
+	--pool-size 120 \
+	--fastq-type sanger
+
+done
+
+```
+
+Move it to personal:
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/bowtie/bowtie_pi/*.pi /Users/paulknoops/Bioinformatics/episodic_practice/Bowtie_Pi
+```
+
+Read each seperate into function below to create plot ( R function )
+```
+Pi_PlotFunction <- function(x) {
+  require(ggplot2)
+  x2 <- gsub("\\_.*","",x)
+#Read in the data:
+  Datt <- read.table(x)
+  colnames(Datt) <- c('chr', 'window', 'windowCount', ' propInwindow', 'Pi')
+  
+  #Remove unnecessary regions: Not necessary based on later steps
+  Datt$chr <- as.character(Datt$chr)
+  Datt2 <- Datt
+  
+  #Datt2 <- Datt[-which(Datt$chr=="YHet"),]
+  #Datt2 <- Datt2[-which(Datt2$chr=="2RHet"),]
+  #Datt2 <- Datt2[-which(Datt2$chr=="2LHet"),]
+  #Datt2 <- Datt2[-which(Datt2$chr=="3LHet"),]
+  #Datt2 <- Datt2[-which(Datt2$chr=="3RHet"),]
+  #Datt2 <- Datt2[-which(Datt2$chr=="U"),]
+  #Datt2 <- Datt2[-which(Datt2$chr=="XHet"),]
+  #Datt2 <- Datt2[-which(Datt2$chr=="dmel_mitochondrion_genome"),]
+  #Datt2 <- Datt2[-which(Datt2$chr=="Uextra"),]
+  
+  #Remove "na" pi values
+  Datt2 <- Datt2[-which(Datt2$Pi=="na"),]
+  
+  #Need the numbers for chromosomes for labelling and colours:
+  DattX <- Datt2[which(Datt2$chr=="X"),]
+  a <- dim(DattX)[1]
+  DattX$number <- 1:a
+  
+  Datt2L <- Datt2[which(Datt2$chr=="2L"),]
+  b <- dim(Datt2L)[1]
+  Datt2L$number <- (a+1):(a+b)
+  
+  Datt2R <- Datt2[which(Datt2$chr=="2R"),]
+  c <- dim(Datt2R)[1]
+  Datt2R$number <- (a+b+1):(a+b+c)
+  
+  Datt3L <- Datt2[which(Datt2$chr=="3L"),]
+  d <- dim(Datt3L)[1]
+  Datt3L$number <- (a+b+c+1):(a+b+c+d)
+  
+  Datt3R <- Datt2[which(Datt2$chr=="3R"),]
+  e <- dim(Datt3R)[1]
+  Datt3R$number <- (a+b+c+d+1):(a+b+c+d+e)
+  
+  Datt4 <- Datt2[which(Datt2$chr=="4"),]
+  f <- dim(Datt4)[1]
+  Datt4$number <- (a+b+c+d+e+1):(a+b+c+d+e+f)
+  
+  #Full data frame of necessary chromosomes
+  DattFull <- rbind(DattX, Datt2L, Datt2R, Datt3L, Datt3R, Datt4)
+  
+  #Pi as numeric
+  DattFull$Pi=as.numeric(levels(DattFull$Pi))[DattFull$Pi]
+  
+  Pi_plot <- ggplot(DattFull, aes(x = number, y= Pi, colour = chr)) 
+  
+  Pi_plot_2 <- Pi_plot + 
+    geom_point(size=0.3, show.legend = F) +
+    scale_y_continuous(limits=c(0, 0.02), breaks=seq(0, 0.02, 0.005)) + 
+    xlab("") +
+    scale_x_discrete(limits=c(1049, 3185, 5277, 7443, 9952, 11359), labels = c("X", "2L", '2R', '3L', '3R', "4")) +
+    theme(text = element_text(size=20), 
+          axis.text.x= element_text(size=15), axis.text.y= element_text(size=15)) +
+    scale_colour_manual(values=c("#56B4E9", "#E69F00", 'grey30', 'grey46', 'wheat3', 'lemonchiffon4')) +
+    ggtitle(x2)
+  
+  return(Pi_plot_2)
+}
+```
+
+
+
+
+
+

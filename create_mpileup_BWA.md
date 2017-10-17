@@ -3,19 +3,23 @@
 ### Most functions best to do using screen
 ____________________________________________________________________________________________________
   
-###Step 1: 
+### Step 1: 
+
 Make a project directory (project_dir) and put all files are in a raw directory located in the project directory (raw_dir=${project_dir}/raw_dir)
 
-###Step 2: 
+### Step 2: 
+
 md5sum all raw files: changes depending on the file name (example below)
+
 ```
 md5sum - c md5.txt
 ```
 
-###Step 3: 
+### Step 3: 
+
 Fastqc; run as a quality control and view
 
-###Step 4: 
+### Step 4: 
 Create all working directories and bringing in reference sequence and indexing
 
 Change name of project_dir at top & change index sequence and path to desired reference

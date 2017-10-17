@@ -1,11 +1,14 @@
-#Pipeline; Paul Knoops
-##Episodic Data
-###Generation 0, 38, 77, 115
+# Pipeline; Paul Knoops
+## Episodic Data
+### Generation 0, 38, 77, 115
 
-###1. Quality Control and Fastqc
+### 1. Quality Control and Fastqc
+
 First; check if the data uploaded correctly (matched set) 
+
 Use md5sum on md5.txt. 
 	- "-c" = report if checksums match contents of files (OK).
+	
 	- Must be in rawData directory (with the raw sequence files and the md5.txt file)
 
 ```
@@ -13,9 +16,13 @@ md5sum - c md5.txt
 ```
 
 Next check with Fastqc for quality of the reads. 
+
 Fastqc flag "-o" sends all output files to output directory. 
+
 The process will output two files (*fastqc.html and *fastqc.zip). 
+
 The *fastqc.html will be loaded to local machine and opened in web browser to view files.
+
 Moving to local machine also shown below while on the local machine.
 
 ```
@@ -26,7 +33,7 @@ fastqc -o /home/paul/episodicData/fastqcOutputs /home/paul/episodicData/rawData*
 scp paul@info.mcmaster.ca:/home/paul/episodicData/fastqcOutputs/*_fastqc.html /Users/paulknoops/episodicWork/data/fastqcOutputs
 ```
 
-2. Quality Trimming files (Trimmomatic)
+### 2. Quality Trimming files (Trimmomatic)
 	FLAGS/INPUT SETTINGS
 	- java program
 	- trimmomatic v.0.33
@@ -37,7 +44,9 @@ scp paul@info.mcmaster.ca:/home/paul/episodicData/fastqcOutputs/*_fastqc.html /U
 	- alternatively, edit input and run PoPoolation2 perl script for trimming
 	
 	-trimlog <trimlog>
+
 *Trimming F0 and F77
+
 ```
 #!/bin/bash
 
@@ -53,9 +62,10 @@ java -jar trimmomatic-0.33.jar PE -phred33 -trimlog /home/paul/episodicData/gen0
 done
 ```
 	
-3. Bring in reference sequence (version r5.57.fasta.gz)
+### 3. Bring in reference sequence (version r5.57.fasta.gz)
 	- curl -O (URL)
 	- bwa index ${REFERENCE}
+
 ```
 # Download index genome for D. mel
 # Make outdirectory
@@ -67,9 +77,9 @@ curl -O ftp://ftp.flybase.net/genomes/Drosophila_melanogaster/dmel_r5.57_FB2014_
 # Set bwa index genome 
 
 bwa index dmel-all-chromosome-r5.57.fasta.gz
-```	
+```
 
-4. BWA Mapping
+### 4. BWA Mapping
 	- Output = SAM files 
 		* Two files (different lanes) for same sample
 			-combine now or downstream
@@ -78,6 +88,7 @@ bwa index dmel-all-chromosome-r5.57.fasta.gz
 	- bwa mem
 		- t - processors (8)
 		- M - Mark shorter split hits as secondary
+
 ```
 #!/bin/bash
 
@@ -119,10 +130,15 @@ done
 ```
 
 May want to combine lanes
+
 - Can combine L001 with L002 with same start (R1)
+
 - need to change to run those in L003 and L004 and L005 and L006
+
 - find way to add to first script
+
 - example below, but better to samtools merge (shown after SAM to BAM)
+
 ```
 #!/bin/bash
 
@@ -140,13 +156,14 @@ bwa mem -t 8 -M ${ref_genome} ${mapped_dir}/${base}_L001_aligned_pe.SAM ${mapped
 done
 ```
 
+### 5. SAM to BAM
 
-
-5. SAM to BAM
 - samtools view;  FLAGS
 	-Sb = sam to bam
 	-q = quality (will do 20 as recommended by PoPoolation2)
+	
 - pipe to {sametools sort}
+
 ```
 #! /bin/bash
 dir = /home/paul/episodicData/mappedSequence
@@ -161,6 +178,8 @@ done
 ```
 
 Test with L005
+
+```
 #! /bin/bash
 dir=/home/paul/episodicData/mappedSequence/
 files=(${dir}*_L005_aligned_pe.SAM)
@@ -171,6 +190,8 @@ name=${file}
 base=`basename ${name} _L005_aligned_pe.SAM`
 samtools view -b -S -q 20 ${dir}${base}_L005_aligned_pe.SAM | samtools sort - ${dir}${base}_L005_aligned_pe
 done > L005_SAM_TO_BAM.txt
+```
+
 * be sure to change output to signify lane (merge after) -- did above (lane specified)
 
 doing each seperate (based on lane) to make sure get done before server shuts down
@@ -178,6 +199,7 @@ doing each seperate (based on lane) to make sure get done before server shuts do
 Different Outputs for organization: Final Script
 
 ```
+
 #! /bin/bash
 sam_dir=/home/paul/episodicData/mappedSequence/SAM_files/
 bam_dir=/home/paul/episodicData/mappedSequence/BAM_files/
@@ -192,10 +214,12 @@ done
 ```
 
 
-5.5. merge files:
+### 5.5. merge files:
 
 samtools merge --output --input1.bam --input2.bam .... inputN.bam
+
 should be based on lane (differently numbered)
+
 - could change names (all L001 and L002) or set up for even and odd numbers)
 
 ```
@@ -208,6 +232,7 @@ do
 name=${file}
 base=`basename ${name} _L001_aligned_pe.SAM`
 samtools merge ${mapped_dir}/${base}_merged_aligned_pe.SAM ${mapped_dir}/${base}_L001_aligned_pe.SAM ${mapped_dir}/${base}_L002_aligned_pe.SAM
+```
 
 - still need to change for L003/L004 and L005/L006
 - tried running: needs to be in BAM format for samtools merge aparently.
@@ -233,7 +258,7 @@ done
 ```
 
 	 
-6.* Sort with Picard?
+### 6.* Sort with Picard?
 ```
 #! /bin/bash
 
@@ -248,14 +273,20 @@ done
 ```
 
 Picard runs with Java
+
  Xmx2g give Java 2 Gb of memory
- jar SortSam use the Java software SortSam
- I= input
- O= output
- SO= sort order; sort by coordinate
+
+jar SortSam use the Java software SortSam
+
+I= input
+
+O= output
+
+SO= sort order; sort by coordinate
+
 VALIDATION STRINGENCY= Picard is like a Princess that is constantly complaining about every small deviation of our sam file from the most stringent requirements. I have never found a sam file satisfying all of Picards demands ⇒ ’shut up Picard’
 
-7.* Remove duplicates
+### 7.* Remove duplicates
 ```
 #! /bin/bash
 
@@ -268,12 +299,14 @@ base=`basename ${name}.sort.bam`
 java -Xmx2g -jar ˜pic/MarkDuplicates.jar I= ${mapped_dir}/*.sort.bam O= ${mapped_dir}/${base}.rmd.sort.bam M= ${mapped_dir}/dupstat.txt VALIDATION_STRINGENCY=SILENT REMOVE_DUPLICATES= true
 done
 ```
+
 - I= input file
 - O= output file for reads
 - M= output file of statistics (how many identified duplicates)
 - REMOVE DUPLICATES= remove duplicates from the output file rather than just marking them (remember flag in sam-file 0x400)
 
-8.* Remove low quality mapping
+### 8.* Remove low quality mapping
+
 	- same as adding -q (step 5.) however, adds flags -f 0x0002 -F 0x0004 -F 0x0008 -b
 	- only using -q (20), -F 0x0004, and -b (for bam files)
 	- can be done with samtools view above 
@@ -281,16 +314,16 @@ done
 ```
 samtools view -q 20 -F 0x0004 -b pe/pe.rmd.sort.bam > pe/pe.qf.rmd.sort.bam
 ```
-	
-	
+
 * 6,7,8 from PoPoolation; PoPoolation2 uses SAM to BAM with sort, than to step 9; including just as a precaution, may not be needed
 
 
-9. Create mpileup file with samtools
+### 9. Create mpileup file with samtools
 	- samtools mpileup (output = .mpileup)
 		-FLAGS
 			-B = disable BAQ computation
 		- BCF and VCF?
+
 ```
 #! /bin/bash
 
@@ -302,7 +335,7 @@ samtools mpileup -B ${ref_genome} ${files[@]} > episodicData.mpileup
 ```
 
 
-10. Convert to sync file with popoolation2 (java)
+### 10. Convert to sync file with popoolation2 (java)
 	- with java and PoPoolation2 script (mpileup2sync.jar)
 		- Flags:
 			--input = input files (.mpileup)
@@ -312,13 +345,14 @@ samtools mpileup -B ${ref_genome} ${files[@]} > episodicData.mpileup
 			--threads = 8
 			
 Ex.
+
 java -jar ˜/programs/popoolation2/mpileup2sync.jar --input p1-2.mpileup --output p1-2.sync --fastqtype sanger --min-qual 20 --threads 2
 
 ```
 java -jar ˜/programs/popoolation2/mpileup2sync.jar --input episodicData.mpileup --output episodicData.mpileup.sync --fastqtype illumina --min-qual 20 --threads 8
 ```
 			
-11. Can now run scripts from popoolation2 directory to find / visualize;
+### 11. Can now run scripts from popoolation2 directory to find / visualize;
 	- calculate allele frequency differences
 	- Fst (differentiation b/w pops.) 
 		-SCRIPT = fst-sliding
