@@ -12,6 +12,7 @@ Create a project directory (variable ${project_dir}) for all analysis to be comp
 
 Within this directory, you can create a raw data directory (i.e. raw_dir) for a personal copy of the data or (if the data is to large), links to the locations of the raw data may be more convinient. For explination from here, the variable ${raw_dir} refers to the location of the raw files.
 
+
 ### Quality Control: md5sum
 
 The first step is to check if the data uploaded correctly using md5sum. Using the md5.txt file for the sequence reads will output either "FAILED" or "OK" to know if the raw reads match the line in the md5.txt file, to signify a correct or incorrect transfer.
@@ -21,6 +22,8 @@ Flags;
   -c == report if checksums match contents of files (OK).
   
 ```
+#Within raw_dir
+
 md5sum - c md5.txt
 ```
 
@@ -47,5 +50,41 @@ The process will output two files (fastqc.html and fastqc.zip). The fastqc.html 
 scp paul@info.mcmaster.ca:${project_dir}/fastqcOutputs/*_fastqc.html ${LOCAL_PROJECT_DIR}/fastqcOutputs
 ```
 
+### Trimmomatic:
+Trimmomatic
+
+Flags;
+  -phred33 == may not need to be specified (actually important for later if 33 used)
+  -trimlog == log of trim outputs 
+  -IlluminaClip == adapter removal
+      Need to find the path to the adapter and create a variable for this (${adapter}) 
+  -LEADING:3 & TRAILING:3 == removal at start end end if below quality 
+  -MINLEN:36 == minimum length of 36 
+  -MAXINFO:40:0.5 == adaptive quality (balance b/w length and quality)
+
+```
+#! /bin/bash
+
+files=(${raw_dir}/*_R1_001.fastq.gz)
+for file in ${files[@]} 
+do
+name=${file}
+base=`basename ${name} _R1_001.fastq.gz`
+java -jar ${trim} PE -phred33 \
+  -trimlog ${trim_dir}/trimlog.txt \
+  ${raw_dir}/${base}_R1_001.fastq.gz \
+  ${raw_dir}/${base}_R2_001.fastq.gz \
+  ${trim_dir}/${base}_R1_PE.fastq.gz \
+  ${trim_dir}/${base}_R1_SE.fastq.gz \
+  ${trim_dir}/${base}_R2_PE.fastq.gz \
+  ${trim_dir}/${base}_R2_SE.fastq.gz \
+  ILLUMINACLIP:${adapter} \
+  LEADING:3 \
+  TRAILING:3 \
+  MAXINFO:40:0.5 \
+  MINLEN:36
+  
+done
+```
 
 
