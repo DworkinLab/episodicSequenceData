@@ -5150,6 +5150,8 @@ Pi_PlotFunction <- function(x) {
 ```
 
 
+NOTE: Running in parallel (in background) and screen is closed: list the jobs running still with pgrep PROGRAM (ex. pgrep novoalign)
+https://www.digitalocean.com/community/tutorials/how-to-use-bash-s-job-control-to-manage-foreground-and-background-processes
 
 
 
