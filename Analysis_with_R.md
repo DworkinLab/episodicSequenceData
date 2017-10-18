@@ -542,7 +542,10 @@ X <- rbind(coeffs_bowtie, coeffs_bwa)
 rm(coeffs_bowtie)
 rm(coeffs_bwa)
 
+print('writing CSV')
+setwd('/home/paul/Chromosomes')
 write.csv(X, file="Chromosome_3R.csv", row.names = FALSE)
+print('DONE')
 
 ```
 
@@ -583,9 +586,9 @@ print('writing CSV')
 
 #Where the output should be:
 
-setwd('/home/paul/Chromosomes')
+#setwd('/home/paul/Chromosomes')
 
-write.csv(coeffs_treatment, file="Chromosome_3R.csv", row.names = FALSE)
+#write.csv(coeffs_treatment, file="Chromosome_3R.csv", row.names = FALSE)
 
 rm(coeffs_treatment)
 
