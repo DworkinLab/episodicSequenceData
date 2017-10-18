@@ -549,53 +549,72 @@ print('DONE')
 
 ```
 
-
+Move to local??
 
 Taking this model and 
 ```
-#Need to split based on chosed Effect:
+#Can change the effect of interest by changing hashes at X_Effect (#EFFECT OF INTEREST#)
 
-#Choose the effect of interest:
+require(dplyr)
 
-X2 <- X[which(X$Effects=="TreatmentSel"),]
-#X2 <- X[which(X$Effects=="TreatmentSel:Generation"),]
-#X2 <- X[which(X$Effects=="Intercept"),]
-#X2 <- X[which(X$Effects=="Generation"),]
+#Combined .csv files with both BWA and Bowtie
 
-#Title <- as.character(X2$Effects[1])
+print("Read BWA files")
 
-rm(X)
+setwd('/home/paul/episodicData/Chromosome')
 
-# Call the two mappers for the positions called in file:
+mycsvs <- list.files(pattern=".csv")
 
-DF <- X2 %>%
-  group_by(position) %>%
-  summarise(mapper_1 = mapper[1], mapper_2=mapper[2])
+for (file in mycsvs){
+  print('file')
+  name <- gsub("\\**._","",file)
+  name2 <- gsub("\\..*","",name)
+  X <- read.csv(file, h=T)
+  
+  #Need to split based on chosed Effect:
+  #Choose the effect of interest:
+  
+  #EFFECT OF INTEREST#
+  #X_Effect <- X[which(X$Effects=="TreatmentSel"),]
+  X_Effect <- X[which(X$Effects=="TreatmentSel:Generation"),]
+  #X_Effect <- X[which(X$Effects=="Intercept"),]
+  #X_Effect <- X[which(X$Effects=="Generation"),]
 
-# Only keep those with both mappers at a position:
-DF2 <- DF[which(DF$mapper_2=="bwa" & DF$mapper_1=="bowtie"),]
+  title <- as.character(X_Effect$Effects[1])
+  title2 <- ifelse(title=='TreatmentSel', "Treat", ifelse(title=='Generation', "Gen", ifelse(title=='TreatmentSel:Generation', "TxG", "Int")))
+  rm(X)
+  # Call the two mappers for the positions called in file:
 
-# only keep positions from main data with both mappers
-coeffs_treatment <- X2[(X2$position %in% DF2$position),]
+   DF <- X_Effect %>%
+        group_by(position) %>%
+        summarise(mapper_1 = mapper[1], mapper_2=mapper[2])
 
-rm(DF)
+    # Only keep those with both mappers at a position:
+    
+    DF2 <- DF[which(DF$mapper_2=="bwa" & DF$mapper_1=="bowtie"),]
 
-rm(DF2)
 
-print('writing CSV')
+    # Only keep positions from main data with both mappers
+    
+    Effects_Final <- X_Effect[(X_Effect$position %in% DF2$position),]
 
-#Where the output should be:
+    rm(DF)
+    rm(DF2)
+    rm(X_Effect)
 
-#setwd('/home/paul/Chromosomes')
+    print('writing CSV')
+    
+    #Change name based on chosen effect:
+    #Change name based on input files
+    write.csv(Effects_Final, file=paste0(name2_, "Chromosome_", title2, ".csv", row.names = FALSE)
 
-#write.csv(coeffs_treatment, file="Chromosome_3R.csv", row.names = FALSE)
+    rm(Effects_Final)
 
-rm(coeffs_treatment)
-
-print('Done and everything gone')
-
+    print('Done and everything gone')
+   }
 ```
 
+        
 Now have a seperate chromosome file with combined mappers
 
 ### Move to local machine for further analysis:
