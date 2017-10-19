@@ -557,16 +557,12 @@ Taking this model and
 
 require(dplyr)
 
-#Combined .csv files with both BWA and Bowtie
+setwd('/home/paul/Chromosomes')
 
-print("Read BWA files")
-
-setwd('/home/paul/episodicData/Chromosome')
-
-mycsvs <- list.files(pattern=".csv")
+mycsvs <- list.files(pattern='.csv')
 
 for (file in mycsvs){
-  print('file')
+  print(file)
   name <- gsub("\\**._","",file)
   name2 <- gsub("\\..*","",name)
   X <- read.csv(file, h=T)
@@ -581,7 +577,7 @@ for (file in mycsvs){
   #X_Effect <- X[which(X$Effects=="Generation"),]
 
   title <- as.character(X_Effect$Effects[1])
-  title2 <- ifelse(title=='TreatmentSel', "Treat", ifelse(title=='Generation', "Gen", ifelse(title=='TreatmentSel:Generation', "TxG", "Int")))
+  title2 <- ifelse(title=='TreatmentSel', 'Treat', ifelse(title=='Generation', 'Gen', ifelse(title=='TreatmentSel:Generation', 'TxG', 'Int')))
   rm(X)
   # Call the two mappers for the positions called in file:
 
@@ -603,10 +599,8 @@ for (file in mycsvs){
     rm(X_Effect)
 
     print('writing CSV')
-    
-    #Change name based on chosen effect:
-    #Change name based on input files
-    write.csv(Effects_Final, file=paste0(name2_, "Chromosome_", title2, ".csv", row.names = FALSE)
+
+    write.csv(Effects_Final, file=paste0(name2, '_Chromosome_', title2, '.csv'), row.names = FALSE)
 
     rm(Effects_Final)
 
