@@ -614,10 +614,17 @@ Now have a seperate chromosome file with combined mappers
 ### Move to local machine for further analysis:
 
 ```
-scp ......
+scp paul@info.mcmaster.ca:/home/paul/Chromosomes/*TxG.csv /Users/paulknoops/Bioinformatics/episodic_practice/Chromosomes
 ```
 
 ### Plotting:
+
+R functions on local machine
+
+```
+
+
+```
 
 
 
