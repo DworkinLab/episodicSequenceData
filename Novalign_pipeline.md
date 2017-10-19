@@ -266,7 +266,7 @@ ________________________________________________________________________________
 
 __Steps used for all mapping outputs: changing parameters for input/output directories__
 
-### Change SAM files to BAM files: 
+### Change SAM files to BAM files: novo_samTobam.sh
 
 -- Saves space (BAM files are binary compressed versions of SAM files)
 
