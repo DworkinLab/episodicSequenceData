@@ -563,7 +563,7 @@ mycsvs <- list.files(pattern='.csv')
 
 for (file in mycsvs){
   print(file)
-  name <- gsub("\\**._","",file)
+  name <- gsub(".*_","",file)
   name2 <- gsub("\\..*","",name)
   X <- read.csv(file, h=T)
   
