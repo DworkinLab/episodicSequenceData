@@ -328,7 +328,27 @@ done
 ```
 
 __Need to merge the base generation additionaly (two sequence runs for ancestor need to merge: MGD0 and MGD)__
+```
+#!/bin/bash
 
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to input directory
+novo_bam=${project_dir}/novo_bam
+
+#Path to output directory
+novo_merge=${project_dir}/novo_merge
+
+samtools merge ${novo_merge}/MGD3_SO_CAGATC_merged_aligned_pe.final.bam ${novo_merge}/MGD2_SO_CAGATC_merged_aligned_pe.final.bam ${novo_merge}/MGD_SO_CAGATC_merged_aligned_pe.final.bam
+```
+
+Need to move the ancestor unmerged away (so not read for later steps)
+```
+mkdir ancestorUnmerged
+mv MGD2_SO_CAGATC_merged_aligned_pe.final.bam ancestorUnmerged
+mv MGD_SO_CAGATC_merged_aligned_pe.final.bam ancestorUnmerged
+```
 
   
 ### Picard Sort 
