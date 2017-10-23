@@ -340,7 +340,10 @@ novo_bam=${project_dir}/novo_bam
 #Path to output directory
 novo_merge=${project_dir}/novo_merge
 
-samtools merge ${novo_merge}/MGD3_SO_CAGATC_merged_aligned_pe.final.bam ${novo_merge}/MGD2_SO_CAGATC_merged_aligned_pe.final.bam ${novo_merge}/MGD_SO_CAGATC_merged_aligned_pe.final.bam
+samtools merge ${novo_merge}/MGD3_SO_CAGATC_novo_merge.bam \
+${novo_merge}/MGD2_SO_CAGATC_novo_merge.bam \
+${novo_merge}/MGD_SO_CAGATC_novo_merge.bam
+
 ```
 
 Need to move the ancestor unmerged away (so not read for later steps)
