@@ -5147,12 +5147,20 @@ Pi_PlotFunction <- function(x) {
   
   return(Pi_plot_2)
 }
+
 ```
+
+
+______________________________________________________________________________________________________________________________________
+
+
 
 
 NOTE: Running in parallel (in background) and screen is closed: list the jobs running still with pgrep PROGRAM (ex. pgrep novoalign)
 https://www.digitalocean.com/community/tutorials/how-to-use-bash-s-job-control-to-manage-foreground-and-background-processes
 
+
+Run Trimmomatic with different MAXINFO 0.3 -- 0.8
 
 
 
