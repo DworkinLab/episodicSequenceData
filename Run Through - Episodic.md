@@ -5163,4 +5163,6 @@ https://www.digitalocean.com/community/tutorials/how-to-use-bash-s-job-control-t
 Run Trimmomatic with different MAXINFO 0.3 -- 0.8
 
 
+Present on the analysis in two weeks!
+
 
