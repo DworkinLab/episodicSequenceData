@@ -356,7 +356,7 @@ mv MGD_SO_CAGATC_merged_aligned_pe.final.bam ancestorUnmerged
   
 ### Picard Sort 
 
-Need to sord with Picard to mark and remove duplicates
+Need to sord with Picard to mark and remove duplicates (needs to be sorted with Picard in order for downstream analysis)
 
 Need a directory for outputs, and a temporary directory for space allocation
 ```
@@ -369,7 +369,7 @@ Flags:
 
  - Xmx2g -- 2 Gb of memory allocated
  
- - Djava.io.tmpdir=${tmp} -- using my temporary direcory due to errors in space allocation to avoid errors while running (not necessary)
+ - Djava.io.tmpdir=${tmp} -- using my temporary directory due to errors in space allocation to avoid errors while running (not necessary but useful)
 
  - I -- input
  
@@ -400,12 +400,17 @@ novo_pic=${project_dir}/novo_pic
 novo_tmp=${project_dir}/novo_tmp
 
 
-files=(${novo_merge}/*)
+files=(${novo_merge}/*.bam)
 for file in ${files[@]}
 do
 name=${file}
+
 base=`basename ${name} .bam`
-java -Xmx2g -Djava.io.tmpdir=${novo_tmp} -jar ${pic} SortSam I= ${novo_merge}/${base}.bam O= ${novo_pic}/${base}_novo_sort.bam VALIDATION_STRINGENCY=SILENT SO=coordinate TMP_DIR=${novo_tmp}
+java -Xmx2g -Djava.io.tmpdir=${novo_tmp} -jar ${pic} SortSam \
+I= ${novo_merge}/${base}.bam \
+O= ${novo_pic}/${base}_novo_sort.bam \
+VALIDATION_STRINGENCY=SILENT SO=coordinate TMP_DIR=${novo_tmp}
+
 done
 ```
 
