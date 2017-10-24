@@ -44,6 +44,8 @@ mkdir novo_index
 
 The reference genome needs to be indexed for novoalign mapping (with novoindex)
 
+Script: novo_index.sh
+
 ```
 #! /bin/bash
 
@@ -117,7 +119,7 @@ For generation 115 alone: mean = 542, SD = 156
 
 This process will run one file at a time
 
-The script:
+The script: novo_map.sh
 ```
 #! /bin/bash
 
@@ -161,6 +163,7 @@ A solution to run each file seperatly in a simple splitting method
 
 *** alternative that may be an option: add the & after the code in the for Loop (before the done) and it should push that "for" to the background and run the next file in sequence *** 
 
+
 __1) Make the script to make multiple scripts__
 
 Make dir for all output scripts: 
@@ -173,6 +176,7 @@ Script to create many scripts
 
 - each different file normally looped through one by one above are put into a seperate script
 
+Script: novo_map_scriptMaker.sh
 ```
 #! /bin/bash
 
@@ -208,6 +212,7 @@ This creates a file that has all the scripts made in step 1) in a list with ''&'
 
 One method to run only half is make files/basename based on lane (i.e 001 or 002)
 
+Script: novo_createParallel_scipt.sh
 ```
 #! /bin/bash
 
@@ -271,12 +276,13 @@ __Steps used for all mapping outputs: changing parameters for input/output direc
 -- Saves space (BAM files are binary compressed versions of SAM files)
 
 -- need bam directory for .bam files (mkdir novo_bam)
-
-    > Flags:
+Flags:
         - b -- output is .bam
         - S -- input is .sam
         - q 20 -- quality mapping score of 20 (standard throughout all experiments)
-        
+     
+Script: novo_samTobam.sh
+
 ```
 #! /bin/bash
 
@@ -304,7 +310,9 @@ done
 mkdir novo_merge
 ```
 
-The script: no flags, just merging the two lanes of the illumina sequencing run
+no flags, just merging the two lanes of the illumina sequencing run
+
+The script: novo_merge.sh
 ```    
 #!/bin/bash
 
@@ -328,6 +336,9 @@ done
 ```
 
 __Need to merge the base generation additionaly (two sequence runs for ancestor need to merge: MGD0 and MGD)__
+
+
+Script: novo_MGD_merge.sh
 ```
 #!/bin/bash
 
@@ -379,8 +390,8 @@ Flags:
 
  - SO=coordinate -- sort order based on coordinate
   
- Script:
  
+Script: novo_picard_sort.sh 
 ```
 #!/bin/bash
 
@@ -415,11 +426,10 @@ done
 ```
 
 ### Remove Duplicates
-
 ```
 mkdir novo_rmd
 ```
-Flags:
+Flags: Similar to above
         - Xmx2g -- ""
         - MarkDuplicates -- ""
         - I -- ""
@@ -428,7 +438,8 @@ Flags:
         - VALIDATION_STRINGENCY=SILENT -- ""
         - REMOVE_DUPLICATES= true -- get rid of any found duplicated regions
 
-Script:
+
+Script: novo_rmd.sh
 ```
 #!/bin/bash
 
@@ -454,6 +465,7 @@ done
 ```
 
 ### More QC and make final bam files
+
 ```
 mkdir novo_final
 ```
@@ -463,7 +475,7 @@ Flags:
         -F 0x0004 -- remove any unmapped reads (hexidecimal value for unmapped = 0x0004)
         -b -- ""
 
-Script:
+Script: novo_final_qc.sh
 ```
 #!/bin/bash
 
@@ -496,7 +508,7 @@ Flags;
         -Q -- minimum base quality (already filtered for 20, default is 13, just set to 0 and not worry about it)
         -f -- path to reference sequence
        
-Script:
+Script: novo_mpileup.sh
 ```
 #!/bin/bash
 
@@ -530,7 +542,8 @@ Flags;
         --fastq-type -- needed for base encoding
         --min-qual 20 -- already set to 20 before, but since custome script, use 20 as safer assumption
         --threads 2 -- ""
-        
+     
+Script: 
 ```
 #!/bin/bash
 
