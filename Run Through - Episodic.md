@@ -5153,16 +5153,59 @@ Pi_PlotFunction <- function(x) {
 
 ______________________________________________________________________________________________________________________________________
 
-
-
-
 NOTE: Running in parallel (in background) and screen is closed: list the jobs running still with pgrep PROGRAM (ex. pgrep novoalign)
 https://www.digitalocean.com/community/tutorials/how-to-use-bash-s-job-control-to-manage-foreground-and-background-processes
 
 
 Run Trimmomatic with different MAXINFO 0.3 -- 0.8
 
+For Variant callers (or MPILEUP), don't use the reference sequence, but use the ancestor (turn into a .fasta.... file?????)
 
 Present on the analysis in two weeks!
+	-- Present Tested Trim Files
+	-- Present CRISP or other variant callers?
+	-- Thomas Taus Scripts Testing????
+	
+	
+______________
+
+Running Novoalign full data set: error
+-- Because I merged the ancestor early (before Picard), the markduplicates fails, maybe try picard merge
+```
+java -jar picard.jar MergeSamFiles \
+      I=input_1.bam \
+      I=input_2.bam \
+      O=merged_files.bam
+```
+```
+#!/bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to input directory
+novo_bam=${project_dir}/novo_bam
+
+#Path to output directory
+novo_pic_merge=${project_dir}/novo_pic_merge
+
+#Path to Picard
+pic=/usr/local/picard-tools-1.131/picard.jar
+
+files=(${novo_bam}/*_L001_novo.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _L001_novo.bam`
+java -jar ${pic} MergeSamFiles I=${novo_bam}/${base}_L001_novo.bam I=${novo_bam}/${base}_L002_novo.bam O=${novo_pic_merge}/${base}_novo_pic_merge.bam
+done
+```
+
+
+
+
+
+
+
 
 
