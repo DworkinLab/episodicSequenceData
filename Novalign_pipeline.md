@@ -337,7 +337,7 @@ done
 
 __Need to merge the base generation additionaly (two sequence runs for ancestor need to merge: MGD0 and MGD)__
 
-
+## TO SOON!!!!!!!!!!!!!
 Script: novo_MGD_merge.sh
 ```
 #!/bin/bash
@@ -364,6 +364,11 @@ mv MGD2_SO_CAGATC_merged_aligned_pe.final.bam ancestorUnmerged
 mv MGD_SO_CAGATC_merged_aligned_pe.final.bam ancestorUnmerged
 ```
 
+  
+  
+  
+  
+  
   
 ### Picard Sort 
 
@@ -463,6 +468,57 @@ base=`basename ${name} _novo_sort.bam`
 java -Xmx2g -jar ${pic} MarkDuplicates I= ${novo_pic}/${base}_novo_sort.bam O= ${novo_rmd}/${base}_novo_rmd.bam M= ${novo_rmd}/dupstat.txt VALIDATION_STRINGENCY=SILENT REMOVE_DUPLICATES= true
 done
 ```
+
+Note: the process fails for the ancestor b/c the merging early disrupted the ID's for reading with picard: rerun here (in one script
+
+need the ancsetor Unmerged dir and a new picard directory for ancestor to be put into (mkdir pic_ancestor)
+
+```
+#!/bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to input directory
+novo_merge=${project_dir}/novo_merge/ancestorUnmerged
+
+#Path to Picard
+pic=/usr/local/picard-tools-1.131/picard.jar
+
+#Path to output directory
+novo_pic=${project_dir}/novo_pic/pic_ancestor
+
+#Path to tmp
+novo_tmp=${project_dir}/novo_tmp
+
+#Path to output directory
+novo_rmd=${project_dir}/novo_rmd
+
+
+files=(${novo_merge}/*.bam)
+for file in ${files[@]}
+do
+name=${file}
+
+base=`basename ${name} .bam`
+
+java -Xmx2g -Djava.io.tmpdir=${novo_tmp} -jar ${pic} SortSam \
+I= ${novo_merge}/${base}.bam \
+O= ${novo_pic}/${base}_novo_sort.bam \
+VALIDATION_STRINGENCY=SILENT SO=coordinate TMP_DIR=${novo_tmp}
+
+java -Xmx2g -jar ${pic} MarkDuplicates \
+I= ${novo_pic}/${base}_novo_sort.bam \
+O= ${novo_rmd}/${base}_novo_rmd.bam \
+M= ${novo_rmd}/dupstat_anc.txt \
+VALIDATION_STRINGENCY=SILENT \
+REMOVE_DUPLICATES= true
+
+done
+
+
+```
+
 
 ### More QC and make final bam files
 
