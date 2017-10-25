@@ -5170,7 +5170,91 @@ Present on the analysis in two weeks!
 ______________
 
 Running Novoalign full data set: error
--- Because I merged the ancestor early (before Picard), the markduplicates fails, maybe try picard merge
+
+Remidied here (Merged to early)
+
+Script: novo_MGD_merge.sh
+```
+#!/bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to input directory
+novo_bam=${project_dir}/novo_bam
+
+#Path to output directory
+novo_merge=${project_dir}/novo_merge
+
+samtools merge ${novo_merge}/MGD3_SO_CAGATC_novo_merge.bam \
+${novo_merge}/MGD2_SO_CAGATC_novo_merge.bam \
+${novo_merge}/MGD_SO_CAGATC_novo_merge.bam
+
+```
+
+Need to move the ancestor unmerged away (so not read for later steps)
+```
+mkdir ancestorUnmerged
+mv MGD2_SO_CAGATC_merged_aligned_pe.final.bam ancestorUnmerged
+mv MGD_SO_CAGATC_merged_aligned_pe.final.bam ancestorUnmerged
+```
+
+Note: the process fails for the ancestor b/c the merging early disrupted the ID's for reading with picard: rerun here (in one script
+
+need the ancsetor Unmerged dir and a new picard directory for ancestor to be put into (mkdir pic_ancestor)
+
+```
+#!/bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to input directory
+novo_merge=${project_dir}/novo_merge/ancestorUnmerged
+
+#Path to Picard
+pic=/usr/local/picard-tools-1.131/picard.jar
+
+#Path to output directory
+novo_pic=${project_dir}/novo_pic/pic_ancestor
+
+#Path to tmp
+novo_tmp=${project_dir}/novo_tmp
+
+#Path to output directory
+novo_rmd=${project_dir}/novo_rmd
+
+
+files=(${novo_merge}/*.bam)
+for file in ${files[@]}
+do
+name=${file}
+
+base=`basename ${name} .bam`
+
+java -Xmx2g -Djava.io.tmpdir=${novo_tmp} -jar ${pic} SortSam \
+I= ${novo_merge}/${base}.bam \
+O= ${novo_pic}/${base}_novo_sort.bam \
+VALIDATION_STRINGENCY=SILENT SO=coordinate TMP_DIR=${novo_tmp}
+
+java -Xmx2g -jar ${pic} MarkDuplicates \
+I= ${novo_pic}/${base}_novo_sort.bam \
+O= ${novo_rmd}/${base}_novo_rmd.bam \
+M= ${novo_rmd}/dupstat_anc.txt \
+VALIDATION_STRINGENCY=SILENT \
+REMOVE_DUPLICATES= true
+
+done
+```
+
+
+
+
+
+
+__Because I merged the ancestor early (before Picard), the markduplicates fails, maybe try picard merge__
+
+__PICARD MERGING:__
 ```
 java -jar picard.jar MergeSamFiles \
       I=input_1.bam \
@@ -5201,6 +5285,30 @@ java -jar ${pic} MergeSamFiles I=${novo_bam}/${base}_L001_novo.bam I=${novo_bam}
 done
 ```
 
+```
+#!/bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to input directory
+novo_bam=${project_dir}/novo_bam
+
+#Path to output directory
+novo_pic_merge=${project_dir}/novo_pic_merge
+
+#Path to Picard
+pic=/usr/local/picard-tools-1.131/picard.jar
+
+java -jar ${pic} MergeSamFiles \
+	I=${novo_pic_merge}/MGD2_SO_CAGATC_novo_pic_merge.bam\
+	I=${novo_pic_merge}/MGD_SO_CAGATC_novo_pic_merge.bam \
+	O=${novo_pic_merge}/MGD3_SO_CAGATC_novo_merge.bam
+	
+mkdir ${novo_pic_merge}/Anc_unmerged
+mv ${novo_pic_merge}/MGD2_SO_CAGATC_novo_pic_merge.bam ${novo_pic_merge}/Anc_unmerged
+mv ${novo_pic_merge}/MGD_SO_CAGATC_novo_pic_merge.bam ${novo_pic_merge}/Anc_unmerged
+```
 
 
 
