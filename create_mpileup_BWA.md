@@ -20,10 +20,12 @@ md5sum - c md5.txt
 Fastqc; run as a quality control and view
 
 ### Step 4: 
+
 Create all working directories and bringing in reference sequence and indexing
 
 Change name of project_dir at top & change index sequence and path to desired reference
 
+Script:  
 ```
 #! /bin/bash
 
@@ -42,8 +44,6 @@ bwa index dmel-all-chromosome-r5.57.fasta.gz
 
 ref_genome=${index_dir}/dmel-all-chromosome-r5.57.fasta.gz
 
-
-
 cd ${project_dir}
 
 raw_dir=${project_dir}/raw_dir
@@ -61,6 +61,7 @@ mkdir ${project_dir}/mpileup_dir
 ```
 
 ### Step 5
+
 Defining all directories to copy and paste at start of each script
 
 Change everything to desired locations, adapters, paths to locations etc. up to comment
@@ -98,30 +99,39 @@ mpileup_dir=${project_dir}/mpileup_dir
 ```
 
 
-###Step 6
+### Step 6
+
 Change names to match
 
 In order for easier run through, change names to common names (ending in _L001_RX_001.fastq.gz or _L002_RX_001.fastq.gz)
+  
   - Change using mv function: easiest method would be to copy and paste with changes already made for ones you want
+  
   - Change to match F38SelR2_GATCAG_L001_R2_001.fastq.gz style
+  
   - should be same start
+  
   - all L003 = L001
+  
   - all L004 = L002 (etc.)
 
-##Scripts: copy the file/directory paths above into each script
-###Nano in scripts directory for each step below
+
+## Scripts: copy the file/directory paths above into each script
+### Nano in scripts directory for each step below
 __________________________________________________________________________________
 
 ### Trimmomatic
+
 Flags:
-  -phred33 = may not need to be specified
-  -trimlog = log of trim outputs
-  -IlluminaClip = adapter removal (${adapter})
-  -LEADING & TRAILING = 3; removal at start end end if below quality
-  -MINLEN = minimum length of 36
-  -MAXINFO = adaptive quality (balance b/w length and quality) = 0.5
 
+    -phred33 = may not need to be specified
+    -trimlog = log of trim outputs
+    -IlluminaClip = adapter removal (${adapter})
+    -LEADING & TRAILING = 3; removal at start end end if below quality
+    -MINLEN = minimum length of 36
+    -MAXINFO = adaptive quality (balance b/w length and quality) = 0.5
 
+Script:  
 ```
 #! /bin/bash
 
@@ -135,10 +145,13 @@ done
 ```
 
 ### BWA mapping
-Flags:
-  -t 8 = number of processors
-  -M = Mark shorter split hits as secondary (for Picard compatibility)
 
+Flags:
+
+      -t 8 = number of processors
+      -M = Mark shorter split hits as secondary (for Picard compatibility)
+
+Script:  
 ```
 #!/bin/bash
 
@@ -155,10 +168,12 @@ done
 
 ### convert SAM to BAM
 Flags:
-  -b = Bam files
-  -S = Sam files
-  -q 20 = minimum quality score 
 
+      -b = Bam files
+      -S = Sam files
+      -q 20 = minimum quality score 
+
+Script:  
 ```
 #! /bin/bash
 
@@ -171,9 +186,12 @@ base=`basename ${name} .SAM`
 samtools view -b -S -q 20 ${sam_dir}/${base}.SAM | samtools sort - ${bam_dir}/${base}
 done
 ```
+
 ### Merge files
+
 Only works if all lanes are L001/L002
 
+Script:  
 ```
 #!/bin/bash
 
@@ -187,15 +205,18 @@ done
 ```
 
 ### sort with Picard
+
 Flags: 
-  -Xmx2g = allocated Java 2 Gb of memory
-  -SO = sort order
-  -VALIDATION_STRINGENCY = surpress validation messages completely
-  -I = input file
-  -O = output file
-  -Djava.io.tmpdir=${tmp} = to be sure for java programs in general (may not be needed and TMP_DIR could be sufficient)
-  -TMP_DIR = temporary scratch directory for large files
+
+    -Xmx2g = allocated Java 2 Gb of memory
+    -SO = sort order
+    -VALIDATION_STRINGENCY = surpress validation messages completely
+    -I = input file
+    -O = output file
+    -Djava.io.tmpdir=${tmp} = to be sure for java programs in general (may not be needed and TMP_DIR could be sufficient)
+    -TMP_DIR = temporary scratch directory for large files
   
+Script:  
 ```
 #! /bin/bash
 
@@ -209,8 +230,10 @@ done
 ```
 
 ### Remove duplicates
+
 Flags: same as above
 
+Script:  
 ```
 #! /bin/bash
 
@@ -224,10 +247,13 @@ done
 ```
 
 ### Remove low quality reads
+
 Flags:
-  -q 20 = min quality score
-  -F 0x0004 = remove unmapped reads
-  - 
+  
+    -q 20 = min quality score
+    -F 0x0004 = remove unmapped reads
+
+Script:
 ```
 #! /bin/bash
 
@@ -241,8 +267,15 @@ done
 ```
 
 ### Create mpileup file format
-check the flags (illumina or sanger) -6 removed as not what is needed
 
+Flags:
+
+     -6 =illumina encoded, no flag if sanger
+     -B = Disable BAQ computation
+     -Q = quality step (done before so set to 0)
+     -f = path to reference genome
+
+Script:
 ```
 #! /bin/bash
 
@@ -250,6 +283,8 @@ samtools mpileup -B -Q 0 -f ${ref_genome} ${final_bam}/*.bam > ${mpileup_dir}/${
 ```
 
 ### Sync Files
+
+Script:
 ```
 #! /bin/bash
 
