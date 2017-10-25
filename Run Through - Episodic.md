@@ -5310,6 +5310,55 @@ mv ${novo_pic_merge}/MGD2_SO_CAGATC_novo_pic_merge.bam ${novo_pic_merge}/Anc_unm
 mv ${novo_pic_merge}/MGD_SO_CAGATC_novo_pic_merge.bam ${novo_pic_merge}/Anc_unmerged
 ```
 
+Comparing Samtools merge and Picard Merge: 
+
+	-- Picard Merge has slightly larger file sizes (better at merging???)
+	-- Potentially more b/c Read Group (RG) information is preserved??
+	-- Attempt the rest of the pipeline in duplicate:
+	
+
+```
+#!/bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to input directory
+novo_pic_merge=${project_dir}/novo_pic_merge
+
+#Path to Picard
+pic=/usr/local/picard-tools-1.131/picard.jar
+
+#Path to output directory
+novo_pic=${project_dir}/novo_picMerge_sort
+
+#Path to tmp
+novo_tmp=${project_dir}/novo_tmp
+
+#Path to rmd directory
+novo_rmd=${project_dir}/novo_pic_rmd
+
+files=(${novo_pic_merge}/*.bam)
+for file in ${files[@]}
+do
+name=${file}
+
+base=`basename ${name} .bam`
+
+java -Xmx2g -Djava.io.tmpdir=${novo_tmp} -jar ${pic} SortSam \
+I= ${novo_pic_merge}/${base}.bam \
+O= ${novo_pic}/${base}_novo_sort.bam \
+VALIDATION_STRINGENCY=SILENT SO=coordinate TMP_DIR=${novo_tmp}
+
+java -Xmx2g -jar ${pic} MarkDuplicates \
+I= ${novo_pic}/${base}_novo_sort.bam \
+O= ${novo_rmd}/${base}_novo_rmd.bam \
+M= ${novo_rmd}/dupstat_anc.txt \
+VALIDATION_STRINGENCY=SILENT \
+REMOVE_DUPLICATES= true
+
+done
+```
 
 
 
