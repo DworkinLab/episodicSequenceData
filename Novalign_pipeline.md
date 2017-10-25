@@ -335,41 +335,6 @@ samtools merge ${novo_merge}/${base}_novo_merge.bam ${novo_bam}/${base}_L001_nov
 done
 ```
 
-__Need to merge the base generation additionaly (two sequence runs for ancestor need to merge: MGD0 and MGD)__
-
-## TO SOON!!!!!!!!!!!!!
-Script: novo_MGD_merge.sh
-```
-#!/bin/bash
-
-#Variable for project:
-project_dir=/home/paul/episodicData/novoalign
-
-#Path to input directory
-novo_bam=${project_dir}/novo_bam
-
-#Path to output directory
-novo_merge=${project_dir}/novo_merge
-
-samtools merge ${novo_merge}/MGD3_SO_CAGATC_novo_merge.bam \
-${novo_merge}/MGD2_SO_CAGATC_novo_merge.bam \
-${novo_merge}/MGD_SO_CAGATC_novo_merge.bam
-
-```
-
-Need to move the ancestor unmerged away (so not read for later steps)
-```
-mkdir ancestorUnmerged
-mv MGD2_SO_CAGATC_merged_aligned_pe.final.bam ancestorUnmerged
-mv MGD_SO_CAGATC_merged_aligned_pe.final.bam ancestorUnmerged
-```
-
-  
-  
-  
-  
-  
-  
 ### Picard Sort 
 
 Need to sord with Picard to mark and remove duplicates (needs to be sorted with Picard in order for downstream analysis)
@@ -469,57 +434,6 @@ java -Xmx2g -jar ${pic} MarkDuplicates I= ${novo_pic}/${base}_novo_sort.bam O= $
 done
 ```
 
-Note: the process fails for the ancestor b/c the merging early disrupted the ID's for reading with picard: rerun here (in one script
-
-need the ancsetor Unmerged dir and a new picard directory for ancestor to be put into (mkdir pic_ancestor)
-
-```
-#!/bin/bash
-
-#Variable for project:
-project_dir=/home/paul/episodicData/novoalign
-
-#Path to input directory
-novo_merge=${project_dir}/novo_merge/ancestorUnmerged
-
-#Path to Picard
-pic=/usr/local/picard-tools-1.131/picard.jar
-
-#Path to output directory
-novo_pic=${project_dir}/novo_pic/pic_ancestor
-
-#Path to tmp
-novo_tmp=${project_dir}/novo_tmp
-
-#Path to output directory
-novo_rmd=${project_dir}/novo_rmd
-
-
-files=(${novo_merge}/*.bam)
-for file in ${files[@]}
-do
-name=${file}
-
-base=`basename ${name} .bam`
-
-java -Xmx2g -Djava.io.tmpdir=${novo_tmp} -jar ${pic} SortSam \
-I= ${novo_merge}/${base}.bam \
-O= ${novo_pic}/${base}_novo_sort.bam \
-VALIDATION_STRINGENCY=SILENT SO=coordinate TMP_DIR=${novo_tmp}
-
-java -Xmx2g -jar ${pic} MarkDuplicates \
-I= ${novo_pic}/${base}_novo_sort.bam \
-O= ${novo_rmd}/${base}_novo_rmd.bam \
-M= ${novo_rmd}/dupstat_anc.txt \
-VALIDATION_STRINGENCY=SILENT \
-REMOVE_DUPLICATES= true
-
-done
-
-
-```
-
-
 ### More QC and make final bam files
 
 ```
@@ -553,6 +467,47 @@ base=`basename ${name} _novo_rmd.bam`
 samtools view -q 20 -F 0x0004 -b ${novo_rmd}/${base}_novo_rmd.bam > ${novo_final}/${base}_novo_final.bam
 done
 ```
+
+__Need to merge the base generation additionaly (two sequence runs for ancestor need to merge: MGD0 and MGD)__
+
+```
+#!/bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to final directory
+novo_final=${project_dir}/novo_final
+
+samtools merge ${novo_final}/MGD3_SO_CAGATC_novo_final.bam \
+${novo_final}/MGD2_SO_CAGATC_novo_final.bam \
+${novo_final}/MGD_SO_CAGATC_novo_final.bam
+
+mkdir ${novo_final}/Anc_unmerged
+mv ${novo_final}/MGD2_SO_CAGATC_novo_final.bam ${novo_final}/Anc_unmerged
+mv ${novo_final}/MGD_SO_CAGATC_novo_final.bam ${novo_final}/Anc_unmerged
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### Create mpileup
 
