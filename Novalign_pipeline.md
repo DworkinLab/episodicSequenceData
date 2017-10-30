@@ -468,7 +468,9 @@ samtools view -q 20 -F 0x0004 -b ${novo_rmd}/${base}_novo_rmd.bam > ${novo_final
 done
 ```
 
-__Need to merge the base generation additionaly (two sequence runs for ancestor need to merge: MGD0 and MGD)__
+### Merge the 2 ancestors
+
+Need to merge the base generation additionaly (two sequence runs for ancestor need to merge: MGD2 and MGD)
 
 ```
 #!/bin/bash
