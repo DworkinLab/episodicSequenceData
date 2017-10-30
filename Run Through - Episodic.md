@@ -5381,7 +5381,21 @@ samtools view -q 20 -F 0x0004 -b ${novo_rmd}/${base}_novo_rmd.bam > ${novo_final
 done
 ```
 
+```
+#!/bin/bash
 
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
 
+#Path to final directory
+novo_final=${project_dir}/novo_pic_final
 
+samtools merge ${novo_final}/MGD3_SO_CAGATC_novo_pic_merge_novo_final.bam \
+${novo_final}/MGD2_SO_CAGATC_novo_pic_merge_novo_final.bam \
+${novo_final}/MGD_SO_CAGATC_novo_pic_merge_novo_final.bam
+
+mkdir ${novo_final}/Anc_unmerged
+mv ${novo_final}/MGD2_SO_CAGATC_novo_pic_merge_novo_final.bam ${novo_final}/Anc_unmerged
+mv ${novo_final}/MGD_SO_CAGATC_novo_pic_merge_novo_final.bam ${novo_final}/Anc_unmerged
+```
 
