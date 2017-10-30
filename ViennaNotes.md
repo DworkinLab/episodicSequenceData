@@ -1,3 +1,5 @@
+### Sarah's Questions for Vienna Trip
+
 If you have uneven coverage, relative to your total coverage how do you figure out the minimum and maximum you need? What do you do if you have one region that has more coverage and one that has less, you will sample down so that you have less coverage accross the entire thing? 
   How do you know what to cut down the coverage to?
   How do you get the random subset in your program, prmutation test (Sarah)?
@@ -32,3 +34,6 @@ When using two different mappers, what do you average? Where do you recombine th
   Could take avarage of SNP counts in sync file and round up one way or not
   What do you do in a case where one mapper shows the SNP and the other does not (just get rid of it)?
   
+ 
+ 
+
