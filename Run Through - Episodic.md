@@ -2979,7 +2979,7 @@ Run Regular scripts; just make a new trim dir with a copu of F77ConR2.
 
 
 
-Test for running in paralle: have two data sets for F115ConR1 and F115ConR2 bam files to be merged
+### Test for running in paralle: have two data sets for F115ConR1 and F115ConR2 bam files to be merged
 Run each in parallel:
 Make each into seperate scripts (F115ConR1_merge.sh and F115ConR2_merge.sh)
 ```
@@ -5398,4 +5398,4 @@ mkdir ${novo_final}/Anc_unmerged
 mv ${novo_final}/MGD2_SO_CAGATC_novo_pic_merge_novo_final.bam ${novo_final}/Anc_unmerged
 mv ${novo_final}/MGD_SO_CAGATC_novo_pic_merge_novo_final.bam ${novo_final}/Anc_unmerged
 ```
-
+All the final files look the same: this is a possible alternative method, but does not really matter it looks like....
