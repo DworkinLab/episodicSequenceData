@@ -276,6 +276,7 @@ __Steps used for all mapping outputs: changing parameters for input/output direc
 -- Saves space (BAM files are binary compressed versions of SAM files)
 
 -- need bam directory for .bam files (mkdir novo_bam)
+
 Flags:
         - b -- output is .bam
         - S -- input is .sam
@@ -472,6 +473,7 @@ done
 
 Need to merge the base generation additionaly (two sequence runs for ancestor need to merge: MGD2 and MGD)
 
+Script: 
 ```
 #!/bin/bash
 
@@ -489,6 +491,141 @@ mkdir ${novo_final}/Anc_unmerged
 mv ${novo_final}/ MGD2_SO_CAGATC_novo_merge_novo_final.bam ${novo_final}/Anc_unmerged
 mv ${novo_final}/ MGD_SO_CAGATC_novo_merge_novo_final.bam ${novo_final}/Anc_unmerged
 ```
+
+### Indel Realigner with GATK
+
+
+__1) Need an unzipped copy of the reference genome__
+
+Made a second copy and unzipping the second copy
+```
+gunzip dmel-all-chromosome-r5.57_2.fasta.gz
+```
+
+__2) make a gatk directory__
+```
+mkdir novo_GATK
+```
+
+__3) Set up reference genome__
+
+a) Create .dict file for reference: This creates a dictionary file for the ref genome with a header but no sam records (the header is only sequence records)
+
+script: novo_dict_index.sh
+```
+#! /bin/bash
+
+pic=/usr/local/picard-tools-1.131/picard.jar
+index_dir=/home/paul/episodicData/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57_2.fasta
+
+java -jar ${pic} CreateSequenceDictionary R=${ref_genome} O=${index_dir}/dmel-all-chromosome-r5.57_2.dict
+```
+
+b) Create a .fai to reference genome: 
+```
+samtools faidx dmel-all-chromosome-r5.57_2.fasta
+```
+
+__4) Need Read Group headers__
+
+For GATK to run, read group headers are needed to read for Indel Realignment, __BUT__ the details are not necessary and don't need to be accurate, just need to be there.
+
+Flags:
+  - RGID --Read Group Identifier; for Illumina, are composed using the flowcell + lane name and number [using Lanes L001_L002 for now]
+  - RGLB -- DNA Preperation Library Identifier [library1 as place holder]
+  - RGPL -- platform/technology used to produce the read [Illumina]
+  - RGPU -- Platform Unit; details on the sequencing unit (i.e run barcode) [None, used for practice]
+  - RGSM -- Sample [Using the basename which is each unique sequence]
+
+Script: 
+```
+#! /bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to Picard
+pic=/usr/local/picard-tools-1.131/picard.jar
+
+#Path to .bam files
+novo_final=${project_dir}/novo_final
+
+files=(${novo_final}/*.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} .bam`
+
+java -jar ${pic} AddOrReplaceReadGroups I=${novo_final}/${base}.bam O=${novo_final}/${base}_RG.bam RGID=L001_L002 RGLB=library1 RGPL=illumina RGPU=None RGSM=${base}
+
+done
+```
+
+__5) Index the read group Bam files __
+
+Need to have the .bam files indexed prior to the indel realignment
+
+Script: novo_indexBam.sh
+```
+#! /bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to .bam files
+novo_final=${project_dir}/novo_final
+
+files=(${novo_final}/*_RG.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _RG.bam`
+samtools index ${novo_final}/${base}_RG.bam
+done
+```
+
+__6) Run GATK indel realigner__
+
+GATK indel realigner takes two steps, 1) target the indels to be raligned (.intervals file) and 2) realign the indels (.realigned files)
+
+Script: novo_gatk.sh
+```
+#!/bin/bash
+
+#Variable for project name (file name)
+project_name=novo_episodic
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to input directory
+novo_final=${project_dir}/novo_final
+
+#Path to output directory
+novo_GATK=${project_dir}/novo_GATK
+
+#Variable for reference genome (non-zipped)
+index_dir=/home/paul/episodicData/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57_2.fasta
+
+#Path to GATK
+gatk=/usr/local/gatk/GenomeAnalysisTK.jar
+
+files=(${novo_final}/*_RG.bam)
+for file in ${files[@]}
+do
+name=${file}
+base=`basename ${name} _RG.bam`
+
+java -Xmx8g -jar ${gatk} -I ${novo_final}/${base}_RG.bam -R ${ref_genome} -T RealignerTargetCreator -o ${novo_GATK}/${base}.intervals
+
+java -Xmx8g -jar ${gatk} -I ${novo_final}/${base}_RG.bam -R ${ref_genome} -T IndelRealigner -targetIntervals ${novo_GATK}/${base}.intervals -o ${novo_GATK}/${base}_realigned.bam
+
+done
+```
+
+
 
 
 
@@ -625,29 +762,7 @@ also need .fai (have but rerun? -- samtools faidx Homo_sapiens_assembly18.fasta 
 Needs a readgroup (dummy can work)
 java -jar picard.jar AddOrReplaceReadGroups I=input.bam O=output.bam RGID=4 RGLB=lib1 RGPL=illumina RGPU=unit1 RGSM=20
 
-```
-#! /bin/bash
 
-#Variable for project:
-project_dir=/home/paul/episodicData/novoalign
-
-#Path to Picard
-pic=/usr/local/picard-tools-1.131/picard.jar
-
-#Path to .bam files
-novo_final=${project_dir}/novo_final
-
-files=(${novo_final}/*.bam)
-for file in ${files[@]}
-do
-name=${file}
-base=`basename ${name} .bam`
-
-java -jar ${pic} AddOrReplaceReadGroups I=${novo_final}/${base}.bam O=${novo_final}/${base}_RG.bam RGID=L001_L002 RGLB=library1 RGPL=illumina RGPU=None RGSM=${base}
-
-done
-
-```
 Need to index bams?
 Change things to _RG
 ```
