@@ -624,8 +624,111 @@ java -Xmx8g -jar ${gatk} -I ${novo_final}/${base}_RG.bam -R ${ref_genome} -T Ind
 
 done
 ```
+### Analysis of the variation
+
+__1) Looking at Tajima's Pi__
+
+Will need two new directories, one for pileup files, and one for the output Pi files: Be sure they are in project dir
+```
+mkdir novo_pileup
+mkdir novo_pi
+```
+
+Each generated .bam file needs to be in mpileup format for the use in Popoolation Scripts:
+
+Flags:
+        -B -- disable BAQ (base alignment quality) computation, helps to stop false SNPs passing through due to misalignment
+        -Q -- minimum base quality (already filtered for 20, default is 13, just set to 0 and not worry about it)
+        -f -- path to reference sequence
+        
+Script: novo_Pi_pileups.sh
+```
+#! /bin/bash
+
+# Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+# Path to input directory
+input=${project_dir}/novo_GATK
+
+# Path to output novoalign pileup files
+output=${project_dir}/novo_pileup
+
+index_dir=/home/paul/episodicData/index_dir
+ref_genome=${index_dir}/dmel-all-chromosome-r5.57_2.fasta
+
+files=(${input}/*_merge_novo_final_realigned.bam)
+
+for file in ${files[@]}
+
+do
+
+name=${file}
+
+base=`basename ${name} _merge_novo_final_realigned.bam`
+
+samtools mpileup -B -Q 0 -f ${ref_genome} ${input}/${base}_merge_novo_final_realigned.bam > ${output}/${base}.pileup
+
+done
+```
+
+Using the Variance-sliding.pl script from Popoolation1
+
+Flags:
+        	--input -- input pileup file
+         --output -- output file with Tajima's Pi calculated
+         --measure [pi] -- Options include Tajima's Pi or Wattersons Theta or Tajima's D along chromosomes using a sliding window approach
+         --window-size [10000] -- size of the sliding window 
+         --step-size [10000] -- how far to move along with chromosome (if step size smaller, windows will overlap)
+         --min-count [2] -- minimum allele count 
+         --min-coverage [4] -- minimum coverage
+         --max-coverage [400] --maximum coverage
+         --min-qual [20] -- minimum base quality (already filtered for 20 multiple times)
+         --pool-size [120] -- number of chromosomes (So double the number of individuals per pool)
+         --fastq-type [sanger] -- depending on the encoding of the fastq files
 
 
+Script: novo_tajima_pi.sh
+```
+#! /bin/bash
+
+# Path to PoPoolation1 (Currently in Paul's Home directory)
+popoolation=/home/paul/popoolation_1.2.2
+
+# Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+# Path to input directory
+input=${project_dir}/novo_pileup
+
+# Path to output Tajima Pi files
+output=${project_dir}/novo_pi
+
+files=(${input}/*.pileup)
+
+for file in ${files[@]}
+
+do
+
+name=${file}
+
+base=`basename ${name} .pileup`
+
+perl ${popoolation}/Variance-sliding.pl \
+	--input ${input}/${base}.pileup \
+	--output ${output}/${base}.pi \
+	--measure pi \
+	--window-size 10000 \
+	--step-size 10000 \
+	--min-count 2 \
+	--min-coverage 4 \
+	--max-coverage 400 \
+	--min-qual 20 \
+	--pool-size 120 \
+	--fastq-type sanger
+
+done
+```
 
 
 
