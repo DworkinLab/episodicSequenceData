@@ -538,7 +538,7 @@ Flags:
   - RGPU -- Platform Unit; details on the sequencing unit (i.e run barcode) [None, used for practice]
   - RGSM -- Sample [Using the basename which is each unique sequence]
 
-Script: 
+Script: novo_readgroups.sh
 ```
 #! /bin/bash
 
@@ -562,7 +562,7 @@ java -jar ${pic} AddOrReplaceReadGroups I=${novo_final}/${base}.bam O=${novo_fin
 done
 ```
 
-__5) Index the read group Bam files __
+__5) Index the read group Bam files__
 
 Need to have the .bam files indexed prior to the indel realignment
 
@@ -713,112 +713,6 @@ java -ea -Xmx7g -jar ${sync} --input ${novo_mpileup}/${project_name}.mpileup --o
 ```
 
 ______________________________________________
-
-### Testing out GATK
--- mkdir novo_GATK
--- unzip reference?
--- need to do as a loop with base again?
-
-```
-#!/bin/bash
-
-#Variable for project name (file name)
-project_name=novo_episodic
-
-#Variable for project:
-project_dir=/home/paul/episodicData/novoalign
-
-#Path to input directory
-novo_final=${project_dir}/novo_final
-
-#Path to output directory
-novo_GATK=${project_dir}/novo_GATK
-
-#Variable for reference genome (non-zipped)
-index_dir=/home/paul/episodicData/index_dir
-ref_genome=${index_dir}/dmel-all-chromosome-r5.57_2.fasta
-
-#Path to GATK
-gatk=/usr/local/gatk/GenomeAnalysisTK.jar
-
-
-files=(${novo_final}/*.bam)
-for file in ${files[@]}
-do
-name=${file}
-base=`basename ${name} .bam`
-
-java -Xmx8g -jar ${gatk} -I ${novo_final}/${base}.bam -R ${ref_genome} -T RealignerTargetCreator -o ${novo_GATK}/${base}.intervals
-
-java -Xmx8g -jar ${gatk} -I ${novo_final}/${base}.bam -R ${ref_genome} -T IndelRealigner -targetIntervals ${novo_GATK}/${base}.intervals -o ${novo_GATK}/${base}_realigned.bam
-
-done
-```
-Error with reference
-need .dict (java -jar CreateSequenceDictionary.jar R= Homo_sapiens_assembly18.fasta O= Homo_sapiens_assembly18.dict)
-also need .fai (have but rerun? -- samtools faidx Homo_sapiens_assembly18.fasta )
-
-
-Needs a readgroup (dummy can work)
-java -jar picard.jar AddOrReplaceReadGroups I=input.bam O=output.bam RGID=4 RGLB=lib1 RGPL=illumina RGPU=unit1 RGSM=20
-
-
-Need to index bams?
-Change things to _RG
-```
-#! /bin/bash
-
-#Variable for project:
-project_dir=/home/paul/episodicData/novoalign
-
-#Path to .bam files
-novo_final=${project_dir}/novo_final
-
-files=(${novo_final}/*_RG.bam)
-for file in ${files[@]}
-do
-name=${file}
-base=`basename ${name} _RG.bam`
-samtools index ${novo_final}/${base}_RG.bam
-done
-```
-
-Rerun script:
-```
-#!/bin/bash
-
-#Variable for project name (file name)
-project_name=novo_episodic
-
-#Variable for project:
-project_dir=/home/paul/episodicData/novoalign
-
-#Path to input directory
-novo_final=${project_dir}/novo_final
-
-#Path to output directory
-novo_GATK=${project_dir}/novo_GATK
-
-#Variable for reference genome (non-zipped)
-index_dir=/home/paul/episodicData/index_dir
-ref_genome=${index_dir}/dmel-all-chromosome-r5.57_2.fasta
-
-#Path to GATK
-gatk=/usr/local/gatk/GenomeAnalysisTK.jar
-
-
-files=(${novo_final}/*_RG.bam)
-for file in ${files[@]}
-do
-name=${file}
-base=`basename ${name} _RG.bam`
-
-java -Xmx8g -jar ${gatk} -I ${novo_final}/${base}_RG.bam -R ${ref_genome} -T RealignerTargetCreator -o ${novo_GATK}/${base}.intervals
-
-java -Xmx8g -jar ${gatk} -I ${novo_final}/${base}_RG.bam -R ${ref_genome} -T IndelRealigner -targetIntervals ${novo_GATK}/${base}.intervals -o ${novo_GATK}/${base}_realigned.bam
-
-done
-```
 
 Carful with basenames (don't make the outputs novo_aligned_novo_mapped_novo_final.bam etc.
 - samtools workflow with GATK:               http://www.htslib.org/workflow/
