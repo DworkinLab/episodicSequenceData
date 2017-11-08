@@ -5458,3 +5458,5 @@ Details
        The output will be a reduced coverage synchronized file
 ```
 
+
+https://rtsf.natsci.msu.edu/genomics/tech-notes/fastqc-tutorial-and-faq/
