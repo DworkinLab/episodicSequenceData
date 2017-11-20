@@ -675,7 +675,7 @@ done
 Using the Variance-sliding.pl script from Popoolation1
 
 Flags:
-        	--input -- input pileup file
+         --input -- input pileup file
          --output -- output file with Tajima's Pi calculated
          --measure [pi] -- Options include Tajima's Pi or Wattersons Theta or Tajima's D along chromosomes using a sliding window approach
          --window-size [10000] -- size of the sliding window 
