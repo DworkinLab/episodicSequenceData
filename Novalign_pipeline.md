@@ -80,9 +80,11 @@ Note: Compressed read files are not supported in unlicensed versions.
 gunzip *.gz
 ```
 
-### Novoalign Flags: 
+### Novoalign 
 
- - d -- Full pathname of indexed reference sequence from novoindex
+Flags: 
+
+- d -- Full pathname of indexed reference sequence from novoindex
 
 - f -- Files containing the read sequences to be aligned  
 
@@ -90,7 +92,9 @@ gunzip *.gz
 
 - i ###,## -- Sets fragment orientation and approximate fragment length for proper pairs.
     ex. -i 250 50  Defaults to paired end Illumina or Mate Pair ABI with 250bp insert and 50bp standard deviation (possible check below)
+     
      - 400, 100 found based on initial mapping with novoalign first run through
+     
      - using 500, 150 (below)
 
 ### Checking insert Size
@@ -98,6 +102,7 @@ gunzip *.gz
 Using output from Picard Sort (if available) from Bowtie2 or BWA mem previously (before removing duplicates) use Picard CollectInsertSizeMetrics.jar to get summary statistics on file for insert size and other information
 
 If other mappers not available, map using defaults or extreme insert / SD values (i.e. 0, 500) and then run this script on .bam files (needs to be sorted with Picard)
+
 ```
 java -jar /usr/local/picard-tools-1.131/picard.jar CollectInsertSizeMetrics \
     I=/home/paul/episodicData/novoalign/novo_rmd/F115ConR1_TAGCTT_novo_merge_novo_rmd.bam \
@@ -278,10 +283,14 @@ __Steps used for all mapping outputs: changing parameters for input/output direc
 -- need bam directory for .bam files (mkdir novo_bam)
 
 Flags:
-        - b -- output is .bam
-        - S -- input is .sam
-        - q 20 -- quality mapping score of 20 (standard throughout all experiments)
+
+- b -- output is .bam
+
+- S -- input is .sam
+
+- q 20 -- quality mapping score of 20 (standard throughout all experiments)
      
+
 Script: novo_samTobam.sh
 
 ```
@@ -449,9 +458,12 @@ mkdir novo_final
 ```
 
 Flags:
-        -q 20 -- ""
-        -F 0x0004 -- remove any unmapped reads (hexidecimal value for unmapped = 0x0004)
-        -b -- ""
+
+- q 20 -- ""
+
+- F 0x0004 -- remove any unmapped reads (hexidecimal value for unmapped = 0x0004)
+
+- b -- ""
 
 Script: novo_final_qc.sh
 ```
@@ -539,11 +551,16 @@ __4) Need Read Group headers__
 For GATK to run, read group headers are needed to read for Indel Realignment, __BUT__ the details are not necessary and don't need to be accurate, just need to be there.
 
 Flags:
-  - RGID --Read Group Identifier; for Illumina, are composed using the flowcell + lane name and number [using Lanes L001_L002 for now]
-  - RGLB -- DNA Preperation Library Identifier [library1 as place holder]
-  - RGPL -- platform/technology used to produce the read [Illumina]
-  - RGPU -- Platform Unit; details on the sequencing unit (i.e run barcode) [None, used for practice]
-  - RGSM -- Sample [Using the basename which is each unique sequence]
+
+- RGID --Read Group Identifier; for Illumina, are composed using the flowcell + lane name and number [using Lanes L001_L002 for now]
+
+- RGLB -- DNA Preperation Library Identifier [library1 as place holder]
+
+- RGPL -- platform/technology used to produce the read [Illumina]
+
+- RGPU -- Platform Unit; details on the sequencing unit (i.e run barcode) [None, used for practice]
+
+- RGSM -- Sample [Using the basename which is each unique sequence]
 
 Script: novo_readgroups.sh
 ```
@@ -644,9 +661,12 @@ mkdir novo_pi
 Each generated .bam file needs to be in mpileup format for the use in Popoolation Scripts:
 
 Flags:
-        -B -- disable BAQ (base alignment quality) computation, helps to stop false SNPs passing through due to misalignment
-        -Q -- minimum base quality (already filtered for 20, default is 13, just set to 0 and not worry about it)
-        -f -- path to reference sequence
+
+- B -- disable BAQ (base alignment quality) computation, helps to stop false SNPs passing through due to misalignment
+
+- Q -- minimum base quality (already filtered for 20, default is 13, just set to 0 and not worry about it)
+
+- f -- path to reference sequence
         
 Script: novo_Pi_pileups.sh
 ```
@@ -681,21 +701,32 @@ done
 
 Using the Variance-sliding.pl script from Popoolation1
 
-```
 Flags:
-         --input -- input pileup file
-         --output -- output file with Tajima's Pi calculated
-         --measure [pi] -- Options include Tajima's Pi or Wattersons Theta or Tajima's D along chromosomes using a sliding window approach
-         --window-size [10000] -- size of the sliding window 
-         --step-size [10000] -- how far to move along with chromosome (if step size smaller, windows will overlap)
-         --min-count [2] -- minimum allele count 
-         --min-coverage [4] -- minimum coverage (not important if subsampling done..)
-         --max-coverage [400] --maximum coverage
-         --min-qual [20] -- minimum base quality (already filtered for 20 multiple times)
-         --pool-size [120] -- number of chromosomes (So double the number of individuals per pool)
-         --fastq-type [sanger] -- depending on the encoding of the fastq files
-	 –-min-covered-fraction [0.5] -- minimum percentage of sites having sufficient coverage in the given window -- 0.5 from example
-```
+
+- input -- input pileup file
+
+- output -- output file with Tajima's Pi calculated
+
+- measure [pi] -- Options include Tajima's Pi or Wattersons Theta or Tajima's D along chromosomes using a sliding window approach
+
+- window-size [10000] -- size of the sliding window 
+
+- step-size [10000] -- how far to move along with chromosome (if step size smaller, windows will overlap)
+ 
+- min-count [2] -- minimum allele count 
+
+- min-coverage [4] -- minimum coverage (not important if subsampling done..)
+
+- max-coverage [400] --maximum coverage
+
+- min-qual [20] -- minimum base quality (already filtered for 20 multiple times)
+
+- pool-size [120] -- number of chromosomes (So double the number of individuals per pool)
+
+- fastq-type [sanger] -- depending on the encoding of the fastq files
+
+- min-covered-fraction [0.5] -- minimum percentage of sites having sufficient coverage in the given window -- 0.5 from example
+
 
 Script: novo_tajima_pi.sh
 
@@ -768,12 +799,14 @@ done
 mkdir novo_mpileup
 ```
 
-```
-Flags;
-        -B -- disable BAQ (base alignment quality) computation, helps to stop false SNPs passing through due to misalignment
-        -Q -- minimum base quality (already filtered for 20, default is 13, just set to 0 and not worry about it)
-        -f -- path to reference sequence
-```      
+Flags:
+
+- B -- disable BAQ (base alignment quality) computation, helps to stop false SNPs passing through due to misalignment
+
+- Q -- minimum base quality (already filtered for 20, default is 13, just set to 0 and not worry about it)
+
+- f -- path to reference sequence
+    
 
 Script: novo_mpileup.sh
 ```
@@ -802,16 +835,19 @@ samtools mpileup -B -Q 0 -f ${ref_genome} ${novo_final}/*.bam > ${novo_mpileup}/
 
 --use mpileup dir
 
-```
-Flags;
-        -- Xmx7g -- ""
-        --input -- ""
-        --output -- ""
-        --fastq-type -- needed for base encoding
-        --min-qual 20 -- already set to 20 before, but since custome script, use 20 as safer assumption
-        --threads 2 -- ""
-   
-```
+Flags:
+
+- Xmx7g -- ""
+
+- input -- ""
+
+- output -- ""
+
+- fastq-type -- needed for base encoding
+
+- min-qual 20 -- already set to 20 before, but since custome script, use 20 as safer assumption
+
+- threads 2 -- ""
 
 Script: 
 ```
