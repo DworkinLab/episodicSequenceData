@@ -402,17 +402,19 @@ mkdir novo_rmd
 ```
 Flags: Similar to above
 
-	- Xmx2g -- ""
+- Xmx2g -- ""
         
-	- MarkDuplicates -- ""
+- MarkDuplicates -- ""
         
-	- I -- ""
+- I -- ""
         
-	- O -- ""
+- O -- ""
         
-	- M -- creates an output file of statistics of duplicates found
-	- VALIDATION_STRINGENCY=SILENT -- ""
-        - REMOVE_DUPLICATES= true -- get rid of any found duplicated regions
+- M -- creates an output file of statistics of duplicates found
+
+- VALIDATION_STRINGENCY=SILENT -- ""
+
+- REMOVE_DUPLICATES= true -- get rid of any found duplicated regions
 
 
 Script: novo_rmd.sh
