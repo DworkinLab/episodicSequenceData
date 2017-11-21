@@ -5458,5 +5458,28 @@ Details
        The output will be a reduced coverage synchronized file
 ```
 
-
+Info on fastqc
+```
 https://rtsf.natsci.msu.edu/genomics/tech-notes/fastqc-tutorial-and-faq/
+```
+
+### Steps after pileups made (testing on Novoalign files)
+1) Could subsample to uniform coverage (but why for Popoolation1 looking within one population)
+	--> from slides _"Several population genetic estimators are sensitive to sequencing errors. For example a very low Tajima’s D, usually indicative of a selective sweep, may be, as an artifact, frequently be found in highly covered regions because these regions have just more sequencing errors. To avoid these kinds of biases we recommend to subsample to an uniform coverage."_
+
+2) Filter Indels -- 
+	--> From Slide: _"FILTERING INDELS
+	perl ˜/programs/popoolation/basic-pipeline/identifygenomic-indel-regions.pl --indel-window 5 --mincount --input pe.mpileup --output indels.gtf
+	I –indel-window how many bases surrounding indels should be ignored
+	I –min-count minimum count for calling an indel. Note that indels may be sequencing errors as well
+	
+	_perl ˜/programs/popoolation/basic-pipeline/filterpileup-by-gtf.pl --input pe.mpileup --gtf indels.gtf --output pe.idf.mpileup
+
+	_Note: the filter-pileup script could also be used to remove entries overlapping with transposable elements (RepeatMasker produces a gtf as well)."_
+
+	-- Necessary if IndelRealignment Done???
+
+3) Now Run analysis of Tajima's Pi
+
+
+
