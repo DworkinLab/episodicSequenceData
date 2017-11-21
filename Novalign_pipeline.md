@@ -681,14 +681,15 @@ Flags:
          --window-size [10000] -- size of the sliding window 
          --step-size [10000] -- how far to move along with chromosome (if step size smaller, windows will overlap)
          --min-count [2] -- minimum allele count 
-         --min-coverage [4] -- minimum coverage
+         --min-coverage [4] -- minimum coverage (not important if subsampling done..)
          --max-coverage [400] --maximum coverage
          --min-qual [20] -- minimum base quality (already filtered for 20 multiple times)
          --pool-size [120] -- number of chromosomes (So double the number of individuals per pool)
          --fastq-type [sanger] -- depending on the encoding of the fastq files
-
+	 –-min-covered-fraction [0.5] -- minimum percentage of sites having sufficient coverage in the given window -- 0.5 from example
 
 Script: novo_tajima_pi.sh
+
 ```
 #! /bin/bash
 
@@ -725,8 +726,9 @@ perl ${popoolation}/Variance-sliding.pl \
 	--max-coverage 400 \
 	--min-qual 20 \
 	--pool-size 120 \
-	--fastq-type sanger
-
+	--fastq-type sanger \
+	--snp-output ${output}/${base}.snps \
+	--min-covered-fraction 0.5
 done
 ```
 
