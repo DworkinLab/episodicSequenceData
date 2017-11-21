@@ -674,6 +674,7 @@ done
 
 Using the Variance-sliding.pl script from Popoolation1
 
+```
 Flags:
          --input -- input pileup file
          --output -- output file with Tajima's Pi calculated
@@ -687,6 +688,7 @@ Flags:
          --pool-size [120] -- number of chromosomes (So double the number of individuals per pool)
          --fastq-type [sanger] -- depending on the encoding of the fastq files
 	 –-min-covered-fraction [0.5] -- minimum percentage of sites having sufficient coverage in the given window -- 0.5 from example
+```
 
 Script: novo_tajima_pi.sh
 
@@ -758,11 +760,14 @@ done
 ```
 mkdir novo_mpileup
 ```
+
+```
 Flags;
         -B -- disable BAQ (base alignment quality) computation, helps to stop false SNPs passing through due to misalignment
         -Q -- minimum base quality (already filtered for 20, default is 13, just set to 0 and not worry about it)
         -f -- path to reference sequence
-       
+```      
+
 Script: novo_mpileup.sh
 ```
 #!/bin/bash
@@ -790,14 +795,17 @@ samtools mpileup -B -Q 0 -f ${ref_genome} ${novo_final}/*.bam > ${novo_mpileup}/
 
 --use mpileup dir
 
+```
 Flags;
-        -Xmx7g -- ""
+        -- Xmx7g -- ""
         --input -- ""
         --output -- ""
         --fastq-type -- needed for base encoding
         --min-qual 20 -- already set to 20 before, but since custome script, use 20 as safer assumption
         --threads 2 -- ""
-     
+   
+```
+
 Script: 
 ```
 #!/bin/bash
