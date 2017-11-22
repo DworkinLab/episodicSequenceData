@@ -5482,4 +5482,21 @@ https://rtsf.natsci.msu.edu/genomics/tech-notes/fastqc-tutorial-and-faq/
 3) Now Run analysis of Tajima's Pi
 
 
+4) Gene by Gene Tajima's Pi
+
+- Download most recent .gff file --> Go to the FlyBase homepage (http://flybase.org/) and get the annotation: dmel-all-r6.18.gff.gz
+
+- Move to Brians Machine (scp dmel-all-r6.18.gff.gz paul@info.mcmaster.ca:/home/paul)
+
+- Unzip the file.
+
+- Filter for exons and convert it into a gtf file:
+```
+cat dmel-all-r5.22.gff| awk '$2=="FlyBase" && $3=="exon"'| perl -pe 's/ID=([^:;]+)([^;]+)?;.*/gene_id "$1"; transcript_id "$1:1";/'> exons.gtf
+```
+
+- run Variance at position:
+```
+perl Variance-at-position.pl --pool-size 120 --min-qual 20 --min-coverage 4 --min-count 2 --max-coverage 4 --pileup dmel.pileup --gtf exons.gtf --output dmel.genes.pi --measure pi
+```
 
