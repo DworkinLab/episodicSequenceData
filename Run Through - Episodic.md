@@ -1,3 +1,7 @@
+# Note Book for the work I have been doing
+
+### A lot of what is in here is practice work and very rough and messy (other files are clearer for step by step instructions)
+
 Step 1) raw_data file made and all raw reads into file
 
 Step 2) md5sum for each different md5.txt
@@ -5485,10 +5489,16 @@ https://rtsf.natsci.msu.edu/genomics/tech-notes/fastqc-tutorial-and-faq/
 4) Gene by Gene Tajima's Pi
 
 - Download most recent .gff file --> Go to the FlyBase homepage (http://flybase.org/) and get the annotation: dmel-all-r6.18.gff.gz
+	 (Should get the matching to current index (that was mapped with) - r5.57
 
-- Move to Brians Machine (scp dmel-all-r6.18.gff.gz paul@info.mcmaster.ca:/home/paul)
-
+- Move to Brians Machine
+```
+scp /Users/paulknoops/Downloads/dmel-all-r5.57.gff.gz paul@info.mcmaster.ca:/home/paul/episodicData/index_dir
+```
 - Unzip the file.
+```
+gunzip dmel-all-r5.57.gff.gz
+```
 
 - Filter for exons and convert it into a gtf file:
 ```
