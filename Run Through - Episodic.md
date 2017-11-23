@@ -5499,10 +5499,11 @@ scp /Users/paulknoops/Downloads/dmel-all-r5.57.gff.gz paul@info.mcmaster.ca:/hom
 ```
 gunzip dmel-all-r5.57.gff.gz
 ```
+.... No space left on device....
 
 - Filter for exons and convert it into a gtf file:
 ```
-cat dmel-all-r5.22.gff| awk '$2=="FlyBase" && $3=="exon"'| perl -pe 's/ID=([^:;]+)([^;]+)?;.*/gene_id "$1"; transcript_id "$1:1";/'> exons.gtf
+cat /home/paul/episodicData/index_dir/dmel-all-r5.57.gff| awk '$2=="FlyBase" && $3=="exon"'| perl -pe 's/ID=([^:;]+)([^;]+)?;.*/gene_id "$1"; transcript_id "$1:1";/'> /home/paul/episodicData/index_dir/exons.gtf
 ```
 
 - run Variance at position:
