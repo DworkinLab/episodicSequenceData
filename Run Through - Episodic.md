@@ -5503,11 +5503,15 @@ gunzip dmel-all-r5.57.gff.gz
 
 - Filter for exons and convert it into a gtf file:
 ```
-cat /home/paul/episodicData/index_dir/dmel-all-r5.57.gff| awk '$2=="FlyBase" && $3=="exon"'| perl -pe 's/ID=([^:;]+)([^;]+)?;.*/gene_id "$1"; transcript_id "$1:1";/'> /home/paul/episodicData/index_dir/exons.gtf
+cat /home/paul/episodicData/index_dir/dmel-all-r5.57.gff| awk '$2=="FlyBase" && $3=="exon"'| perl -pe 's/ID=([^:;]+)([^;]+)?;.*/gene_id "$1"; transcript_id "$1:1";/'> /home/paul/episodicData/novoalign/novo_exons/exons.gtf
 ```
 
 - run Variance at position:
 ```
-perl Variance-at-position.pl --pool-size 120 --min-qual 20 --min-coverage 4 --min-count 2 --max-coverage 4 --pileup dmel.pileup --gtf exons.gtf --output dmel.genes.pi --measure pi
+perl /home/paul/popoolation_1.2.2/Variance-at-position.pl --pool-size 120 --min-qual 20 --min-coverage 4 --min-count 2 --max-coverage 400 --pileup /home/paul/episodicData/novoalign/novo_pileup/MGD3_SO_CAGATC_novo.pileup --gtf /home/paul/episodicData/novoalign/novo_exons/exons.gtf --output /home/paul/episodicData/novoalign/novo_exons/MGD3_SO_CAGATC_novo.genes.pi --measure pi --fastq-type sanger
 ```
+Gene ID's not correct (go back to the GTF)??
+
+
+
 
