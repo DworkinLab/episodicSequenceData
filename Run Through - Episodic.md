@@ -5505,6 +5505,9 @@ gunzip dmel-all-r5.57.gff.gz
 ```
 cat /home/paul/episodicData/index_dir/dmel-all-r5.57.gff| awk '$2=="FlyBase" && $3=="exon"'| perl -pe 's/ID=([^:;]+)([^;]+)?;.*/gene_id "$1"; transcript_id "$1:1";/'> /home/paul/episodicData/novoalign/novo_exons/exons.gtf
 ```
+From Popoolation:
+
+cat dmel-all-r5.22.gff| awk '$2=="FlyBase" && $3=="exon"'| perl -pe 's/ID=([^:;]+)([^;]+)?;.*/gene_id "$1"; transcript_id "$1:1";/'> exons.gtf
 
 - run Variance at position:
 ```
