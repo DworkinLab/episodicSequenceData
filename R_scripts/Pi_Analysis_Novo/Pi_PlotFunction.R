@@ -1,6 +1,10 @@
-Pi_PlotFunction <- function(x) {
+Pi_PlotFunction <- function(x, y) {
   require(ggplot2)
   x2 <- gsub("\\_.*","",x)
+  y2 <- y
+  
+  #bowtie.pi
+  #novo.pi
   #Read in the data:
   Datt <- read.table(x)
   colnames(Datt) <- c('chr', 'window', 'windowCount', ' propInwindow', 'Pi')
@@ -8,17 +12,7 @@ Pi_PlotFunction <- function(x) {
   #Remove unnecessary regions: Not necessary based on later steps
   Datt$chr <- as.character(Datt$chr)
   Datt2 <- Datt
-  
-  #Datt2 <- Datt[-which(Datt$chr=="YHet"),]
-  #Datt2 <- Datt2[-which(Datt2$chr=="2RHet"),]
-  #Datt2 <- Datt2[-which(Datt2$chr=="2LHet"),]
-  #Datt2 <- Datt2[-which(Datt2$chr=="3LHet"),]
-  #Datt2 <- Datt2[-which(Datt2$chr=="3RHet"),]
-  #Datt2 <- Datt2[-which(Datt2$chr=="U"),]
-  #Datt2 <- Datt2[-which(Datt2$chr=="XHet"),]
-  #Datt2 <- Datt2[-which(Datt2$chr=="dmel_mitochondrion_genome"),]
-  #Datt2 <- Datt2[-which(Datt2$chr=="Uextra"),]
-  
+
   #Remove "na" pi values
   Datt2 <- Datt2[-which(Datt2$Pi=="na"),]
   
@@ -50,9 +44,18 @@ Pi_PlotFunction <- function(x) {
   #Full data frame of necessary chromosomes
   DattFull <- rbind(DattX, Datt2L, Datt2R, Datt3L, Datt3R, Datt4)
   
+  
+  
   #Pi as numeric
   DattFull$Pi=as.numeric(levels(DattFull$Pi))[DattFull$Pi]
   
+  DattFull$Seq <- x2
+  assign(paste("Datt", x2, sep="_"),DattFull)
+  
+  #Title:
+  z2 <- paste(x2, y2, sep="_")
+  
+  # The plots: 
   Pi_plot <- ggplot(DattFull, aes(x = number, y= Pi, colour = chr)) 
   
   Pi_plot_2 <- Pi_plot + 
@@ -63,7 +66,7 @@ Pi_PlotFunction <- function(x) {
     theme(text = element_text(size=20), 
           axis.text.x= element_text(size=15), axis.text.y= element_text(size=15)) +
     scale_colour_manual(values=c("#56B4E9", "#E69F00", 'grey30', 'grey46', 'wheat3', 'lemonchiffon4')) +
-    ggtitle(x2)
+    ggtitle(z2)
   
   return(Pi_plot_2)
 }
