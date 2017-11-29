@@ -50,7 +50,7 @@ Pi_PlotFunction <- function(x, y) {
   DattFull$Pi=as.numeric(levels(DattFull$Pi))[DattFull$Pi]
   
   DattFull$Seq <- x2
-  assign(paste("Datt", x2, sep="_"),DattFull)
+  #assign(paste("Datt", x2, sep="_"),DattFull)
   
   #Title:
   z2 <- paste(x2, y2, sep="_")
