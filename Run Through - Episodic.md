@@ -5468,6 +5468,11 @@ https://rtsf.natsci.msu.edu/genomics/tech-notes/fastqc-tutorial-and-faq/
 ```
 
 ### Steps after pileups made (testing on Novoalign files)
+ First run of Tajima Pi for Novoalign: some files are empty? Not sure why?
+```
+perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input /home/paul/episodicData/novoalign/novo_pileup/F115SelR2_GTGGCC_novo.pileup --output /home/paul/episodicData/novoalign/novo_pileup/F115SelR2_GTGGCC_novo.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120 --fastq-type sanger --snp-output /home/paul/episodicData/novoalign/novo_pileup/F115SelR2_GTGGCC_novo.snps --min-covered-fraction 0.5
+```
+
 1) Could subsample to uniform coverage (but why for Popoolation1 looking within one population)
 	--> from slides _"Several population genetic estimators are sensitive to sequencing errors. For example a very low Tajima’s D, usually indicative of a selective sweep, may be, as an artifact, frequently be found in highly covered regions because these regions have just more sequencing errors. To avoid these kinds of biases we recommend to subsample to an uniform coverage."_
 
