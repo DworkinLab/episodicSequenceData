@@ -780,6 +780,9 @@ perl ${popoolation}/Variance-sliding.pl \
 done
 ```
 
+__ SOME FAILED: EMPTY FILES>??
+
+
 4) Bring to local machine
 ```
 scp paul@info.mcmaster.ca:/home/paul/episodicData/novoalign/novo_pi/*.pi /Users/paulknoops/Bioinformatics/R-projects_git/episodicSequenceData/R_scripts/Pi_Analysis_Novo
