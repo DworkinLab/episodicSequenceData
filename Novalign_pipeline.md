@@ -779,8 +779,7 @@ perl ${popoolation}/Variance-sliding.pl \
 	--min-covered-fraction 0.5
 done
 ```
-
-__ SOME FAILED: EMPTY FILES>??
+Need to check the files were created properly (check that there are no empty files).
 
 
 4) Bring to local machine
@@ -863,7 +862,7 @@ Pi_PlotFunction <- function(x, y) {
 }
 ```
 
-6) Run the function:
+6) Run the function for each .pi file
 
 ```
 Pi_PlotFunction('F115ConR1_TAGCTT_novo.pi', "Novoalign")
