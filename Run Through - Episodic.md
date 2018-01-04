@@ -5577,6 +5577,59 @@ scp paul@info.mcmaster.ca:/home/paul/episodicData/novoalign/novo_exons/MGD3_SO_C
 ```
 perl /home/paul/popoolation_1.2.2/Variance-at-position.pl --pool-size 120 --min-qual 20 --min-coverage 4 --min-count 2 --max-coverage 400 --pileup /home/paul/episodicData/novoalign/novo_pileup/MGD3_SO_CAGATC_novo.pileup --gtf /home/paul/episodicData/novoalign/novo_exons/2R-exons.gtf --output /home/paul/episodicData/novoalign/novo_exons/MGD3_SO_CAGATC_novo.2Rgenes.pi --measure pi --fastq-type sanger
 ```
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/novoalign/novo_exons/MGD3_SO_CAGATC_novo.2Rgenes.pi /Users/paulknoops/Bioinformatics/episodic_practice/MGD3
+```
+Compare to a F115 Selection: NEED TO RUN STILL!
+
+```
+perl /home/paul/popoolation_1.2.2/Variance-at-position.pl --pool-size 120 --min-qual 20 --min-coverage 4 --min-count 2 --max-coverage 400 --pileup /home/paul/episodicData/novoalign/novo_pileup/F115SelR1_GTTTCG_novo.pileup --gtf /home/paul/episodicData/novoalign/novo_exons/2R-exons.gtf --output /home/paul/episodicData/novoalign/novo_exons/F115SelR1_GTTTCG_novo.2Rgenes.pi --measure pi --fastq-type sanger
+```
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/novoalign/novo_exons/F115SelR1_GTTTCG_novo.2Rgenes.pi /Users/paulknoops/Bioinformatics/episodic_practice/MGD3
+```
+
+### 2R Tajima's Pi script:
+
+```
+#! /bin/bash
+
+# Path to PoPoolation1 (Currently in Paul's Home directory)
+popoolation=/home/paul/popoolation_1.2.2
+
+# Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+# Path to input directory
+input=${project_dir}/novo_pileup
+
+# Path to output Tajima Pi files
+output=${project_dir}/novo_exons/2R_dir
+
+#gtf file
+gtf=${project_dir}/novo_exons
 
 
+files=(${input}/*.pileup)
 
+for file in ${files[@]}
+
+do
+
+name=${file}
+
+base=`basename ${name} .pileup`
+perl ${popoolation}/Variance-at-position.pl \
+	--pool-size 120 \
+	--min-qual 20 \
+	--min-coverage 4 \
+	--min-count 2 \
+	--max-coverage 400 \
+	--pileup ${input}/${base}.pileup \
+	--gtf ${gtf}/2R-exons.gtf \
+	--output ${output}/${base}.2Rgenes.pi \
+	--measure pi \
+	--fastq-type sanger
+
+done
+```
