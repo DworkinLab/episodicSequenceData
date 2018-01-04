@@ -5470,22 +5470,31 @@ https://rtsf.natsci.msu.edu/genomics/tech-notes/fastqc-tutorial-and-faq/
 ### Steps after pileups made (testing on Novoalign files)
  First run of Tajima Pi for Novoalign: some files are empty? Not sure why?
 ```
+#!/bin/bash
+
+samtools mpileup -B -Q 0 -f /home/paul/episodicData/index_dir/dmel-all-chromosome-r5.57_2.fasta /home/paul/episodicData/novoalign/novo_GATK/F115SelR2_GTGGCC_novo_merge_novo_final_realigned.bam > /home/paul/episodicData/novoalign/novo_pileup/F115SelR2_GTGGCC_novo.pileup
+
 perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input /home/paul/episodicData/novoalign/novo_pileup/F115SelR2_GTGGCC_novo.pileup --output /home/paul/episodicData/novoalign/novo_pileup/F115SelR2_GTGGCC_novo.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120 --fastq-type sanger --snp-output /home/paul/episodicData/novoalign/novo_pileup/F115SelR2_GTGGCC_novo.snps --min-covered-fraction 0.5
 ```
-WORKED????
-Do I trust any of them??
-F38ConR1_ATCACG_novo.pi --> F38ConR1_ATCACG_novo.pileup
+```
+#!/bin/bash
+
+samtools mpileup -B -Q 0 -f /home/paul/episodicData/index_dir/dmel-all-chromosome-r5.57_2.fasta /home/paul/episodicData/novoalign/novo_GATK/F115SelR1_GTTTCG_novo_merge_novo_final_realigned.bam > /home/paul/episodicData/novoalign/novo_pileup/F115SelR1_GTTTCG_novo.pileup
+
+perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input /home/paul/episodicData/novoalign/novo_pileup/F115SelR1_GTTTCG_novo.pileup --output /home/paul/episodicData/novoalign/novo_pileup/F115SelR1_GTTTCG_novo.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120 --fastq-type sanger --snp-output /home/paul/episodicData/novoalign/novo_pileup/F115SelR1_GTTTCG_novo.snps --min-covered-fraction 0.5
+```
+
 ```
 perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input /home/paul/episodicData/novoalign/novo_pileup/F38ConR1_ATCACG_novo.pileup --output /home/paul/episodicData/novoalign/novo_pileup/F38ConR1_ATCACG_novo.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120 --fastq-type sanger --snp-output /home/paul/episodicData/novoalign/novo_pileup/F38ConR1_ATCACG_novo.snp --min-covered-fraction 0.5
 ```
 
-F38ConR2_TTAGGC_novo.pi --> F38ConR2_TTAGGC_novo.pileup
 ```
 perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input /home/paul/episodicData/novoalign/novo_pileup/F38ConR2_TTAGGC_novo.pileup --output /home/paul/episodicData/novoalign/novo_pileup/F38ConR2_TTAGGC_novo.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120 --fastq-type sanger --snp-output /home/paul/episodicData/novoalign/novo_pileup/F38ConR2_TTAGGC_novo.snp --min-covered-fraction 0.5
 ```
-
-
-
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/novoalign/novo_pileup/*.pi /Users/paulknoops/Bioinformatics/R-projects_git/episodicSequenceData/R_scripts/Pi_Analysis_Novo
+```
+Then move them back over to novo_pi
 
 1) Could subsample to uniform coverage (but why for Popoolation1 looking within one population)
 	--> from slides _"Several population genetic estimators are sensitive to sequencing errors. For example a very low Tajima’s D, usually indicative of a selective sweep, may be, as an artifact, frequently be found in highly covered regions because these regions have just more sequencing errors. To avoid these kinds of biases we recommend to subsample to an uniform coverage."_
@@ -5528,12 +5537,46 @@ From Popoolation:
 
 cat dmel-all-r5.22.gff| awk '$2=="FlyBase" && $3=="exon"'| perl -pe 's/ID=([^:;]+)([^;]+)?;.*/gene_id "$1"; transcript_id "$1:1";/'> exons.gtf
 
+Does not work properly...not a properly formated gtf...
+
+TO check whats going on ....
+```
+cat /home/paul/episodicData/index_dir/dmel-all-r5.57.gff| awk '$2=="FlyBase" && $3=="exon"'> exons.gff
+```
+Looks the same as exons.gtf....
+
+
+Trying cufflinks (spoiler.. does not work for this..)
+```
+cat dmel-all-r5.57.gff| awk '$2=="FlyBase" && $3=="exon"'| /usr/local/cufflinks1.1.0/gffread -T -o my.gtf
+```
+/usr/local/cufflinks1.1.0/gffread dmel-all-r5.57.gff -T -o my.gtf
+
+gffread my.gff3 -T -o my.gtf
+
+Issue seems to be with the /ID from popoolation script:
+
+```
+cat /home/paul/episodicData/index_dir/dmel-all-r5.57.gff| awk '$2=="FlyBase" && $3=="exon"'| perl -pe 's/Name=([^:;]+)([^;]+)?;.*/gene_id "$1"; transcript_id "$1:1";/'> /home/paul/episodicData/novoalign/novo_exons/exons.gtf
+```
+THIS WORKS!
+
+
+
 - run Variance at position:
+
 ```
 perl /home/paul/popoolation_1.2.2/Variance-at-position.pl --pool-size 120 --min-qual 20 --min-coverage 4 --min-count 2 --max-coverage 400 --pileup /home/paul/episodicData/novoalign/novo_pileup/MGD3_SO_CAGATC_novo.pileup --gtf /home/paul/episodicData/novoalign/novo_exons/exons.gtf --output /home/paul/episodicData/novoalign/novo_exons/MGD3_SO_CAGATC_novo.genes.pi --measure pi --fastq-type sanger
 ```
-Gene ID's not correct (go back to the GTF)??
+Stopped early?
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/novoalign/novo_exons/MGD3_SO_CAGATC_novo.genes.pi /Users/paulknoops/Bioinformatics/episodic_practice/MGD3
+```
 
+
+```
+perl /home/paul/popoolation_1.2.2/Variance-at-position.pl --pool-size 120 --min-qual 20 --min-coverage 4 --min-count 2 --max-coverage 400 --pileup /home/paul/episodicData/novoalign/novo_pileup/MGD3_SO_CAGATC_novo.pileup --gtf /home/paul/episodicData/novoalign/novo_exons/2R-exons.gtf --output /home/paul/episodicData/novoalign/novo_exons/MGD3_SO_CAGATC_novo.2Rgenes.pi --measure pi --fastq-type sanger
+```
 
 
 
