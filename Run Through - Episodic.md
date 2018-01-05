@@ -5633,3 +5633,6 @@ perl ${popoolation}/Variance-at-position.pl \
 
 done
 ```
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/novoalign/novo_exons/2R_dir/*.pi /Users/paulknoops/Bioinformatics/episodic_practice/2R_GenePi
+```
