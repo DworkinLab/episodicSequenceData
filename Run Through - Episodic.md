@@ -5636,3 +5636,10 @@ done
 ```
 scp paul@info.mcmaster.ca:/home/paul/episodicData/novoalign/novo_exons/2R_dir/*.pi /Users/paulknoops/Bioinformatics/episodic_practice/2R_GenePi
 ```
+
+```
+perl /home/paul/popoolation_1.2.2/Visualise-output.pl --input /home/paul/episodicData/novoalign/novo_pi/MGD3_SO_CAGATC_novo.pi --output /home/paul/episodicData/novoalign/novo_pi/MGD3_SO_CAGATC_novo.pi.pdf --ylab pi --chromosomes "X 2L 2R 3L 3R 4"
+```
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/novoalign/novo_pi/MGD3_SO_CAGATC_novo.pi.pdf /Users/paulknoops/Bioinformatics/episodic_practice
+```
