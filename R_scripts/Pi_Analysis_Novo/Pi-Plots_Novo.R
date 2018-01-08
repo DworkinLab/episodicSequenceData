@@ -33,17 +33,3 @@ Pi_PlotFunction('F77SelR2_GATCAG_novo.pi', "Novoalign")
 Pi_PlotFunction('MGD3_SO_CAGATC_novo.pi', "Novoalign")
 
 
-
-
-
-
-#### IGNORE ######
-# Example to run all in a for loop
-# Creates a list of all .pi files (from mapper)
-MyPi <- list.files(pattern="novo.pi")
-MyPi
-
-
-for (file in MyPi){
-  Pi_PlotFunction(file, "Novoalign")
-}
