@@ -5485,6 +5485,16 @@ perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input /home/paul/episodi
 ```
 
 ```
+#!/bin/bash
+
+samtools mpileup -B -Q 0 -f /home/paul/episodicData/index_dir/dmel-all-chromosome-r5.57_2.fasta /home/paul/episodicData/novoalign/novo_GATK/F38SelR1_ACTTGA_novo_merge_novo_final_realigned.bam > /home/paul/episodicData/novoalign/novo_pileup/F38SelR1_ACTTGA_novo.pileup
+
+perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input /home/paul/episodicData/novoalign/novo_pileup/F38SelR1_ACTTGA_novo.pileup --output /home/paul/episodicData/novoalign/novo_pileup/F38SelR1_ACTTGA_novo.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120 --fastq-type sanger --snp-output /home/paul/episodicData/novoalign/novo_pileup/F38SelR1_ACTTGA_novo.snps --min-covered-fraction 0.5
+
+```
+F38SelR1_ACTTGA_novo.pi
+
+```
 perl /home/paul/popoolation_1.2.2/Variance-sliding.pl --input /home/paul/episodicData/novoalign/novo_pileup/F38ConR1_ATCACG_novo.pileup --output /home/paul/episodicData/novoalign/novo_pileup/F38ConR1_ATCACG_novo.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120 --fastq-type sanger --snp-output /home/paul/episodicData/novoalign/novo_pileup/F38ConR1_ATCACG_novo.snp --min-covered-fraction 0.5
 ```
 
@@ -5637,9 +5647,20 @@ done
 scp paul@info.mcmaster.ca:/home/paul/episodicData/novoalign/novo_exons/2R_dir/*.pi /Users/paulknoops/Bioinformatics/episodic_practice/2R_GenePi
 ```
 
+#Done but Dumb: Forget it \/ \/  \/
 ```
 perl /home/paul/popoolation_1.2.2/Visualise-output.pl --input /home/paul/episodicData/novoalign/novo_pi/MGD3_SO_CAGATC_novo.pi --output /home/paul/episodicData/novoalign/novo_pi/MGD3_SO_CAGATC_novo.pi.pdf --ylab pi --chromosomes "X 2L 2R 3L 3R 4"
 ```
 ```
 scp paul@info.mcmaster.ca:/home/paul/episodicData/novoalign/novo_pi/MGD3_SO_CAGATC_novo.pi.pdf /Users/paulknoops/Bioinformatics/episodic_practice
 ```
+#Done but Dumb: Forget it /\  /\  /\
+
+
+
+
+
+
+
+
+
