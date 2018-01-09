@@ -976,8 +976,92 @@ java -ea -Xmx7g -jar ${sync} --input ${novo_mpileup}/${project_name}.mpileup --o
 ## Running Custom R script: Logistic Regression
 
 ### Split .sync file into chromosomes (easier to work with)
+```
+#!/bin/bash
+
+#Variable for project name (title of mpileup file)
+project_name=novo_episodic
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to .sync files
+novo_mpileup=${project_dir}/novo_mpileup
+
+grep -v 'Het' ${novo_mpileup}/${project_name}.sync > ${novo_mpileup}/${project_name}_less_het.sync
+
+wait
+
+grep -v 'U' ${novo_mpileup}/${project_name}_less_het.sync > ${novo_mpileup}/${project_name}_removed_U_Het.sync
+
+wait
+
+grep -v 'dmel_mitochondrion_genome' ${novo_mpileup}/${project_name}_removed_U_Het.sync > ${novo_mpileup}/${project_name}_main.sync
+
+wait
+
+rm -f ${novo_mpileup}/${project_name}_less_het.sync
+
+rm -f ${novo_mpileup}/${project_name}_removed_U_Het.sync
+
+grep '3R' ${novo_mpileup}/${project_name}_main.sync > ${novo_mpileup}/${project_name}_3R.sync &
+grep '2R' ${novo_mpileup}/${project_name}_main.sync > ${novo_mpileup}/${project_name}_2R.sync &
+grep '3L' ${novo_mpileup}/${project_name}_main.sync > ${novo_mpileup}/${project_name}_3L.sync &
+grep '2L' ${novo_mpileup}/${project_name}_main.sync > ${novo_mpileup}/${project_name}_2L.sync &
+grep '^4' ${novo_mpileup}/${project_name}_main.sync > ${novo_mpileup}/${project_name}_4.sync &
+grep 'X' ${novo_mpileup}/${project_name}_main.sync > ${novo_mpileup}/${project_name}_X.sync 
+```
+Sitting with a different .sync file for each chromosome, can now split more, but since it all goes back together (and is annoying to do all the steps etc.) will make it all into one LONG script... maybe set up as a function?
+
+### LONG SCRIPT:
+```
+#! /bin/bash
+
+#Variable location
+SyncFiles=/home/paul/episodicData/R_dir
+
+#output dir:
+subsets=/home/paul/episodicData/R_dir/bwa_subsetDirectories
+
+sync[0]=${SyncFiles}/novo_episodic_3R.sync
+sync[1]=${SyncFiles}/novo_episodic_2R.sync
+sync[2]=${SyncFiles}/novo_episodic_3L.sync
+sync[3]=${SyncFiles}/novo_episodic_2L.sync
+sync[4]=${SyncFiles}/novo_episodic_X.sync 
+
+#Removing 4 b/c complete and short Run on its own (Does not need to be split)
+
+for file in ${sync[@]}
+do
+name=${file}
+base=`basename ${name} .sync`
+
+mkdir ${subsets}/${base}_dir
+basedir=${subsets}/${base}_dir
+
+length=($(wc -l ${SyncFiles}/${base}.sync))
+
+###
+
+sed -n ' 1, 2054752 p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_1.sync
+sed -n ' 2054753, 4109504 p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_2.sync
+sed -n ' 4109505, 6164256 p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_3.sync
+sed -n ' 6164257, 8219008 p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_4.sync
+sed -n ' 8219009, 10273760 p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_5.sync
+sed -n ' 10273761, 12328512 p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_6.sync
+sed -n ' 12328513, 14383264 p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_7.sync
+sed -n ' 14383265, 16438016 p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_8.sync
+sed -n ' 16438017, 18492768 p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_9.sync
+sed -n ' 18492769, 20547500 p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_10.sync
+sed -n " 20547501, ${length} p" ${SyncFiles}/${base}.sync > ${basedir}/${base}_11.sync
+done
 
 
+mkdir ${subsets}/novo_episodic_4_dir
+cp ${SyncFiles}/novo_episodic_4.sync ${subsets}/novo_episodic_4_dir
+
+
+```
 
 
 
