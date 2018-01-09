@@ -973,7 +973,24 @@ sync=/usr/local/popoolation/mpileup2sync.jar
 java -ea -Xmx7g -jar ${sync} --input ${novo_mpileup}/${project_name}.mpileup --output ${novo_mpileup}/${project_name}.sync --fastq-type sanger --min-qual 20 --threads 2
 ```
 
+## Running Custom R script: Logistic Regression
+
+### Split .sync file into chromosomes (easier to work with)
+
+
+
+
+
+
+
+
+
+
+
 ______________________________________________
+
+______________________________________________
+Links and Notes
 
 Carful with basenames (don't make the outputs novo_aligned_novo_mapped_novo_final.bam etc.
 - samtools workflow with GATK:               http://www.htslib.org/workflow/
