@@ -1041,24 +1041,38 @@ basedir=${subsets}/${base}_dir
 
 length=($(wc -l ${SyncFiles}/${base}.sync))
 
+#Split length into 11 segements (11th == length)
+cut=$((`wc -l < ${SyncFiles}/${base}.sync` / 11))
+cut_2=$((${cut}*2))
+cut_3=$((${cut}*3))
+cut_4=$((${cut}*4))
+cut_5=$((${cut}*5))
+cut_6=$((${cut}*6))
+cut_7=$((${cut}*7))
+cut_8=$((${cut}*8))
+cut_9=$((${cut}*9))
+cut_10=$((${cut}*10))
 ###
 
-sed -n ' 1, 2054752 p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_1.sync
-sed -n ' 2054753, 4109504 p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_2.sync
-sed -n ' 4109505, 6164256 p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_3.sync
-sed -n ' 6164257, 8219008 p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_4.sync
-sed -n ' 8219009, 10273760 p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_5.sync
-sed -n ' 10273761, 12328512 p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_6.sync
-sed -n ' 12328513, 14383264 p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_7.sync
-sed -n ' 14383265, 16438016 p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_8.sync
-sed -n ' 16438017, 18492768 p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_9.sync
-sed -n ' 18492769, 20547500 p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_10.sync
-sed -n " 20547501, ${length} p" ${SyncFiles}/${base}.sync > ${basedir}/${base}_11.sync
+sed -n ' 1, ${cut} p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_1.sync
+sed -n ' $((${cut}+1)), ${cut_2} p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_2.sync
+sed -n ' $((${cut_2}+1)), ${cut_3} p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_3.sync
+sed -n ' $((${cut_3}+1)), ${cut_4} p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_4.sync
+sed -n ' $((${cut_4}+1)), ${cut_5} p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_5.sync
+sed -n ' $((${cut_5}+1)), ${cut_6} p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_6.sync
+sed -n ' $((${cut_6}+1)), ${cut_7} p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_7.sync
+sed -n ' $((${cut_7}+1)), ${cut_8} p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_8.sync
+sed -n ' $((${cut_8}+1)), ${cut_9} p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_9.sync
+sed -n ' $((${cut_9}+1)), ${cut_10} p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_10.sync
+sed -n " $((${cut_10}+1)), ${length} p" ${SyncFiles}/${base}.sync > ${basedir}/${base}_11.sync
 done
 
 
 mkdir ${subsets}/novo_episodic_4_dir
 cp ${SyncFiles}/novo_episodic_4.sync ${subsets}/novo_episodic_4_dir
+
+
+# Should now have 11 different .sync files to work with
 
 
 ```
