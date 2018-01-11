@@ -5660,10 +5660,62 @@ scp paul@info.mcmaster.ca:/home/paul/episodicData/novoalign/novo_pi/MGD3_SO_CAGA
 ```
 #Done but Dumb: Forget it /\  /\  /\
 
+Rscript RSCriptingTest.R '/home/paul/episodicData/novoalign/novo_mpileup'
+```
+args <- commandArgs(trailingOnly = TRUE)
+# rnorm(n=as.numeric(args[1]), mean=as.numeric(args[2]))
+# Rscript myScript.R 5 100
 
+require('tidyr')
+require('dplyr')
 
+mydirs <- list.dirs(path = args[1], recursive = FALSE)
 
+for (dir in mydirs){
 
+    setwd(dir)
+  
+  mysyncs <- list.files(pattern=".sync")
+  
+  for (sync in mysyncs){
+    
+    print(sync)
+  }
+}
+
+messy <- data.frame(
+  name = c("Wilbur", "Petunia", "Gregory"),
+  a = c(67, 80, 64),
+  b = c(56, 90, 50)
+)
+print(messy)
+
+messy2 <- messy %>%
+  gather(drug, heartrate, a:b)
+  
+  print(messy2)
+```
+WORKS!
+Issue with tidyr: 
+-works with interactive (Running R) -- 3.2.2
+-Does not work with Rscript:
+	-- different order
+
+```
+#! /bin/bash
+
+#Variable for project name (title of mpileup file)
+project_name=novo_episodic
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to .sync files
+SyncFiles=${project_dir}/novo_mpileup
+
+Rscript RSCriptingTest.R ${SyncFiles}
+
+```
 
 
 
