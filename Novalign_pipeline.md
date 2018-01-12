@@ -1013,7 +1013,10 @@ grep 'X' ${novo_mpileup}/${project_name}_main.sync > ${novo_mpileup}/${project_n
 ```
 Sitting with a different .sync file for each chromosome, can now split more, but since it all goes back together (and is annoying to do all the steps etc.) will make it all into one LONG script... maybe set up as a function?
 
-### LONG SCRIPT: (Change input and output..)
+### LONG SCRIPT: (Change input and output, add Rscripts, etc.)
+
+Some assumptions are made in R scripts that may not work with this data: suggestion is to attempt a trail run with R scripts using 4th chrmosome (the smallest) to make sure all scripts work
+
 ```
 #! /bin/bash
 
@@ -1030,6 +1033,11 @@ SyncFiles=${project_dir}/novo_mpileup
 mkdir ${project_dir}/ChromoSubsets
 subsets=${project_dir}/ChromoSubsets
 
+# Need to copy three R scripts and add to a new directory (i.e. novo_Rscripts)
+Rscripts=${project_dir}/novo_Rscripts
+
+
+# The seperated .sync files
 sync[0]=${SyncFiles}/novo_episodic_3R.sync
 sync[1]=${SyncFiles}/novo_episodic_2R.sync
 sync[2]=${SyncFiles}/novo_episodic_3L.sync
@@ -1047,9 +1055,10 @@ mkdir ${subsets}/${base}_dir
 basedir=${subsets}/${base}_dir
 
 length=($(wc -l ${SyncFiles}/${base}.sync))
+echo ${length}
 
 #Split length into 11 segements (11th == length)
-cut=$((`wc -l < ${SyncFiles}/${base}.sync` / 11))
+cut=$((${length}/11))
 cut_2=$((${cut}*2))
 cut_3=$((${cut}*3))
 cut_4=$((${cut}*4))
@@ -1059,25 +1068,27 @@ cut_7=$((${cut}*7))
 cut_8=$((${cut}*8))
 cut_9=$((${cut}*9))
 cut_10=$((${cut}*10))
+
 ###
 
-sed -n ' 1, ${cut} p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_1.sync
-sed -n ' $((${cut}+1)), ${cut_2} p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_2.sync
-sed -n ' $((${cut_2}+1)), ${cut_3} p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_3.sync
-sed -n ' $((${cut_3}+1)), ${cut_4} p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_4.sync
-sed -n ' $((${cut_4}+1)), ${cut_5} p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_5.sync
-sed -n ' $((${cut_5}+1)), ${cut_6} p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_6.sync
-sed -n ' $((${cut_6}+1)), ${cut_7} p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_7.sync
-sed -n ' $((${cut_7}+1)), ${cut_8} p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_8.sync
-sed -n ' $((${cut_8}+1)), ${cut_9} p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_9.sync
-sed -n ' $((${cut_9}+1)), ${cut_10} p' ${SyncFiles}/${base}.sync > ${basedir}/${base}_10.sync
-sed -n " $((${cut_10}+1)), ${length} p" ${SyncFiles}/${base}.sync > ${basedir}/${base}_11.sync
+sed -n " 1, ${cut} p" ${SyncFiles}/${base}.sync > ${basedir}/${base}_1.sync
+sed -n " $((${cut} + 1)), ${cut_2} p" ${SyncFiles}/${base}.sync > ${basedir}/${base}_2.sync
+sed -n " $((${cut_2} + 1)), ${cut_3} p" ${SyncFiles}/${base}.sync > ${basedir}/${base}_3.sync
+sed -n " $((${cut_3} + 1)), ${cut_4} p" ${SyncFiles}/${base}.sync > ${basedir}/${base}_4.sync
+sed -n " $((${cut_4} + 1)), ${cut_5} p" ${SyncFiles}/${base}.sync > ${basedir}/${base}_5.sync
+sed -n " $((${cut_5} + 1)), ${cut_6} p" ${SyncFiles}/${base}.sync > ${basedir}/${base}_6.sync
+sed -n " $((${cut_6} + 1)), ${cut_7} p" ${SyncFiles}/${base}.sync > ${basedir}/${base}_7.sync
+sed -n " $((${cut_7} + 1)), ${cut_8} p" ${SyncFiles}/${base}.sync > ${basedir}/${base}_8.sync
+sed -n " $((${cut_8} + 1)), ${cut_9} p" ${SyncFiles}/${base}.sync > ${basedir}/${base}_9.sync
+sed -n " $((${cut_9} + 1)), ${cut_10} p" ${SyncFiles}/${base}.sync > ${basedir}/${base}_10.sync
+sed -n " $((${cut_10} + 1)), ${length} p" ${SyncFiles}/${base}.sync > ${basedir}/${base}_11.sync
 done
 
 
 mkdir ${subsets}/novo_episodic_4_dir
 cp ${SyncFiles}/novo_episodic_4.sync ${subsets}/novo_episodic_4_dir
 
+echo 'Done Splitting Files'
 
 # Should now have 11 different .sync files to work with
 
@@ -1086,19 +1097,76 @@ cp ${SyncFiles}/novo_episodic_4.sync ${subsets}/novo_episodic_4_dir
 
 # Running Rscript below to go through each subset file created and convert to counts (see Sync_to_counts.R)
 
-Rscript Sync_to_counts.R ${subsets}
+echo 'Running R script Sync To Counts'
 
+Rscript ${Rscripts}/Sync_to_counts.R ${subsets}
+
+echo ' Done R script Sync to Counts'
+
+# can remove the sync files? (need a loop to enter each ${subsets} dir to remove *.sync
+
+sync[0]=${SyncFiles}/novo_episodic_3R.sync
+sync[1]=${SyncFiles}/novo_episodic_2R.sync
+sync[2]=${SyncFiles}/novo_episodic_3L.sync
+sync[3]=${SyncFiles}/novo_episodic_2L.sync
+sync[4]=${SyncFiles}/novo_episodic_X.sync 
+sync[5]=${SyncFiles}/novo_episodic_4.sync 
+
+for file in ${sync[@]}
+	do
+	name=${file}
+	base=`basename ${name} .sync`
+	basedir=${subsets}/${base}_dir
+	rm -f ${basedir}/*.sync
+done
+
+echo 'Removed Sync Files'
 
 ########################
 
 # Run Model On each seperate file (creating a coeffs file)
 
+echo 'Rscript Model'
+
+Rscript ${Rscripts}/Counts_to_model.R ${subsets}
+
+echo 'Done Model'
+
+# Left with the ${subsets} directory full of .csv files and .coeffs.csv files
+
 #########################
 
 #Combine Coeffs file into one large chromosome file
 
+#mkdir in main project location for combined coeffs 
+
+# Takes into assumption the files are named "episodic_data_2L_11.sync.csv.coeffs.csv" to create a final .csv named "episodic_data_2L_chromo.csv" (removes all past the last _)
+
+mkdir ${project_dir}/novo_coeffs
+coeff_dir=${project_dir}/novo_coeffs
+
+Rscript ${Rscripts}/Combine_chromo.R ${subsets} ${coeff_dir}
+
 ########################
+
+#Remove all .csv intermediates from random files:
+
+#for file in ${sync[@]}
+#	do
+#	name=${file}
+#	base=`basename ${name} .sync`
+#	basedir=${subsets}/${base}_dir
+#	rm -f ${basedir}/*.csv
+#	rmdir ${base}_dir
+#done
+
+#rmdir ${subsets}
+
+#left with the final output files (coeffs) for novoalign files
+
+echo 'DONE'
 ```
+# WORKING SO FAR
 
 Create R-script: need to call variable for output directory above (i.e. the outputs OR subsets above).
 
@@ -1109,13 +1177,16 @@ To run on own:
 Rscript Sync_to_counts.R '/home/paul/episodicData/novoalign/novo_mpileup'
 ```
 ```
-#For loop sync to counts
+# For loop sync to counts
 
-# To run: open R (> R) and source this script (be sure to edit based on file used). 
+## need next line to call arguments:
+
+args <- commandArgs(trailingOnly = TRUE)
+
 
 ## Convert a .sync file into long format, filter somewhat, and have only position, treatment, Cage, Generation and Maj/Min counts
 
-### Packages source code: only need these two for this script (need to be this order)
+## Packages source code: only need these two for this script (need to be this order)
 
 require('tidyr')
 require('dplyr')
@@ -1129,6 +1200,7 @@ require('dplyr')
 # Read in Data: Big Data Sets
 
 #pwd a direcotry containing only the directories of interest (made with other sed -n script)
+
 
 mydirs <- list.dirs(path = args[1], recursive = FALSE)
 
@@ -1307,6 +1379,172 @@ for (dir in mydirs){
 ```
 
 
+### Script: Counts_to_model.R
+To run on own:
+```
+Rscript Counts_to_model.R 'DIRECTORY'
+```
+```
+#Episodic data analysis: loop .csv files to run model:
+
+args <- commandArgs(trailingOnly = TRUE)
+
+#change to directory holding all directories:
+
+mydirs <- list.dirs(path = args[1], recursive = FALSE)
+
+for (dir in mydirs){
+
+  setwd(dir)
+  
+  mycsvs <- list.files(pattern=".csv")
+  
+  for (file in mycsvs){
+    
+    episodic_long <- read.csv(file, h=T)
+    
+    #The Data: in long format, each position with Treatment, Cage and Generation, along with the Major and Mnor allele counts correponding to the ancestral major/minor allele
+    
+    #The full model:
+    
+    #Call each position
+    
+    position <- unique(episodic_long$pos)
+    
+    no.pos <- length(position)
+    
+    #Remove N/A's -- possibly not needed so hashed out.
+    
+    episodic_long <- na.omit(episodic_long)
+    
+    
+    #Make list to store model
+    
+    modlist_2 <- as.list(1:no.pos)
+    
+    #Each model of a position, named for each mod will be position
+    
+    names(modlist_2) <- position
+    
+    #Empty Data Frame to store all coeffecients of model
+    
+    coeffs_df <- data.frame(NULL)
+    
+    #Run the  model for each position
+    
+    for(i in position){
+      print(paste("Running entity:", i, "which is", which(position==i), "out of", no.pos, "file=", file))
+      
+      #Temporary data frame for only the one position
+      
+      tmp2 <- episodic_long[episodic_long$pos == i,]
+      
+      #The model: major vs. minor counts by Treatment, Generation and Treatment:Generation
+      
+      modlist_2[[i]] <- 
+        glm(cbind(Major_count, Minor_count) ~ Treatment*Generation, 
+            data = tmp2, family = "binomial")
+      
+      #Turn this model into a data frame of coefficients
+      
+      x <- as.data.frame(summary(modlist_2[[i]] )$coefficients)
+      
+      #Name the position of this model results with i
+      
+      x$position <- i
+      x$chr <- tmp2$chr[1]
+      #Add to data frame (total for the whole data set == coeffs_df + the newly made X)
+      
+      coeffs_df <- rbind(coeffs_df, x)
+      
+      #Remove i for safety and it starts over
+      
+      rm(i)
+    }
+    
+    #Change column names to workable
+    
+    colnames(coeffs_df) <- c("Estimate", "Standard_error", "z-value", "p-value", "position", "chr")
+    
+    coeffs_df$Effects<-rownames(coeffs_df)
+    
+    coeffs_df$Effects_2 <- ifelse(grepl("TreatmentSel:Generation",coeffs_df$Effects),'T_Sel:Gen', ifelse(grepl("Intercept",coeffs_df$Effects),'Int', coeffs_df$Effects ))
+    
+    coeffs_df$Effects_2 <- ifelse(grepl("TreatmentSel",coeffs_df$Effects_2),'T_Sel', ifelse(grepl("Generation",coeffs_df$Effects_2),'Gen', coeffs_df$Effects_2))
+    
+    rownames(coeffs_df) <- c()
+    
+    #Make the p-values into -log10 p values
+    coeffs_df$log_p <- -log10(coeffs_df$`p-value`)
+    
+    coeffs_df <- subset(coeffs_df, select = -c(Effects))
+    
+    coeffs_df$Effects <- ifelse(coeffs_df$Effects_2=='T_Sel', 'TreatmentSel', ifelse(coeffs_df$Effects_2=='Gen', 'Generation', ifelse(coeffs_df$Effects_2=='Int', 'Intercept', 'TreatmentSel:Generation')))
+    
+    coeffs_df <- subset(coeffs_df, select = -c(Effects_2))
+    
+    coeffs_df <- coeffs_df[-which(coeffs_df$log_p==0),]
+    
+    write.csv(coeffs_df, file=paste(file,".coeffs.csv", sep=""))
+        rm(coeffs_df)
+    rm(tmp2)
+    rm(x)
+    rm(modlist_2)
+    rm(episodic_long)
+    rm(no.pos)
+    rm(position)
+  }
+}
+
+```
+
+### Script: Combine_chromo.R:
+To run on own:
+```
+Rscript Combine_chromo.R 'DIRECTORY' 'OutputDIRECTORY'
+```
+```
+
+# Combine .coeffs.csv for two mappers
+require(dplyr)
+
+args <- commandArgs(trailingOnly = TRUE)
+
+# Change to directory holding all directories:
+
+mydirs <- list.dirs(path = args[1], recursive = FALSE)
+
+for (dir in mydirs){
+
+  setwd(dir)
+  
+  print("Read coeffs.csv files")
+
+  mycsvs <- list.files(pattern=".coeffs.csv")
+
+  Novoalign_Chromosome <- NULL
+  
+  for (file in mycsvs){
+    print(file)
+    coeffs1 <- read.csv(file, h=T)
+    Novoalign_Chromosome  <- rbind(Novoalign_Chromosome , coeffs1)
+    rm(coeffs1)
+    J2 <- gsub("*_","", file)
+    J3 <- gsub("\\..*","",J2)
+}
+
+x3 <- gsub("\\..*","",file)
+J3 <- gsub('(.*)_\\w+', '\\1', x3)
+
+X <- args[2]
+
+write.csv(Novoalign_Chromosome , file=paste(X,"/",J3,"_chromo.csv", sep=""), row.names = FALSE)
+rm(x3)
+rm(J3)
+rm(Novoalign_Chromosome)
+
+}
+```
 
 
 
