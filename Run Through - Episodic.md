@@ -5660,7 +5660,7 @@ scp paul@info.mcmaster.ca:/home/paul/episodicData/novoalign/novo_pi/MGD3_SO_CAGA
 ```
 #Done but Dumb: Forget it /\  /\  /\
 
-Rscript RSCriptingTest.R '/home/paul/episodicData/novoalign/novo_mpileup'
+Rscript /home/paul/episodicData/novoalign/novo_mpileup/RSCriptingTest.R '/home/paul/episodicData/novoalign/novo_mpileup'
 ```
 args <- commandArgs(trailingOnly = TRUE)
 # rnorm(n=as.numeric(args[1]), mean=as.numeric(args[2]))
@@ -5680,6 +5680,13 @@ for (dir in mydirs){
   for (sync in mysyncs){
     
     print(sync)
+x3 <- gsub("\\..*","",sync)
+J3 <- gsub('(.*)_\\w+', '\\1', x3)
+
+X <- args[1]
+
+file=paste(X,"/",J3,"_chromo.csv", sep="")  
+print(file)  
   }
 }
 
@@ -5694,6 +5701,7 @@ messy2 <- messy %>%
   gather(drug, heartrate, a:b)
   
   print(messy2)
+ 
 ```
 WORKS!
 Issue with tidyr: 
@@ -5716,7 +5724,23 @@ SyncFiles=${project_dir}/novo_mpileup
 Rscript RSCriptingTest.R ${SyncFiles}
 
 ```
+```
+#! /bin/bash
+length=20547500
 
+cut=$((${length}/11))
+cut_2=$((${cut}*2))
+cut_3=$((${cut}*3))
+cut_4=$((${cut}*4))
+cut_5=$((${cut}*5))
+cut_6=$((${cut}*6))
+cut_7=$((${cut}*7))
+cut_8=$((${cut}*8))
+cut_9=$((${cut}*9))
+cut_10=$((${cut}*10))
+echo '$((${cut_6}+1)))'
+echo '${cut_10}
+```
 
 
 
