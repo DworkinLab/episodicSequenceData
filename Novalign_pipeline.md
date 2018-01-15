@@ -1135,6 +1135,17 @@ echo 'Done Model'
 # Left with the ${subsets} directory full of .csv files and .coeffs.csv files
 # Note: this step takes the longest time, possibly search for method to parallelize this script (per chromosome, per file etc..)
 
+# Rscript ${Rscripts}/Counts_to_model.R ${subsets}/${basedir}
+
+# Loop will not work because I need to call the "main" dir holding all the directories: Write seperate script for individual directory. (removes direcory option, args[1] == setwd() and ready to go.)
+#for file in ${sync[@]}
+#	do
+#	name=${file}
+#	base=`basename ${name} .sync`
+#	basedir=${subsets}/${base}_dir
+#	Rscript ${Rscripts}/Counts_to_model.R ${basedir}	
+#done
+
 #########################
 
 #Combine Coeffs file into one large chromosome file
