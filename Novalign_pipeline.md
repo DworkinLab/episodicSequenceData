@@ -1133,6 +1133,7 @@ Rscript ${Rscripts}/Counts_to_model.R ${subsets}
 echo 'Done Model'
 
 # Left with the ${subsets} directory full of .csv files and .coeffs.csv files
+# Note: this step takes the longest time, possibly search for method to parallelize this script (per chromosome, per file etc..)
 
 #########################
 
@@ -1166,6 +1167,8 @@ Rscript ${Rscripts}/Combine_chromo.R ${subsets} ${coeff_dir}
 
 echo 'DONE'
 ```
+
+
 # WORKING SO FAR
 
 Create R-script: need to call variable for output directory above (i.e. the outputs OR subsets above).
