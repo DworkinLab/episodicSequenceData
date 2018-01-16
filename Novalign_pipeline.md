@@ -1402,7 +1402,7 @@ for (dir in mydirs){
 ```
 
 
-### Script: Counts_to_model.R
+### Script: Counts_to_model_2.R
 	- Script for running each chromosome in unison
 To run on own:
 ```
