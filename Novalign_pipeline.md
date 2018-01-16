@@ -1057,7 +1057,7 @@ basedir=${subsets}/${base}_dir
 length=($(wc -l ${SyncFiles}/${base}.sync))
 echo ${length}
 
-#Split length into 11 segements (11th == length)
+#Split length into 11 segements (11th == length) (can extend this if to large)
 cut=$((${length}/11))
 cut_2=$((${cut}*2))
 cut_3=$((${cut}*3))
@@ -1128,24 +1128,33 @@ echo 'Removed Sync Files'
 
 echo 'Rscript Model'
 
-Rscript ${Rscripts}/Counts_to_model.R ${subsets}
-
-echo 'Done Model'
-
+#Rscript ${Rscripts}/Counts_to_model.R ${subsets}
 # Left with the ${subsets} directory full of .csv files and .coeffs.csv files
 # Note: this step takes the longest time, possibly search for method to parallelize this script (per chromosome, per file etc..)
+# This R script is not the same as below (needs to set large overall directory), I don't recombend using this.
+#
 
 # Rscript ${Rscripts}/Counts_to_model.R ${subsets}/${basedir}
 
 # Loop will not work because I need to call the "main" dir holding all the directories: Write seperate script for individual directory. (removes direcory option, args[1] == setwd() and ready to go.)
-#for file in ${sync[@]}
-#	do
-#	name=${file}
-#	base=`basename ${name} .sync`
-#	basedir=${subsets}/${base}_dir
-#	Rscript ${Rscripts}/Counts_to_model.R ${basedir}	
-#done
 
+sync[0]=${SyncFiles}/novo_episodic_3R.sync
+sync[1]=${SyncFiles}/novo_episodic_2R.sync
+sync[2]=${SyncFiles}/novo_episodic_3L.sync
+sync[3]=${SyncFiles}/novo_episodic_2L.sync
+sync[4]=${SyncFiles}/novo_episodic_X.sync 
+sync[5]=${SyncFiles}/novo_episodic_4.sync 
+
+for file in ${sync[@]}
+	do
+	(name=${file}
+	base=`basename ${name} .sync`
+	basedir=${subsets}/${base}_dir
+	Rscript ${Rscripts}/Counts_to_model_2.R ${basedir}) &	
+done
+wait
+
+echo 'Done Model'
 #########################
 
 #Combine Coeffs file into one large chromosome file
@@ -1394,22 +1403,18 @@ for (dir in mydirs){
 
 
 ### Script: Counts_to_model.R
+	- Script for running each chromosome in unison
 To run on own:
 ```
 Rscript Counts_to_model.R 'DIRECTORY'
 ```
+Script to run model for each chromosome seperatly
 ```
 #Episodic data analysis: loop .csv files to run model:
 
 args <- commandArgs(trailingOnly = TRUE)
 
-#change to directory holding all directories:
-
-mydirs <- list.dirs(path = args[1], recursive = FALSE)
-
-for (dir in mydirs){
-
-  setwd(dir)
+  setwd(args[1])
   
   mycsvs <- list.files(pattern=".csv")
   
@@ -1508,9 +1513,8 @@ for (dir in mydirs){
     rm(no.pos)
     rm(position)
   }
-}
-
 ```
+
 
 ### Script: Combine_chromo.R:
 To run on own:
@@ -1559,9 +1563,6 @@ rm(Novoalign_Chromosome)
 
 }
 ```
-
-
-
 
 
 
