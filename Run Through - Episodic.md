@@ -5899,3 +5899,8 @@ for (dir in mydirs){
 
 ```
 
+### Subsampling:
+```
+perl /usr/local/popoolation/subsample-synchronized.pl --input novo_episodic_main.sync --output novo_episodic_main_subsample.sync --target-coverage 40 --max-coverage 200 --method withreplace
+
+```
