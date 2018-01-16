@@ -5900,7 +5900,12 @@ for (dir in mydirs){
 ```
 
 ### Subsampling:
+withreplacement
 ```
 perl /usr/local/popoolation/subsample-synchronized.pl --input novo_episodic_main.sync --output novo_episodic_main_subsample.sync --target-coverage 40 --max-coverage 200 --method withreplace
+
+```
+```
+perl /usr/local/popoolation/subsample-synchronized.pl --input novo_episodic_main.sync --output novo_episodic_sub_w.o_replace.sync --target-coverage 40 --max-coverage 200 --method withoutreplace
 
 ```
