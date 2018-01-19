@@ -5909,3 +5909,34 @@ perl /usr/local/popoolation/subsample-synchronized.pl --input novo_episodic_main
 perl /usr/local/popoolation/subsample-synchronized.pl --input novo_episodic_main.sync --output novo_episodic_sub_w.o_replace.sync --target-coverage 40 --max-coverage 200 --method withoutreplace
 
 ```
+
+Changing .sync file for selection vs. controls and duplicate ancestor! (ALL FOR TAUS ET AL. 2017== PoolSeq package)
+```
+F115ConR1_TAGCTT_novo_merge_novo_final_realigned.bam
+F115ConR2_GGCTAC_novo_merge_novo_final_realigned.bam
+F115SelR1_GTTTCG_novo_merge_novo_final_realigned.bam
+F115SelR2_GTGGCC_novo_merge_novo_final_realigned.bam
+F38ConR1_ATCACG_novo_merge_novo_final_realigned.bam
+F38ConR2_TTAGGC_novo_merge_novo_final_realigned.bam
+F38SelR1_ACTTGA_novo_merge_novo_final_realigned.bam
+F38SelR2_GATCAG_novo_merge_novo_final_realigned.bam
+F77ConR1_ATGTCA_novo_merge_novo_final_realigned.bam
+F77ConR2_ATTCCT_novo_merge_novo_final_realigned.bam
+F77SelR1_TTAGGC_novo_merge_novo_final_realigned.bam
+F77SelR2_GATCAG_novo_merge_novo_final_realigned.bam
+MGD3_SO_CAGATC_novo_merge_novo_final_realigned.bam
+```
+FOR SELECTION LINEAGES (WITH *2* replicates of ancestor.) == still >2G
+```
+cat novo_episodic_2R.sync | awk '{print $1,$2,$3,$6,$7,$10, $11, $14, $15, $16, $16}' > novo_episodic_2R_Sel.sync
+```
+```
+cat novo_episodic_2R.sync | awk '{print $1,$2,$3,$4,$5,$8, $9, $12, $13, $16, $16}' > novo_episodic_2R_Con.sync
+```
+```
+cat novo_episodic_2R.sync | awk '{print $1,$2,$3,$6,$10,$14 $16}' > novo_episodic_2R_SelR1.sync
+```
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/novoalign/novo_mpileup/novo_episodic_2R_SelR1.sync /Users/paulknoops/Bioinformatics/episodic_practice/
+```
+
