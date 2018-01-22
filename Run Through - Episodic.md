@@ -5939,14 +5939,14 @@ Not needed:
 cat novo_episodic_2R.sync | awk '{print $1,$2,$3,$6,$10,$14,$16}' > novo_episodic_2R_SelR1.sync
 ```
 ```
-scp paul@info.mcmaster.ca:/home/paul/episodicData/novoalign/novo_mpileup/novo_episodic_2R_Sel.sync /Users/paulknoops/Bioinformatics/episodic_practice/
+scp paul@info.mcmaster.ca:/home/paul/episodicData/novoalign/novo_mpileup/novo_episodic_2R_SelR1.sync /Users/paulknoops/Bioinformatics/episodic_practice/
 ```
 
 
 ```
 #! /bin/bash
 
-length=($(wc -l /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_Sel.sync))
+length=($(wc -l /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1.sync))
 echo ${length}
 
 #Split length into 8 segements (8th == length) (can extend this if to large)
@@ -5958,21 +5958,21 @@ cut_5=$((${cut}*5))
 cut_6=$((${cut}*6))
 cut_7=$((${cut}*7))
 
-sed -n " 1, ${cut} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_Sel.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_Sel_1.sync
+sed -n " 1, ${cut} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1_1.sync
 
-sed -n " $((${cut} + 1)), ${cut_2} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_Sel.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_Sel_2.sync
+sed -n " $((${cut} + 1)), ${cut_2} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1_2.sync
 
-sed -n " $((${cut_2} + 1)), ${cut_3} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_Sel.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_Sel_3.sync
+sed -n " $((${cut_2} + 1)), ${cut_3} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1_3.sync
 
-sed -n " $((${cut_3} + 1)), ${cut_4} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_Sel.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_Sel_4.sync
+sed -n " $((${cut_3} + 1)), ${cut_4} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1_4.sync
 
-sed -n " $((${cut_4} + 1)), ${cut_5} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_Sel.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_Sel_5.sync
+sed -n " $((${cut_4} + 1)), ${cut_5} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1_5.sync
 
-sed -n " $((${cut_5} + 1)), ${cut_6} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_Sel.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_Sel_6.sync
+sed -n " $((${cut_5} + 1)), ${cut_6} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1_6.sync
 
-sed -n " $((${cut_6} + 1)), ${cut_7} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_Sel.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_Sel_7.sync
+sed -n " $((${cut_6} + 1)), ${cut_7} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1_7.sync
 
-sed -n " $((${cut_7} + 1)), ${length} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_Sel.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_Sel_8.sync
+sed -n " $((${cut_7} + 1)), ${length} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1_8.sync
 
 
 
