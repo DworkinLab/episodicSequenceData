@@ -5647,6 +5647,10 @@ done
 scp paul@info.mcmaster.ca:/home/paul/episodicData/novoalign/novo_exons/2R_dir/*.pi /Users/paulknoops/Bioinformatics/episodic_practice/2R_GenePi
 ```
 
+```
+middle=$((`wc -l < file` / 2))
+```
+
 #Done but Dumb: Forget it \/ \/  \/
 ```
 perl /home/paul/popoolation_1.2.2/Visualise-output.pl --input /home/paul/episodicData/novoalign/novo_pi/MGD3_SO_CAGATC_novo.pi --output /home/paul/episodicData/novoalign/novo_pi/MGD3_SO_CAGATC_novo.pi.pdf --ylab pi --chromosomes "X 2L 2R 3L 3R 4"
@@ -5656,11 +5660,320 @@ scp paul@info.mcmaster.ca:/home/paul/episodicData/novoalign/novo_pi/MGD3_SO_CAGA
 ```
 #Done but Dumb: Forget it /\  /\  /\
 
+Rscript /home/paul/episodicData/novoalign/novo_mpileup/RSCriptingTest.R '/home/paul/episodicData/novoalign/novo_mpileup'
+```
+args <- commandArgs(trailingOnly = TRUE)
+# rnorm(n=as.numeric(args[1]), mean=as.numeric(args[2]))
+# Rscript myScript.R 5 100
+
+require('tidyr')
+require('dplyr')
+
+mydirs <- list.dirs(path = args[1], recursive = FALSE)
+
+for (dir in mydirs){
+
+    setwd(dir)
+  
+  mysyncs <- list.files(pattern=".sync")
+  
+  for (sync in mysyncs){
+    
+    print(sync)
+x3 <- gsub("\\..*","",sync)
+J3 <- gsub('(.*)_\\w+', '\\1', x3)
+
+X <- args[1]
+
+file=paste(X,"/",J3,"_chromo.csv", sep="")  
+print(file)  
+  }
+}
+
+messy <- data.frame(
+  name = c("Wilbur", "Petunia", "Gregory"),
+  a = c(67, 80, 64),
+  b = c(56, 90, 50)
+)
+print(messy)
+
+messy2 <- messy %>%
+  gather(drug, heartrate, a:b)
+  
+  print(messy2)
+ 
+```
+WORKS!
+Issue with tidyr: 
+-works with interactive (Running R) -- 3.2.2
+-Does not work with Rscript:
+	-- different order
+
+```
+#! /bin/bash
+
+#Variable for project name (title of mpileup file)
+project_name=novo_episodic
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to .sync files
+SyncFiles=${project_dir}/novo_mpileup
+
+Rscript RSCriptingTest.R ${SyncFiles}
+
+```
+```
+#! /bin/bash
+length=20547500
+
+cut=$((${length}/11))
+cut_2=$((${cut}*2))
+cut_3=$((${cut}*3))
+cut_4=$((${cut}*4))
+cut_5=$((${cut}*5))
+cut_6=$((${cut}*6))
+cut_7=$((${cut}*7))
+cut_8=$((${cut}*8))
+cut_9=$((${cut}*9))
+cut_10=$((${cut}*10))
+echo '$((${cut_6}+1)))'
+echo '${cut_10}
+```
+
+```
+#! /bin/bash
+
+#Variable for project name (title of mpileup file)
+project_name=novo_episodic
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to .sync files
+SyncFiles=${project_dir}/novo_mpileup
+
+#Output dir:
+subsets=${project_dir}/ChromoSubsets
+
+# Need to copy three R scripts and add to a new directory (i.e. novo_Rscripts)
+Rscripts=${project_dir}/novo_Rscripts
+
+sync[0]=${SyncFiles}/novo_episodic_3R.sync
+sync[1]=${SyncFiles}/novo_episodic_2R.sync
+sync[2]=${SyncFiles}/novo_episodic_3L.sync
+sync[3]=${SyncFiles}/novo_episodic_2L.sync
+sync[4]=${SyncFiles}/novo_episodic_X.sync 
+sync[5]=${SyncFiles}/novo_episodic_4.sync 
+
+for file in ${sync[@]}
+	do
+	(name=${file}
+	base=`basename ${name} .sync`
+	basedir=${subsets}/${base}_dir
+	Rscript ${Rscripts}/Counts_to_model_2.R ${basedir}) &	
+done
+wait
+
+```
+
+Copy of model script that goes through directories (Chromos) in series:
+```
+### Script: Counts_to_model.R
+#	- Script for running each chromosome in unison
+#To run on own:
+
+# Rscript Counts_to_model.R 'DIRECTORY'
+
+#Episodic data analysis: loop .csv files to run model:
+
+args <- commandArgs(trailingOnly = TRUE)
+
+#change to directory holding all directories:
+
+mydirs <- list.dirs(path = args[1], recursive = FALSE)
+
+for (dir in mydirs){
+
+  setwd(dir)
+  
+  mycsvs <- list.files(pattern=".csv")
+  
+  for (file in mycsvs){
+    
+    episodic_long <- read.csv(file, h=T)
+    
+    #The Data: in long format, each position with Treatment, Cage and Generation, along with the Major and Mnor allele counts correponding to the ancestral major/minor allele
+    
+    #The full model:
+    
+    #Call each position
+    
+    position <- unique(episodic_long$pos)
+    
+    no.pos <- length(position)
+    
+    #Remove N/A's -- possibly not needed so hashed out.
+    
+    episodic_long <- na.omit(episodic_long)
+    
+    
+    #Make list to store model
+    
+    modlist_2 <- as.list(1:no.pos)
+    
+    #Each model of a position, named for each mod will be position
+    
+    names(modlist_2) <- position
+    
+    #Empty Data Frame to store all coeffecients of model
+    
+    coeffs_df <- data.frame(NULL)
+    
+    #Run the  model for each position
+    
+    for(i in position){
+      print(paste("Running entity:", i, "which is", which(position==i), "out of", no.pos, "file=", file))
+      
+      #Temporary data frame for only the one position
+      
+      tmp2 <- episodic_long[episodic_long$pos == i,]
+      
+      #The model: major vs. minor counts by Treatment, Generation and Treatment:Generation
+      
+      modlist_2[[i]] <- 
+        glm(cbind(Major_count, Minor_count) ~ Treatment*Generation, 
+            data = tmp2, family = "binomial")
+      
+      #Turn this model into a data frame of coefficients
+      
+      x <- as.data.frame(summary(modlist_2[[i]] )$coefficients)
+      
+      #Name the position of this model results with i
+      
+      x$position <- i
+      x$chr <- tmp2$chr[1]
+      #Add to data frame (total for the whole data set == coeffs_df + the newly made X)
+      
+      coeffs_df <- rbind(coeffs_df, x)
+      
+      #Remove i for safety and it starts over
+      
+      rm(i)
+    }
+    
+    #Change column names to workable
+    
+    colnames(coeffs_df) <- c("Estimate", "Standard_error", "z-value", "p-value", "position", "chr")
+    
+    coeffs_df$Effects<-rownames(coeffs_df)
+    
+    coeffs_df$Effects_2 <- ifelse(grepl("TreatmentSel:Generation",coeffs_df$Effects),'T_Sel:Gen', ifelse(grepl("Intercept",coeffs_df$Effects),'Int', coeffs_df$Effects ))
+    
+    coeffs_df$Effects_2 <- ifelse(grepl("TreatmentSel",coeffs_df$Effects_2),'T_Sel', ifelse(grepl("Generation",coeffs_df$Effects_2),'Gen', coeffs_df$Effects_2))
+    
+    rownames(coeffs_df) <- c()
+    
+    #Make the p-values into -log10 p values
+    coeffs_df$log_p <- -log10(coeffs_df$`p-value`)
+    
+    coeffs_df <- subset(coeffs_df, select = -c(Effects))
+    
+    coeffs_df$Effects <- ifelse(coeffs_df$Effects_2=='T_Sel', 'TreatmentSel', ifelse(coeffs_df$Effects_2=='Gen', 'Generation', ifelse(coeffs_df$Effects_2=='Int', 'Intercept', 'TreatmentSel:Generation')))
+    
+    coeffs_df <- subset(coeffs_df, select = -c(Effects_2))
+    
+    coeffs_df <- coeffs_df[-which(coeffs_df$log_p==0),]
+    
+    write.csv(coeffs_df, file=paste(file,".coeffs.csv", sep=""))
+        rm(coeffs_df)
+    rm(tmp2)
+    rm(x)
+    rm(modlist_2)
+    rm(episodic_long)
+    rm(no.pos)
+    rm(position)
+  }
+}
+
+```
+
+### Subsampling:
+withreplacement
+```
+perl /usr/local/popoolation/subsample-synchronized.pl --input novo_episodic_main.sync --output novo_episodic_main_subsample.sync --target-coverage 40 --max-coverage 200 --method withreplace
+
+```
+```
+perl /usr/local/popoolation/subsample-synchronized.pl --input novo_episodic_main.sync --output novo_episodic_sub_w.o_replace.sync --target-coverage 40 --max-coverage 200 --method withoutreplace
+
+```
+
+Changing .sync file for selection vs. controls and duplicate ancestor! (ALL FOR TAUS ET AL. 2017== PoolSeq package)
+```
+F115ConR1_TAGCTT_novo_merge_novo_final_realigned.bam
+F115ConR2_GGCTAC_novo_merge_novo_final_realigned.bam
+F115SelR1_GTTTCG_novo_merge_novo_final_realigned.bam
+F115SelR2_GTGGCC_novo_merge_novo_final_realigned.bam
+F38ConR1_ATCACG_novo_merge_novo_final_realigned.bam
+F38ConR2_TTAGGC_novo_merge_novo_final_realigned.bam
+F38SelR1_ACTTGA_novo_merge_novo_final_realigned.bam
+F38SelR2_GATCAG_novo_merge_novo_final_realigned.bam
+F77ConR1_ATGTCA_novo_merge_novo_final_realigned.bam
+F77ConR2_ATTCCT_novo_merge_novo_final_realigned.bam
+F77SelR1_TTAGGC_novo_merge_novo_final_realigned.bam
+F77SelR2_GATCAG_novo_merge_novo_final_realigned.bam
+MGD3_SO_CAGATC_novo_merge_novo_final_realigned.bam
+```
+FOR SELECTION LINEAGES (WITH *2* replicates of ancestor.) == still >2G
+```
+cat novo_episodic_2R.sync | awk '{print $1,$2,$3,$6,$7,$10, $11, $14, $15, $16, $16}' > novo_episodic_2R_Sel.sync
+```
+```
+cat novo_episodic_2R.sync | awk '{print $1,$2,$3,$4,$5,$8, $9, $12, $13, $16, $16}' > novo_episodic_2R_Con.sync
+```
+
+Not needed:
+```
+cat novo_episodic_2R.sync | awk '{print $1,$2,$3,$6,$10,$14,$16}' > novo_episodic_2R_SelR1.sync
+```
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/novoalign/novo_mpileup/novo_episodic_2R_SelR1.sync /Users/paulknoops/Bioinformatics/episodic_practice/
+```
+
+
+```
+#! /bin/bash
+
+length=($(wc -l /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1.sync))
+echo ${length}
+
+#Split length into 8 segements (8th == length) (can extend this if to large)
+cut=$((${length}/8))
+cut_2=$((${cut}*2))
+cut_3=$((${cut}*3))
+cut_4=$((${cut}*4))
+cut_5=$((${cut}*5))
+cut_6=$((${cut}*6))
+cut_7=$((${cut}*7))
+
+sed -n " 1, ${cut} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1_1.sync
+
+sed -n " $((${cut} + 1)), ${cut_2} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1_2.sync
+
+sed -n " $((${cut_2} + 1)), ${cut_3} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1_3.sync
+
+sed -n " $((${cut_3} + 1)), ${cut_4} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1_4.sync
+
+sed -n " $((${cut_4} + 1)), ${cut_5} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1_5.sync
+
+sed -n " $((${cut_5} + 1)), ${cut_6} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1_6.sync
+
+sed -n " $((${cut_6} + 1)), ${cut_7} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1_7.sync
+
+sed -n " $((${cut_7} + 1)), ${length} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1_8.sync
 
 
 
-
-
-
-
-
+```
