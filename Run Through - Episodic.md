@@ -5974,6 +5974,7 @@ sed -n " $((${cut_6} + 1)), ${cut_7} p" /Users/paulknoops/Bioinformatics/episodi
 
 sed -n " $((${cut_7} + 1)), ${length} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1_8.sync
 
-
-
 ```
+
+
+Run Fst and create plots
