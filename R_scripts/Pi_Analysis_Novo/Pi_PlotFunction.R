@@ -1,6 +1,9 @@
 Pi_PlotFunction <- function(x, y) {
   
-  require(ggplot2)
+  #x <- 'F115ConR1_TAGCTT_novo.pi' 
+  #y <- "Novoalign"
+  
+require(ggplot2)
   x2 <- gsub("\\_.*","",x)
   y2 <- y
   
@@ -56,6 +59,26 @@ Pi_PlotFunction <- function(x, y) {
   #Title:
   z2 <- paste(x2, y2, sep="_")
   
+  ## This is useful for Tajima's D: can be hashed out for Pi or theta
+  
+  # Remove all that are above 0
+  DattFull_plus0 <- DattFull[which(DattFull$Pi>0),]
+  
+  # Remove all below 0
+  DattFull_minus0 <- DattFull[which(DattFull$Pi<0),]
+  
+  ff <- length(DattFull_plus0$Pi)
+  gg <- length(DattFull_minus0$Pi)
+  
+  ff_prop <- ff / (ff+gg)
+  gg_prop <- gg / (ff+gg)
+  
+  print(paste('Proportion of values above 0 is',ff_prop))
+  
+  print(paste('Proportion of values below 0 is', gg_prop))
+  
+  #### Can be hashed out above for Pi and Theta
+  
   # The plots: 
   Pi_plot <- ggplot(DattFull, aes(x = number, y= Pi, colour = chr)) 
   
@@ -70,5 +93,42 @@ Pi_PlotFunction <- function(x, y) {
     ggtitle(z2)
   
   return(Pi_plot_2)
-}
+  }
+
+
+#head(DattFull)
+#max(DattFull$Pi)
+
+### Remove all that are above 0
+
+  #DattFull2 <- DattFull[which(DattFull$Pi<0),]
+
+### Remove all below 0
+
+  #DattFull2 <- DattFull[which(DattFull$Pi>0),]
+
+### Filter fo a value - remove anything less than 0.0055
+
+  #DattFull2 <- DattFull[-which(DattFull$Pi<0.0055),]
+### keep anything less than 0.0055
+
+  #DattFull3 <- DattFull[-which(DattFull$Pi>0.0055),]
+
+### How many points
+
+  #ff <- length(DattFull2$Pi)
+  #gg <- length(DattFull3$Pi)
+
+
+  #ff / (ff+gg)
+  #gg / (ff+gg)
+  
+#head(DattFull)
+#mean(DattFull$Pi)
+#max(DattFull$Pi)
+
+### Filter for certain sequences
+
+#DattFull_F115ConR1 <- DattFull[which(DattFull$Seq=='F115ConR1'),]
+
 
