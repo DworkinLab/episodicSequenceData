@@ -1569,8 +1569,9 @@ rm(Novoalign_Chromosome)
 _____________________________________________________________
 _____________________________________________________________
 
-### Running poolSeq R package: [Taus et al. 2017](https://github.com/ThomasTaus/poolSeq)
+### Running [poolSeq](https://github.com/ThomasTaus/poolSeq) R package:
 
+ 
 
 
 
