@@ -6,7 +6,7 @@ ________________________________________________________________________________
 
 Starting with sequence files that have already been inspected with md5sum and fastqc and have been trimmed using trimmomatic (See other files for running trimmomatic)
 
-Novoalign link tutorial: http://www.novocraft.com/documentation/novoalign-2/novoalign-ngs-quick-start-tutorial/basic-short-read-mapping/
+[Novoalign tutorial](http://www.novocraft.com/documentation/novoalign-2/novoalign-ngs-quick-start-tutorial/basic-short-read-mapping/)
 
 ### Need to create directory for project and to house mapping outputs
 
@@ -1571,13 +1571,51 @@ _____________________________________________________________
 
 ### Running [poolSeq](https://github.com/ThomasTaus/poolSeq) R package:
 
+
+
+```
+#! /bin/bash
+
+#Variable for project name (title of mpileup file)
+project_name=novo_episodic
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to .sync files
+SyncFiles=${project_dir}/novo_mpileup
+
+#Output dir:
+mkdir ${project_dir}/novo_PoolSeq
+poolSeq=${project_dir}/novo_PoolSeq
+
+# Need to copy three R scripts and add to a new directory (i.e. novo_Rscripts)
+Rscripts=${project_dir}/novo_Rscripts
+
+# The seperated .sync files
+sync[0]=${SyncFiles}/novo_episodic_3R.sync
+sync[1]=${SyncFiles}/novo_episodic_2R.sync
+sync[2]=${SyncFiles}/novo_episodic_3L.sync
+sync[3]=${SyncFiles}/novo_episodic_2L.sync
+sync[4]=${SyncFiles}/novo_episodic_X.sync 
+sync[5]=${SyncFiles}/novo_episodic_4.sync 
+
+
+for file in ${sync[@]}
+	do
+	Rscript ${Rscripts}/[SCRIPT].R args[1] args[2] &	
+done
+wait
  
-
+```
 
 
 ______________________________________________
 
 ______________________________________________
+
+
+
 Links and Notes
 
 Carful with basenames (don't make the outputs novo_aligned_novo_mapped_novo_final.bam etc.
