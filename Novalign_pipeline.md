@@ -1600,15 +1600,21 @@ sync[3]=${SyncFiles}/novo_episodic_2L.sync
 sync[4]=${SyncFiles}/novo_episodic_X.sync 
 sync[5]=${SyncFiles}/novo_episodic_4.sync 
 
-
 for file in ${sync[@]}
 	do
-	Rscript ${Rscripts}/[SCRIPT].R args[1] args[2] &	
+	name=${file}
+	base=`basename ${name} .sync`
+	
+	cat ${base}.sync | awk '{print $1,$2,$3,$6,$7,$10, $11, $14, $15, $16, $16}' > ${base}_Sel.sync
+	
+	cat ${base}.sync | awk '{print $1,$2,$3,$4,$5,$8, $9, $12, $13, $16, $16}' > ${base}_Con.sync
+	
+	Rscript ${Rscripts}/[SCRIPT].R args[1] args[2]) &	
+
 done
 wait
  
 ```
-
 
 ______________________________________________
 
