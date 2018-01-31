@@ -5899,6 +5899,33 @@ for (dir in mydirs){
 
 ```
 
+```
+#! /bin/bash
+
+#Variable for project name (title of mpileup file)
+project_name=novo_episodic
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to .sync files
+SyncFiles=${project_dir}/novo_mpileup
+
+#Output dir:
+mkdir ${project_dir}/ChromoSubsets
+subsets=${project_dir}/ChromoSubsets
+
+# Need to copy three R scripts and add to a new directory (i.e. novo_Rscripts)
+Rscripts=${project_dir}/novo_Rscripts
+
+#mkdir ${project_dir}/novo_coeffs
+coeff_dir=${project_dir}/novo_coeffs
+
+
+Rscript ${Rscripts}/Combine_chromo.R ${subsets} ${coeff_dir}
+```
+
+
 ### Subsampling:
 withreplacement
 ```
