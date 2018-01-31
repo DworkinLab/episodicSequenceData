@@ -5925,6 +5925,41 @@ coeff_dir=${project_dir}/novo_coeffs
 Rscript ${Rscripts}/Combine_chromo.R ${subsets} ${coeff_dir}
 ```
 
+Redone for BWA and Bowtie
+```
+#! /bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+subsets=/home/paul/episodicData/R_dir/bwa_subsetDirectories
+
+# Need to copy three R scripts and add to a new directory (i.e. novo_Rscripts)
+Rscripts=${project_dir}/novo_Rscripts
+
+mkdir /home/paul/episodicData/R_dir/bwa_coeffs
+coeff_dir=/home/paul/episodicData/R_dir/bwa_coeffs
+
+
+Rscript ${Rscripts}/Combine_chromo.R ${subsets} ${coeff_dir}
+```
+```
+#! /bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+subsets=/home/paul/episodicData/bowtie/R_bowtie/bowtie_subset_Ranalysis
+
+# Need to copy three R scripts and add to a new directory (i.e. novo_Rscripts)
+Rscripts=${project_dir}/novo_Rscripts
+
+mkdir /home/paul/episodicData/bowtie/R_bowtie/bowtie_coeffs
+coeff_dir=/home/paul/episodicData/bowtie/R_bowtie/bowtie_coeffs
+
+Rscript ${Rscripts}/Combine_chromo.R ${subsets} ${coeff_dir}
+```
+
 
 ### Subsampling:
 withreplacement
