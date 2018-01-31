@@ -1172,26 +1172,104 @@ Rscript ${Rscripts}/Combine_chromo.R ${subsets} ${coeff_dir}
 
 #Remove all .csv intermediates from random files:
 
-#for file in ${sync[@]}
-#	do
-#	name=${file}
-#	base=`basename ${name} .sync`
-#	basedir=${subsets}/${base}_dir
-#	rm -f ${basedir}/*.csv
-#	rmdir ${base}_dir
-#done
+for file in ${sync[@]}
+	do
+	name=${file}
+	base=`basename ${name} .sync`
+	basedir=${subsets}/${base}_dir
+	rm -f ${basedir}/*.csv
+	rmdir ${base}_dir
+done
 
-#rmdir ${subsets}
+rmdir ${subsets}
 
 #left with the final output files (coeffs) for novoalign files
 
 echo 'DONE'
 ```
 
+Now have 6 .csv files with output from model for each chromosome (check naming of 4th, might not include 4). 
 
-# WORKING SO FAR
+Can combine with other mappers to get more accurate results:
 
-Create R-script: need to call variable for output directory above (i.e. the outputs OR subsets above).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_____________________________________________________________
+_____________________________________________________________
+
+### Running [poolSeq](https://github.com/ThomasTaus/poolSeq) R package:
+
+
+
+```
+#! /bin/bash
+
+#Variable for project name (title of mpileup file)
+project_name=novo_episodic
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to .sync files
+SyncFiles=${project_dir}/novo_mpileup
+
+#Output dir:
+mkdir ${project_dir}/novo_PoolSeq
+poolSeq=${project_dir}/novo_PoolSeq
+
+# Need to copy three R scripts and add to a new directory (i.e. novo_Rscripts)
+Rscripts=${project_dir}/novo_Rscripts
+
+# The seperated .sync files
+sync[0]=${SyncFiles}/novo_episodic_3R.sync
+sync[1]=${SyncFiles}/novo_episodic_2R.sync
+sync[2]=${SyncFiles}/novo_episodic_3L.sync
+sync[3]=${SyncFiles}/novo_episodic_2L.sync
+sync[4]=${SyncFiles}/novo_episodic_X.sync 
+sync[5]=${SyncFiles}/novo_episodic_4.sync 
+
+for file in ${sync[@]}
+	do
+	name=${file}
+	base=`basename ${name} .sync`
+	
+	cat ${base}.sync | awk '{print $1,$2,$3,$6,$7,$10, $11, $14, $15, $16, $16}' > ${base}_Sel.sync
+	
+	cat ${base}.sync | awk '{print $1,$2,$3,$4,$5,$8, $9, $12, $13, $16, $16}' > ${base}_Con.sync
+	
+	Rscript ${Rscripts}/[SCRIPT].R args[1] args[2]) &	
+
+done
+wait
+ 
+```
+
+
+
+
+
+
+
+
+
+
+
+## R Scripts:
+______________________________________________
+
+______________________________________________
 
 
 ### Script: Sync_to_counts.R
@@ -1563,59 +1641,6 @@ rm(Novoalign_Chromosome)
 
 }
 ```
-
-
-
-_____________________________________________________________
-_____________________________________________________________
-
-### Running [poolSeq](https://github.com/ThomasTaus/poolSeq) R package:
-
-
-
-```
-#! /bin/bash
-
-#Variable for project name (title of mpileup file)
-project_name=novo_episodic
-
-#Variable for project:
-project_dir=/home/paul/episodicData/novoalign
-
-#Path to .sync files
-SyncFiles=${project_dir}/novo_mpileup
-
-#Output dir:
-mkdir ${project_dir}/novo_PoolSeq
-poolSeq=${project_dir}/novo_PoolSeq
-
-# Need to copy three R scripts and add to a new directory (i.e. novo_Rscripts)
-Rscripts=${project_dir}/novo_Rscripts
-
-# The seperated .sync files
-sync[0]=${SyncFiles}/novo_episodic_3R.sync
-sync[1]=${SyncFiles}/novo_episodic_2R.sync
-sync[2]=${SyncFiles}/novo_episodic_3L.sync
-sync[3]=${SyncFiles}/novo_episodic_2L.sync
-sync[4]=${SyncFiles}/novo_episodic_X.sync 
-sync[5]=${SyncFiles}/novo_episodic_4.sync 
-
-for file in ${sync[@]}
-	do
-	name=${file}
-	base=`basename ${name} .sync`
-	
-	cat ${base}.sync | awk '{print $1,$2,$3,$6,$7,$10, $11, $14, $15, $16, $16}' > ${base}_Sel.sync
-	
-	cat ${base}.sync | awk '{print $1,$2,$3,$4,$5,$8, $9, $12, $13, $16, $16}' > ${base}_Con.sync
-	
-	Rscript ${Rscripts}/[SCRIPT].R args[1] args[2]) &	
-
-done
-wait
- 
-```
-
 ______________________________________________
 
 ______________________________________________
