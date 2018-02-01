@@ -5899,6 +5899,68 @@ for (dir in mydirs){
 
 ```
 
+```
+#! /bin/bash
+
+#Variable for project name (title of mpileup file)
+project_name=novo_episodic
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to .sync files
+SyncFiles=${project_dir}/novo_mpileup
+
+#Output dir:
+mkdir ${project_dir}/ChromoSubsets
+subsets=${project_dir}/ChromoSubsets
+
+# Need to copy three R scripts and add to a new directory (i.e. novo_Rscripts)
+Rscripts=${project_dir}/novo_Rscripts
+
+#mkdir ${project_dir}/novo_coeffs
+coeff_dir=${project_dir}/novo_coeffs
+
+
+Rscript ${Rscripts}/Combine_chromo.R ${subsets} ${coeff_dir}
+```
+
+Redone for BWA and Bowtie
+```
+#! /bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+subsets=/home/paul/episodicData/R_dir/bwa_subsetDirectories
+
+# Need to copy three R scripts and add to a new directory (i.e. novo_Rscripts)
+Rscripts=${project_dir}/novo_Rscripts
+
+mkdir /home/paul/episodicData/R_dir/bwa_coeffs
+coeff_dir=/home/paul/episodicData/R_dir/bwa_coeffs
+
+
+Rscript ${Rscripts}/Combine_chromo.R ${subsets} ${coeff_dir}
+```
+```
+#! /bin/bash
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+subsets=/home/paul/episodicData/bowtie/R_bowtie/bowtie_subset_Ranalysis
+
+# Need to copy three R scripts and add to a new directory (i.e. novo_Rscripts)
+Rscripts=${project_dir}/novo_Rscripts
+
+mkdir /home/paul/episodicData/bowtie/R_bowtie/bowtie_coeffs
+coeff_dir=/home/paul/episodicData/bowtie/R_bowtie/bowtie_coeffs
+
+Rscript ${Rscripts}/Combine_chromo.R ${subsets} ${coeff_dir}
+```
+
+
 ### Subsampling:
 withreplacement
 ```
@@ -5974,6 +6036,7 @@ sed -n " $((${cut_6} + 1)), ${cut_7} p" /Users/paulknoops/Bioinformatics/episodi
 
 sed -n " $((${cut_7} + 1)), ${length} p" /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1.sync > /Users/paulknoops/Bioinformatics/episodic_practice/novo_episodic_2R_SelR1_8.sync
 
-
-
 ```
+
+
+Run Fst and create plots
