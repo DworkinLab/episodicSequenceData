@@ -6044,6 +6044,12 @@ In case I need to regrep:
 grep '3R' /home/paul/episodicData/novoalign/novo_mpileup/novo_episodic_main.sync > /home/paul/episodicData/novoalign/novo_mpileup/novo_episodic_3R.sync
 ```
 
+## PoolSeq
+
+need high version of R
+```
+tar xvzf R-3.4.3.tar.gz
+```
 
 ### Loop for running Poolseq (Taus) -- breaking apart files: 
 
