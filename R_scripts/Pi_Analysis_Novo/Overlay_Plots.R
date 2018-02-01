@@ -44,12 +44,13 @@ for (file in MyPi){
   DattFull <- rbind(DattX, Datt2L, Datt2R, Datt3L, Datt3R, Datt4)
   
   #Pi as numeric
-  DattFull$Pi=as.numeric(lev
-                         els(DattFull$Pi))[DattFull$Pi]
+  DattFull$Pi=as.numeric(levels(DattFull$Pi))[DattFull$Pi]
   DattFull$Seq <- x2
   assign(paste("Datt", x2, sep="_"),DattFull)
 }
 
+
+#
 
 Datt_MGD3_GG <- ggplot(Datt_MGD3, aes(x = number, y= Pi, colour = chr)) + 
   geom_smooth(method = "loess", show.legend = F) +   scale_y_continuous(limits=c(0, 0.009), breaks=seq(0, 0.009, 0.001)) + 

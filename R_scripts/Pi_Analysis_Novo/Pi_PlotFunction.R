@@ -86,7 +86,7 @@ require(ggplot2)
     geom_point(size=0.3, show.legend = F) +
     scale_y_continuous(limits=c(0, 0.02), breaks=seq(0, 0.02, 0.005)) + 
     xlab("") +
-    scale_x_discrete(limits=c(1049, 3185, 5277, 7443, 9952, 11359), labels = c("X", "2L", '2R', '3L', '3R', "4")) +
+    scale_x_discrete(limits=c(a/2, (a+b)-b/2, (a+b+c)-c/2, (a+b+c+d)-d/2, (a+b+c+d+e)-e/2, (a+b+c+d+e+f)-f/2), labels = c("X", "2L", '2R', '3L', '3R', "4")) +
     theme(text = element_text(size=20), 
           axis.text.x= element_text(size=15), axis.text.y= element_text(size=15)) +
     scale_colour_manual(values=c("#56B4E9", "#E69F00", 'grey30', 'grey46', 'wheat3', 'lemonchiffon4')) +
