@@ -6039,4 +6039,344 @@ sed -n " $((${cut_7} + 1)), ${length} p" /Users/paulknoops/Bioinformatics/episod
 ```
 
 
+In case I need to regrep:
+```
+grep '3R' /home/paul/episodicData/novoalign/novo_mpileup/novo_episodic_main.sync > /home/paul/episodicData/novoalign/novo_mpileup/novo_episodic_3R.sync
+```
+
+
+### Loop for running Poolseq (Taus) -- breaking apart files: 
+
+Wrong but keeping as reference: do in two steps:
+```
+#! /bin/bash
+
+#Variable for project name (title of mpileup file)
+project_name=novo_episodic
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to .sync files
+SyncFiles=${project_dir}/novo_mpileup
+
+# The seperated .sync files
+sync[0]=${SyncFiles}/novo_episodic_3R.sync
+sync[1]=${SyncFiles}/novo_episodic_2R.sync
+sync[2]=${SyncFiles}/novo_episodic_3L.sync
+sync[3]=${SyncFiles}/novo_episodic_2L.sync
+sync[4]=${SyncFiles}/novo_episodic_X.sync 
+sync[5]=${SyncFiles}/novo_episodic_4.sync 
+
+for file in ${sync[@]}
+	do
+	name=${file}
+	base=`basename ${name} .sync`
+	
+	mkdir ${SyncFiles}/splitsync_dir
+	splitSync=${SyncFiles}/splitsync_dir
+	
+	mkdir ${splitSync}/${base}_SelSync
+	SelSync=${splitSync}/${base}_SelSync
+	
+	mkdir ${splitSync}/${base}_ConSync
+	ConSync=${splitSync}/${base}_ConSync
+	
+	cat ${SyncFiles}/${base}.sync | awk '{print $1,$2,$3,$6,$7,$10, $11, $14, $15, $16, $16}' > ${splitSync}/${base}_Sel.sync
+	
+	cat ${SyncFiles}/${base}.sync | awk '{print $1,$2,$3,$4,$5,$8, $9, $12, $13, $16, $16}' > ${splitSync}/${base}_Con.sync
+	
+	SplitSync[1]=${splitSync}/${base}_Sel.sync
+	SplitSync[2]=${splitSync}/${base}_Con.sync
+	
+	for file2 in ${SplitSync[@]}
+		do
+		name2=${file2}
+		base2=`basename ${name2} .sync`
+		
+		length=($(wc -l ${base2}.sync))
+		#echo ${length}
+
+		#Split length into 8 segements (8th == length) (can extend this if to large)
+		cut=$((${length}/8))
+		cut_2=$((${cut}*2))
+		cut_3=$((${cut}*3))
+		cut_4=$((${cut}*4))
+		cut_5=$((${cut}*5))
+		cut_6=$((${cut}*6))
+		cut_7=$((${cut}*7))
+
+		sed -n " 1, ${cut} p" ${base2}.sync > ${base2}_1.sync
+
+		sed -n " $((${cut} + 1)), ${cut_2} p" ${base2}.sync > ${base2}_2.sync
+
+		sed -n " $((${cut_2} + 1)), ${cut_3} p" ${base2}.sync > ${base2}_3.sync
+
+		sed -n " $((${cut_3} + 1)), ${cut_4} p" ${base2}.sync > ${base2}_4.sync
+
+		sed -n " $((${cut_4} + 1)), ${cut_5} p" ${base2}.sync > ${base2}_5.sync
+
+		sed -n " $((${cut_5} + 1)), ${cut_6} p" ${base2}.sync > ${base2}_6.sync
+
+		sed -n " $((${cut_6} + 1)), ${cut_7} p" ${base2}.sync > ${base2}_7.sync
+
+		sed -n " $((${cut_7} + 1)), ${length} p" ${base2}.sync > ${base2}_8.sync
+		
+		rm -f ${base2}.sync
+	
+	done
+
+done
+```
+
+Split Treatments 1st:
+```
+#! /bin/bash
+
+#Variable for project name (title of mpileup file)
+project_name=novo_episodic
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to .sync files
+SyncFiles=${project_dir}/novo_mpileup
+	
+mkdir ${SyncFiles}/splitsync_dir
+splitSync=${SyncFiles}/splitsync_dir
+	
+# The seperated .sync files
+sync[0]=${SyncFiles}/novo_episodic_3R.sync
+sync[1]=${SyncFiles}/novo_episodic_2R.sync
+sync[2]=${SyncFiles}/novo_episodic_3L.sync
+sync[3]=${SyncFiles}/novo_episodic_2L.sync
+sync[4]=${SyncFiles}/novo_episodic_X.sync 
+sync[5]=${SyncFiles}/novo_episodic_4.sync 
+
+for file in ${sync[@]}
+	do
+	name=${file}
+	base=`basename ${name} .sync`
+	
+	cat ${SyncFiles}/${base}.sync | awk '{print $1,$2,$3,$6,$7,$10, $11, $14, $15, $16, $16}' > ${splitSync}/${base}_Sel.sync
+	
+	cat ${SyncFiles}/${base}.sync | awk '{print $1,$2,$3,$4,$5,$8, $9, $12, $13, $16, $16}' > ${splitSync}/${base}_Con.sync
+
+done
+```
+
+
+```
+#! /bin/bash
+
+#Variable for project name (title of mpileup file)
+project_name=novo_episodic
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to .sync files
+SyncFiles=${project_dir}/novo_mpileup
+
+#Path to treatment split sync files
+splitSync=${SyncFiles}/splitsync_dir
+
+#All files in splitSync need to be split further:
+
+files=(${splitSync}/*.sync)
+
+for file in ${files[@]}
+	do
+	name=${file}
+	base=`basename ${name} .sync`
+	
+	mkdir ${splitSync}/${base}_Split
+	split_sync=${splitSync}/${base}_Split
+	
+	length=($(wc -l ${splitSync}${base}.sync))
+	#echo ${length}
+		
+	#Split length into 8 segements (8th == length) (can extend this if to large)
+	cut=$((${length}/8))
+	cut_2=$((${cut}*2))
+	cut_3=$((${cut}*3))
+	cut_4=$((${cut}*4))
+	cut_5=$((${cut}*5))
+	cut_6=$((${cut}*6))
+	cut_7=$((${cut}*7))
+	
+	sed -n " 1, ${cut} p"  ${splitSync}/${base}.sync > ${split_sync}${base}_1.sync
+
+	sed -n " $((${cut} + 1)), ${cut_2} p"  ${splitSync}/${base}.sync >  ${split_sync}/${base}_2.sync
+
+	sed -n " $((${cut_2} + 1)), ${cut_3} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_3.sync
+	
+	sed -n " $((${cut_3} + 1)), ${cut_4} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_4.sync
+
+	sed -n " $((${cut_4} + 1)), ${cut_5} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_5.sync
+
+	sed -n " $((${cut_5} + 1)), ${cut_6} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_6.sync
+
+	sed -n " $((${cut_6} + 1)), ${cut_7} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_7.sync
+
+	sed -n " $((${cut_7} + 1)), ${length} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_8.sync
+	
+done
+
+```
+
+```
+#! /bin/bash
+
+#Variable for project name (title of mpileup file)
+project_name=novo_episodic
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to .sync files
+SyncFiles=${project_dir}/novo_mpileup
+
+#Path to treatment split sync files
+splitSync=${SyncFiles}/splitsync_dir
+
+#Output dir:
+mkdir ${project_dir}/novo_PoolSeq
+poolSeq=${project_dir}/novo_PoolSeq
+
+# Need to copy three R scripts and add to a new directory (i.e. novo_Rscripts)
+Rscripts=${project_dir}/novo_Rscripts
+
+
+sync=(${splitSync}/*.sync)
+
+for file in ${sync[@]}
+	do
+	(name=${file}
+	base=`basename ${name} .sync`
+	basedir=${subsets}/${base}_Split
+	Chromo=$(cat ${file} | awk '{print $1; exit}')
+	Rscript ${Rscripts}/.R ${basedir} ${Chromo} ${poolSeq}) &	
+done
+
+```
+
+R SCRIPT TO BE USED:
+
+3 Arguments:
+	1 == input (location of files)
+	2 == Chromosome (identifies above)
+	3 == output
+
+```
+### Running the PoolSeq Package to run on .sync files for estimates of selection coefficeints per position
+
+### Requires: R (>= 3.3.1), data.table (>= 1.9.4), foreach (>= 1.4.2), stringi (>= 0.4-1), matrixStats (>= 0.14.2)
+
+### 
+
+### Required Packages:
+
+  #install.packages("/home/paul/poolSeq_0.3.2.tar.gz", repos=NULL, type="source"
+
+  require(poolSeq)
+
+### Possible helpful help files:
+  
+  #?read.sync
+  #?estimateSH
+  #?af
+  #?af.traj
+  #??`poolSeq-package`
+  
+### These are part of the dependencies for poolSeq
+
+  #require(data.table)
+  #require(foreach)
+  #require(stringi)
+  #require(matrixStats)
+
+### Not actually required: But used for plotting (ggplot) 
+
+  #require(tidyverse)
+
+
+### Possibly need custom function to read in manipulated .sync files:
+  
+  source("/home/paul/episodicData/novoalign/novo_Rscripts/Taus_ReadSync.R")
+  
+  args <- commandArgs(trailingOnly = TRUE)
+
+### Reading in multiple sync file:
+  
+### Location of split .sync files:
+  
+  setwd(args[1])
+  
+  print(paste("Running directory:", dir))
+
+### List the .sync files:
+  
+  SyncList <- list.files(pattern=".sync")
+  
+### Create empty data frame to hold all chromosomal information:
+  
+  DFULL <- data.frame(NULL)
+  
+### Loop through list of files:
+  
+  for (SyncFile in SyncList){
+
+    mySync <- read.sync_Personal(file=SyncFile, gen=c(115, 115, 38, 38, 77, 77, 0, 0), repl=c(1,2,1,2,1,2,1,2), polarization = "rising")
+
+    
+### Make data.frame of just alleles information to sort out relevent positions:
+    
+  ff <- as.data.frame(mySync@alleles)
+  pst <- as.numeric(ff$pos)
+  pst2 <- sort(pst)
+  rm(pst)
+  rm(ff)
+
+### Create empty data frame to read into for estiamting S:
+  
+  DF <- data.frame(NULL)
+  ccc <- c(0,38,77,115)
+  
+### For Test:
+  #len <- length(pst2)
+  #pst2 <- sample(pst2[1]:pst2[len], 50)
+  
+for (i in pst2) {
+  Traj115 <- af.traj(mySync, args[2], repl=c(1,2), pos=i)
+  Bfsf <- estimateSH(Traj115, Ne=150, t=ccc, h=0.5, haploid = FALSE, simulate.p.value=TRUE)
+  Fd <- data.frame(Bfsf$s, Bfsf$p0, Bfsf$p.value)
+  Fd$pos <- i
+  DF <- rbind(DF, Fd)
+  DF <- na.omit(DF)
+  #print(paste("Running entity:", i, "of", END))
+  rm(i)
+  
+}
+  
+  DFULL <- rbind(DFULL, DF)
+  
+  rm(DF)
+  rm(mySync)
+  rm(ccc)
+  rm(pst2)
+  }
+  
+  
+  X <- args[1]
+  X3 <- gsub('.{7}$', '', X)
+  
+  write.csv(DFULL, file=paste(args[3], X3, "SelCoeff.csv", sep=""), row.names=FALSE)
+
+  
+```
+
+
+
+
 Run Fst and create plots
