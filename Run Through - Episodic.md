@@ -6047,9 +6047,7 @@ grep '3R' /home/paul/episodicData/novoalign/novo_mpileup/novo_episodic_main.sync
 ## PoolSeq
 
 need high version of R
-```
-tar xvzf R-3.4.3.tar.gz
-```
+
 
 ### Loop for running Poolseq (Taus) -- breaking apart files: 
 
@@ -6258,11 +6256,11 @@ sync=(${splitSync}/*.sync)
 
 for file in ${sync[@]}
 	do
-	(name=${file}
+	name=${file}
 	base=`basename ${name} .sync`
 	basedir=${subsets}/${base}_Split
 	Chromo=$(cat ${file} | awk '{print $1; exit}')
-	Rscript ${Rscripts}/.R ${basedir} ${Chromo} ${poolSeq}) &	
+	/usr/bin/Rscript ${Rscripts}/PoolSeq_SelCoeff.R ${basedir} ${Chromo} ${poolSeq}	
 done
 
 ```
@@ -6377,11 +6375,10 @@ for (i in pst2) {
   X <- args[1]
   X3 <- gsub('.{7}$', '', X)
   
-  write.csv(DFULL, file=paste(args[3], X3, "SelCoeff.csv", sep=""), row.names=FALSE)
+  write.csv(DFULL, file=paste(args[3], "/", X3, "SelCoeff.csv", sep=""), row.names=FALSE)
 
   
 ```
-
 
 
 
