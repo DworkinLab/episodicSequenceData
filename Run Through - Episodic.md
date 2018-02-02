@@ -6265,6 +6265,14 @@ done
 
 ```
 
+ 
+for one chromosome:
+novo_episodic_2L_Sel_Split
+```
+Rscript /home/paul/episodicData/novoalign/novo_Rscripts/PoolSeq_SelCoeff_one.R novo_episodic_2L_Sel_Split 2L /home/paul/episodicData/novoalign/novo_PoolSeq
+```
+/home/paul/episodicData/novoalign/novo_Rscripts/Taus_Scripts/testTaus
+
 R SCRIPT TO BE USED:
 
 3 Arguments:
@@ -6272,6 +6280,8 @@ R SCRIPT TO BE USED:
 	2 == Chromosome (identifies above)
 	3 == output
 
+
+### Script == PoolSeq_SelCoeff.R
 ```
 ### Running the PoolSeq Package to run on .sync files for estimates of selection coefficeints per position
 
@@ -6380,6 +6390,124 @@ for (i in pst2) {
   
 ```
 
+for one chromosome:
+novo_episodic_2L_Sel_Split
+```
+Rscript /home/paul/episodicData/novoalign/novo_Rscripts/PoolSeq_SelCoeff_one.R /home/paul/episodicData/novoalign/novo_mpileup/splitsync_dir/novo_episodic_2L_Sel_Split 2L /home/paul/episodicData/novoalign/novo_PoolSeq
+```
+/home/paul/episodicData/novoalign/novo_Rscripts/Taus_Scripts/testTaus
+
+
+### Script == PoolSeq_SelCoeff_one.R
+```
+### Running the PoolSeq Package to run on .sync files for estimates of selection coefficeints per position
+
+### Requires: R (>= 3.3.1), data.table (>= 1.9.4), foreach (>= 1.4.2), stringi (>= 0.4-1), matrixStats (>= 0.14.2)
+
+  args <- commandArgs(trailingOnly = TRUE)
+
+### Required Packages:
+
+  #install.packages("/home/paul/poolSeq_0.3.2.tar.gz", repos=NULL, type="source")
+  #install.packages("/home/paul/matrixStats_0.53.0.tar.gz", repos=NULL, type="source")
+  # Not available: so source seperate:
+  #require(poolSeq)
+  
+  ### These are part of the dependencies for poolSeq
+  
+  require(methods)
+  require(data.table)
+  require(foreach)
+  require(stringi)
+  #Won't load
+  require(matrixStats)
+  
+  source('/home/paul/episodicData/novoalign/novo_Rscripts/Taus_Scripts/testTaus/loadaf.R')  
+  #estne.R Fails.
+  #source('/home/paul/episodicData/novoalign/novo_Rscripts/Taus_Scripts/testTaus/estne.R')
+  
+  source('/home/paul/episodicData/novoalign/novo_Rscripts/Taus_Scripts/testTaus/estsh.R')
+  source('/home/paul/episodicData/novoalign/novo_Rscripts/Taus_Scripts/testTaus/idsel.R')
+  source('/home/paul/episodicData/novoalign/novo_Rscripts/Taus_Scripts/testTaus/simaf.R')
+
+
+### Possible helpful help files:
+  
+  #?read.sync
+  #?estimateSH
+  #?af
+  #?af.traj
+  #??`poolSeq-package`
+  
+
+### Possibly need custom function to read in manipulated .sync files:
+  
+  source("/home/paul/episodicData/novoalign/novo_Rscripts/Taus_ReadSync.R")
+  
+### Reading in multiple sync file:
+  
+### Location of split .sync files:
+  
+
+### List the .sync files:
+  
+  SyncList <- list.files(path = args[1], pattern=".sync")
+### Create empty data frame to hold all chromosomal information:
+  
+  DFULL <- data.frame(NULL)
+  
+### Loop through list of files:
+  
+  for (SyncFile in SyncList){
+
+    mySync <- read.sync_Personal(file=Pasttg/SyncFile, gen=c(115, 115, 38, 38, 77, 77, 0, 0), repl=c(1,2,1,2,1,2,1,2), polarization = "rising")
+
+    
+### Make data.frame of just alleles information to sort out relevent positions:
+    
+  ff <- as.data.frame(mySync@alleles)
+  pst <- as.numeric(ff$pos)
+  pst2 <- sort(pst)
+  rm(pst)
+  rm(ff)
+
+### Create empty data frame to read into for estiamting S:
+  
+  DF <- data.frame(NULL)
+  ccc <- c(0,38,77,115)
+  
+### For Test:
+  #len <- length(pst2)
+  #pst2 <- sample(pst2[1]:pst2[len], 50)
+  
+for (i in pst2) {
+  Traj115 <- af.traj(mySync, args[2], repl=c(1,2), pos=i)
+  Bfsf <- estimateSH(Traj115, Ne=150, t=ccc, h=0.5, haploid = FALSE, simulate.p.value=TRUE)
+  Fd <- data.frame(Bfsf$s, Bfsf$p0, Bfsf$p.value)
+  Fd$pos <- i
+  DF <- rbind(DF, Fd)
+  DF <- na.omit(DF)
+  #print(paste("Running entity:", i, "of", END))
+  rm(i)
+  
+}
+  
+  DFULL <- rbind(DFULL, DF)
+  
+  rm(DF)
+  rm(mySync)
+  rm(ccc)
+  rm(pst2)
+  }
+  
+  
+  X <- args[1]
+  X3 <- gsub('.{7}$', '', X)
+  
+  write.csv(DFULL, file=paste(args[3], "/", X3, "SelCoeff.csv", sep=""), row.names=FALSE)
+
+
+```
 
 
 Run Fst and create plots
