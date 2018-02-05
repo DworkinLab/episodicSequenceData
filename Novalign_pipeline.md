@@ -1241,7 +1241,73 @@ for (i in name2){
   write.csv(X , file=paste(outputDir,"/",'Chromosome_', i, "_Full.csv", sep=""), row.names = FALSE)
 }
 ```
+### Choose an effect and only keep those with positions mapped on by all three mappers:
 
+```
+Rscript TxG_allThreeMappedPos.R '/home/paul/coeffs_fullChromo'
+```
+
+```
+#To run as Rscript and have output directory argument:
+args <- commandArgs(trailingOnly = TRUE)
+#Can input manually:
+setwd(args[1])
+
+#Can change the effect of interest by changing hashes at X_Effect (#EFFECT OF INTEREST#)
+
+
+require(dplyr)
+
+mycsvs <- list.files(pattern='_Full.csv')
+
+
+for (file in mycsvs){
+  print(file)
+  name <- gsub("^.*?_","",file)
+  name2 <- gsub("_.*","",name)
+  X <- read.csv(file, h=T)
+
+  
+#EFFECT OF INTEREST#
+#X_Effect <- X[which(X$Effects=="TreatmentSel"),]
+X_Effect <- X[which(X$Effects=="TreatmentSel:Generation"),]
+#X_Effect <- X[which(X$Effects=="Intercept"),]
+#X_Effect <- X[which(X$Effects=="Generation"),]
+
+title <- as.character(X_Effect$Effects[1])
+title2 <- ifelse(title=='TreatmentSel', 'Treat', ifelse(title=='Generation', 'Gen', ifelse(title=='TreatmentSel:Generation', 'TxG', '
+                                                                                           Int')))
+rm(X)
+# Call the two mappers for the positions called in file:
+
+DF <- X_Effect %>%
+  group_by(position) %>%
+  summarise(mapper_1 = mapper[1], mapper_2=mapper[2], mapper_3=mapper[3])
+
+# Only keep those with both mappers at a position:
+
+DF2 <- DF[which(DF$mapper_2=="bwa" & DF$mapper_1=="bowtie" & DF$mapper_3=="novoalign"),]
+
+
+# Only keep positions from main data with both mappers
+
+Effects_Final <- X_Effect[(X_Effect$position %in% DF2$position),]
+
+rm(DF)
+rm(DF2)
+rm(X_Effect)
+
+print('writing CSV')
+gad=paste0(name2, '_Chromosome_', title2, '.csv')
+print(gad)
+write.csv(Effects_Final, file=paste0(name2, '_Chromosome_', title2, '.csv'), row.names = FALSE)
+
+
+rm(Effects_Final)
+
+print('Done and everything gone')
+}
+```
 
 
 
