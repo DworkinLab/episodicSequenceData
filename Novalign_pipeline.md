@@ -1342,9 +1342,10 @@ _____________________________________________________________
 
 ### Running [poolSeq](https://github.com/ThomasTaus/poolSeq) R package:
 
-1) Split into treatment vs. control:
 ```
 #! /bin/bash
+
+### Set all variables (need to make an output directory):
 
 #Variable for project name (title of mpileup file)
 project_name=novo_episodic
@@ -1355,8 +1356,14 @@ project_dir=/home/paul/episodicData/novoalign
 #Path to .sync files
 SyncFiles=${project_dir}/novo_mpileup
 	
-mkdir ${SyncFiles}/splitsync_dir
+mkdir ${SyncFiles}/splitsync_dir_2
 splitSync=${SyncFiles}/splitsync_dir
+
+#Output dir:
+poolSeq=${project_dir}/novo_PoolSeq
+
+# Need to copy three R scripts and add to a new directory (i.e. novo_Rscripts)
+Rscripts=${project_dir}/novo_Rscripts
 	
 # The seperated .sync files
 sync[0]=${SyncFiles}/novo_episodic_3R.sync
@@ -1365,6 +1372,10 @@ sync[2]=${SyncFiles}/novo_episodic_3L.sync
 sync[3]=${SyncFiles}/novo_episodic_2L.sync
 sync[4]=${SyncFiles}/novo_episodic_X.sync 
 sync[5]=${SyncFiles}/novo_episodic_4.sync 
+
+##-----------------------------------------------##
+
+### Split into treatment vs. control
 
 for file in ${sync[@]}
 	do
@@ -1376,25 +1387,11 @@ for file in ${sync[@]}
 	cat ${SyncFiles}/${base}.sync | awk '{print $1,$2,$3,$4,$5,$8, $9, $12, $13, $16, $16}' > ${splitSync}/${base}_Con.sync
 
 done
-```
 
-2) Split the sync files into many sized files (12):
-```
-#! /bin/bash
 
-#Variable for project name (title of mpileup file)
-project_name=novo_episodic
+##------------------------------------------------##
 
-#Variable for project:
-project_dir=/home/paul/episodicData/novoalign
-
-#Path to .sync files
-SyncFiles=${project_dir}/novo_mpileup
-
-#Path to treatment split sync files
-splitSync=${SyncFiles}/splitsync_dir
-
-#All files in splitSync need to be split further:
+### Split the sync files into many sized files (12):
 
 files=(${splitSync}/*.sync)
 
@@ -1448,10 +1445,109 @@ for file in ${files[@]}
 	
 done
 
+##------------------------------------------------##
+
+syncs=(${splitSync}/*.sync)
+
+script=${Rscripts}/PoolSeq_SelCoeff.R
+
+for file in ${syncs[@]}
+	do
+	name=${file}
+	base=`basename ${name} .sync`
+	basedir=${splitSync}/${base}_Split
+	Chromo=$(cat ${file} | awk '{print $1; exit}')
+	splits=(${basedir}/*.sync)
+	for Xfile in ${splits[@]}
+		(Rscript ${script} Xfile ${Chromo} ${basedir}) &
+		done
+	#Combine all in basedir with .csv:
+	Rscript ${script2} ${basedir}
+	
+done
+
+
+##------------------------------------------------##
+
 
 
 ```
+### Rscript:
+```
+### Running the PoolSeq Package to run on .sync files for estimates of selection coefficeints per position
+### Requires: R (>= 3.3.1), data.table (>= 1.9.4), foreach (>= 1.4.2), stringi (>= 0.4-1), matrixStats (>= 0.14.2)
 
+  args <- commandArgs(trailingOnly = TRUE)
+  
+### Required Packages:
+
+  #install.packages("/home/paul/poolSeq_0.3.2.tar.gz", repos=NULL, type="source")
+  #install.packages("/home/paul/matrixStats_0.53.0.tar.gz", repos=NULL, type="source")
+
+### Not available: so source seperate:
+  #require(poolSeq)
+  
+### These are part of the dependencies for poolSeq
+  
+  require(methods)
+  require(data.table)
+  require(foreach)
+  require(stringi)
+  require(matrixStats)
+  
+### Source the scripts (Copied) for Pool-Seq (only one fails and is not needed)
+  source('/home/paul/episodicData/novoalign/novo_Rscripts/Taus_Scripts/testTaus/loadaf.R')  
+  #estne.R Fails.
+  #source('/home/paul/episodicData/novoalign/novo_Rscripts/Taus_Scripts/testTaus/estne.R')
+  source('/home/paul/episodicData/novoalign/novo_Rscripts/Taus_Scripts/testTaus/estsh.R')
+  source('/home/paul/episodicData/novoalign/novo_Rscripts/Taus_Scripts/testTaus/idsel.R')
+  source('/home/paul/episodicData/novoalign/novo_Rscripts/Taus_Scripts/testTaus/simaf.R')
+
+### Possibly need custom function to read in manipulated .sync files:
+	### Needed for manipulated .sync files (one basic change labeled at top of changed script:
+  
+  source("/home/paul/episodicData/novoalign/novo_Rscripts/Taus_ReadSync.R")
+
+### Read in the data file for args[1]
+
+  setwd(args[3])
+  
+  mySync <- read.sync_Personal(file=args[1], gen=c(115, 115, 38, 38, 77, 77, 0, 0), repl=c(1,2,1,2,1,2,1,2), polarization = "rising")
+
+### Make data.frame of just alleles information to sort out relevent positions:
+
+  ff <- as.data.frame(mySync@alleles)
+  pst <- as.numeric(ff$pos)
+  pst2 <- sort(pst)
+  rm(pst)
+  rm(ff)
+
+### Create empty data frame to read into for estiamting S:
+  
+  DF <- data.frame(NULL)
+  ccc <- c(0,38,77,115)
+
+  for (i in pst2) {
+  	Traj115 <- af.traj(mySync, args[2], repl=c(1,2), pos=i)
+  	Bfsf <- estimateSH(Traj115, Ne=150, t=ccc, h=0.5, haploid = FALSE, simulate.p.value=TRUE)
+  	Fd <- data.frame(Bfsf$s, Bfsf$p0, Bfsf$p.value)
+ 	 Fd$pos <- i
+  	DF <- rbind(DF, Fd)
+  	DF <- na.omit(DF)
+  	#print(paste("Running entity:", i, "of", END))
+  	rm(i)
+	
+	}
+ 
+  x2 <- args[1]
+  x3 <- gsub("\\..*","", x2)
+  write.csv(DF, file=paste(args[3], "/", x3, ".csv", sep=""), row.names=FALSE)
+  
+  rm(DF)
+  rm(mySync)
+  rm(ccc)
+  rm(pst2)
+```
 
 
 
