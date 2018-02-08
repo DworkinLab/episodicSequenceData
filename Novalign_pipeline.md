@@ -992,9 +992,10 @@ fst=/usr/local/popoolation/fst-sliding.pl
 mkdir ${novo_mpileup}/novo_fst
 novo_fst=${novo_mpileup}/novo_fst
 
-perl ${fst} --input ${novo_mpileup}/novo_episodic_main.sync --output ${novo_fst}/novo_episodic_main.fst --min-count 6 --min-coverage 50 --max-coverage 200 --min-covered-fraction 1 --window-size 500 --step-size 500 --pool-size 120
+perl ${fst} --input ${novo_mpileup}/novo_episodic_main.sync --output ${novo_fst}/novo_episodic_main.fst --min-count 6 --min-coverage 10 --max-coverage 250 --min-covered-fraction 1 --window-size 500 --step-size 500 --pool-size 120
 
 ```
+
 
 ## Running Custom R script: Logistic Regression
 
