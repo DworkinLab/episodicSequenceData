@@ -996,6 +996,74 @@ perl ${fst} --input ${novo_mpileup}/novo_episodic_main.sync --output ${novo_fst}
 
 ```
 
+Split the file into each compasison: Run in R
+```
+# Script to read in one .fst file and split this into many .csv files based on comparisons
+# .fst files generated from Popoolation2 fst-sliding.pl script
+# Need to change the working directory, the input, and the number of comparisons present (i.e 6:ncol for .fst file)
+
+### Packages Required (tidyverse, but more specifically tidyr)
+  require(data.table)
+  require(tidyverse)
+
+### Set working directory to location of .fst file
+  setwd("~/Bioinformatics/episodic_practice/FST")
+  
+### Read in the .fst file into R (requires data.table)
+  Fst_novo <- fread('novo_episodic_main.fst')
+
+### Make into long format
+  XCC  <- gather(Fst_novo, Comparison, Fst_measure, 6:83, factor_key=TRUE)
+
+### Remove intermediate:
+  rm(Fst_novo)
+
+### Seperate the Fst (ex. 1:2=na) into a comparison column and a fst column
+  novo_Fst <- XCC %>%
+    separate(Fst_measure, "=", into = c('Comp', 'Fst'))
+
+### Remove intermediate:
+  rm(XCC)
+
+### Remove unnecessary column (column 6 has no value)
+  novo_Fst <- novo_Fst[,c(1,2,3,4,5,7,8)]
+
+### Rename columns:
+  colnames(novo_Fst) <- c('chr', 'window', "num", 'frac', 'meanCov','Comp', 'Fst')
+
+### Create list of all unique comparisons:
+  X_compLIST <- unique(novo_Fst$Comp)
+
+### For loop that will create a .csv file for every comparison:
+  for (vxcx in X_compLIST){
+
+    CXV_Comp <- novo_Fst[which(novo_Fst$Comp==vxcx),]
+    
+    write.csv(CXV_Comp, file=paste("Novo_fst_", vxcx, '.csv', sep = ""), row.names = FALSE)
+    }
+
+```
+Which comparisons are needed? Find the order of files in the sync file (order in directory that .sync file created from)
+
+i.e 1 == F115ConR1_TAGCTT_novo_merge_novo_final_realigned.bam, 13 == MGD3_SO_CAGATC_novo_merge_novo_final_realigned.bam
+```
+F115ConR1_TAGCTT_novo_merge_novo_final_realigned.bam
+F115ConR2_GGCTAC_novo_merge_novo_final_realigned.bam
+F115SelR1_GTTTCG_novo_merge_novo_final_realigned.bam
+F115SelR2_GTGGCC_novo_merge_novo_final_realigned.bam
+F38ConR1_ATCACG_novo_merge_novo_final_realigned.bam
+F38ConR2_TTAGGC_novo_merge_novo_final_realigned.bam
+F38SelR1_ACTTGA_novo_merge_novo_final_realigned.bam
+F38SelR2_GATCAG_novo_merge_novo_final_realigned.bam
+F77ConR1_ATGTCA_novo_merge_novo_final_realigned.bam
+F77ConR2_ATTCCT_novo_merge_novo_final_realigned.bam
+F77SelR1_TTAGGC_novo_merge_novo_final_realigned.bam
+F77SelR2_GATCAG_novo_merge_novo_final_realigned.bam
+MGD3_SO_CAGATC_novo_merge_novo_final_realigned.bam
+```
+
+
+
 
 ## Running Custom R script: Logistic Regression
 
