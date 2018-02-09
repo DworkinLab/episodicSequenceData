@@ -6518,3 +6518,10 @@ FST Output trial One: Min coverage == 50, why there is all na..
 
 2L      3810750 4       0.602   54.2    1:2=na  1:3=na  1:4=na  1:5=na  1:6=na  1:7=na  1:8=na  1:9=na  1:10=na 1:11=na 1:12=na 1:13=na 2:3=na  2:4=na  2:5=na  2:6=na  2:7=na  2:8=na  2:9=na  2:10=na 2:11=na 2:12=na 2:13=na 3:4=na  3:5=na  3:6=na  3:7=na  3:8=na  3:9=na  3:10=na 3:11=na 3:12=na 3:13=na 4:5=na  4:6=na  4:7=na  4:8=na  4:9=na  4:10=na 4:11=na 4:12=na 4:13=na 5:6=na  5:7=na  5:8=na  5:9=na  5:10=na 5:11=na 5:12=na 5:13=na 6:7=na  6:8=na  6:9=na  6:10=na 6:11=na 6:12=na 6:13=na 7:8=na  7:9=na  7:10=na 7:11=na 7:12=na 7:13=na 8:9=na  8:10=na 8:11=na 8:12=na 8:13=na 9:10=na 9:11=na 9:12=na 9:13=na 10:11=na        10:12=na        10:13=na        11:12=na        11:13=na        12:13=na
 ```
+Move to local (scp)
+
+Ex.
+```
+scp paul@info.mcmaster.ca:/home/paul/episodicData/novoalign/novo_mpileup/novo_fst/novo_episodic_main.fst /Users/paulknoops/Bioinformatics/episodic_practice/FST
+```
+
