@@ -996,6 +996,7 @@ perl ${fst} --input ${novo_mpileup}/novo_episodic_main.sync --output ${novo_fst}
 
 ```
 
+
 Split the file into each compasison: Run in R
 ```
 # Script to read in one .fst file and split this into many .csv files based on comparisons
