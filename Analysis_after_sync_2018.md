@@ -1,6 +1,6 @@
 # The analysis of pooled sequence data after the final .bam files and .sync files have been created. 
 
-- The analaysis here is for data mapped and finalized with three mappers: [bwa mem], [bowtie2] and [novoalign] 
+- The analaysis here is for data mapped and finalized with three mappers: **bwa mem**, **bowtie2** and **novoalign** 
 
 - See associated scripts for steps up to final bams and creating .sync files
 _______________________________________________________________________________________
