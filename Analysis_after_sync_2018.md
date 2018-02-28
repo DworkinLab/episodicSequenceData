@@ -1,1 +1,3 @@
-The analysis of episodic sequence data after final .bam files and .sync files have been created (for 3X mappers)
+# The analysis of episodic sequence data after final .bam files and .sync files have been created
+## -----------------------------------------------
+### Analaysis here is for data mapped and finalized with bwa mem, bowtie2 and novoalign
