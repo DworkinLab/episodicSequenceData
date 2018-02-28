@@ -8,7 +8,10 @@ ________________________________________________________________________________
 ## Outline of analysis:
 
 ### 1) Tajima's Pi of non-overlapping windows for each sequence
-
+&nbsp
+&nbsp
+&nbsp
+&nbsp
 ### 2) Run Fst on windows for each pairwise comparision of sequenced data
 
 ### 3) per SNP logistic regression for each treatment by generation
