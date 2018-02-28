@@ -8,17 +8,20 @@ ________________________________________________________________________________
 ## Outline of analysis:
 
 ### 1) Tajima's Pi of non-overlapping windows for each sequence
-&nbsp
-&nbsp
-&nbsp
-&nbsp
+/
+/
 ### 2) Run Fst on windows for each pairwise comparision of sequenced data
-
+/
+/
 ### 3) per SNP logistic regression for each treatment by generation
-
+/
+/
 ### 4) estimates of selection coefficient at each position for selection and control lineages
-
+/
+/
 ### 5) Combine outputs of three mappers for Fst, model, and selection coefficients
+/
+/
 
 _______________________________________________________________________________________
 
