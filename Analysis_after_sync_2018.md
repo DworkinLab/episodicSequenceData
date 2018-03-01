@@ -187,6 +187,6 @@ Notes:
 
 _______________________________________________________________________________________
 
-## 5) Combine outputs of three mappers for Fst, model, and selection coefficients
+## 5) Combine outputs of three mappers for Fst, model, and selection coefficients (and Pi??)
 
 
