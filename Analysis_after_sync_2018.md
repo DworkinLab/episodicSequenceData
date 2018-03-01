@@ -167,10 +167,23 @@ Rscript Combine_chromo.R 'DIRECTORY' 'OutputDIRECTORY'
 
 _______________________________________________________________________________________
 
-## 4) estimates of selection coefficient at each position for selection and control lineages
+## 4) estimates of selection coefficient at each position for selection and control lineages using [poolSeq](https://github.com/ThomasTaus/poolSeq) R package:
 
+**Script:** [poolseq_SelectionCoefficientEstimate.sh](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/poolseq_SelectionCoefficientEstimate.sh)
 
+This script will break the file into two treatment .sync files, break apart these .sync files (smaller sized files), and run through a R script to run poolSeq Package. 
 
+**Rscript:** [poolSeq_selectionCoeff.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/poolSeq_selectionCoeff.R)
+
+Notes: 
+
+- need to edit to make more efficient to run (not taking 3 days per section)
+
+- poolSeq may not work on certain versions of R; but can bring in Taus poolSeq scripts in manually and source (done in this script)
+
+- may need to ensure updated packages and install if necessary (i.e matrixStats_0.53.0 installed for this reason)
+
+- breaking the .sync file causes changes in structure, so a modified read_sync function is used (in R script; Taus_ReadSync.R))
 
 _______________________________________________________________________________________
 
