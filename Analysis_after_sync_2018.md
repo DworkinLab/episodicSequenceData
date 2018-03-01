@@ -36,7 +36,7 @@ ________________________________________________________________________________
 
 ## 1) Tajima's Pi of non-overlapping windows for each sequence
 
-### 1) Create pileup files for every .bam file
+### Create pileup files for every .bam file
 
 **Script:** [novo_Pi_pileups.sh](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/novo_Pi_pileups.sh)
 
@@ -48,7 +48,7 @@ Flags:
 
 - f -- path to reference sequence
 
-## 2) Run script to calcualte Tajima's Pi using the Variance-sliding.pl script from Popoolation1
+### Run script to calcualte Tajima's Pi using the Variance-sliding.pl script from Popoolation1
 
 **Script:** [novo_tajima_pi.sh](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/novo_tajima_pi.sh)
 
@@ -78,15 +78,15 @@ Flags:
 
 - min-covered-fraction [0.5] -- minimum percentage of sites having sufficient coverage in the given window -- 0.5 from example
 
-### 3) Bring to local machine
+### Bring to local machine
 
-### 4) Create plots of tajima Pi data
+### Create plots of tajima Pi data
 
 R function that will run for each .pi file to output a plot
 
 **Script:** [Pi_PlotFunction.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/Pi_PlotFunction.R)
 
-### 5) Run the function for each .pi file
+### Run the function for each .pi file
 
 Ex. 
 ```
