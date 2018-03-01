@@ -94,7 +94,7 @@ require(ggplot2)
   
   return(Pi_plot_2)
   }
-Pi_PlotFunction('F115ConR1_TAGCTT_novo.pi', "Novoalign")
+#Pi_PlotFunction('F115ConR1_TAGCTT_novo.pi', "Novoalign")
 
 
 

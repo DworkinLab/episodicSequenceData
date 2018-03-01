@@ -40,7 +40,6 @@ for (file in MyPi){
   colnames(Datt2) <- c('chr', 'window', 'windowCount', ' propInwindow', 'Pi')
   
   Datt2$chr <- as.character(Datt2$chr)
-  
   #Remove "na" pi values
   Datt2 <- Datt2[-which(Datt2$Pi=="na"),]
   
@@ -104,3 +103,64 @@ datt2LGGPLOT <- ggplot(Datt2L_MGD3, aes(x = window, y= Pi, colour = chr)) +
   geom_smooth(method = "loess", data = Datt2L_F115SelR2, linetype = "dotdash",  aes(x = window, y= Pi, colour = chr), show_guide = F)
 
 print(datt2LGGPLOT)
+
+
+
+
+
+
+##
+setwd("~/Bioinformatics/R-projects_git/episodicSequenceData/R_scripts/Pi_Analysis_Novo")
+require('tidyverse')
+
+#Can change the files you want to look at (change pattern of directories and move things)
+MyPi <- list.files(pattern="novo.pi")
+
+#change chromosomes of interest (can just be one if you like)
+#mychromo <- c('X', '2L', '2R','3L','3R','4')
+mychromo <- c('2L')
+
+for (file in MyPi){
+  require(ggplot2)
+  x2 <- gsub("\\_.*","",file)
+  Datt2 <- read.table(file)
+  colnames(Datt2) <- c('chr', 'window', 'windowCount', ' propInwindow', 'Pi')
+  Datt2$chr <- as.character(Datt2$chr)
+  Datt2 <- Datt2[-which(Datt2$Pi=="na"),]
+  for (chromo in mychromo){
+    DattFull <- Datt2[which(Datt2$chr==chromo),]
+  DattFull$Pi=as.numeric(levels(DattFull$Pi))[DattFull$Pi]
+  DattFull$Seq <- x2
+
+  assign(paste("Datt", chromo, x2, sep="_"),DattFull)
+  }
+}
+
+Dddat_115_2L <- rbind(Datt_2L_F115ConR1, Datt_2L_F115ConR2, Datt_2L_F115SelR1, Datt_2L_F115SelR2)
+Dddat_77_2L <-rbind(Datt_2L_F77ConR1, Datt_2L_F77ConR2, Datt_2L_F77SelR1, Datt_2L_F77SelR2)
+Dddat_38_2L <- rbind(Datt_2L_F38ConR1, Datt_2L_F38ConR2, Datt_2L_F38SelR1, Datt_2L_F38SelR2)
+
+pplot <- ggplot(Dddat_115_2L, aes(x = window, y= Pi, linetype = Seq, colour= Seq)) +
+  #geom_point() +
+  scale_linetype_manual(values=c("solid", "dotted", "dashed", "longdash", "twodash")) +
+  geom_smooth(method = "loess", size=1.25, color="#56B4E9") +   
+  scale_y_continuous(limits=c(0, 0.009), breaks=seq(0, 0.009, 0.001)) + 
+  xlab("") +
+  theme(text = element_text(size=20), axis.text.x= element_text(size=15), axis.text.y= element_text(size=15), legend.text=element_text(size=7.5)) 
+pplot
+
+
+Datt_SelR1 <- rbind(Datt_2L_F38SelR1, Datt_2L_F77SelR1, Datt_2L_F115SelR1)
+
+pplot <- ggplot(Datt_SelR1, aes(x = window, y= Pi, colour= Seq)) +
+  #geom_point() +
+  scale_color_manual(values=c("#56B4E9", "#E69F00", 'grey30', 'wheat3' )) +
+  geom_smooth(method = "loess", size=1) +   
+  scale_y_continuous(limits=c(0, 0.009), breaks=seq(0, 0.009, 0.001)) + 
+  xlab("") +
+  theme(text = element_text(size=20), axis.text.x= element_text(size=15), axis.text.y= element_text(size=15), legend.text=element_text(size=7.5)) 
+pplot
+
+
+
+
