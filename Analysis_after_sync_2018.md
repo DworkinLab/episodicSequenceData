@@ -25,7 +25,7 @@ ________________________________________________________________________________
 
 _______________________________________________________________________________________
 
-## Notes:
+## Notes / additional set up:
 
 - For one mapper: Have a diretory with all the .final.bam files created and .mpileup /.sync files created using these .bam files
 
@@ -33,24 +33,9 @@ ________________________________________________________________________________
 
 - need to know the order of the .sync files: will be based on the order of the .bam files read into .sync 
 
-- Order of my .sync file:
-```
-F115ConR1_TAGCTT_novo_merge_novo_final_realigned.bam
-F115ConR2_GGCTAC_novo_merge_novo_final_realigned.bam
-F115SelR1_GTTTCG_novo_merge_novo_final_realigned.bam
-F115SelR2_GTGGCC_novo_merge_novo_final_realigned.bam
-F38ConR1_ATCACG_novo_merge_novo_final_realigned.bam
-F38ConR2_TTAGGC_novo_merge_novo_final_realigned.bam
-F38SelR1_ACTTGA_novo_merge_novo_final_realigned.bam
-F38SelR2_GATCAG_novo_merge_novo_final_realigned.bam
-F77ConR1_ATGTCA_novo_merge_novo_final_realigned.bam
-F77ConR2_ATTCCT_novo_merge_novo_final_realigned.bam
-F77SelR1_TTAGGC_novo_merge_novo_final_realigned.bam
-F77SelR2_GATCAG_novo_merge_novo_final_realigned.bam
-MGD3_SO_CAGATC_novo_merge_novo_final_realigned.bam
-```
+- Some scripts require the .sync file split into chromosomes: script below shows method of splitting
 
-
+**Script:** [novo_split_sync2chromosomes.sh](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/novo_split_sync2chromosomes.sh)
 _______________________________________________________________________________________
 
 ## 1) Tajima's Pi of non-overlapping windows for each sequence
@@ -150,8 +135,35 @@ ________________________________________________________________________________
 
 ## 3) per SNP logistic regression for each treatment by generation
 
+**Long Script:*** [novo_regression_model_LONGSCRIPT.sh](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/novo_regression_model_LONGSCRIPT.sh)
 
+This script will break the chromosomal .sync files into smaller managable pieces and run through multiple R scripts while removing intermediates:
 
+1)Running R script Sync To Counts 
+
+**Script:** [Sync_to_counts.R]()
+
+ex.
+```
+
+```
+
+2) MODEL
+
+**Script:** [Counts_to_model_2.R]()
+
+ex.
+```
+
+```
+
+3) Combine_chromo.R
+**Script:** [Combine_chromo.R]()
+
+ex.
+```
+
+```
 
 _______________________________________________________________________________________
 
