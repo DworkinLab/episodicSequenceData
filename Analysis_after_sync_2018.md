@@ -31,6 +31,25 @@ ________________________________________________________________________________
 
 - The analysis (up to step 5) will be generic for one mapper (Novoalign) but completed similarily for other chosen mappers
 
+- need to know the order of the .sync files: will be based on the order of the .bam files read into .sync 
+
+- Order of my .sync file:
+```
+F115ConR1_TAGCTT_novo_merge_novo_final_realigned.bam
+F115ConR2_GGCTAC_novo_merge_novo_final_realigned.bam
+F115SelR1_GTTTCG_novo_merge_novo_final_realigned.bam
+F115SelR2_GTGGCC_novo_merge_novo_final_realigned.bam
+F38ConR1_ATCACG_novo_merge_novo_final_realigned.bam
+F38ConR2_TTAGGC_novo_merge_novo_final_realigned.bam
+F38SelR1_ACTTGA_novo_merge_novo_final_realigned.bam
+F38SelR2_GATCAG_novo_merge_novo_final_realigned.bam
+F77ConR1_ATGTCA_novo_merge_novo_final_realigned.bam
+F77ConR2_ATTCCT_novo_merge_novo_final_realigned.bam
+F77SelR1_TTAGGC_novo_merge_novo_final_realigned.bam
+F77SelR2_GATCAG_novo_merge_novo_final_realigned.bam
+MGD3_SO_CAGATC_novo_merge_novo_final_realigned.bam
+```
+
 
 _______________________________________________________________________________________
 
@@ -77,17 +96,15 @@ Flags:
 - fastq-type [sanger] -- depending on the encoding of the fastq files
 - min-covered-fraction [0.5] -- minimum percentage of sites having sufficient coverage in the given window -- 0.5 from example
 
-### Bring to local machine
-
 ### Create plots of tajima Pi data
 
-R function that will run for each .pi file to output a plot
+On local machine, this R function can run each .pi file to output a plot
 
 **Script:** [Pi_PlotFunction.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/Pi_PlotFunction.R)
 
 ### In R, run the function for each .pi file
 
-Ex. 
+ex. 
 ```
 Pi_PlotFunction('F115ConR1_TAGCTT_novo.pi', "Novoalign")
 ```
@@ -96,6 +113,35 @@ Pi_PlotFunction('F115ConR1_TAGCTT_novo.pi', "Novoalign")
 _______________________________________________________________________________________
 
 ## 2) Run Fst on windows for each pairwise comparision of sequenced data
+
+### Running Fst
+
+**Script:** [Novo_Fst.sh](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/Novo_Fst.sh)
+
+ex.
+```
+perl ${fst} --input ${novo_mpileup}/novo_episodic_main.sync --output ${novo_fst}/novo_episodic_main.fst --min-count 6 --min-coverage 10 --max-coverage 250 --min-covered-fraction 1 --window-size 500 --step-size 500 --pool-size 120
+```
+Flags:
+
+- input -- input sync file
+- output -- output file with Fst calculated 
+- window-size [500] -- size of the window 
+- step-size [500] -- distance to move along chromosome
+- min-count [6] -- minimum allele count 
+- min-coverage [10] -- minimum coverage
+- max-coverage [250] --maximum coverage
+- pool-size [120] -- double pooled size (diploid)
+- min-covered-fraction [1] -- minimum percentage of sites having sufficient coverage in the given window
+
+
+### In R, split the file into each compasison
+
+**Script:** [novo_Fst_Split_Comparisons.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/novo_Fst_Split_Comparisons.R)
+
+R script that will split the .fst file into many .csv files with each comparison of interest (can choose the necessary ones from here)
+
+### Plotting Fst files for comparisons of interest
 
 
 
