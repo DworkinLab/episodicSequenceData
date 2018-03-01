@@ -139,31 +139,31 @@ ________________________________________________________________________________
 
 This script will break the chromosomal .sync files into smaller managable pieces and run through multiple R scripts while removing intermediates:
 
-1)Running R script Sync To Counts 
-
-**Script:** [Sync_to_counts.R]()
+**R script to covert sync to Count data:** [Sync_to_counts.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/Sync_to_counts.R)
 
 ex.
 ```
-
+Rscript Sync_to_counts.R '${Sync Directory}'
 ```
 
-2) MODEL
+**Running the model for each position along the chromosome:** [Counts_to_model.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/Counts_to_model.R)
 
-**Script:** [Counts_to_model_2.R]()
+In long script: this is set up to work in parallel, having each chromosome running at the same time (6 instances running over 11 sections)
+
+NOTE: Script needs to be changed to run faster/ more efficiently
+ex.
+```
+Rscript Counts_to_model_2.R 'DIRECTORY'
+```
+
+3) **Combine all the split chromosome pieces back into one chromosome:** [Combine_chromo.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/Combine_chromo.R)
 
 ex.
 ```
-
+Rscript Combine_chromo.R 'DIRECTORY' 'OutputDIRECTORY'
 ```
 
-3) Combine_chromo.R
-**Script:** [Combine_chromo.R]()
 
-ex.
-```
-
-```
 
 _______________________________________________________________________________________
 
