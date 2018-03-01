@@ -3,6 +3,7 @@
 - Some scripts require the .sync file split into chromosomes: script below shows method of splitting
 
 **Script:** [novo_split_sync2chromosomes.sh](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/novo_split_sync2chromosomes.sh)
+
 _______________________________________________________________________________________
 
 ## 1) Tajima's Pi of non-overlapping windows for each sequence
@@ -16,14 +17,6 @@ ex.
 samtools mpileup -B -Q 0 -f ${ref_genome} ${input}/${base}_merge_novo_final_realigned.bam > ${output}/${base}.pileup
 ```
 
-Flags:
-
-- B -- disable BAQ (base alignment quality) computation, helps to stop false SNPs passing through due to misalignment
-
-- Q -- minimum base quality (already filtered for 20, default is 13, just set to 0 and not worry about it)
-
-- f -- path to reference sequence
-
 ### Run script to calcualte Tajima's Pi using the Variance-sliding.pl script from Popoolation1
 
 **Script:** [novo_tajima_pi.sh](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/novo_tajima_pi.sh)
@@ -34,19 +27,6 @@ perl ${popoolation}/Variance-sliding.pl --input ${input}/${base}.pileup --output
 ```
 
 Flags:
-
-- input -- input pileup file
-- output -- output file with Tajima's Pi calculated
-- measure [pi] -- Options include Tajima's Pi or Wattersons Theta or Tajima's D along chromosomes using a sliding window approach
-- window-size [10000] -- size of the sliding window 
-- step-size [10000] -- how far to move along with chromosome (if step size smaller, windows will overlap)
-- min-count [2] -- minimum allele count 
-- min-coverage [4] -- minimum coverage (not important if subsampling done..)
-- max-coverage [400] --maximum coverage
-- min-qual [20] -- minimum base quality (already filtered for 20 multiple times)
-- pool-size [120] -- number of chromosomes (So double the number of individuals per pool)
-- fastq-type [sanger] -- depending on the encoding of the fastq files
-- min-covered-fraction [0.5] -- minimum percentage of sites having sufficient coverage in the given window -- 0.5 from example
 
 ### Create plots of tajima Pi data
 
@@ -74,17 +54,6 @@ ex.
 ```
 perl ${fst} --input ${novo_mpileup}/novo_episodic_main.sync --output ${novo_fst}/novo_episodic_main.fst --min-count 6 --min-coverage 10 --max-coverage 250 --min-covered-fraction 1 --window-size 500 --step-size 500 --pool-size 120
 ```
-Flags:
-
-- input -- input sync file
-- output -- output file with Fst calculated 
-- window-size [500] -- size of the window 
-- step-size [500] -- distance to move along chromosome
-- min-count [6] -- minimum allele count 
-- min-coverage [10] -- minimum coverage
-- max-coverage [250] --maximum coverage
-- pool-size [120] -- double pooled size (diploid)
-- min-covered-fraction [1] -- minimum percentage of sites having sufficient coverage in the given window
 
 
 ### In R, split the file into each compasison
