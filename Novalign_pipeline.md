@@ -1290,6 +1290,8 @@ Need a directory to hold chromosomal outputs:
 mkdir /home/paul/coeffs_fullChromo
 ```
 
+
+
 To run: have args[1] be the output directory created just above (which can hold script to avoid confusion with other mappers)
 ```
 Rscript combine_threeMappers.R '/home/paul/coeffs_fullChromo'
