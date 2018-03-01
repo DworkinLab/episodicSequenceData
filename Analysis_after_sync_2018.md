@@ -91,7 +91,7 @@ On local machine, this R function can run each .pi file to output a plot
 
 ex. 
 ```
-Pi_PlotFunction('F115ConR1_TAGCTT_novo.pi', "Novoalign")
+Pi_PlotFunction('FILE.pi', "Plot_Title_Details")
 ```
 
 
