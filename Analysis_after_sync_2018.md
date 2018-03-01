@@ -40,6 +40,11 @@ ________________________________________________________________________________
 
 **Script:** [novo_Pi_pileups.sh](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/novo_Pi_pileups.sh)
 
+ex.
+```
+samtools mpileup -B -Q 0 -f ${ref_genome} ${input}/${base}_merge_novo_final_realigned.bam > ${output}/${base}.pileup
+```
+
 Flags:
 
 - B -- disable BAQ (base alignment quality) computation, helps to stop false SNPs passing through due to misalignment
@@ -52,30 +57,24 @@ Flags:
 
 **Script:** [novo_tajima_pi.sh](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/novo_tajima_pi.sh)
 
+ex. 
+```
+perl ${popoolation}/Variance-sliding.pl --input ${input}/${base}.pileup --output ${output}/${base}.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120 --fastq-type sanger --snp-output ${output}/${base}.snps --min-covered-fraction 0.5
+```
+
 Flags:
 
 - input -- input pileup file
-
 - output -- output file with Tajima's Pi calculated
-
 - measure [pi] -- Options include Tajima's Pi or Wattersons Theta or Tajima's D along chromosomes using a sliding window approach
-
 - window-size [10000] -- size of the sliding window 
-
 - step-size [10000] -- how far to move along with chromosome (if step size smaller, windows will overlap)
- 
 - min-count [2] -- minimum allele count 
-
 - min-coverage [4] -- minimum coverage (not important if subsampling done..)
-
 - max-coverage [400] --maximum coverage
-
 - min-qual [20] -- minimum base quality (already filtered for 20 multiple times)
-
 - pool-size [120] -- number of chromosomes (So double the number of individuals per pool)
-
 - fastq-type [sanger] -- depending on the encoding of the fastq files
-
 - min-covered-fraction [0.5] -- minimum percentage of sites having sufficient coverage in the given window -- 0.5 from example
 
 ### Bring to local machine
@@ -86,7 +85,7 @@ R function that will run for each .pi file to output a plot
 
 **Script:** [Pi_PlotFunction.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/Pi_PlotFunction.R)
 
-### Run the function for each .pi file
+### In R, run the function for each .pi file
 
 Ex. 
 ```
