@@ -35,18 +35,10 @@ ________________________________________________________________________________
 _______________________________________________________________________________________
 
 ## 1) Tajima's Pi of non-overlapping windows for each sequence
-1) Create Directories
 
-Will need two new directories, one for pileup files, and one for the output Pi files: Be sure they are in project dir
+1) Create pileup files for every .bam file
 
-```
-mkdir novo_pileup
-mkdir novo_pi
-```
-
-2) Create pileup files of every .bam file
-
-Each generated .bam file needs to be in mpileup format for the use in Popoolation Scripts:
+**Script:** [novo_Pi_pileups.sh](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/novo_Pi_pileups.sh)
 
 Flags:
 
@@ -55,41 +47,10 @@ Flags:
 - Q -- minimum base quality (already filtered for 20, default is 13, just set to 0 and not worry about it)
 
 - f -- path to reference sequence
-        
-Script: novo_Pi_pileups.sh
-```
-#! /bin/bash
 
-# Variable for project:
-project_dir=/home/paul/episodicData/novoalign
+2) Run script to calcualte Tajima's Pi using the Variance-sliding.pl script from Popoolation1
 
-# Path to input directory
-input=${project_dir}/novo_GATK
-
-# Path to output novoalign pileup files
-output=${project_dir}/novo_pileup
-
-index_dir=/home/paul/episodicData/index_dir
-ref_genome=${index_dir}/dmel-all-chromosome-r5.57_2.fasta
-
-files=(${input}/*_merge_novo_final_realigned.bam)
-
-for file in ${files[@]}
-
-do
-
-name=${file}
-
-base=`basename ${name} _merge_novo_final_realigned.bam`
-
-samtools mpileup -B -Q 0 -f ${ref_genome} ${input}/${base}_merge_novo_final_realigned.bam > ${output}/${base}.pileup
-
-done
-```
-
-3) Run script to calcualte Tajima's Pi
-
-Using the Variance-sliding.pl script from Popoolation1
+**Script:** [novo_tajima_pi.sh](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/novo_tajima_pi.sh)
 
 Flags:
 
@@ -117,73 +78,20 @@ Flags:
 
 - min-covered-fraction [0.5] -- minimum percentage of sites having sufficient coverage in the given window -- 0.5 from example
 
+3) Bring to local machine
 
-Script: novo_tajima_pi.sh
+4) Create plots of tajima Pi data
 
-```
-#! /bin/bash
+R function that will run for each .pi file to output a plot
 
-# Path to PoPoolation1 (Currently in Paul's Home directory)
-popoolation=/home/paul/popoolation_1.2.2
+**Script:** [Pi_PlotFunction.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/Pi_PlotFunction.R)
 
-# Variable for project:
-project_dir=/home/paul/episodicData/novoalign
+5) Run the function for each .pi file
 
-# Path to input directory
-input=${project_dir}/novo_pileup
-
-# Path to output Tajima Pi files
-output=${project_dir}/novo_pi
-
-files=(${input}/*.pileup)
-
-for file in ${files[@]}
-
-do
-
-name=${file}
-
-base=`basename ${name} .pileup`
-
-perl ${popoolation}/Variance-sliding.pl \
-	--input ${input}/${base}.pileup \
-	--output ${output}/${base}.pi \
-	--measure pi \
-	--window-size 10000 \
-	--step-size 10000 \
-	--min-count 2 \
-	--min-coverage 4 \
-	--max-coverage 400 \
-	--min-qual 20 \
-	--pool-size 120 \
-	--fastq-type sanger \
-	--snp-output ${output}/${base}.snps \
-	--min-covered-fraction 0.5
-done
-```
-Need to check the files were created properly (check that there are no empty files).
-
-
-4) Bring to local machine
-```
-scp paul@info.mcmaster.ca:/home/paul/episodicData/novoalign/novo_pi/*.pi /Users/paulknoops/Bioinformatics/R-projects_git/episodicSequenceData/R_scripts/Pi_Analysis_Novo
-```
-
-5) Function to create plots of tajima Pi data
-
-R Function to run and create plots [FUNTION](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/Pi_PlotFunction.R) 
-
-See: R_scripts/Pi_Analysis_Novo/Pi_PlotFunction.R
-
-
-6) Run the function for each .pi file
-
+Ex. 
 ```
 Pi_PlotFunction('F115ConR1_TAGCTT_novo.pi', "Novoalign")
 ```
-
-
-
 
 
 _______________________________________________________________________________________
