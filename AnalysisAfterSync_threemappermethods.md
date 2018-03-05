@@ -106,7 +106,7 @@ ex.
 Pi_PlotFunction('FILE.pi', "Plot_Title_Details-(i.e mapper)")
 ```
 
-
+Not done for bwa-mem (worth it??)
 _______________________________________________________________________________________
 
 ## 2) Run Fst on windows for each pairwise comparision of sequenced data
@@ -179,6 +179,7 @@ perl ${fst} --input ${input}/episodic_data_bowtie_main.gatk.sync  --output ${out
 ```
 
 
+Combine here??
 
 ### In R, [split](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/novo_Fst_Split_Comparisons.R) the file into each compasison
 
