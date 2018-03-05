@@ -1,5 +1,13 @@
 Starting with each mapper having been used and created the .bam files and the large .sync file:
 
+Each Mapper files and layout:
+
+**Novoalign**
+
+**Bwa -mem**
+
+**Bowtie**
+
 Split the sync file by chromosome:
 
 **Script:** [novo_split_sync2chromosomes.sh](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/novo_split_sync2chromosomes.sh)
@@ -8,37 +16,31 @@ Will show the procedure for each mapper to generate files for [outline of method
 
 _______________________________________________________________________________________
 
-# 1) Tajima's Pi of non-overlapping windows for each sequence
+## 1) Tajima's Pi of non-overlapping windows for each sequence
 
-## [Create](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/novo_Pi_pileups.sh) pileup files for every .bam file
+### [Create](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/novo_Pi_pileups.sh) pileup files for every .bam file
 
 ex.
 ```
 samtools mpileup -B -Q 0 -f ${ref_genome} ${input}/${base}_merge_novo_final_realigned.bam > ${output}/${base}.pileup
 ```
 
-### Novoalign
+**Novoalign**
 
-### Bwa -mem
+**Bwa -mem**
 
-### Bowtie
+**Bowtie**
 
 
-## Run [script](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/novo_tajima_pi.sh) to calcualte Tajima's Pi using the Variance-sliding.pl script from Popoolation1
+### Run [script](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/novo_tajima_pi.sh) to calcualte Tajima's Pi using the Variance-sliding.pl script from Popoolation1
 
 ex. 
 ```
 perl ${popoolation}/Variance-sliding.pl --input ${input}/${base}.pileup --output ${output}/${base}.pi --measure pi --window-size 10000 --step-size 10000 --min-count 2 --min-coverage 4 --max-coverage 400 --min-qual 20 --pool-size 120 --fastq-type sanger --snp-output ${output}/${base}.snps --min-covered-fraction 0.5
 ```
 
-### Novoalign
 
-### Bwa -mem
-
-### Bowtie
-
-
-## [Create plots](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/Pi_PlotFunction.R) of tajima Pi data
+### [Create plots](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/Pi_PlotFunction.R) of tajima Pi data
 
 On local machine, this R function can run each .pi file to output a plot for each mapper
 
@@ -50,23 +52,85 @@ Pi_PlotFunction('FILE.pi', "Plot_Title_Details-(i.e mapper)")
 
 _______________________________________________________________________________________
 
-# 2) Run Fst on windows for each pairwise comparision of sequenced data
+## 2) Run Fst on windows for each pairwise comparision of sequenced data
 
-## Running [Fst](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/Novo_Fst.sh)
+### Running [Fst](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/Novo_Fst.sh)
 
 ex.
 ```
 perl ${fst} --input ${novo_mpileup}/novo_episodic_main.sync --output ${novo_fst}/novo_episodic_main.fst --min-count 6 --min-coverage 10 --max-coverage 250 --min-covered-fraction 1 --window-size 500 --step-size 500 --pool-size 120
 ```
+**Novoalign**
 
-### Novoalign
+```
+#!/bin/bash
 
-### Bwa -mem
+#Variable for project name (title of mpileup file)
+project_name=novo_episodic
 
-### Bowtie
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to .sync files
+novo_mpileup=${project_dir}/novo_mpileup
+
+#Path and variable for script from PoPoolation to create .sync files
+fst=/usr/local/popoolation/fst-sliding.pl
+
+mkdir ${novo_mpileup}/novo_fst
+novo_fst=${novo_mpileup}/novo_fst
+
+perl ${fst} --input ${novo_mpileup}/novo_episodic_main.sync --output ${novo_fst}/novo_episodic_main.fst --min-count 6 --min-coverage 10 --max-coverage 250 --min-covered-fraction 1 --window-size 500 --step-size 500 --pool-size 120
+```
+
+**Bwa -mem**
+```
+#!/bin/bash
+
+#Variable for project name (title of mpileup file)
+project_name=novo_episodic
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to .sync files
+novo_mpileup=${project_dir}/novo_mpileup
+
+#Path and variable for script from PoPoolation to create .sync files
+fst=/usr/local/popoolation/fst-sliding.pl
+
+mkdir ${novo_mpileup}/novo_fst
+novo_fst=${novo_mpileup}/novo_fst
+
+perl ${fst} --input ${novo_mpileup}/novo_episodic_main.sync --output ${novo_fst}/novo_episodic_main.fst --min-count 6 --min-coverage 10 --max-coverage 250 --min-covered-fraction 1 --window-size 500 --step-size 500 --pool-size 120
+```
+
+**Bowtie**
+```
+#!/bin/bash
+
+#Variable for project name (title of mpileup file)
+project_name=novo_episodic
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to .sync files
+novo_mpileup=${project_dir}/novo_mpileup
+
+#Path and variable for script from PoPoolation to create .sync files
+fst=/usr/local/popoolation/fst-sliding.pl
+
+mkdir ${novo_mpileup}/novo_fst
+novo_fst=${novo_mpileup}/novo_fst
+
+perl ${fst} --input ${novo_mpileup}/novo_episodic_main.sync --output ${novo_fst}/novo_episodic_main.fst --min-count 6 --min-coverage 10 --max-coverage 250 --min-covered-fraction 1 --window-size 500 --step-size 500 --pool-size 120
+
+```
 
 
-## In R, [split](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/novo_Fst_Split_Comparisons.R) the file into each compasison
+
+### In R, [split](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/novo_Fst_Split_Comparisons.R) the file into each compasison
 
 
 R script that will split the .fst file into many .csv files with each comparison of interest (can choose the necessary ones from here)
