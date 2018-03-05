@@ -1,12 +1,69 @@
+# Details of procedure for each mapper used
+
 Starting with each mapper having been used and created the .bam files and the large .sync file:
 
-Each Mapper files and layout:
+Each .sync files (main chromosomes all together) and the .bam files after GATK relaignment
 
 **Novoalign**
+```
+novo_episodic_main.sync
+```
+```
+F115ConR1_TAGCTT_novo_merge_novo_final_realigned.bam
+F115ConR2_GGCTAC_novo_merge_novo_final_realigned.bam
+F115SelR1_GTTTCG_novo_merge_novo_final_realigned.bam
+F115SelR2_GTGGCC_novo_merge_novo_final_realigned.bam
+F38ConR1_ATCACG_novo_merge_novo_final_realigned.bam
+F38ConR2_TTAGGC_novo_merge_novo_final_realigned.bam
+F38SelR1_ACTTGA_novo_merge_novo_final_realigned.bam
+F38SelR2_GATCAG_novo_merge_novo_final_realigned.bam
+F77ConR1_ATGTCA_novo_merge_novo_final_realigned.bam
+F77ConR2_ATTCCT_novo_merge_novo_final_realigned.bam
+F77SelR1_TTAGGC_novo_merge_novo_final_realigned.bam
+F77SelR2_GATCAG_novo_merge_novo_final_realigned.bam
+MGD3_SO_CAGATC_novo_merge_novo_final_realigned.bam
+```
 
 **Bwa -mem**
+```
+episodic_data_main.gatk.sync
+```
+```
+F115ConR1_TAGCTT_merged_aligned_pe.final_realigned.bam
+F115ConR2_GGCTAC_merged_aligned_pe.final_realigned.bam
+F115SelR1_GTTTCG_merged_aligned_pe.final_realigned.bam
+F115SelR2_GTGGCC_merged_aligned_pe.final_realigned.bam
+F38ConR1_ATCACG_merged_aligned_pe.final_realigned.bam
+F38ConR2_TTAGGC_merged_aligned_pe.final_realigned.bam
+F38SelR1_ACTTGA_merged_aligned_pe.final_realigned.bam
+F38SelR2_GATCAG_merged_aligned_pe.final_realigned.bam
+F77ConR1_ATGTCA_merged_aligned_pe.final_realigned.bam
+F77ConR2_ATTCCT_merged_aligned_pe.final_realigned.bam
+F77SelR1_TTAGGC_merged_aligned_pe.final_realigned.bam
+F77SelR2_GATCAG_merged_aligned_pe.final_realigned.bam
+MGD3_SO_CAGATC_merged_aligned_pe.final_realigned.bam
+```
 
 **Bowtie**
+
+```
+episodic_data_bowtie_main.gatk.sync 
+```
+```
+F115ConR1_TAGCTT_merged_bowtie_pe.final_realigned.bam
+F115ConR2_GGCTAC_merged_bowtie_pe.final_realigned.bam
+F115SelR1_GTTTCG_merged_bowtie_pe.final_realigned.bam
+F115SelR2_GTGGCC_merged_bowtie_pe.final_realigned.bam
+F38ConR1_ATCACG_merged_bowtie_pe.final_realigned.bam
+F38ConR2_TTAGGC_merged_bowtie_pe.final_realigned.bam
+F38SelR1_ACTTGA_merged_bowtie_pe.final_realigned.bam
+F38SelR2_GATCAG_merged_bowtie_pe.final_realigned.bam
+F77ConR1_ATGTCA_merged_bowtie_pe.final_realigned.bam
+F77ConR2_ATTCCT_merged_bowtie_pe.final_realigned.bam
+F77SelR1_TTAGGC_merged_bowtie_pe.final_realigned.bam
+F77SelR2_GATCAG_merged_bowtie_pe.final_realigned.bam
+MGD3_SO_CAGATC_merged_bowtie_pe.final_realigned.bam
+```
 
 Split the sync file by chromosome:
 
@@ -87,45 +144,38 @@ perl ${fst} --input ${novo_mpileup}/novo_episodic_main.sync --output ${novo_fst}
 ```
 #!/bin/bash
 
-#Variable for project name (title of mpileup file)
-project_name=novo_episodic
-
 #Variable for project:
-project_dir=/home/paul/episodicData/novoalign
+project_dir=/home/paul/episodicData
 
 #Path to .sync files
-novo_mpileup=${project_dir}/novo_mpileup
+input=${project_dir}/R_dir
 
 #Path and variable for script from PoPoolation to create .sync files
 fst=/usr/local/popoolation/fst-sliding.pl
 
-mkdir ${novo_mpileup}/novo_fst
-novo_fst=${novo_mpileup}/novo_fst
+mkdir ${project_dir}/bwa_fst
+output=${project_dir}/bwa_fst
 
-perl ${fst} --input ${novo_mpileup}/novo_episodic_main.sync --output ${novo_fst}/novo_episodic_main.fst --min-count 6 --min-coverage 10 --max-coverage 250 --min-covered-fraction 1 --window-size 500 --step-size 500 --pool-size 120
+perl ${fst} --input ${input}/episodic_data_main.gatk.sync  --output ${output}/episodic_data_main.fst --min-count 6 --min-coverage 10 --max-coverage 250 --min-covered-fraction 1 --window-size 500 --step-size 500 --pool-size 120
 ```
 
 **Bowtie**
 ```
 #!/bin/bash
 
-#Variable for project name (title of mpileup file)
-project_name=novo_episodic
-
 #Variable for project:
-project_dir=/home/paul/episodicData/novoalign
+project_dir=/home/paul/episodicData/bowtie
 
 #Path to .sync files
-novo_mpileup=${project_dir}/novo_mpileup
+input=${project_dir}/R_bowtie
 
 #Path and variable for script from PoPoolation to create .sync files
 fst=/usr/local/popoolation/fst-sliding.pl
 
-mkdir ${novo_mpileup}/novo_fst
-novo_fst=${novo_mpileup}/novo_fst
+mkdir ${project_dir}/bowtie_fst
+output=${project_dir}/bowtie_fst
 
-perl ${fst} --input ${novo_mpileup}/novo_episodic_main.sync --output ${novo_fst}/novo_episodic_main.fst --min-count 6 --min-coverage 10 --max-coverage 250 --min-covered-fraction 1 --window-size 500 --step-size 500 --pool-size 120
-
+perl ${fst} --input ${input}/episodic_data_bowtie_main.gatk.sync  --output ${output}/episodic_data_bowtie_main.fst --min-count 6 --min-coverage 10 --max-coverage 250 --min-covered-fraction 1 --window-size 500 --step-size 500 --pool-size 120
 ```
 
 
