@@ -6525,3 +6525,8 @@ Ex.
 scp paul@info.mcmaster.ca:/home/paul/episodicData/novoalign/novo_mpileup/novo_fst/novo_episodic_main.fst /Users/paulknoops/Bioinformatics/episodic_practice/FST
 ```
 
+
+
+
+Deleting all subset files of sync for Pool seq- have script that writes these subsets (and deletes) in a loop.
+
