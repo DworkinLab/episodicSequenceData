@@ -147,14 +147,16 @@ perl ${fst} --input ${novo_mpileup}/novo_episodic_main.sync --output ${novo_fst}
 #Variable for project:
 project_dir=/home/paul/episodicData
 
+
 #Path to .sync files
 input=${project_dir}/R_dir
 
 #Path and variable for script from PoPoolation to create .sync files
 fst=/usr/local/popoolation/fst-sliding.pl
 
-mkdir ${project_dir}/bwa_fst
-output=${project_dir}/bwa_fst
+#mkdir ${project_dir}/bwa_fst
+#output=${project_dir}/bwa_fst
+output=/home/paul
 
 perl ${fst} --input ${input}/episodic_data_main.gatk.sync  --output ${output}/episodic_data_main.fst --min-count 6 --min-coverage 10 --max-coverage 250 --min-covered-fraction 1 --window-size 500 --step-size 500 --pool-size 120
 ```
@@ -172,8 +174,9 @@ input=${project_dir}/R_bowtie
 #Path and variable for script from PoPoolation to create .sync files
 fst=/usr/local/popoolation/fst-sliding.pl
 
-mkdir ${project_dir}/bowtie_fst
-output=${project_dir}/bowtie_fst
+#mkdir ${project_dir}/bowtie_fst
+#output=${project_dir}/bowtie_fst
+output=/home/paul
 
 perl ${fst} --input ${input}/episodic_data_bowtie_main.gatk.sync  --output ${output}/episodic_data_bowtie_main.fst --min-count 6 --min-coverage 10 --max-coverage 250 --min-covered-fraction 1 --window-size 500 --step-size 500 --pool-size 120
 ```
