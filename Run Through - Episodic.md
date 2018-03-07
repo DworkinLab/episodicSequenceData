@@ -6547,10 +6547,10 @@ Move to local (scp)
 
 Ex.
 ```
-scp paul@info.mcmaster.ca:/home/paul/episodicData/novoalign/novo_mpileup/novo_fst/novo_episodic_main.fst /Users/paulknoops/Bioinformatics/episodic_practice/FST
+scp paul@info.mcmaster.ca:/home/paul/episodicData/novoalign/novo_mpileup/novo_fst/novo_episodic_main.fst /Users/paulknoops/Bioinformatics/episodic_practice/FST/novo_fst
 ```
 ```
-scp paul@info.mcmaster.ca:/home/paul/episodicData/bwa_fst/episodic_data_main.fst /Users/paulknoops/Bioinformatics/episodic_practice/FST
+scp paul@info.mcmaster.ca:/home/paul/episodicData/bwa_fst/episodic_data_main.fst /Users/paulknoops/Bioinformatics/episodic_practice/FST/bwa_fst
 ```
 ```
 scp paul@info.mcmaster.ca:/home/paul/episodicData/bowtie/bowtie_fst/episodic_data_bowtie_main.fst /Users/paulknoops/Bioinformatics/episodic_practice/FST/bowtie_fst
@@ -6561,6 +6561,7 @@ bwa as well: need to rerun:
 Error with fread: possible solution:
 fread("sed 's/\\0//g' mycsv.csv")
 
+ReRan:
 
 
 
