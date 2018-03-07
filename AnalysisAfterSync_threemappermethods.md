@@ -186,7 +186,7 @@ Combine here??
 
 ### In R, [split](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/novo_Fst_Split_Comparisons.R) the file into each compasison
 
-**Novoalign**
+**Works for all three just by changing the working directory and the file read in**
 ```
 # Script to read in one .fst file and split this into many .csv files based on comparisons
 # .fst files generated from Popoolation2 fst-sliding.pl script
@@ -196,14 +196,26 @@ Combine here??
   require(data.table)
   require(tidyverse)
 
+######### NOVOALIGN ##########
 ### Set working directory to location of .fst file
   setwd("~/Bioinformatics/episodic_practice/FST/novo_fst")
-  
 ### Read in the .fst file into R (requires data.table)
-  Fst_novo <- fread('novo_episodic_main.fst')
+  Fst <- fread('novo_episodic_main.fst')
+ 
+######### Bowtie2 ##########
+### Set working directory to location of .fst file
+  #setwd("~/Bioinformatics/episodic_practice/FST/bowtie_fst")
+### Read in the .fst file into R (requires data.table)
+  #Fst <- fread('episodic_data_bowtie_main.fst')
+
+######### BWA-MEM ##########
+### Set working directory to location of .fst file
+  #setwd("~/Bioinformatics/episodic_practice/FST/bwa_fst") 
+### Read in the .fst file into R (requires data.table)
+  #Fst <- fread('episodic_data_main.fst')
 
 ### Make into long format
-  XCC  <- gather(Fst_novo, Comparison, Fst_measure, 6:83, factor_key=TRUE)
+  XCC  <- gather(Fst, Comparison, Fst_measure, 6:83, factor_key=TRUE)
 
 ### Remove intermediate:
   rm(Fst_novo)
@@ -229,12 +241,9 @@ Combine here??
 
     CXV_Comp <- novo_Fst[which(novo_Fst$Comp==vxcx),]
     
-    #write.csv(CXV_Comp, file=paste("Novo_fst_", vxcx, '.csv', sep = ""), row.names = FALSE)
+    write.csv(CXV_Comp, file=paste("Novo_fst_", vxcx, '.csv', sep = ""), row.names = FALSE)
     }
 ```
-
-
-
 
 R script that will split the .fst file into many .csv files with each comparison of interest (can choose the necessary ones from here)
 
