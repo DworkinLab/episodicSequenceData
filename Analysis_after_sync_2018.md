@@ -19,6 +19,7 @@ ________________________________________________________________________________
 ### 4) Average estimates of selection coefficient at each position for selection and control lineages for thee mappers
 /
 /
+### 5) Comparison of Fst and model output
 
 _______________________________________________________________________________________
 
