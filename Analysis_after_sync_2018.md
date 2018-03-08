@@ -134,7 +134,7 @@ Will take the split comparisons, and combine those specified into one FST file w
 
 ### Plotting Fst files for comparisons of interest
 
-
+![meanFst for F115](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/F115_meanFstPlot.png)
 
 
 
