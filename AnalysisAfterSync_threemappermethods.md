@@ -247,7 +247,8 @@ Combine here??
 
 R script that will split the .fst file into many .csv files with each comparison of interest (can choose the necessary ones from here)
 
-### Combining the data files from three mappers
+### Combining the data files from [three mappers](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/FST_combine3mappers.R)
+
 ```
 ## Packages:
   require(data.table)
