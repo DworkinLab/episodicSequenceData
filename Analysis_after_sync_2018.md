@@ -10,16 +10,13 @@ ________________________________________________________________________________
 ### 1) Tajima's Pi of non-overlapping windows for each sequence
 /
 /
-### 2) Run Fst on windows for each pairwise comparision of sequenced data
+### 2) Run Fst on windows for each pairwise comparision of sequenced data and calculate average Fst across three mappers
 /
 /
-### 3) per SNP logistic regression for each treatment by generation
+### 3) per SNP logistic regression for each treatment by generation averaged for Novoalign, Bwa-mem and bowtie2
 /
 /
-### 4) estimates of selection coefficient at each position for selection and control lineages
-/
-/
-### 5) Combine outputs of three mappers for Fst, model, and selection coefficients
+### 4) Average estimates of selection coefficient at each position for selection and control lineages for thee mappers
 /
 /
 
@@ -94,7 +91,7 @@ ex.
 Pi_PlotFunction('FILE.pi', "Plot_Title_Details")
 ```
 
-### Example Output: Ancestral Pi for Novoalign:
+### Example Output: Ancestral Pi for Novoalign
 
 
 _______________________________________________________________________________________
@@ -136,6 +133,8 @@ Will take the split comparisons, and combine those specified into one FST file w
 
 
 ### Plotting Fst files for comparisons of interest
+
+
 
 
 
@@ -196,6 +195,5 @@ Notes:
 
 _______________________________________________________________________________________
 
-## 5) Combine outputs of three mappers for Fst, model, and selection coefficients (and Pi??)
 
 
