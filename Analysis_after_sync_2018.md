@@ -94,6 +94,8 @@ ex.
 Pi_PlotFunction('FILE.pi', "Plot_Title_Details")
 ```
 
+### Example Output: Ancestral Pi for Novoalign:
+
 
 _______________________________________________________________________________________
 
@@ -125,6 +127,13 @@ Flags:
 **Script:** [novo_Fst_Split_Comparisons.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/novo_Fst_Split_Comparisons.R)
 
 R script that will split the .fst file into many .csv files with each comparison of interest (can choose the necessary ones from here)
+
+### Combining three mappers:
+
+**Script**[FST_combine3mappers.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/FST_combine3mappers.R)
+
+Will take the split comparisons, and combine those specified into one FST file with the average Fst between the three mappers
+
 
 ### Plotting Fst files for comparisons of interest
 
