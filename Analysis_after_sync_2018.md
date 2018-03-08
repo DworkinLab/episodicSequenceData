@@ -93,6 +93,7 @@ Pi_PlotFunction('FILE.pi', "Plot_Title_Details")
 
 ### Example Output: Ancestral Pi for Novoalign
 
+![Ancestral Pi Plot for Novoalign](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/Ancestral_Pi.png)
 
 _______________________________________________________________________________________
 
