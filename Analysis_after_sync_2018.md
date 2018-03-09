@@ -99,6 +99,15 @@ Pi_PlotFunction('FILE.pi', "Plot_Title_Details")
 
 ![Ancestral Pi Plot for Novoalign](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/Ancestral_Pi.png)
 
+
+Currently, Pi files for Novoalign and Bowtie2 generated.
+
+- Should these be averaged (with bwa-mem that can be generated easily enough)
+
+- is one mapper enough for this
+
+- Do we want to show trends in nucleotide diversity (other Pi plots) or just focus on ancestoral Pi
+
 _______________________________________________________________________________________
 
 ## 2) Run Fst on windows for each pairwise comparision of sequenced data
@@ -139,7 +148,7 @@ Will take the split comparisons, and combine those specified into one FST file w
 
 ### Plotting Fst files for comparisons of interest
 
- - average Fst of three mappers and average between replicates
+ - average Fst of three mappers **and** average between replicates
  
  - comparison betweeen control and selection lines
  
@@ -217,7 +226,7 @@ Treatment x Generation -log10(meanP-value) for model output: colours dictate the
 Just the top 1% of positions (~ 32000 positions)
 ![top1%](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/model_top1percent.png)
 
-## 4) Comparison of Fst and Model Outputs:
+## 4) Comparison of Fst (of generation 115, control:Selection) and Model Outputs:
 
 **First draft of plots** 
 
@@ -256,6 +265,12 @@ Just the top 1% of positions (~ 32000 positions)
 _______________________________________________________________________________________
 
 ## 5) estimates of selection coefficient at each position for selection and control lineages using [poolSeq](https://github.com/ThomasTaus/poolSeq) R package:
+
+Not completed currently:
+
+- Machine was full and current script takes a long time
+
+- should this be done on the full chromosome or focus on regions of interest (say the top 1% above)
 
 **Script:** [poolseq_SelectionCoefficientEstimate.sh](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/poolseq_SelectionCoefficientEstimate.sh)
 
