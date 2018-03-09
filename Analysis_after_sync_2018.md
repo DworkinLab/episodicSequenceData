@@ -176,6 +176,12 @@ ex.
 ```
 Rscript Counts_to_model_2.R 'DIRECTORY'
 ```
+Basic Model at each positon (tmp2):
+```
+modlist_2[[i]] <- 
+        glm(cbind(Major_count, Minor_count) ~ Treatment*Generation, 
+            data = tmp2, family = "binomial")
+```
 
 **Combine all the split chromosome pieces back into one chromosome:** [Combine_chromo.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/Combine_chromo.R)
 
@@ -183,6 +189,27 @@ ex.
 ```
 Rscript Combine_chromo.R 'DIRECTORY' 'OutputDIRECTORY'
 ```
+
+**Combine three mappers into one file** [model_combine3mappers.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/model_combine3mappers.R)
+```
+Rscript combine_threeMappers.R 'OutputDirectory
+```
+
+**Write files with coeffefficent of interest** [model_3mappersTxG.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/model_3mappersTxG.R)
+
+Keeps positions that are present in all three files (position needs to be mapped three times)
+```
+Rscript model_3mappersTxG.R 'Input/OutputDirectory'
+```
+
+**Plots**
+Treatment x Generation -log10(meanP-value) for model output: 
+![FullGenomeTxGPlot](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/CHROMOS_D1.png)
+
+
+Treatment x Generation -log10(meanP-value) for model output: colours dictate the qunatiles (the top 1% in dark grey, green being the top 0.01% of positions)
+![QuantilePlot](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/CHROMOs_Qunatiles_D1.png)
+
 
 
 
