@@ -16,10 +16,13 @@ ________________________________________________________________________________
 ### 3) per SNP logistic regression for each treatment by generation averaged for Novoalign, Bwa-mem and bowtie2
 /
 /
-### 4) Average estimates of selection coefficient at each position for selection and control lineages for thee mappers
+### 4) Comparison of Fst and model output
 /
 /
-### 5) Comparison of Fst and model output
+### 5) Average estimates of selection coefficient at each position for selection and control lineages for thee mappers
+/
+/
+
 
 _______________________________________________________________________________________
 
@@ -204,18 +207,21 @@ Rscript model_3mappersTxG.R 'Input/OutputDirectory'
 
 **Plots**
 Treatment x Generation -log10(meanP-value) for model output: 
-![FullGenomeTxGPlot](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/CHROMOS_D1.png)
+![FullGenomeTxGPlot](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/CHROMO_meanP.png)
 
 
 Treatment x Generation -log10(meanP-value) for model output: colours dictate the qunatiles (the top 1% in dark grey, green being the top 0.01% of positions)
 ![QuantilePlot](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/CHROMOs_Qunatiles_D1.png)
 
 
+## 4) Comparison of Fst and Model Outputs:
+
+
 
 
 _______________________________________________________________________________________
 
-## 4) estimates of selection coefficient at each position for selection and control lineages using [poolSeq](https://github.com/ThomasTaus/poolSeq) R package:
+## 5) estimates of selection coefficient at each position for selection and control lineages using [poolSeq](https://github.com/ThomasTaus/poolSeq) R package:
 
 **Script:** [poolseq_SelectionCoefficientEstimate.sh](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/poolseq_SelectionCoefficientEstimate.sh)
 
