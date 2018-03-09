@@ -219,6 +219,14 @@ Treatment x Generation -log10(meanP-value) for model output: colours dictate the
 
 **First draft of plots** 
 
+**Full Chromosome:**
+
+ -- Numbers/ peaks do not line up perfectly (product of how they are plotted/ measured (windows vs. positions)
+ 
+![FstV.model_full](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/log10p_fst_comboFUll.png)
+
+ -- Individual chromosome plots line up per position, but the fst have 1/500th (ish) data points (windows of 500 used)
+ 
 **X Chromosome**
 ![XChromo](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/fst_pvalue_X.png)
 
