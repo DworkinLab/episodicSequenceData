@@ -6707,3 +6707,36 @@ rm(mySync)
 rm(ccc)
 rm(pst2)
 ```
+
+Combine:
+```
+#! /bin/bash
+# Variable for project:
+  project_dir=/home/paul/episodicData/novoalign
+# Path to .sync files
+  SyncFiles=${project_dir}/novo_mpileup
+# Set output for subsets:
+  splitSync=${SyncFiles}/splitsync_TEST
+# Scripts Directory:
+  Rscripts=${project_dir}/novo_Rscripts
+ 
+Rscript ${Rscripts}/test_combinePoolseqCSV.R ${splitSync}
+```
+Rscript: test_combinePoolseqCSV.R
+```
+args <- commandArgs(trailingOnly = TRUE)
+mydirs <- list.dirs(path=args[1], recursive = FALSE) 
+XX <- args[1]
+for (dir in mydirs){
+	setwd(dir)
+	J4 <- gsub('(.*)_\\w+', '\\1', dir)
+	mycsvs <- list.files(pattern='.csv')
+	X <- Null
+	for (file in mycsvs){
+	X <- rbind(X, X2)
+    }
+	write.csv(X, file=paste(XX,"/",'J4', '.csv', sep=""), row.names = FALSE)
+	rm(X)
+	rm(J4)
+}
+```
