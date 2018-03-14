@@ -278,6 +278,9 @@ This script will break the file into two treatment .sync files, break apart thes
 
 **Rscript:** [poolSeq_selectionCoeff.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/poolSeq_selectionCoeff.R)
 
+Combine the .csv into one file:
+**Rscript:** [combinePoolseqCSV.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/combinePoolseqCSV.R)
+
 Notes: 
 
 - need to edit to make more efficient to run (not taking 3 days per section)
