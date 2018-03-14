@@ -103,7 +103,7 @@ for file in ${files[@]}
 	for file in ${syncs[@]}
 	  	do
 	  	(Chromo=$(cat ${file} | awk '{print $1; exit}')
-	  	Rscript ${Rscripts}/PoolSeq_SelCoeff.R ${file} ${Chromo} ${split_sync}) &
+	  	Rscript ${Rscripts}/poolSeq_selectionCoeff.R ${file} ${Chromo} ${split_sync}) &
 	done 
 	wait
 	rm -f ${split_sync}/*.sync
