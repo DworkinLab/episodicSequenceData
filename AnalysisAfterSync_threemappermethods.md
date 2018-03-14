@@ -398,7 +398,209 @@ ________________________________________________________________________________
 
 ## 4) estimates of selection coefficient at each position for selection and control lineages
 
+```
+#! /bin/bash
 
+# Variable for project name (title of mpileup file)
+  
+  project_name=novo_episodic
+
+# Variable for project:
+
+  project_dir=/home/paul/episodicData/novoalign
+
+# Path to .sync files
+  
+  SyncFiles=${project_dir}/novo_mpileup
+	
+# Create and set output for subsets:
+  mkdir ${SyncFiles}/splitsync_dir
+  splitSync=${SyncFiles}/splitsync_dir
+
+# Output dir:
+
+  poolSeq=${project_dir}/novo_PoolSeq
+
+# Scripts Directory:
+
+  Rscripts=${project_dir}/novo_Rscripts
+	
+# The seperated .sync files
+
+  sync[0]=${SyncFiles}/novo_episodic_3R.sync
+  sync[1]=${SyncFiles}/novo_episodic_2R.sync
+  sync[2]=${SyncFiles}/novo_episodic_3L.sync
+  sync[3]=${SyncFiles}/novo_episodic_2L.sync
+  sync[4]=${SyncFiles}/novo_episodic_X.sync 
+  sync[5]=${SyncFiles}/novo_episodic_4.sync 
+
+##-----------------------------------------------##
+
+### Split into treatment vs. control
+
+for file in ${sync[@]}
+	do
+	name=${file}
+	base=`basename ${name} .sync`
+	
+  #Selection:
+	cat ${SyncFiles}/${base}.sync | awk '{print $1,$2,$3,$6,$7,$10, $11, $14, $15, $16, $16}' > ${splitSync}/${base}_Sel.sync
+	
+  #Control:
+	cat ${SyncFiles}/${base}.sync | awk '{print $1,$2,$3,$4,$5,$8, $9, $12, $13, $16, $16}' > ${splitSync}/${base}_Con.sync
+
+done
+
+
+##------------------------------------------------##
+
+### Split the sync files into many sized files (12):
+
+  files=(${splitSync}/*.sync)
+
+for file in ${files[@]}
+	do
+	name=${file}
+	base=`basename ${name} .sync`
+	
+	mkdir ${splitSync}/${base}_Split
+	split_sync=${splitSync}/${base}_Split
+	
+	length=($(wc -l ${splitSync}${base}.sync))
+		
+	# Split length into 12 segements (12th == length) (can extend this if to large)
+	cut=$((${length}/12))
+	cut_2=$((${cut}*2))
+	cut_3=$((${cut}*3))
+	cut_4=$((${cut}*4))
+	cut_5=$((${cut}*5))
+	cut_6=$((${cut}*6))
+	cut_7=$((${cut}*7))
+	cut_8=$((${cut}*8))
+	cut_9=$((${cut}*9))
+	cut_10=$((${cut}*10))
+	cut_11=$((${cut}*11))
+	
+	
+  sed -n " 1, ${cut} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_1.sync
+
+	sed -n " $((${cut} + 1)), ${cut_2} p"  ${splitSync}/${base}.sync >  ${split_sync}/${base}_2.sync
+
+	sed -n " $((${cut_2} + 1)), ${cut_3} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_3.sync
+	
+	sed -n " $((${cut_3} + 1)), ${cut_4} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_4.sync
+
+	sed -n " $((${cut_4} + 1)), ${cut_5} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_5.sync
+
+	sed -n " $((${cut_5} + 1)), ${cut_6} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_6.sync
+
+	sed -n " $((${cut_6} + 1)), ${cut_7} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_7.sync
+	
+	sed -n " $((${cut_7} + 1)), ${cut_8} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_8.sync
+	
+	sed -n " $((${cut_8} + 1)), ${cut_9} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_9.sync
+	
+	sed -n " $((${cut_9} + 1)), ${cut_10} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_10.sync
+	
+	sed -n " $((${cut_10} + 1)), ${cut_11} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_11.sync
+	
+	sed -n " $((${cut_11} + 1)), ${length} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_12.sync
+	
+  syncs=(${split_sync}/*.sync)
+
+  script=${Rscripts}/PoolSeq_SelCoeff.R
+
+  Chromo=$(cat ${file} | awk '{print $1; exit}')
+  
+  for file in ${syncs[@]}
+	  do
+	  	(Rscript ${script} file ${Chromo} ${split_sync}) &
+	done
+  
+  #rm -f ${split_sync}/*.sync
+  
+  #rm -f ${splitSync}/file
+	
+# Combine all in basedir with .csv:
+	  #Rscript ${script2} ${split_sync}
+
+
+done
+
+##------------------------------------------------##
+```
+```
+#RscriptTest:
+args <- commandArgs(trailingOnly = TRUE)
+
+require(methods)
+require(data.table)
+require(foreach)
+require(stringi)
+require(matrixStats)
+
+### Source the scripts (Copied) for Pool-Seq (only one fails and is not needed)
+source('/home/paul/episodicData/novoalign/novo_Rscripts/Taus_Scripts/testTaus/loadaf.R')  
+
+source('/home/paul/episodicData/novoalign/novo_Rscripts/Taus_Scripts/testTaus/estsh.R')
+
+source('/home/paul/episodicData/novoalign/novo_Rscripts/Taus_Scripts/testTaus/idsel.R')
+
+source('/home/paul/episodicData/novoalign/novo_Rscripts/Taus_Scripts/testTaus/simaf.R')
+
+### Possibly need custom function to read in manipulated .sync files:
+### With fiddling with the .sync file, a personal read.sync function is needed
+
+source("/home/paul/episodicData/novoalign/novo_Rscripts/Taus_ReadSync.R")
+
+### Read in the data file for args[1]
+
+setwd(args[3])
+
+mySync <- read.sync_Personal(file=args[1], gen=c(115, 115, 38, 38, 77, 77, 0, 0), repl=c(1,2,1,2,1,2,1,2), polarization = "rising")
+
+# Turn alleles to data frame:
+ff <- as.data.frame(mySync@alleles)
+
+# Find length (number of positons)
+len <- round(length(ff$posID))
+
+# Keep only positions:
+pst <- as.numeric(ff$pos)
+pst2 <- sort(pst)
+
+# Generations:
+ccc <- c(0,38,77,115)
+
+rm(pst)
+rm(ff)
+
+pst2  <- sample(pst2[1]:pst2[len], 1000)
+
+### Create empty matrix to read into for estiamting S:
+pbj <- matrix(NA,length(pst2), 3)
+
+
+  for (i in 1:length(pst2)) {
+    b_b <- pst2[i]
+    TrajTEST <- af.traj(mySync, args[2], repl=c(1,2), pos=b_b)
+    BfsfTEST <- estimateSH(TrajTEST, Ne=150, t=ccc, h=0.5, haploid = FALSE, simulate.p.value=TRUE)
+    pbj[i,] <- c(BfsfTEST$s, BfsfTEST$p.value, b_b)
+    rm(TrajTEST)
+    rm(BfsfTEST)
+    rm(b_b)
+  }
+
+
+x2 <- args[1]
+x3 <- gsub("\\..*","", x2)
+write.csv(pbj, file=paste(args[3], "/", x3, ".csv", sep=""), row.names=FALSE)
+
+rm(pbj)
+rm(mySync)
+rm(ccc)
+rm(pst2)
+```
 
 
 _______________________________________________________________________________________
