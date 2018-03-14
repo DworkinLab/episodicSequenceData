@@ -1427,7 +1427,7 @@ project_dir=/home/paul/episodicData/novoalign
 #Path to .sync files
 SyncFiles=${project_dir}/novo_mpileup
 	
-mkdir ${SyncFiles}/splitsync_dir_2
+mkdir ${SyncFiles}/splitsync_dir
 splitSync=${SyncFiles}/splitsync_dir
 
 #Output dir:
@@ -1514,34 +1514,21 @@ for file in ${files[@]}
 	
 	sed -n " $((${cut_11} + 1)), ${length} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_12.sync
 	
+	syncs=(${split_sync}/*.sync)
+ 	
+	for file in ${syncs[@]}
+	  	do
+	  	(Chromo=$(cat ${file} | awk '{print $1; exit}')
+	  	Rscript ${Rscripts}/PoolSeq_SelCoeff.R ${file} ${Chromo} ${split_sync}) &
+	done 
+	wait
+	rm -f ${split_sync}/*.sync
 done
+wait
+
+Rscript ${Rscripts}/combinePoolseqCSV.R ${splitSync}
 
 ##------------------------------------------------##
-
-syncs=(${splitSync}/*.sync)
-
-script=${Rscripts}/PoolSeq_SelCoeff.R
-
-for file in ${syncs[@]}
-	do
-	name=${file}
-	base=`basename ${name} .sync`
-	basedir=${splitSync}/${base}_Split
-	Chromo=$(cat ${file} | awk '{print $1; exit}')
-	splits=(${basedir}/*.sync)
-	for Xfile in ${splits[@]}
-		(Rscript ${script} Xfile ${Chromo} ${basedir}) &
-		done
-	#Combine all in basedir with .csv:
-	Rscript ${script2} ${basedir}
-	
-done
-
-
-##------------------------------------------------##
-
-
-
 ```
 ### Rscript:
 ```
