@@ -6757,6 +6757,7 @@ for (dir in mydirs){
   Rscripts=${project_dir}/novo_Rscripts
   sync[0]=${SyncFiles}/novo_episodic_3L.sync
   sync[1]=${SyncFiles}/novo_episodic_2L.sync
+
 for file in ${sync[@]}
 	do
 	name=${file}
