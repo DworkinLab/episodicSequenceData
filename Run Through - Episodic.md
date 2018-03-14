@@ -6731,12 +6731,82 @@ for (dir in mydirs){
 	setwd(dir)
 	J4 <- gsub('(.*)_\\w+', '\\1', dir)
 	mycsvs <- list.files(pattern='.csv')
-	X <- Null
+	X <- NULL
 	for (file in mycsvs){
-	X <- rbind(X, X2)
-    }
-	write.csv(X, file=paste(XX,"/",'J4', '.csv', sep=""), row.names = FALSE)
+		X2 <- read.csv(file, h=T)
+		X <- rbind(X, X2)
+   	}
+	write.csv(X, file=paste(J4,'.csv',sep=""), row.names = FALSE)
 	rm(X)
 	rm(J4)
 }
 ```
+
+
+
+### Testing PoolSeq: Long Script --> 
+```
+#! /bin/bash
+
+  project_name=novo_episodic
+  project_dir=/home/paul/episodicData/novoalign
+  SyncFiles=${project_dir}/novo_mpileup
+  mkdir ${SyncFiles}/splitsync_TEST
+  splitSync=${SyncFiles}/splitsync_TEST
+  poolSeq=${project_dir}/novo_PoolSeq
+  Rscripts=${project_dir}/novo_Rscripts
+  sync[0]=${SyncFiles}/novo_episodic_3L.sync
+  sync[1]=${SyncFiles}/novo_episodic_2L.sync
+for file in ${sync[@]}
+	do
+	name=${file}
+	base=`basename ${name} .sync`
+	cat ${SyncFiles}/${base}.sync | awk '{print $1,$2,$3,$6,$7,$10, $11, $14, $15, $16, $16}' > ${splitSync}/${base}_Sel.sync
+done
+files=(${splitSync}/*.sync)
+for file in ${files[@]}
+	do
+	name=${file}
+	base=`basename ${name} .sync`
+	mkdir ${splitSync}/${base}_Split
+	split_sync=${splitSync}/${base}_Split
+	length=($(wc -l ${splitSync}/${base}.sync))
+	cut=$((${length}/12))
+	cut_2=$((${cut}*2))
+	cut_3=$((${cut}*3))
+	cut_4=$((${cut}*4))
+	cut_5=$((${cut}*5))
+	cut_6=$((${cut}*6))
+	cut_7=$((${cut}*7))
+	cut_8=$((${cut}*8))
+	cut_9=$((${cut}*9))
+	cut_10=$((${cut}*10))
+	cut_11=$((${cut}*11))
+  	sed -n " 1, ${cut} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_1.sync
+	sed -n " $((${cut} + 1)), ${cut_2} p"  ${splitSync}/${base}.sync >  ${split_sync}/${base}_2.sync
+	sed -n " $((${cut_2} + 1)), ${cut_3} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_3.sync
+	sed -n " $((${cut_3} + 1)), ${cut_4} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_4.sync
+	sed -n " $((${cut_4} + 1)), ${cut_5} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_5.sync
+	sed -n " $((${cut_5} + 1)), ${cut_6} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_6.sync
+	sed -n " $((${cut_6} + 1)), ${cut_7} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_7.sync
+	sed -n " $((${cut_7} + 1)), ${cut_8} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_8.sync
+	sed -n " $((${cut_8} + 1)), ${cut_9} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_9.sync
+	sed -n " $((${cut_9} + 1)), ${cut_10} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_10.sync
+	sed -n " $((${cut_10} + 1)), ${cut_11} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_11.sync
+	sed -n " $((${cut_11} + 1)), ${length} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_12.sync
+  	
+	syncs=(${split_sync}/*.sync)
+ 	for file in ${syncs[@]}
+	  	do
+	  	(Chromo=$(cat ${file} | awk '{print $1; exit}')
+	  	Rscript ${Rscripts}/PoolSeq_SelCoeff_TEST.R ${file} ${Chromo} ${split_sync}) &
+	done 
+	wait
+	rm -f ${split_sync}/*.sync
+	rm -f ${SyncFiles}/${file}
+done
+wait
+Rscript ${Rscripts}/test_combinePoolseqCSV.R ${splitSync}
+rm -f ${split_sync}/*.csv
+
+##------------------------------------------------##
