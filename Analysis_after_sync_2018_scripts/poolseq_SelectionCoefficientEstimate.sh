@@ -58,7 +58,7 @@ for file in ${files[@]}
 	mkdir ${splitSync}/${base}_Split
 	split_sync=${splitSync}/${base}_Split
 	
-	length=($(wc -l ${splitSync}${base}.sync))
+	length=($(wc -l ${splitSync}/${base}.sync))
 	#echo ${length}
 		
 	#Split length into 12 segements (12th == length) (can extend this if to large)
@@ -74,7 +74,7 @@ for file in ${files[@]}
 	cut_10=$((${cut}*10))
 	cut_11=$((${cut}*11))
 	
-	sed -n " 1, ${cut} p"  ${splitSync}/${base}.sync > ${split_sync}${base}_1.sync
+	sed -n " 1, ${cut} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_1.sync
 
 	sed -n " $((${cut} + 1)), ${cut_2} p"  ${splitSync}/${base}.sync >  ${split_sync}/${base}_2.sync
 
