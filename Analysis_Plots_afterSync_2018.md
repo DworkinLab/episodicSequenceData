@@ -14,7 +14,30 @@
 
 
 # Fst Comparisons: 
+____________________________________________________
+## meanFst: Selection vs. Conrtrol: Generation 38
+![meanFst for F38](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/F38_meanFstPlot.png)
 
+### meanFst: Control vs. Control: Generation38
+![Fst_Con:Con_38](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/F38_Con:Con_Fst.png)
+
+### meanFst: Selection vs. Selection: Generation38
+![Fst_Sel:Sel_38](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/F38_Sel:Sel_Fst.png)
+____________________________________________________
+
+____________________________________________________
+
+## meanFst: Selection vs. Conrtrol: Generation 77 
+![meanFst for F77](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/F77_meanFstPlot.png)
+
+### meanFst: Control vs. Control: Generation77
+![Fst_Con:Con_77](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/F77_Con:Con_Fst.png)
+
+### meanFst: Selection vs. Selection: Generation77
+![Fst_Sel:Sel_77](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/F77_Sel:Sel_Fst.png)
+____________________________________________________
+
+___________________________________________________
 ### meanFst: Selection vs. Control: Generation115
 ![meanFst for F115](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/F115_meanFstPlot.png)
 
@@ -22,6 +45,9 @@
 ![Fst_Con:Con_115](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/F115_Control:Control_FST.png)
 ### meanFst: Selection vs. Selection: Generation115
 ![Fst_Sel:Sel_115](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/F115_Selection:Selection_FST.png)
+____________________________________________________
+
+
 
 
 
