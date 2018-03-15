@@ -1,3 +1,4 @@
+################
 ### Running the PoolSeq Package to run on .sync files for estimates of selection coefficeints per position
 ### Requires: R (>= 3.3.1), data.table (>= 1.9.4), foreach (>= 1.4.2), stringi (>= 0.4-1), matrixStats (>= 0.14.2)
 
@@ -39,35 +40,38 @@
   mySync <- read.sync_Personal(file=args[1], gen=c(115, 115, 38, 38, 77, 77, 0, 0), repl=c(1,2,1,2,1,2,1,2), polarization = "rising")
 
 ### Make data.frame of just alleles information to sort out relevent positions:
+# Turn alleles to data frame:
+ff <- as.data.frame(mySync@alleles)
 
-  ff <- as.data.frame(mySync@alleles)
-  pst <- as.numeric(ff$pos)
-  pst2 <- sort(pst)
-  rm(pst)
-  rm(ff)
+# Keep only positions:
+pst <- as.numeric(ff$pos)
+pst2 <- sort(pst)
 
-### Create empty data frame to read into for estiamting S:
-  
-  DF <- data.frame(NULL)
-  ccc <- c(0,38,77,115)
+# Generations:
+ccc <- c(0,38,77,115)
 
-  for (i in pst2) {
-  	Traj115 <- af.traj(mySync, args[2], repl=c(1,2), pos=i)
-  	Bfsf <- estimateSH(Traj115, Ne=150, t=ccc, h=0.5, haploid = FALSE, simulate.p.value=TRUE)
-  	Fd <- data.frame(Bfsf$s, Bfsf$p0, Bfsf$p.value)
- 	 Fd$pos <- i
-  	DF <- rbind(DF, Fd)
-  	DF <- na.omit(DF)
-  	#print(paste("Running entity:", i, "of", END))
-  	rm(i)
-	
-	}
- 
-  x2 <- args[1]
-  x3 <- gsub("\\..*","", x2)
-  write.csv(DF, file=paste(args[3], "/", x3, ".csv", sep=""), row.names=FALSE)
-  
-  rm(DF)
-  rm(mySync)
-  rm(ccc)
-  rm(pst2)
+rm(pst)
+rm(ff)
+
+
+### Create empty matrix to read into for estiamting S:
+pbj <- matrix(NA,length(pst2), 3)
+
+ for (i in 1:length(pst2)) {
+    b_b <- pst2[i]
+    TrajTEST <- af.traj(mySync, args[2], repl=c(1,2), pos=b_b)
+    BfsfTEST <- estimateSH(TrajTEST, Ne=150, t=ccc, h=0.5, haploid = FALSE, simulate.p.value=TRUE)
+    pbj[i,] <- c(BfsfTEST$s, BfsfTEST$p.value, b_b)
+    rm(TrajTEST)
+    rm(BfsfTEST)
+    rm(b_b)
+  }
+
+x2 <- args[1]
+x3 <- gsub("\\..*","", x2)
+write.csv(pbj, file=paste(x3, ".csv", sep=""), row.names=FALSE)
+
+rm(pbj)
+rm(mySync)
+rm(ccc)
+rm(pst2)

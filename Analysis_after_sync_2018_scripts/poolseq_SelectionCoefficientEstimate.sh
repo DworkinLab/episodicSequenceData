@@ -11,7 +11,7 @@ project_dir=/home/paul/episodicData/novoalign
 #Path to .sync files
 SyncFiles=${project_dir}/novo_mpileup
 	
-mkdir ${SyncFiles}/splitsync_dir_2
+mkdir ${SyncFiles}/splitsync_dir
 splitSync=${SyncFiles}/splitsync_dir
 
 #Output dir:
@@ -58,7 +58,7 @@ for file in ${files[@]}
 	mkdir ${splitSync}/${base}_Split
 	split_sync=${splitSync}/${base}_Split
 	
-	length=($(wc -l ${splitSync}${base}.sync))
+	length=($(wc -l ${splitSync}/${base}.sync))
 	#echo ${length}
 		
 	#Split length into 12 segements (12th == length) (can extend this if to large)
@@ -74,7 +74,7 @@ for file in ${files[@]}
 	cut_10=$((${cut}*10))
 	cut_11=$((${cut}*11))
 	
-	sed -n " 1, ${cut} p"  ${splitSync}/${base}.sync > ${split_sync}${base}_1.sync
+	sed -n " 1, ${cut} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_1.sync
 
 	sed -n " $((${cut} + 1)), ${cut_2} p"  ${splitSync}/${base}.sync >  ${split_sync}/${base}_2.sync
 
@@ -98,28 +98,18 @@ for file in ${files[@]}
 	
 	sed -n " $((${cut_11} + 1)), ${length} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_12.sync
 	
+	syncs=(${split_sync}/*.sync)
+ 	
+	for file in ${syncs[@]}
+	  	do
+	  	(Chromo=$(cat ${file} | awk '{print $1; exit}')
+	  	Rscript ${Rscripts}/poolSeq_selectionCoeff.R ${file} ${Chromo} ${split_sync}) &
+	done 
+	wait
+	rm -f ${split_sync}/*.sync
 done
+wait
 
-##------------------------------------------------##
-
-syncs=(${splitSync}/*.sync)
-
-script=${Rscripts}/PoolSeq_SelCoeff.R
-
-for file in ${syncs[@]}
-	do
-	name=${file}
-	base=`basename ${name} .sync`
-	basedir=${splitSync}/${base}_Split
-	Chromo=$(cat ${file} | awk '{print $1; exit}')
-	splits=(${basedir}/*.sync)
-	for Xfile in ${splits[@]}
-		(Rscript ${script} Xfile ${Chromo} ${basedir}) &
-		done
-	#Combine all in basedir with .csv:
-	Rscript ${script2} ${basedir}
-	
-done
-
+Rscript ${Rscripts}/combinePoolseqCSV.R ${splitSync}
 
 ##------------------------------------------------##
