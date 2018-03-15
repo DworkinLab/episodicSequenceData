@@ -13,6 +13,18 @@
 ![meanFst for F115](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/F115_meanFstPlot.png)
 
 
+# Fst Comparisons: 
+
+### meanFst: Selection vs. Control: Generation115
+![meanFst for F115](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/F115_meanFstPlot.png)
+
+### meanFst: Control vs. Control: Generation115
+![Fst_Con:Con_115](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/F115_Control:Control_FST.png)
+### meanFst: Selection vs. Selection: Generation115
+![Fst_Sel:Sel_115](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/F115_Selection:Selection_FST.png)
+
+
+
 # Model Outputs:
 
 ## Treatment x Generation -log10(meanP-value) for model output: 
