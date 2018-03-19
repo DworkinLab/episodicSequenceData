@@ -56,6 +56,11 @@ ____________________________________________________
 ## Treatment x Generation -log10(meanP-value) for model output: 
 ![FullGenomeTxGPlot](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/CHROMO_meanP.png)
 
+
+## Treatment x Generation: -log10(meanP) with Bonferroni Correction for multiple comparisons:
+![BonferroniCorrection](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/Bonferroni_p.adjust_TxG.png)
+
+
 ## Treatment x Generation -log10(meanP-value) for model output: colours dictate the qunatiles (the top 1% in dark grey, green being the top 0.01% of positions)
 ![QuantilePlot](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/CHROMOs_Qunatiles_D1.png)
 
