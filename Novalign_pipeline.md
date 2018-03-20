@@ -972,6 +972,46 @@ sync=/usr/local/popoolation/mpileup2sync.jar
 
 java -ea -Xmx7g -jar ${sync} --input ${novo_mpileup}/${project_name}.mpileup --output ${novo_mpileup}/${project_name}.sync --fastq-type sanger --min-qual 20 --threads 2
 ```
+
+### Split .sync file into chromosomes (easier to work with)
+```
+#!/bin/bash
+
+#Variable for project name (title of mpileup file)
+project_name=novo_episodic
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to .sync files
+novo_mpileup=${project_dir}/novo_mpileup
+
+grep -v 'Het' ${novo_mpileup}/${project_name}.sync > ${novo_mpileup}/${project_name}_less_het.sync
+
+wait
+
+grep -v 'U' ${novo_mpileup}/${project_name}_less_het.sync > ${novo_mpileup}/${project_name}_removed_U_Het.sync
+
+wait
+
+grep -v 'dmel_mitochondrion_genome' ${novo_mpileup}/${project_name}_removed_U_Het.sync > ${novo_mpileup}/${project_name}_main.sync
+
+wait
+
+rm -f ${novo_mpileup}/${project_name}_less_het.sync
+
+rm -f ${novo_mpileup}/${project_name}_removed_U_Het.sync
+
+grep '3R' ${novo_mpileup}/${project_name}_main.sync > ${novo_mpileup}/${project_name}_3R.sync &
+grep '2R' ${novo_mpileup}/${project_name}_main.sync > ${novo_mpileup}/${project_name}_2R.sync &
+grep '3L' ${novo_mpileup}/${project_name}_main.sync > ${novo_mpileup}/${project_name}_3L.sync &
+grep '2L' ${novo_mpileup}/${project_name}_main.sync > ${novo_mpileup}/${project_name}_2L.sync &
+grep '^4' ${novo_mpileup}/${project_name}_main.sync > ${novo_mpileup}/${project_name}_4.sync &
+grep 'X' ${novo_mpileup}/${project_name}_main.sync > ${novo_mpileup}/${project_name}_X.sync 
+```
+
+Sync File now set up to be easily worked with; with one version (being `_main.sync`) that has the 6 chromosomes of interest, and 6 files for these chromosomes seperate
+
 ## Fst:
 
 ```
@@ -1068,45 +1108,8 @@ MGD3_SO_CAGATC_novo_merge_novo_final_realigned.bam
 
 ## Running Custom R script: Logistic Regression
 
-### Split .sync file into chromosomes (easier to work with)
-```
-#!/bin/bash
 
-#Variable for project name (title of mpileup file)
-project_name=novo_episodic
-
-#Variable for project:
-project_dir=/home/paul/episodicData/novoalign
-
-#Path to .sync files
-novo_mpileup=${project_dir}/novo_mpileup
-
-grep -v 'Het' ${novo_mpileup}/${project_name}.sync > ${novo_mpileup}/${project_name}_less_het.sync
-
-wait
-
-grep -v 'U' ${novo_mpileup}/${project_name}_less_het.sync > ${novo_mpileup}/${project_name}_removed_U_Het.sync
-
-wait
-
-grep -v 'dmel_mitochondrion_genome' ${novo_mpileup}/${project_name}_removed_U_Het.sync > ${novo_mpileup}/${project_name}_main.sync
-
-wait
-
-rm -f ${novo_mpileup}/${project_name}_less_het.sync
-
-rm -f ${novo_mpileup}/${project_name}_removed_U_Het.sync
-
-grep '3R' ${novo_mpileup}/${project_name}_main.sync > ${novo_mpileup}/${project_name}_3R.sync &
-grep '2R' ${novo_mpileup}/${project_name}_main.sync > ${novo_mpileup}/${project_name}_2R.sync &
-grep '3L' ${novo_mpileup}/${project_name}_main.sync > ${novo_mpileup}/${project_name}_3L.sync &
-grep '2L' ${novo_mpileup}/${project_name}_main.sync > ${novo_mpileup}/${project_name}_2L.sync &
-grep '^4' ${novo_mpileup}/${project_name}_main.sync > ${novo_mpileup}/${project_name}_4.sync &
-grep 'X' ${novo_mpileup}/${project_name}_main.sync > ${novo_mpileup}/${project_name}_X.sync 
-```
-Sitting with a different .sync file for each chromosome, can now split more, but since it all goes back together (and is annoying to do all the steps etc.) will make it all into one LONG script... maybe set up as a function?
-
-### LONG SCRIPT: (Change input and output, add Rscripts, etc.)
+**LONG SCRIPT: (Change input and output, add Rscripts, etc.)**
 
 Some assumptions are made in R scripts that may not work with this data: suggestion is to attempt a trail run with R scripts using 4th chrmosome (the smallest) to make sure all scripts work
 
@@ -1411,7 +1414,7 @@ print('Done and everything gone')
 _____________________________________________________________
 _____________________________________________________________
 
-### Running [poolSeq](https://github.com/ThomasTaus/poolSeq) R package:
+## Running [poolSeq](https://github.com/ThomasTaus/poolSeq) R package:
 
 ```
 #! /bin/bash
