@@ -14,9 +14,10 @@ ddat2$num <- 1:length(ddat2$meanFst)
 xc_mean <- mean(ddat2$meanFst)
 xs_median <- median(ddat2$meanFst)
 
-# Remove unneccesary chromosomes (het etc.) if needed: 
+# Keep chrososomes of interest (in list below) if needed: 
 
-# NEED TO ADD FROM SARAH!!!!!!!!!!!
+#Obviously Unhash if needed:
+# ddat2 <- filter(ddat2, chr %in% c('X','2L','2R','3L','3R','4')
 
 g <- nrow(ddat2[which(ddat2$chr=='2L'),])
 h <- nrow(ddat2[which(ddat2$chr=='2R'),])
@@ -40,12 +41,12 @@ ddat2$number <- c((l+1):(l+g),
 
 # Example: different order but same effect, X is second but want it first, so second line becomes 1:l. 2L follows ((l+1):(l+g)) and so on.
 #3R-X-2L-3L-2R-4
-ddat2$number <- c((l+g+h+i+1):(l+g+h+i+j),
-                  (1:l),
-                  (l+1):(l+g), 
-                  (l+g+h+1):(l+g+h+i),
-                  (l+g+1):(l+g+h),
-                  (l+g+h+i+j+1):(l+g+h+i+j+k))
+#ddat2$number <- c((l+g+h+i+1):(l+g+h+i+j),
+#                  (1:l),
+#                  (l+1):(l+g), 
+#                  (l+g+h+1):(l+g+h+i),
+#                  (l+g+1):(l+g+h),
+#                  (l+g+h+i+j+1):(l+g+h+i+j+k))
 #Basically: each chromosome will correspond to one split, just need to move it around based initial order (assumeing the order you want is X-2L-2R-3L-3R-4)
 
 ggxcv <-  ggplot(data = ddat2, aes(x=num, y=meanFst, color=chr))
