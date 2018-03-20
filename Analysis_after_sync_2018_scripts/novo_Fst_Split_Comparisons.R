@@ -13,7 +13,8 @@
   Fst_novo <- fread('novo_episodic_main.fst')
 
 ### Make into long format
-  XCC  <- gather(Fst_novo, Comparison, Fst_measure, 6:83, factor_key=TRUE)
+  ccol <- ncol(Fst_novo)
+  XCC  <- gather(Fst_novo, Comparison, Fst_measure, 6:ccol, factor_key=TRUE)
 
 ### Remove intermediate:
   rm(Fst_novo)
