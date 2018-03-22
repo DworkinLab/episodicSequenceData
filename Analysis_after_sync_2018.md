@@ -236,19 +236,13 @@ ________________________________________________________________________________
 
 ## 5) estimates of selection coefficient at each position for selection and control lineages using [poolSeq](https://github.com/ThomasTaus/poolSeq) R package:
 
-Not completed currently:
-
-- Machine was full and current script takes a long time
-
-- should this be done on the full chromosome or focus on regions of interest (say the top 1% above)
-
 **Script:** [poolseq_SelectionCoefficientEstimate.sh](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/poolseq_SelectionCoefficientEstimate.sh)
 
 This script will break the file into two treatment .sync files, break apart these .sync files (smaller sized files), and run through a R script to run poolSeq Package. 
 
 **Rscript:** [poolSeq_selectionCoeff.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/poolSeq_selectionCoeff.R)
 
-Combine the .csv into one file:
+Combine the .csv into one file: Should add a chromosome column to the script
 **Rscript:** [combinePoolseqCSV.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/combinePoolseqCSV.R)
 
 Notes: 
