@@ -1113,6 +1113,17 @@ MGD3_SO_CAGATC_novo_merge_novo_final_realigned.bam
 
 Some assumptions are made in R scripts that may not work with this data: suggestion is to attempt a trail run with R scripts using 4th chrmosome (the smallest) to make sure all scripts work
 
+The Basic model: glm of the major and minor allele count at each position for Treatment by Generation effects (ignoring cage)
+```
+      modlist_2[[i]] <- 
+        glm(cbind(Major_count, Minor_count) ~ Treatment*Generation, 
+            data = tmp2, family = "binomial")
+```
+
+The long script: basic outline == Breaks up sync files (per chromo) into small peices, converts to major/minor allele counts, runs model per position, and then brings back into one chromosome. 
+
+Things need to be changed to run more efficiently
+
 ```
 #! /bin/bash
 
@@ -1292,7 +1303,6 @@ Need a directory to hold chromosomal outputs:
 ```
 mkdir /home/paul/coeffs_fullChromo
 ```
-
 
 
 To run: have args[1] be the output directory created just above (which can hold script to avoid confusion with other mappers)
