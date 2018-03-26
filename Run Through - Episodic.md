@@ -6867,26 +6867,46 @@ write.csv(X, file='/home/paul/episodicData/mpileup_dir/bwa_episodic_2L_Con.csv',
 ```
 
 ### Sync to counts: positions of interest
+
+```
+#! /bin/bash
+
+# Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to .sync files
+SyncFiles=${project_dir}/novo_mpileup
+
+# Need to copy three R scripts and add to a new directory (i.e. novo_Rscripts)
+Rscripts=${project_dir}/novo_Rscripts
+
+# The seperated .sync files
+sync[0]=${SyncFiles}/novo_episodic_3R.sync
+sync[1]=${SyncFiles}/novo_episodic_2R.sync
+sync[2]=${SyncFiles}/novo_episodic_3L.sync
+sync[3]=${SyncFiles}/novo_episodic_2L.sync
+sync[4]=${SyncFiles}/novo_episodic_X.sync 
+sync[5]=${SyncFiles}/novo_episodic_4.sync 
+
+for file in ${sync[@]}
+	do
+        Rscript ${Rscripts}/.R ${file} 
+	done 
+
+```
 ```
 args <- commandArgs(trailingOnly = TRUE)
 
 require('tidyr')
 require('dplyr')
 
-mydirs <- list.dirs(path = args[1], recursive = FALSE)
+sync <- args[1]
 
-for (dir in mydirs){
+episodic_counts <- read.table(sync)
 
-    setwd(dir)
-  
-  mysyncs <- list.files(pattern=".sync")
-  
-  for (sync in mysyncs){
-  
-      episodic_counts <- read.table(sync)
-
-    name.Columns <- c("Chromosome", "Position", "ref", "ConR1_115", "ConR2_115", "SelR2_115", "SelR1_115", "ConR1_38", "ConR2_38", "SelR1_38", "SelR2_38", "ConR1_77", "ConR2_77", "SelR1_77", "SelR2_77", "SelR1_0")
-    colnames(episodic_counts) <- name.Columns
+name.Columns <- c("Chromosome", "Position", "ref", "ConR1_115", "ConR2_115", "SelR2_115", "SelR1_115", "ConR1_38", "ConR2_38", "SelR1_38", "SelR2_38", "ConR1_77", "ConR2_77", "SelR1_77", "SelR2_77", "SelR1_0")
+ 
+ colnames(episodic_counts) <- name.Columns
 
     episodic_counts$SelR2_0 <- episodic_counts$SelR1_0
     episodic_counts$ConR1_0 <- episodic_counts$SelR1_0
@@ -6968,7 +6988,11 @@ for (dir in mydirs){
     
     episodic_long[cols.num] <- sapply(episodic_long[cols.num],as.numeric) 
     
-    write.csv(episodic_long, file=paste(sync, ".csv", sep=""))
+    
+episodic_long$SIG_2 <- ifelse(episodic_long$pos %in% siglist_2, 'SIG', "NOPE")
+CHROMOs_4 <-  CHROMOs[-which(CHROMOs$SIG_2=='NOPE'),]
+   
+write.csv(CHROMOs_4, file=paste(sync, "sig_pos.csv", sep=""))
   }
 }
 
