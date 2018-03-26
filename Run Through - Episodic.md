@@ -6815,6 +6815,8 @@ Rscript ${Rscripts}/test_combinePoolseqCSV.R ${splitSync}
 
 
 Combining Practice Before other is done:
+
+Novoalign: 2L
 ```
 Rscript /home/paul/episodicData/novoalign/novo_Rscripts/combine_2L_Con.R
 ```
@@ -6837,3 +6839,30 @@ X$chr <- '2L'
 #write.csv(X, file='/home/paul/episodicData/novoalign/novo_mpileup/novo_episodic_2L_Con.csv', row.names = FALSE)
 write.csv(X, file='/home/paul/episodicData/novoalign/novo_mpileup/novo_episodic_2L_Sel.csv', row.names = FALSE)
 ```
+
+
+Combining Practice Before other is done:
+BWA-mem: 2L
+```
+Rscript /home/paul/episodicData/mpileup_dir/poolseq_combine_2L_Con.R
+```
+```
+Rscript /home/paul/episodicData/mpileup_dir/poolseq_combine_2L_Sel.R
+```
+
+rscript: combine_2L_bwa.R
+```
+setwd('/home/paul/episodicData/mpileup_dir/splitsync_dir/episodic_data_2L_Con_Split')
+#setwd('/home/paul/episodicData/mpileup_dir/splitsync_dir/episodic_data_2L_Sel_Split')
+
+mycsvs <- list.files(pattern='.csv')
+X <- NULL
+for (file in mycsvs){
+  X2 <- read.csv(file, h=T)
+  X <- rbind(X, X2)
+}
+X$chr <- '2L'
+write.csv(X, file='/home/paul/episodicData/mpileup_dir/bwa_episodic_2L_Con.csv', row.names = FALSE)
+#write.csv(X, file='/home/paul/episodicData/mpileup_dir/bwa_episodic_2L_Sel.csv', row.names = FALSE)
+```
+
