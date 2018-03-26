@@ -6866,3 +6866,116 @@ write.csv(X, file='/home/paul/episodicData/mpileup_dir/bwa_episodic_2L_Con.csv',
 #write.csv(X, file='/home/paul/episodicData/mpileup_dir/bwa_episodic_2L_Sel.csv', row.names = FALSE)
 ```
 
+### Sync to counts: positions of interest
+```
+args <- commandArgs(trailingOnly = TRUE)
+
+require('tidyr')
+require('dplyr')
+
+mydirs <- list.dirs(path = args[1], recursive = FALSE)
+
+for (dir in mydirs){
+
+    setwd(dir)
+  
+  mysyncs <- list.files(pattern=".sync")
+  
+  for (sync in mysyncs){
+  
+      episodic_counts <- read.table(sync)
+
+    name.Columns <- c("Chromosome", "Position", "ref", "ConR1_115", "ConR2_115", "SelR2_115", "SelR1_115", "ConR1_38", "ConR2_38", "SelR1_38", "SelR2_38", "ConR1_77", "ConR2_77", "SelR1_77", "SelR2_77", "SelR1_0")
+    colnames(episodic_counts) <- name.Columns
+
+    episodic_counts$SelR2_0 <- episodic_counts$SelR1_0
+    episodic_counts$ConR1_0 <- episodic_counts$SelR1_0
+    episodic_counts$ConR2_0 <- episodic_counts$SelR1_0
+
+    episodic_counts$Ancestor <- episodic_counts$SelR1_0
+
+    long_episodic <- gather(episodic_counts, Population, Allele_Freq , ConR1_115:ConR2_0, factor_key=TRUE)
+    
+    rm(episodic_counts)
+
+    Episodic_split_2 <- long_episodic %>% 
+      separate(Allele_Freq, c("A","T","C","G","N","del"), ":")
+    
+    rm(long_episodic)
+
+    Episodic_split_2 <- Episodic_split_2 %>% 
+      separate(Ancestor, c("A_0","T_0","C_0","G_0","N_0","del_0"), ":")
+
+    cols.num <- c("A_0", "T_0", "C_0", "G_0", "N_0", "del_0", "A", "T", "C", "G", "N", "del")
+    
+    Episodic_split_2[cols.num] <- sapply(Episodic_split_2[cols.num],as.numeric)
+
+    Episodic_split_2$sum <- (rowSums(Episodic_split_2[,11:16]))
+
+    Episodic_split_2$anc_max <- apply(Episodic_split_2[,4:9], 1, max)
+
+    Episodic_split_2$anc_min <- apply(Episodic_split_2[,4:9], 1, 
+                                      function(x)max(x[x!=max(x)]))
+
+    Episodic_split_2 <- within(Episodic_split_2, {
+      MajorAllele = ifelse(anc_max== Episodic_split_2[,4], "A", ifelse(anc_max== Episodic_split_2[,5],  "T", ifelse(anc_max== Episodic_split_2[,6],  "C",ifelse(anc_max== Episodic_split_2[,7],  "G", ifelse(anc_max== Episodic_split_2[,8],  "N", ifelse(anc_max== Episodic_split_2[,9],  "del", "N/A" ))))))})
+
+    Episodic_split_2 <- within(Episodic_split_2, {
+      Maj_count = ifelse (MajorAllele == "A", Episodic_split_2[,11], ifelse (MajorAllele == "T", Episodic_split_2[,12], ifelse (MajorAllele == "C", Episodic_split_2[,13], ifelse (MajorAllele == "G", Episodic_split_2[,14], ifelse (MajorAllele == "N", Episodic_split_2[,15], ifelse (MajorAllele == "del", Episodic_split_2[,16], "N/A"))))))})
+    
+    Episodic_split_2 <- within(Episodic_split_2, {
+      MinorAllele = ifelse(Maj_count==Episodic_split_2[,17] & anc_min==0, "N/A", ifelse(anc_min== Episodic_split_2[,4], "A", ifelse(anc_min== Episodic_split_2[,5],  "T", ifelse(anc_min== Episodic_split_2[,6],  "C",ifelse(anc_min== Episodic_split_2[,7],  "G", ifelse(anc_min== Episodic_split_2[,8],  "N", ifelse(anc_min== Episodic_split_2[,9],  "del", "Z") ))))))})
+
+    Episodic_split_2 <- within(Episodic_split_2, {
+      Min_count = ifelse (MinorAllele == "A", Episodic_split_2[,11], ifelse (MinorAllele == "T", Episodic_split_2[,12], ifelse (MinorAllele == "C", Episodic_split_2[,13], ifelse (MinorAllele == "G", Episodic_split_2[,14], ifelse (MinorAllele == "N", Episodic_split_2[,15],ifelse (MinorAllele == "del", Episodic_split_2[,16],"N/A"))))))})
+    
+    Episodic_split_2$maj_all <- apply(Episodic_split_2[,11:16], 1, max)
+    
+    Episodic_split_2$alt_allele <- apply(Episodic_split_2[,11:16], 1, 
+                                         function(x)max(x[x!=max(x)]))
+    
+    Episodic_split_2 <- within(Episodic_split_2, {
+      Min_count_2 = ifelse (Maj_count == sum, 0, ifelse(Maj_count==maj_all, alt_allele, maj_all))})
+    
+    Episodic_split_2 <- within(Episodic_split_2, {
+      MinorAllele_base = ifelse(Min_count_2==0, "N/A", ifelse(Min_count_2== Episodic_split_2[,11], "A", ifelse(Min_count_2== Episodic_split_2[,12],  "T", ifelse(Min_count_2== Episodic_split_2[,13],  "C",ifelse(Min_count_2== Episodic_split_2[,14],  "G", ifelse(Min_count_2== Episodic_split_2[,15],  "N", ifelse(Min_count_2== Episodic_split_2[,16],  "del", "Z") ))))))})
+    
+    Episodic_split_2 <- subset(Episodic_split_2, select = -c(A_0,T_0,C_0,G_0,N_0,del_0,A,T,C,G,N,del,anc_max,anc_min, MinorAllele, Min_count, maj_all, alt_allele))
+    
+    nam.col <- c("chr", "pos", "ref", "Population", "sum", "MajorAllele", "Major_count", "Minor_count", "MinorAllele")
+    colnames(Episodic_split_2) <- nam.col
+    
+    grp <- Episodic_split_2 %>%
+      group_by(pos) %>%
+      summarise(sum=sum(Minor_count))
+      
+    grp2 <- grp[which(grp$sum<=5),]
+    
+    Episodic_split_2 <- Episodic_split_2[!(Episodic_split_2$pos %in% grp2$pos),]
+
+    rm(grp)
+    rm(grp2)
+   
+   episodic_long <- Episodic_split_2 %>%
+      separate(Population, c("Treatment", "Generation"), "_")
+    
+    rm(Episodic_split_2)
+    
+    episodic_long <- episodic_long %>%
+      separate(Treatment, c("Treatment", "Cage"), "R")
+      
+    cols.num <- c("Cage", "Generation", "Major_count", "Minor_count")
+    
+    episodic_long[cols.num] <- sapply(episodic_long[cols.num],as.numeric) 
+    
+    write.csv(episodic_long, file=paste(sync, ".csv", sep=""))
+  }
+}
+
+
+```
+
+
+
+
+
