@@ -47,6 +47,7 @@ ddat2$number <- c((l+1):(l+g),
 #                  (l+g+h+1):(l+g+h+i),
 #                  (l+g+1):(l+g+h),
 #                  (l+g+h+i+j+1):(l+g+h+i+j+k))
+
 #Basically: each chromosome will correspond to one split, just need to move it around based initial order (assumeing the order you want is X-2L-2R-3L-3R-4)
 
 ggxcv <-  ggplot(data = ddat2, aes(x=num, y=meanFst, color=chr))
