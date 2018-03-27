@@ -6866,21 +6866,23 @@ write.csv(X, file='/home/paul/episodicData/mpileup_dir/bwa_episodic_2L_Con.csv',
 #write.csv(X, file='/home/paul/episodicData/mpileup_dir/bwa_episodic_2L_Sel.csv', row.names = FALSE)
 ```
 
+
+
 ### Sync to counts: positions of interest
 
 ```
 #! /bin/bash
 
-# Variable for project:
+	# Variable for project:
 project_dir=/home/paul/episodicData/novoalign
 
-#Path to .sync files
+	# Path to .sync files
 SyncFiles=${project_dir}/novo_mpileup
 
-# Need to copy three R scripts and add to a new directory (i.e. novo_Rscripts)
+	# Need to copy three R scripts and add to a new directory (i.e. novo_Rscripts)
 Rscripts=${project_dir}/novo_Rscripts
 
-# The seperated .sync files
+	# Novoalign:
 sync[0]=${SyncFiles}/novo_episodic_3R.sync
 sync[1]=${SyncFiles}/novo_episodic_2R.sync
 sync[2]=${SyncFiles}/novo_episodic_3L.sync
@@ -6890,8 +6892,35 @@ sync[5]=${SyncFiles}/novo_episodic_4.sync
 
 for file in ${sync[@]}
 	do
-        Rscript ${Rscripts}/.R ${file} 
-	done 
+        Rscript ${Rscripts}/Traj_extractSigPos.R ${file} 
+done 
+
+```
+
+```
+#! /bin/bash
+
+# Variable for project:
+project_dir=/home/paul/episodicData
+
+#Path to .sync files
+SyncFiles=${project_dir}/mpileup_dir
+
+# Need to copy three R scripts and add to a new directory (i.e. novo_Rscripts)
+Rscripts=${project_dir}/novoalign/novo_Rscripts
+
+# BWA:
+sync[0]=${SyncFiles}/episodic_data_3R.sync
+sync[1]=${SyncFiles}/episodic_data_2R.sync
+sync[2]=${SyncFiles}/episodic_data_3L.sync
+sync[3]=${SyncFiles}/episodic_data_2L.sync
+sync[4]=${SyncFiles}/episodic_data_X.sync 
+sync[5]=${SyncFiles}/episodic_data_4.sync
+
+for file in ${sync[@]}
+	do
+        Rscript ${Rscripts}/Traj_extractSigPos.R ${file} 
+done 
 
 ```
 ```
@@ -6899,8 +6928,13 @@ args <- commandArgs(trailingOnly = TRUE)
 
 require('tidyr')
 require('dplyr')
+require('data.table')
 
 sync <- args[1]
+
+# Read in significant positions (~ significant after Bonferonni and FDR corrections on model output)
+    siglist <- fread('/home/paul/episodicData/Sig_pos_list.csv', h=T)
+    siglist_2 <- as.list(siglist)
 
 episodic_counts <- read.table(sync)
 
@@ -6988,15 +7022,11 @@ name.Columns <- c("Chromosome", "Position", "ref", "ConR1_115", "ConR2_115", "Se
     
     episodic_long[cols.num] <- sapply(episodic_long[cols.num],as.numeric) 
     
+ # Filter:
+    episodic_long$SIG_2 <- ifelse(episodic_long$pos %in% siglist_2, 'SIG', "NOPE")
+    CHROMOs_4 <-  episodic_long[-which(episodic_long$SIG_2=='NOPE'),]
     
-episodic_long$SIG_2 <- ifelse(episodic_long$pos %in% siglist_2, 'SIG', "NOPE")
-CHROMOs_4 <-  CHROMOs[-which(CHROMOs$SIG_2=='NOPE'),]
-   
-write.csv(CHROMOs_4, file=paste(sync, "sig_pos.csv", sep=""))
-  }
-}
-
-
+    write.csv(CHROMOs_4, file=paste(sync, "_sig_pos.csv", sep=""))
 ```
 
 
