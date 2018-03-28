@@ -22,7 +22,9 @@ ________________________________________________________________________________
 ### 5) Average estimates of selection coefficient at each position for selection and control lineages for thee mappers
 /
 /
-
+### 6) Trajectory of regions of interest based on model output
+/
+/
 
 _______________________________________________________________________________________
 
@@ -256,6 +258,11 @@ Notes:
 - breaking the .sync file causes changes in structure, so a modified read_sync function is used (in R script; Taus_ReadSync.R))
 
 _______________________________________________________________________________________
+
+## 6) Trajectory of regions of interest based on model output
+
+Ex. with BWA -mem output sync files
+**Rscript:** [extract_sig_Chromo_positions.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/extract_sig_Chromo_positions.R)
 
 
 
