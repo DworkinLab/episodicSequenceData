@@ -262,7 +262,12 @@ ________________________________________________________________________________
 ## 6) Trajectory of regions of interest based on model output
 
 Ex. with BWA -mem output sync files
+
 **Rscript:** [extract_sig_Chromo_positions.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/extract_sig_Chromo_positions.R)
 
+running rscript:
+```
+Rscript extract_sig_Chromo_positions.R
+```
 
 
