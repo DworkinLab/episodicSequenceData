@@ -6870,6 +6870,7 @@ write.csv(X, file='/home/paul/episodicData/mpileup_dir/bwa_episodic_2L_Con.csv',
 
 ### Sync to counts: positions of interest
 
+--> Failed:
 ```
 #! /bin/bash
 
@@ -7029,6 +7030,74 @@ name.Columns <- c("Chromosome", "Position", "ref", "ConR1_115", "ConR2_115", "Se
     write.csv(CHROMOs_4, file=paste(sync, "_sig_pos.csv", sep=""))
 ```
 
+### Pull positons of interest:
+```
+#! /bin/bash
+
+# Variable for project:
+project_dir=/home/paul/episodicData
+
+#Path to .sync files
+SyncFiles=${project_dir}/mpileup_dir
+
+# Need to copy three R scripts and add to a new directory (i.e. novo_Rscripts)
+Rscripts=${project_dir}/novoalign/novo_Rscripts
+
+# BWA:
+sync[0]=${SyncFiles}/episodic_data_3R.sync
+sync[1]=${SyncFiles}/episodic_data_2R.sync
+sync[2]=${SyncFiles}/episodic_data_3L.sync
+sync[3]=${SyncFiles}/episodic_data_2L.sync
+sync[4]=${SyncFiles}/episodic_data_X.sync 
+sync[5]=${SyncFiles}/episodic_data_4.sync
+
+for file in ${sync[@]}
+	do
+        Rscript ${Rscripts}/extractSigPos.R ${file} 
+done 
+```
+```
+require('data.table')
+
+## Read in data: 
+
+	episodic_data <- fread('/home/paul/episodicData/mpileup_dir/episodic_data_X.sync')
+	#episodic_data <- fread('/home/paul/episodicData/mpileup_dir/episodic_data_2R.sync')
+	#episodic_data <- fread('/home/paul/episodicData/mpileup_dir/episodic_data_2L.sync')
+	#episodic_data <- fread('/home/paul/episodicData/mpileup_dir/episodic_data_3R.sync')
+	#episodic_data <- fread('/home/paul/episodicData/mpileup_dir/episodic_data_3L.sync')
+	#episodic_data <- fread('/home/paul/episodicData/mpileup_dir/episodic_data_4.sync')
+
+	name.Columns <- c("Chromosome", "Position", "ref", 
+	"ConR1_115", "ConR2_115", "SelR1_115", "SelR2_115", 
+	"ConR1_38", "ConR2_38", "SelR1_38", "SelR2_38", 
+	"ConR1_77", "ConR2_77", "SelR1_77", "SelR2_77", 
+	"SelR1_0")
+
+	colnames(episodic_data) <- name.Columns
+
+## Keep rows with Position in list (position == column 2)
+
+	siglist <- fread('/home/paul/episodicData/positions/X_positions.csv', h=T)
+	#siglist <- fread('/home/paul/episodicData/positions/2R_positions.csv', h=T)
+	#siglist <- fread('/home/paul/episodicData/positions/2L_positions.csv', h=T)
+	#siglist <- fread('/home/paul/episodicData/positions/3R_positions.csv', h=T)
+	#siglist <- fread('/home/paul/episodicData/positions/3L_positions.csv', h=T)
+	#siglist <- fread('/home/paul/episodicData/positions/4_positions.csv', h=T)
+	
+	siglist_2 <- as.list(siglist$x)
+	episodic_counts <- episodic_data[episodic_data$Position %in% siglist_2 ,]
+	
+## write csv file with only positions
+	
+	write.csv(episodic_counts, file="/home/paul/episodicData/positions/X_positions.sync")
+	#write.csv(episodic_counts, file="/home/paul/episodicData/positions/2R_positions.sync")
+	#write.csv(episodic_counts, file="/home/paul/episodicData/positions/2L_positions.sync")
+	#write.csv(episodic_counts, file="/home/paul/episodicData/positions/3R_positions.sync")
+	#write.csv(episodic_counts, file="/home/paul/episodicData/positions/3L_positions.sync")
+	#write.csv(episodic_counts, file="/home/paul/episodicData/positions/4_positions.sync")
+
+```
 
 
 
