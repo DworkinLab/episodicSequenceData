@@ -1012,6 +1012,7 @@ grep 'X' ${novo_mpileup}/${project_name}_main.sync > ${novo_mpileup}/${project_n
 
 Sync File now set up to be easily worked with; with one version (being `_main.sync`) that has the 6 chromosomes of interest, and 6 files for these chromosomes seperate
 
+# Easier layout for Fst, Poolseq, and Model scripts (& Pi) can be found [here](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018.md)
 ## Fst:
 
 ```
@@ -1541,6 +1542,7 @@ Rscript ${Rscripts}/combinePoolseqCSV.R ${splitSync}
  -- Note: may want to move combine into big (dir) loop and change script to not loop through all dir's but just the current one dir?
 
 
+# Positions of interest: finding positions overlapping in model output and selection coefficients with high Con:Sel Fst values
 
 
 
