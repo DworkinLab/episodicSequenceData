@@ -217,9 +217,9 @@ Rscript model_3mappersTxG.R 'Input/OutputDirectory'
 ```
 
 **Plots**
-Which size is better????
 
-Treatment x Generation -log10(meanP-value) for model output: 
+
+Treatment x Generation -log10(meanP-value) for model output: With 
 ![FullGenomeTxGPlot](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/CHROMO_meanP.png)
 
 ## 4) Comparison of Fst (of generation 115, control:Selection) and Model Outputs:
