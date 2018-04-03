@@ -22,7 +22,7 @@ ________________________________________________________________________________
 ### 5) Average estimates of selection coefficient at each position for selection and control lineages for thee mappers
 /
 /
-### 6) Trajectory of regions of interest based on model output
+### 6) Trajectory of regions of interest based on model, Fst and selection coefficients
 /
 /
 
@@ -260,6 +260,216 @@ Notes:
 _______________________________________________________________________________________
 
 ## 6) Trajectory of regions of interest based on model output
+
+### Finding positions: 
+
+**Fst window and ranges in data frame:**
+```
+### Adjust the FST output (FDR) and keep positons that have an Fst value after adjusting
+ require(data.table)
+ require(tidyverse)
+### Read in the data (final generation) with comparison between Control and Selection lines:
+ XC2 <- fread('combined_fst_1:3.csv')
+ CX2 <- fread('combined_fst_2:4.csv')
+### One data frame:
+ ddat <- rbind(CX2, XC2)
+### Mean Fst b/w two replicates:
+ ddat2 <- ddat %>%
+   group_by(chr, window) %>%
+   summarise(meanFst = (mean(meanFst)))
+### Fdr correction: Adjust the calculated Fst values with a false discovery rate:
+ ddat2$adjustFst <- p.adjust(ddat2$meanFst, method = 'fdr')
+### Remove positions with an Fst of 0
+ ddat2 <-  ddat2[-which(ddat2$adjustFst==0),]
+### The range of the 500 bp window (window == center)
+ ddat2$minWindow <- ddat2$window -250
+ ddat2$maxWindow <- ddat2$window +250
+
+### need to sort positions based on chromosome (for trajectories):
+ fst_X <- ddat2[which(ddat2$chr=='X'),]
+ fst_2L <- ddat2[which(ddat2$chr=='2L'),]
+ fst_2R <- ddat2[which(ddat2$chr=='2R'),]
+ fst_3L <- ddat2[which(ddat2$chr=='3L'),]
+ fst_3R <- ddat2[which(ddat2$chr=='3R'),]
+ fst_4 <- ddat2[which(ddat2$chr=='4'),]
+
+### create positional data frame (to be sources later:
+ posfst_X <- as.data.frame(cbind(fst_X$window, fst_X$minWindow, fst_X$maxWindow))
+ posfst_2L <- as.data.frame(cbind(fst_2L$window, fst_2L$minWindow, fst_2L$maxWindow))
+ posfst_2R <- as.data.frame(cbind(fst_2R$window, fst_2R$minWindow, fst_2R$maxWindow))
+ posfst_3L <- as.data.frame(cbind(fst_3L$window, fst_3L$minWindow, fst_3L$maxWindow))
+ posfst_3R <- as.data.frame(cbind(fst_3R$window, fst_3R$minWindow, fst_3R$maxWindow))
+ posfst_4 <- as.data.frame(cbind(fst_4$window, fst_4$minWindow, fst_4$maxWindow))
+
+### Keep only position data frame for sourcing:
+ rm(list=ls()[! ls() %in% c('posfst_X', "posfst_2L", 'posfst_2R', 'posfst_3R', 'posfst_3L','posfst_4')])
+```
+**Positions with significant change after FDR adjustments:**
+```
+### Finding Positions of interest from Model:
+
+### Packages:
+ require(dplyr)
+ require(ggplot2)
+ require(data.table)
+
+### Read in each Chromosomal Data:  
+ ddatX <- fread('../Data/X_Chromosome_TxG.csv', h=T)
+ chr_X <- ddatX %>%
+   group_by(position, chr, Effects) %>%
+   summarise(mean_p = (mean(p.value)))
+ rm(ddatX)
+ a <- nrow(chr_X)
+ chr_X$number <- 1:a
+
+ ddat2L <- fread('../Data/2L_Chromosome_TxG.csv', h=T)
+ chr_2L <- ddat2L %>%
+   group_by(position, chr, Effects) %>%
+   summarise(mean_p = (mean(p.value)))
+ rm(ddat2L)
+ b <- nrow(chr_2L)
+ chr_2L$number <- (a+1):(a+b) 
+
+ ddat2R <- fread('../Data/2R_Chromosome_TxG.csv', h=T)
+ chr_2R <- ddat2R %>%
+   group_by(position, chr, Effects) %>%
+   summarise(mean_p = (mean(p.value)))
+ rm(ddat2R)
+ c <- nrow(chr_2R)
+ chr_2R$number <- (a+b+1):(a+b+c)
+
+ ddat3L <- fread('../Data/3L_Chromosome_TxG.csv', h=T)
+ chr_3L <- ddat3L %>%
+   group_by(position, chr, Effects) %>%
+   summarise(mean_p = (mean(p.value)))
+ rm(ddat3L)
+ d <- nrow(chr_3L)
+ chr_3L$number <- (a+b+c+1):(a+b+c+d)
+
+ ddat3R <- fread('../Data/3R_Chromosome_TxG.csv', h=T)
+ chr_3R <- ddat3R %>%
+   group_by(position, chr, Effects) %>%
+   summarise(mean_p = (mean(p.value)))
+  rm(ddat3R)
+ e <- nrow(chr_3R)
+ chr_3R$number <- (a+b+c+d+1):(a+b+c+d+e)
+
+ ddat4 <- fread('../Data/4_Chromosome_TxG.csv', h=T)
+ chr_4 <- ddat4 %>%
+   group_by(position, chr, Effects) %>%
+   summarise(mean_p = (mean(p.value)))
+ rm(ddat4)
+ f <- nrow(chr_4)
+ chr_4$number <- (a+b+c+d+e+1):(a+b+c+d+e+f)
+ chr_4$chr <- as.character(chr_4$chr)
+
+### One large data frame:
+ CHROMOs <- rbind(chr_X, chr_2L, chr_2R, chr_3L, chr_3R, chr_4)
+
+### Fdr correction: adjust p values with false discrovey rate correction:
+ CHROMOs$adjustP <- p.adjust(CHROMOs$mean_p, method = 'fdr')
+### Filter slightly to make it easier to wotk with:
+ CHROMOs_3 <-  CHROMOs[which(CHROMOs$adjustP<0.9),]
+
+# Split into chromosomes and keep significant postions:
+ ddat2_X <- CHROMOs_3[which(CHROMOs_3$chr=='X' & CHROMOs_3$adjustP<0.05),]
+ pos_X <- ddat2_X$position
+ ddat2_2L <- CHROMOs_3[which(CHROMOs_3$chr=='2L' & CHROMOs_3$adjustP<0.05),]
+ pos_2L <- ddat2_2L$position
+ ddat2_2R <- CHROMOs_3[which(CHROMOs_3$chr=='2R' & CHROMOs_3$adjustP<0.05),]
+ pos_2R <- ddat2_2R$position
+ ddat2_3L <- CHROMOs_3[which(CHROMOs_3$chr=='3L' & CHROMOs_3$adjustP<0.05),]
+ pos_3L <- ddat2_3L$position
+ ddat2_3R <- CHROMOs_3[which(CHROMOs_3$chr=='3R' & CHROMOs_3$adjustP<0.05),]
+ pos_3R <- ddat2_3R$position
+ ddat2_4 <- CHROMOs_3[which(CHROMOs_3$chr=='4' & CHROMOs_3$adjustP<0.05),]
+ pos_4 <- ddat2_4$position
+
+### Remove all but positions:
+ rm(list=ls()[! ls() %in% c('pos_X','pos_2L','pos_2R','pos_3L','pos_3R','pos_4')])
+```
+
+**Positions showing significant selection coefficents in selection but not controls:**
+```
+### Must be done for each chromosome seperatly: 
+###-----    2R     -----###
+ novo_sel_2R <- fread('novo_episodic_2R_Sel.csv')
+ novo_con_2R <- fread('novo_episodic_2R_Con.csv')
+ bwa_sel_2R <- fread('bwa_episodic_2R_Sel.csv')
+ bwa_con_2R <- fread('bwa_episodic_2R_Con.csv')
+
+ column.names <- c('selcoef', 'pval', 'pos', 'chr')
+ colnames(novo_sel_2R) <- column.names
+ colnames(novo_con_2R) <- column.names
+ colnames(bwa_sel_2R) <- column.names
+ colnames(bwa_con_2R) <- column.names
+
+ novo_sel_2R <- na.omit(novo_sel_2R)
+ novo_con_2R <- na.omit(novo_con_2R)
+ bwa_sel_2R <- na.omit(bwa_sel_2R)
+ bwa_con_2R <- na.omit(bwa_con_2R)
+
+ novo_sel_2R$map <- 'Novo'
+ novo_con_2R$map <- 'Novo'
+ bwa_sel_2R$map <- 'bwa'
+ bwa_con_2R$map <- 'bwa'
+
+ novo_sel_2R$Treatment <- 'Sel'
+ novo_con_2R$Treatment <- 'Con'
+ bwa_sel_2R$Treatment <- 'Sel'
+ bwa_con_2R$Treatment <- 'Con'
+
+ Xcx_2R <- rbind(novo_con_2R, novo_sel_2R, bwa_con_2R, bwa_sel_2R)
+###-----    2R     -----###
+
+### Repeat this for all chromosomes (changing instances of 2R to chr) to create one large data frame:
+ Xcx <- rbind(Xcx_2R, Xcx_2L)
+
+### Make sure that all 2 (3) mappers have the position for chr/treatment:
+ CXC <- Xcx %>%
+   group_by(chr, Treatment, pos) %>%
+   mutate(count = n())
+ XCV <- CXC[which(CXC$count==2),]
+
+### Get the mean selection coefficent and the least significant pvalue (max(pval)) between mappers:
+ Zxc <- XCV %>%
+   group_by(chr, Treatment, pos) %>%
+   summarise(meanSelCoef = (mean(selcoef)),
+             pval_max=max(pval))
+
+### Adjust the p-value left with false discovery rate and keep significant postions:
+ Zxc$adjustP <- p.adjust(Zxc$pval_max, method = 'fdr')
+ Zxc$sig <- ifelse(Zxc$adjustP<0.05, "<0.05", ">0.05")
+ Zxc_sig <- Zxc[which(Zxc$sig=='<0.05'),]
+
+### Check if there are positons that are significant and present for both control and selection (and keep only positions that are only significant for selection:
+
+ Zxc_count <- Zxc_sig %>%
+   group_by(chr, pos) %>%
+   mutate(count = n())
+ Zxc_count2 <- Zxc_count[which(Zxc_count$count==1),]
+ Zxc_count2 <- Zxc_count2[which(Zxc_count2$Treatment=='Sel'),]
+
+### Positions by chromosome:
+
+ poolseq_X <- Zxc_count2[which(Zxc_count2$chr=='X'),]
+ pool_pos_X <- poolseq_X$pos
+ poolseq_2L <- Zxc_count2[which(Zxc_count2$chr=='2L'),]
+ pool_pos_2L <- poolseq_2L$pos
+ poolseq_2R <- Zxc_count2[which(Zxc_count2$chr=='2R'),]
+ pool_pos_2R <- poolseq_2R$pos
+ poolseq_3L <- Zxc_count2[which(Zxc_count2$chr=='3L'),]
+ pool_pos_3L <- poolseq_3L$pos
+ poolseq_3R <- Zxc_count2[which(Zxc_count2$chr=='3R'),]
+ pool_pos_3R <- poolseq_3R$pos
+ poolseq_4 <- Zxc_count2[which(Zxc_count2$chr=='4'),]
+ pool_pos_4 <- poolseq_4$pos
+ 
+ ### keep only positions:
+  rm(list=ls()[! ls() %in% c('pool_pos_2L', 'pool_pos_2R', 'pool_pos_3L', 'pool_pos_3R', 'pool_pos_4', 'pool_pos_X')])
+```
+
+
 
 Ex. with BWA -mem output sync files
 
