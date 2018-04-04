@@ -63,14 +63,27 @@ ____________________________________________________
 **None corrected P values: TxG -log10(meanP-value)**
 ![FullGenomeTxGPlot](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/CHROMO_meanP.png)
 
+**FDR Corrected P-values: TxG -log10(meanP-value)**
+![FDRcorrection](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/Fdr_adjustP.png)
 
+### Questions: 
+   1. is Bonferroni a better visualization for the paper (much less going on)
+   
 **TxG: -log10(meanP) with Bonferroni Correction for multiple comparisons**
-![BonferroniCorrection](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/Bonferroni_p.adjust_TxG.png)
+![BonferroniCorrection_2200x1100](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/Bonferroni_p.adjust_TxG.png)
+
+  -- Can create a plot one the regular plot (first one) with coloured sig. values: Would not look good with FDR:
+  
+  ![Coloured Sig](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/fdr_bonf_adjustP_sigColoured.png)
+  
+  
+  2. The size of plots
+  
+**Bonferroni: smaller size (comparison for plot sizes)**
+![Bonferonni_1100x550](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/Bonf_AdjustP.png)
 
 
-
-
-
+## Poolseq outputs:
 
 
 
