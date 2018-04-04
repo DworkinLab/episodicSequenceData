@@ -76,11 +76,6 @@ ____________________________________________________
   
   ![Coloured Sig](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/fdr_bonf_adjustP_sigColoured.png)
   
-  
-  2. The size of plots
-  
-**Bonferroni: smaller size (comparison for plot sizes)**
-![Bonferonni_1100x550](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/Bonf_AdjustP.png)
 
 
 ## Poolseq outputs:
