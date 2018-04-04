@@ -86,3 +86,17 @@ Output from PoolSeq package: the significant selection coeffients that were sign
 
 ![poolseq_2L](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/Chromo_2_selcoef.png)
 
+**Questions**
+
+
+## Trajectories and positions:
+ 
+ **Outline**
+ 
+ Took positions with pvalues <0.05 after FDR from model output and found similar positions in the poolseq significant selection coefficients. Then found any overlapping windows with these positions with Fst values != 0. Ended up with ~400 positions for both 2L and 2R.
+ 
+ Trajectories are the mean absolute difference the treatments had from the ancestor
+ 
+ ![Trajectory_2ndChromo](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/Trajectory_diff_2Chromo.png)
+
+
