@@ -83,5 +83,6 @@ ____________________________________________________
 **Outline**
 
 Output from PoolSeq package: the significant selection coeffients that were significant for Predation lines and not for controls
+
 ![poolseq_2L](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/Chromo_2_selcoef.png)
 
