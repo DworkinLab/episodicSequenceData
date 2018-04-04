@@ -72,18 +72,17 @@ ____________________________________________________
 **TxG: -log10(meanP) with Bonferroni Correction for multiple comparisons**
 ![BonferroniCorrection_2200x1100](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/Bonferroni_p.adjust_TxG.png)
 
-  -- Can create a plot one the regular plot (first one) with coloured sig. values: Would not look good with FDR:
+  2. Can create a plot one the regular plot (first one) with coloured sig. values: Would not look good with FDR:
   
   ![Coloured Sig](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/fdr_bonf_adjustP_sigColoured.png)
   
-  
-  2. The size of plots
-  
-**Bonferroni: smaller size (comparison for plot sizes)**
-![Bonferonni_1100x550](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/Bonf_AdjustP.png)
 
 
 ## Poolseq outputs:
 
+**Outline**
 
+Output from PoolSeq package: the significant selection coeffients that were significant for Predation lines and not for controls
+
+![poolseq_2L](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/Chromo_2_selcoef.png)
 
