@@ -137,9 +137,13 @@ This is the average b/w two mappers (bwa and novoalign), keeping the least signi
 
 2. The location of these positions on one of the above plots 
 
-  -- larger and coloured positions on the model output for example: 2L with FDR:
+  -- larger and coloured positions on the model output for example: 
+  
+  2L with FDR:
   
 ![FDR_col](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/colouredPositions2L_Practice.png)
+  
+  2L with Bonferroni:
   
 ![bonfCOL](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/positions_2L_Bonferonii_Prac.png)
   
