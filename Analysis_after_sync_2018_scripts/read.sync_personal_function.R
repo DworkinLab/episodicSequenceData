@@ -3,14 +3,7 @@
 
 read.sync_Personal <- function(file, gen, repl, polarization=c("minor", "rising", "reference")) {
 polarization <- match.arg(polarization)  
-   
-
-  # file = '~/Bioinformatics/episodic_practice/novo_episodic_2R_Sel_1.sync'
-  # gen=c(115,115,38,38,77,77,0,0)
-  # repl=c(1,2,1,2,1,2,1,2)
-  # polarization <- "rising"
-  
-  
+     
   cat("Reading sync file ...\n")
   # load sync-file
   syncDt <- fread(file, sep=" " , header=FALSE, stringsAsFactors=FALSE)
