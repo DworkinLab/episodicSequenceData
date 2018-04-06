@@ -244,8 +244,13 @@ This script will break the file into two treatment .sync files, break apart thes
 
 **Rscript:** [poolSeq_selectionCoeff.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/poolSeq_selectionCoeff.R)
 
+Note: to run, check poolseq is available, if not, source all PoolSeq scripts available from Taus git page. Also, to run with modified Sync files: need a personal read.sync function: 
+--> modifed script == [read.sync_personal_function.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/read.sync_personal_function.R)
+
 Combine the .csv into one file: Should add a chromosome column to the script
 **Rscript:** [combinePoolseqCSV.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/combinePoolseqCSV.R)
+
+For individual Chromosomes: [combine_poolseq_individual_Chromo.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/combine_poolseq_individual_Chromo.R)
 
 Notes: 
 
