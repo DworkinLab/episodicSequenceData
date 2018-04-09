@@ -1,5 +1,39 @@
 # File with the outline of plots and questions about these first draft of plots
 
+# Most Important Questions for Ian:
+
+**Below I have a few important questions for my analysis (specifically moving onto SNPeff or Gowinda) and after I have more questions (less important) pertaining to visualization and final plots required.
+
+### 1. Filtering positions for Fst values:
+
+**Currently can filter both model output and selection coefficients for significance after adjusting p values, but how to filter the Fst values (other than keeping all those with a Fst value)?**
+
+  Note: Fst values are windows, so use of comparison with other measures here is to ensure Fst is sufficiently high in window around positions of interest.
+
+  What method (or should I) downscale the Fst values with Sel:Sel and Con:Con comparisons? (previous ideas were (Fst_C:C + Fst_S:S)/2 for scaling)
+  
+  Can Fst values use p.adjust as well? You mentioned using Fdr on these values when comparing, not sure if this works though?
+  
+### 2. Bonferroni vs. Fdr:
+
+**Fdr adjustment for p-values keeps more positions but Bonferroni gives more visually appealling plots (see below) and more accuracy for positions**
+
+  For plots of outputs: would Bonferroni plots be better?
+  
+  For finding positions of interest: would Bonferroni be better?
+  
+### 3. Selection Coeffcient Filtering:
+
+ **Current method is to keep any significant (after FDR p.adjust) selection coefficients that are unique to predation lines (i.e no Selcoeef for Con). This is the average Selcoef b/w two mappers (keeping the less significant p-value). 
+ 
+ Does this method make sense?
+  
+____________________________________________________________________________  
+____________________________________________________________________________
+# Plots with specific questions below for plots:
+____________________________________________________________________________
+____________________________________________________________________________
+
 ## Pi: Ancestral Pi for Novoalign:
 
 ### Outline
@@ -16,7 +50,7 @@ The ancestral nucleotide diversity:
 
   2. Average Pi for all mappers??
   
-    -- Calculate bwa Pi and average between three? or show one (/2) mappers as a represenation?
+    -- Calculate bwa Pi and average between three? or show one (or 2) mappers as a represenation?
 
   3. Overlay for changes in diversity over time?
    
@@ -43,7 +77,7 @@ Average pairwise Fst between control and selection replicates
 
 ### Questions
 
-  **1. Can these values be adjusted? p.adjust for FST values??**
+  1. Can these values be adjusted? p.adjust for FST values?
   
     -- Does it make sense to use a FDR adjustment on these values?
   
