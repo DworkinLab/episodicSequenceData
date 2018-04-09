@@ -24,7 +24,7 @@
   
 ### 3. Selection Coeffcient Filtering:
 
- **Current method is to keep any significant (after FDR p.adjust) selection coefficients that are unique to predation lines (i.e no Selcoeef for Con). This is the average Selcoef b/w two mappers (keeping the less significant p-value). 
+ **Current method is to keep any significant (after FDR p.adjust) selection coefficients that are unique to predation lines (i.e no Selcoeef for Con). This is the average Selcoef b/w two mappers (keeping the less significant p-value).**
  
  Does this method make sense?
   
