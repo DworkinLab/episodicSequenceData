@@ -2,7 +2,7 @@
 
 # Most Important Questions for Ian:
 
-**Below I have a few important questions for my analysis (specifically moving onto SNPeff or Gowinda) and after I have more questions (less important) pertaining to visualization and final plots required.
+**Below I have a few important questions for my analysis (specifically moving onto SNPeff or Gowinda) and after I have more questions (less important) pertaining to visualization and final plots required.**
 
 ### 1. Filtering positions for Fst values:
 
