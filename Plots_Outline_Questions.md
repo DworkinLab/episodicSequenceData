@@ -14,7 +14,13 @@
     
      --: Method? (previous ideas were (Fst_C:C + Fst_S:S)/2 for scaling)
   
-### 2. Bonferroni vs. Fdr:
+### 2. Adjusting P values: Chromosome OR full genome ??
+  
+  When performing p.adjust, should the adjustments be for the full genome (all positions) or on a per chromosome basis?
+  
+    -- Currently have to do per chromo for poolseq and am doing full genome for model output.
+
+### 3. Bonferroni vs. Fdr:
 
 **Fdr adjustment for p-values keeps more positions but Bonferroni gives more visually appealling plots (see below) and more accuracy for positions**
 
@@ -24,7 +30,7 @@
   
   OR: keep consistent between the two (which method)?
   
-### 3. Selection Coeffcient Filtering:
+### 4. Selection Coeffcient Filtering:
 
  **Current method is to keep any significant (after FDR p.adjust) selection coefficients that are unique to predation lines (i.e no Selcoeef for Con).**
 
