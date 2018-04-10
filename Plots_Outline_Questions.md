@@ -10,9 +10,9 @@
 
   Note: Fst values are windows, so use of comparison with other measures here is to ensure Fst is sufficiently high in window around positions of interest.
 
-  What method (or should I) downscale the Fst values with Sel:Sel and Con:Con comparisons? (previous ideas were (Fst_C:C + Fst_S:S)/2 for scaling)
-  
-  Can Fst values use p.adjust as well? You mentioned using Fdr on these values when comparing, not sure if this works though?
+  Should I downscale the Fst values with Sel:Sel and Con:Con comparisons? (below are the plots for 115)
+    
+     --: Method? (previous ideas were (Fst_C:C + Fst_S:S)/2 for scaling)
   
 ### 2. Bonferroni vs. Fdr:
 
@@ -20,11 +20,15 @@
 
   For plots of outputs: would Bonferroni plots be better?
   
-  For finding positions of interest: would Bonferroni be better?
+  For finding positions of interest: is FDR still prefered better?
+  
+  OR: keep consistent between the two (which method)?
   
 ### 3. Selection Coeffcient Filtering:
 
- **Current method is to keep any significant (after FDR p.adjust) selection coefficients that are unique to predation lines (i.e no Selcoeef for Con). This is the average Selcoef b/w two mappers (keeping the less significant p-value).**
+ **Current method is to keep any significant (after FDR p.adjust) selection coefficients that are unique to predation lines (i.e no Selcoeef for Con).**
+
+**This is the average Selcoef b/w two mappers (keeping the less significant p-value).**
  
  Does this method make sense?
   
@@ -77,15 +81,7 @@ Average pairwise Fst between control and selection replicates
 
 ### Questions
 
-  1. Can these values be adjusted? p.adjust for FST values?
-  
-    -- Does it make sense to use a FDR adjustment on these values?
-  
-  Ex. FDR adjust Fst:
-  
-  ![FDR_Adjust_FST](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/Fst_FDRAdjust_Sel:Con_115.png)
-   
-  2. Downscaling (available for all generations): Necessary? and methods?
+  1. **Downscaling** (available for all generations): Necessary? and methods?
   
     -- previous ideas were (Fst_C:C + Fst_S:S)/2 for scaling
   ___________________________________________________
@@ -126,7 +122,6 @@ Plots for original values and FDR adjusted
   
   ![Coloured Sig](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/fdr_bonf_adjustP_sigColoured.png)
   
-
 
 ## Poolseq outputs:
 
@@ -169,8 +164,12 @@ This is the average b/w two mappers (bwa and novoalign), keeping the least signi
 
 1. Plots of individual positions?
 
-2. The location of these positions on one of the above plots 
+  -- Is it informative to select some large peaked positions that are shared and show the actual trajectories of frequencies?
 
+2. Overlay the postions of interest onto the output from the model:  
+
+  -- Most interesting plot would be the -log10(p) plot from model, should the positions present from Poolseq and Fst be coloured and used as well?
+  
   -- larger and coloured positions on the model output for example: 
   
   2L with FDR:
