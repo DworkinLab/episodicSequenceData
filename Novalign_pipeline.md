@@ -1013,6 +1013,7 @@ grep 'X' ${novo_mpileup}/${project_name}_main.sync > ${novo_mpileup}/${project_n
 Sync File now set up to be easily worked with; with one version (being `_main.sync`) that has the 6 chromosomes of interest, and 6 files for these chromosomes seperate
 
 # Easier layout for Fst, Poolseq, and Model scripts (& Pi) can be found [here](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018.md)
+
 ## Fst:
 
 ```
@@ -1103,12 +1104,7 @@ F77SelR1_TTAGGC_novo_merge_novo_final_realigned.bam
 F77SelR2_GATCAG_novo_merge_novo_final_realigned.bam
 MGD3_SO_CAGATC_novo_merge_novo_final_realigned.bam
 ```
-
-
-
-
 ## Running Custom R script: Logistic Regression
-
 
 **LONG SCRIPT: (Change input and output, add Rscripts, etc.)**
 
@@ -1298,9 +1294,9 @@ echo 'DONE'
 
 Now have 6 .csv files with output from model for each chromosome (check naming of 4th, might not include 4). 
 
-## R Scripts for model: sync to counts, model itself etc.
+### R Scripts for model: sync to counts, model itself etc.
 
-### Script: Sync_to_counts.R
+**Script: Sync_to_counts.R**
 To run on own:
 ```
 Rscript Sync_to_counts.R '/home/paul/episodicData/novoalign/novo_mpileup'
@@ -1508,7 +1504,7 @@ for (dir in mydirs){
 ```
 
 
-### Script: Counts_to_model_2.R
+**Script: Counts_to_model_2.R**
 	- Script for running each chromosome in unison
 To run on own:
 ```
@@ -1622,7 +1618,7 @@ args <- commandArgs(trailingOnly = TRUE)
 ```
 
 
-### Script: Combine_chromo.R:
+**Script: Combine_chromo.R:**
 To run on own:
 ```
 Rscript Combine_chromo.R 'DIRECTORY' 'OutputDIRECTORY'
@@ -1670,8 +1666,10 @@ rm(Novoalign_Chromosome)
 }
 ```
 
-### Next steps:
-Can combine with other mappers to get more accurate results:
+## Next steps: combine chromosomes and effects of interest
+__________________________________________________________
+
+### Can combine with other mappers
 
 Need a directory to hold chromosomal outputs:
 ```
@@ -1781,7 +1779,7 @@ rm(Effects_Final)
 print('Done and everything gone')
 }
 ```
-
+## Plotting and p.adjust:
 
 
 
@@ -1789,7 +1787,7 @@ print('Done and everything gone')
 _____________________________________________________________
 _____________________________________________________________
 
-## Running [poolSeq](https://github.com/ThomasTaus/poolSeq) R package:
+# Running [poolSeq](https://github.com/ThomasTaus/poolSeq) R package:
 
 ```
 #! /bin/bash
@@ -1911,7 +1909,7 @@ Rscript ${Rscripts}/combinePoolseqCSV.R ${splitSync}
 
 ## Pool Seq R Scripts: running poolseq, combining csv
 
-### Script: PoolSeq_SelCoeff.R:
+**Script: PoolSeq_SelCoeff.R:**
 To run on own:
 ```
 Rscript PoolSeq_SelCoeff.R ".SYNCFILE" "CHROMOSOME_OF_SYNC" "INPUTDIR"
@@ -1993,7 +1991,7 @@ Rscript PoolSeq_SelCoeff.R ".SYNCFILE" "CHROMOSOME_OF_SYNC" "INPUTDIR"
 ```
 
 
-### Script: combinePoolseqCSV.R:
+**Script: combinePoolseqCSV.R:**
 To run on own:
 ```
 Rscript combinePoolseqCSV.R "Dir_Holding_all_SPLIT_DIR's"
@@ -2017,29 +2015,14 @@ for (dir in mydirs){
 }
 ```
 
-
-
-### Rscript: See Below for PoolSeq_SelCoeff.R & combinePoolseqCSV.R
-
  -- Note: may want to move combine into big (dir) loop and change script to not loop through all dir's but just the current one dir?
+ 
+ ## Combine mappers and plot / position extract:
+
+
 
 
 # Positions of interest: finding positions overlapping in model output and selection coefficients with high Con:Sel Fst values
-
-
-
-
-
-
-# R Scripts:
-______________________________________________
-
-______________________________________________
-
-______________________________________________
-
-______________________________________________
-
 
 
 Links and Notes
