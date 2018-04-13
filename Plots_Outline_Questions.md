@@ -1,5 +1,49 @@
 # File with the outline of plots and questions about these first draft of plots
 
+# Most Important Questions for Ian:
+
+**Below I have a few important questions for my analysis (specifically moving onto SNPeff or Gowinda) and after I have more questions (less important) pertaining to visualization and final plots required.**
+
+### 1. Filtering positions for Fst values:
+
+**Currently can filter both model output and selection coefficients for significance after adjusting p values, but how to filter the Fst values (other than keeping all those with a Fst value)?**
+
+  Note: Fst values are windows, so use of comparison with other measures here is to ensure Fst is sufficiently high in window around positions of interest.
+
+  Should I downscale the Fst values with Sel:Sel and Con:Con comparisons? (below are the plots for 115)
+    
+     --: Method? (previous ideas were (Fst_C:C + Fst_S:S)/2 for scaling)
+  
+### 2. Adjusting P values: Chromosome OR full genome ??
+  
+  When performing p.adjust, should the adjustments be for the full genome (all positions) or on a per chromosome basis?
+  
+    -- Currently have to do per chromo for poolseq and am doing full genome for model output.
+
+### 3. Bonferroni vs. Fdr:
+
+**Fdr adjustment for p-values keeps more positions but Bonferroni gives more visually appealling plots (see below) and more accuracy for positions**
+
+  For plots of outputs: would Bonferroni plots be better?
+  
+  For finding positions of interest: is FDR still prefered better?
+  
+  OR: keep consistent between the two (which method)?
+  
+### 4. Selection Coeffcient Filtering:
+
+ **Current method is to keep any significant (after FDR p.adjust) selection coefficients that are unique to predation lines (i.e no Selcoeef for Con).**
+
+**This is the average Selcoef b/w two mappers (keeping the less significant p-value).**
+ 
+ Does this method make sense?
+  
+____________________________________________________________________________  
+____________________________________________________________________________
+# Plots with specific questions below for plots:
+____________________________________________________________________________
+____________________________________________________________________________
+
 ## Pi: Ancestral Pi for Novoalign:
 
 ### Outline
@@ -16,7 +60,7 @@ The ancestral nucleotide diversity:
 
   2. Average Pi for all mappers??
   
-    -- Calculate bwa Pi and average between three? or show one (/2) mappers as a represenation?
+    -- Calculate bwa Pi and average between three? or show one (or 2) mappers as a represenation?
 
   3. Overlay for changes in diversity over time?
    
@@ -43,15 +87,7 @@ Average pairwise Fst between control and selection replicates
 
 ### Questions
 
-  **1. Can these values be adjusted? p.adjust for FST values??**
-  
-    -- Does it make sense to use a FDR adjustment on these values?
-  
-  Ex. FDR adjust Fst:
-  
-  ![FDR_Adjust_FST](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/Fst_FDRAdjust_Sel:Con_115.png)
-   
-  2. Downscaling (available for all generations): Necessary? and methods?
+  1. **Downscaling** (available for all generations): Necessary? and methods?
   
     -- previous ideas were (Fst_C:C + Fst_S:S)/2 for scaling
   ___________________________________________________
@@ -92,7 +128,6 @@ Plots for original values and FDR adjusted
   
   ![Coloured Sig](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/fdr_bonf_adjustP_sigColoured.png)
   
-
 
 ## Poolseq outputs:
 
@@ -135,11 +170,21 @@ This is the average b/w two mappers (bwa and novoalign), keeping the least signi
 
 1. Plots of individual positions?
 
-2. The location of these positions on one of the above plots 
+  -- Is it informative to select some large peaked positions that are shared and show the actual trajectories of frequencies?
 
-  -- larger and coloured positions on the model output for example: 2L with FDR:
+2. Overlay the postions of interest onto the output from the model:  
+
+  -- Most interesting plot would be the -log10(p) plot from model, should the positions present from Poolseq and Fst be coloured and used as well?
   
-  ![]()
+  -- larger and coloured positions on the model output for example: 
+  
+  2L with FDR:
+  
+![FDR_col](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/colouredPositions2L_Practice.png)
+  
+  2L with Bonferroni:
+  
+![bonfCOL](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/positions_2L_Bonferonii_Prac.png)
   
   
 

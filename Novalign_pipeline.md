@@ -1013,6 +1013,7 @@ grep 'X' ${novo_mpileup}/${project_name}_main.sync > ${novo_mpileup}/${project_n
 Sync File now set up to be easily worked with; with one version (being `_main.sync`) that has the 6 chromosomes of interest, and 6 files for these chromosomes seperate
 
 # Easier layout for Fst, Poolseq, and Model scripts (& Pi) can be found [here](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018.md)
+
 ## Fst:
 
 ```
@@ -1103,12 +1104,7 @@ F77SelR1_TTAGGC_novo_merge_novo_final_realigned.bam
 F77SelR2_GATCAG_novo_merge_novo_final_realigned.bam
 MGD3_SO_CAGATC_novo_merge_novo_final_realigned.bam
 ```
-
-
-
-
 ## Running Custom R script: Logistic Regression
-
 
 **LONG SCRIPT: (Change input and output, add Rscripts, etc.)**
 
@@ -1298,265 +1294,9 @@ echo 'DONE'
 
 Now have 6 .csv files with output from model for each chromosome (check naming of 4th, might not include 4). 
 
-Can combine with other mappers to get more accurate results:
+### R Scripts for model: sync to counts, model itself etc.
 
-Need a directory to hold chromosomal outputs:
-```
-mkdir /home/paul/coeffs_fullChromo
-```
-
-
-To run: have args[1] be the output directory created just above (which can hold script to avoid confusion with other mappers)
-```
-Rscript combine_threeMappers.R '/home/paul/coeffs_fullChromo'
-```
-
-```
-#To run as Rscript and have output directory argument:
-args <- commandArgs(trailingOnly = TRUE)
-
-# combine the coeffs csv files for three mappers
-require(dplyr)
-
-# Will call these 6 Chromosoms (but this depends on the files all ending with [name2]_chromo.csv (ex. 2L_chromo.csv)
-name2 <- c('2L', '2R', '3L', '3R', '4','X')
-
-#Loop through all chromosomes: each read.csv has the directory holding all the chromosome subsets from the output of the model run just above. 
-
-# Will combine each chromosome into one file with three mappers (defined in loops) and written to a new large .csv file
-
-for (i in name2){
-
-  print(i)
-  
-  file=paste(i,'_chromo.csv', sep = "")
-  
-  bwa_coeffs <- read.csv(paste('/home/paul/episodicData/R_dir/bwa_coeffs/episodic_data_', file, sep=""), header = TRUE)
-  bwa_coeffs$mapper <- "bwa"
-  
-  bowtie_coeffs <- read.csv(paste('/home/paul/episodicData/bowtie/R_bowtie/bowtie_coeffs/episodic_data_bowtie_', file, sep=""), header = TRUE)
-  bowtie_coeffs$mapper <- "bowtie"
-  
-  novo_coeffs <- read.csv(paste('/home/paul/episodicData/novoalign/novo_coeffs/novo_episodic_', file, sep=""), header = TRUE)
-  novo_coeffs$mapper <- "novoalign"
-  
-  X <- rbind(bwa_coeffs, bowtie_coeffs, novo_coeffs)
-  rm(coeffs_bowtie)
-  rm(coeffs_bwa)
-  rm(novo_coeffs)
-  
-  outputDir <- args[1]
- 
-  write.csv(X , file=paste(outputDir,"/",'Chromosome_', i, "_Full.csv", sep=""), row.names = FALSE)
-}
-```
-### Choose an effect and only keep those with positions mapped on by all three mappers:
-
-```
-Rscript TxG_allThreeMappedPos.R '/home/paul/coeffs_fullChromo'
-```
-The script:
-```
-#To run as Rscript and have output directory argument:
-args <- commandArgs(trailingOnly = TRUE)
-#Can input manually:
-
-setwd(args[1])
-#setwd('/home/paul/coeffs_fullChromo')
-
-#Can change the effect of interest by changing hashes at X_Effect (#EFFECT OF INTEREST#)
-
-require(dplyr)
-mycsvs <- list.files(pattern='_Full.csv')
-
-
-for (file in mycsvs){
-  #file = 'Chromosome_4_Full.csv'
-  print(file)
-  name <- gsub("^.*?_","",file)
-  name2 <- gsub("_.*","",name)
-  rm(name)
-  X <- read.csv(file, h=T)
-
-  
-#EFFECT OF INTEREST#
-#X_Effect <- X[which(X$Effects=="TreatmentSel"),]
-X_Effect <- X[which(X$Effects=="TreatmentSel:Generation"),]
-#X_Effect <- X[which(X$Effects=="Intercept"),]
-#X_Effect <- X[which(X$Effects=="Generation"),]
-
-title <- as.character(X_Effect$Effects[1])
-title2 <- ifelse(title=='TreatmentSel', 'Treat', ifelse(title=='Generation', 'Gen', ifelse(title=='TreatmentSel:Generation', 'TxG', '
-                                                                                           Int')))
-
-rm(title)
-rm(X)
-
-# Only keep those with a position mapped by all three (create table of posiitons and all those >=3 kept)
-tt <- table(X_Effect$position)
-Effects_Final <- subset(X_Effect, position %in% names(tt[tt >= 3]))
-
-rm(tt)
-rm(X_Effect)
-
-print('writing CSV')
-write.csv(Effects_Final, file=paste0(name2, '_Chromosome_', title2, '.csv'), row.names = FALSE)
-
-
-rm(Effects_Final)
-
-print('Done and everything gone')
-}
-```
-
-
-
-
-
-_____________________________________________________________
-_____________________________________________________________
-
-## Running [poolSeq](https://github.com/ThomasTaus/poolSeq) R package:
-
-```
-#! /bin/bash
-
-### Set all variables (need to make an output directory):
-
-#Variable for project name (title of mpileup file)
-project_name=novo_episodic
-
-#Variable for project:
-project_dir=/home/paul/episodicData/novoalign
-
-#Path to .sync files
-SyncFiles=${project_dir}/novo_mpileup
-	
-mkdir ${SyncFiles}/splitsync_dir
-splitSync=${SyncFiles}/splitsync_dir
-
-#Output dir:
-poolSeq=${project_dir}/novo_PoolSeq
-
-# Need to copy three R scripts and add to a new directory (i.e. novo_Rscripts)
-Rscripts=${project_dir}/novo_Rscripts
-	
-# The seperated .sync files
-sync[0]=${SyncFiles}/novo_episodic_3R.sync
-sync[1]=${SyncFiles}/novo_episodic_2R.sync
-sync[2]=${SyncFiles}/novo_episodic_3L.sync
-sync[3]=${SyncFiles}/novo_episodic_2L.sync
-sync[4]=${SyncFiles}/novo_episodic_X.sync 
-sync[5]=${SyncFiles}/novo_episodic_4.sync 
-
-##-----------------------------------------------##
-
-### Split into treatment vs. control
-
-for file in ${sync[@]}
-	do
-	name=${file}
-	base=`basename ${name} .sync`
-	
-	cat ${SyncFiles}/${base}.sync | awk '{print $1,$2,$3,$6,$7,$10, $11, $14, $15, $16, $16}' > ${splitSync}/${base}_Sel.sync
-	
-	cat ${SyncFiles}/${base}.sync | awk '{print $1,$2,$3,$4,$5,$8, $9, $12, $13, $16, $16}' > ${splitSync}/${base}_Con.sync
-
-done
-
-
-##------------------------------------------------##
-
-### Split the sync files into many sized files (12):
-
-files=(${splitSync}/*.sync)
-
-for file in ${files[@]}
-	do
-	name=${file}
-	base=`basename ${name} .sync`
-	
-	mkdir ${splitSync}/${base}_Split
-	split_sync=${splitSync}/${base}_Split
-	
-	length=($(wc -l ${splitSync}/${base}.sync))
-	#echo ${length}
-		
-	#Split length into 12 segements (12th == length) (can extend this if to large)
-	cut=$((${length}/12))
-	cut_2=$((${cut}*2))
-	cut_3=$((${cut}*3))
-	cut_4=$((${cut}*4))
-	cut_5=$((${cut}*5))
-	cut_6=$((${cut}*6))
-	cut_7=$((${cut}*7))
-	cut_8=$((${cut}*8))
-	cut_9=$((${cut}*9))
-	cut_10=$((${cut}*10))
-	cut_11=$((${cut}*11))
-	
-	sed -n " 1, ${cut} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_1.sync
-
-	sed -n " $((${cut} + 1)), ${cut_2} p"  ${splitSync}/${base}.sync >  ${split_sync}/${base}_2.sync
-
-	sed -n " $((${cut_2} + 1)), ${cut_3} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_3.sync
-	
-	sed -n " $((${cut_3} + 1)), ${cut_4} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_4.sync
-
-	sed -n " $((${cut_4} + 1)), ${cut_5} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_5.sync
-
-	sed -n " $((${cut_5} + 1)), ${cut_6} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_6.sync
-
-	sed -n " $((${cut_6} + 1)), ${cut_7} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_7.sync
-	
-	sed -n " $((${cut_7} + 1)), ${cut_8} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_8.sync
-	
-	sed -n " $((${cut_8} + 1)), ${cut_9} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_9.sync
-	
-	sed -n " $((${cut_9} + 1)), ${cut_10} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_10.sync
-	
-	sed -n " $((${cut_10} + 1)), ${cut_11} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_11.sync
-	
-	sed -n " $((${cut_11} + 1)), ${length} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_12.sync
-	
-	syncs=(${split_sync}/*.sync)
- 	
-	for file in ${syncs[@]}
-	  	do
-	  	(Chromo=$(cat ${file} | awk '{print $1; exit}')
-	  	Rscript ${Rscripts}/PoolSeq_SelCoeff.R ${file} ${Chromo} ${split_sync}) &
-	done 
-	wait
-	rm -f ${split_sync}/*.sync
-done
-wait
-
-Rscript ${Rscripts}/combinePoolseqCSV.R ${splitSync}
-
-##------------------------------------------------##
-```
-
-
-### Rscript: See Below for PoolSeq_SelCoeff.R & combinePoolseqCSV.R
-
- -- Note: may want to move combine into big (dir) loop and change script to not loop through all dir's but just the current one dir?
-
-
-# Positions of interest: finding positions overlapping in model output and selection coefficients with high Con:Sel Fst values
-
-
-
-
-
-
-# R Scripts:
-______________________________________________
-
-______________________________________________
-
-## Scripts for model: sync to counts, model itself etc.
-
-### Script: Sync_to_counts.R
+**Script: Sync_to_counts.R**
 To run on own:
 ```
 Rscript Sync_to_counts.R '/home/paul/episodicData/novoalign/novo_mpileup'
@@ -1764,7 +1504,7 @@ for (dir in mydirs){
 ```
 
 
-### Script: Counts_to_model_2.R
+**Script: Counts_to_model_2.R**
 	- Script for running each chromosome in unison
 To run on own:
 ```
@@ -1878,7 +1618,7 @@ args <- commandArgs(trailingOnly = TRUE)
 ```
 
 
-### Script: Combine_chromo.R:
+**Script: Combine_chromo.R:**
 To run on own:
 ```
 Rscript Combine_chromo.R 'DIRECTORY' 'OutputDIRECTORY'
@@ -1926,9 +1666,250 @@ rm(Novoalign_Chromosome)
 }
 ```
 
-## Pool Seq Scripts: running poolseq, combining csv
+## Next steps: combine chromosomes and effects of interest
+__________________________________________________________
 
-### Script: PoolSeq_SelCoeff.R:
+### Can combine with other mappers
+
+Need a directory to hold chromosomal outputs:
+```
+mkdir /home/paul/coeffs_fullChromo
+```
+
+
+To run: have args[1] be the output directory created just above (which can hold script to avoid confusion with other mappers)
+```
+Rscript combine_threeMappers.R '/home/paul/coeffs_fullChromo'
+```
+
+```
+#To run as Rscript and have output directory argument:
+args <- commandArgs(trailingOnly = TRUE)
+
+# combine the coeffs csv files for three mappers
+require(dplyr)
+
+# Will call these 6 Chromosoms (but this depends on the files all ending with [name2]_chromo.csv (ex. 2L_chromo.csv)
+name2 <- c('2L', '2R', '3L', '3R', '4','X')
+
+#Loop through all chromosomes: each read.csv has the directory holding all the chromosome subsets from the output of the model run just above. 
+
+# Will combine each chromosome into one file with three mappers (defined in loops) and written to a new large .csv file
+
+for (i in name2){
+
+  print(i)
+  
+  file=paste(i,'_chromo.csv', sep = "")
+  
+  bwa_coeffs <- read.csv(paste('/home/paul/episodicData/R_dir/bwa_coeffs/episodic_data_', file, sep=""), header = TRUE)
+  bwa_coeffs$mapper <- "bwa"
+  
+  bowtie_coeffs <- read.csv(paste('/home/paul/episodicData/bowtie/R_bowtie/bowtie_coeffs/episodic_data_bowtie_', file, sep=""), header = TRUE)
+  bowtie_coeffs$mapper <- "bowtie"
+  
+  novo_coeffs <- read.csv(paste('/home/paul/episodicData/novoalign/novo_coeffs/novo_episodic_', file, sep=""), header = TRUE)
+  novo_coeffs$mapper <- "novoalign"
+  
+  X <- rbind(bwa_coeffs, bowtie_coeffs, novo_coeffs)
+  rm(coeffs_bowtie)
+  rm(coeffs_bwa)
+  rm(novo_coeffs)
+  
+  outputDir <- args[1]
+ 
+  write.csv(X , file=paste(outputDir,"/",'Chromosome_', i, "_Full.csv", sep=""), row.names = FALSE)
+}
+```
+### Choose an effect and only keep those with positions mapped on by all three mappers:
+
+```
+Rscript TxG_allThreeMappedPos.R '/home/paul/coeffs_fullChromo'
+```
+The script:
+```
+#To run as Rscript and have output directory argument:
+args <- commandArgs(trailingOnly = TRUE)
+#Can input manually:
+
+setwd(args[1])
+#setwd('/home/paul/coeffs_fullChromo')
+
+#Can change the effect of interest by changing hashes at X_Effect (#EFFECT OF INTEREST#)
+
+require(dplyr)
+mycsvs <- list.files(pattern='_Full.csv')
+
+
+for (file in mycsvs){
+  #file = 'Chromosome_4_Full.csv'
+  print(file)
+  name <- gsub("^.*?_","",file)
+  name2 <- gsub("_.*","",name)
+  rm(name)
+  X <- read.csv(file, h=T)
+
+  
+#EFFECT OF INTEREST#
+#X_Effect <- X[which(X$Effects=="TreatmentSel"),]
+X_Effect <- X[which(X$Effects=="TreatmentSel:Generation"),]
+#X_Effect <- X[which(X$Effects=="Intercept"),]
+#X_Effect <- X[which(X$Effects=="Generation"),]
+
+title <- as.character(X_Effect$Effects[1])
+title2 <- ifelse(title=='TreatmentSel', 'Treat', ifelse(title=='Generation', 'Gen', ifelse(title=='TreatmentSel:Generation', 'TxG', '
+                                                                                           Int')))
+
+rm(title)
+rm(X)
+
+# Only keep those with a position mapped by all three (create table of posiitons and all those >=3 kept)
+tt <- table(X_Effect$position)
+Effects_Final <- subset(X_Effect, position %in% names(tt[tt >= 3]))
+
+rm(tt)
+rm(X_Effect)
+
+print('writing CSV')
+write.csv(Effects_Final, file=paste0(name2, '_Chromosome_', title2, '.csv'), row.names = FALSE)
+
+
+rm(Effects_Final)
+
+print('Done and everything gone')
+}
+```
+## Plotting and p.adjust:
+
+
+
+
+_____________________________________________________________
+_____________________________________________________________
+
+# Running [poolSeq](https://github.com/ThomasTaus/poolSeq) R package:
+
+```
+#! /bin/bash
+
+### Set all variables (need to make an output directory):
+
+#Variable for project name (title of mpileup file)
+project_name=novo_episodic
+
+#Variable for project:
+project_dir=/home/paul/episodicData/novoalign
+
+#Path to .sync files
+SyncFiles=${project_dir}/novo_mpileup
+	
+mkdir ${SyncFiles}/splitsync_dir
+splitSync=${SyncFiles}/splitsync_dir
+
+#Output dir:
+poolSeq=${project_dir}/novo_PoolSeq
+
+# Need to copy three R scripts and add to a new directory (i.e. novo_Rscripts)
+Rscripts=${project_dir}/novo_Rscripts
+	
+# The seperated .sync files
+sync[0]=${SyncFiles}/novo_episodic_3R.sync
+sync[1]=${SyncFiles}/novo_episodic_2R.sync
+sync[2]=${SyncFiles}/novo_episodic_3L.sync
+sync[3]=${SyncFiles}/novo_episodic_2L.sync
+sync[4]=${SyncFiles}/novo_episodic_X.sync 
+sync[5]=${SyncFiles}/novo_episodic_4.sync 
+
+##-----------------------------------------------##
+
+### Split into treatment vs. control
+
+for file in ${sync[@]}
+	do
+	name=${file}
+	base=`basename ${name} .sync`
+	
+	cat ${SyncFiles}/${base}.sync | awk '{print $1,$2,$3,$6,$7,$10, $11, $14, $15, $16, $16}' > ${splitSync}/${base}_Sel.sync
+	
+	cat ${SyncFiles}/${base}.sync | awk '{print $1,$2,$3,$4,$5,$8, $9, $12, $13, $16, $16}' > ${splitSync}/${base}_Con.sync
+
+done
+
+
+##------------------------------------------------##
+
+### Split the sync files into many sized files (12):
+
+files=(${splitSync}/*.sync)
+
+for file in ${files[@]}
+	do
+	name=${file}
+	base=`basename ${name} .sync`
+	
+	mkdir ${splitSync}/${base}_Split
+	split_sync=${splitSync}/${base}_Split
+	
+	length=($(wc -l ${splitSync}/${base}.sync))
+	#echo ${length}
+		
+	#Split length into 12 segements (12th == length) (can extend this if to large)
+	cut=$((${length}/12))
+	cut_2=$((${cut}*2))
+	cut_3=$((${cut}*3))
+	cut_4=$((${cut}*4))
+	cut_5=$((${cut}*5))
+	cut_6=$((${cut}*6))
+	cut_7=$((${cut}*7))
+	cut_8=$((${cut}*8))
+	cut_9=$((${cut}*9))
+	cut_10=$((${cut}*10))
+	cut_11=$((${cut}*11))
+	
+	sed -n " 1, ${cut} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_1.sync
+
+	sed -n " $((${cut} + 1)), ${cut_2} p"  ${splitSync}/${base}.sync >  ${split_sync}/${base}_2.sync
+
+	sed -n " $((${cut_2} + 1)), ${cut_3} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_3.sync
+	
+	sed -n " $((${cut_3} + 1)), ${cut_4} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_4.sync
+
+	sed -n " $((${cut_4} + 1)), ${cut_5} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_5.sync
+
+	sed -n " $((${cut_5} + 1)), ${cut_6} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_6.sync
+
+	sed -n " $((${cut_6} + 1)), ${cut_7} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_7.sync
+	
+	sed -n " $((${cut_7} + 1)), ${cut_8} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_8.sync
+	
+	sed -n " $((${cut_8} + 1)), ${cut_9} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_9.sync
+	
+	sed -n " $((${cut_9} + 1)), ${cut_10} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_10.sync
+	
+	sed -n " $((${cut_10} + 1)), ${cut_11} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_11.sync
+	
+	sed -n " $((${cut_11} + 1)), ${length} p"  ${splitSync}/${base}.sync > ${split_sync}/${base}_12.sync
+	
+	syncs=(${split_sync}/*.sync)
+ 	
+	for file in ${syncs[@]}
+	  	do
+	  	(Chromo=$(cat ${file} | awk '{print $1; exit}')
+	  	Rscript ${Rscripts}/PoolSeq_SelCoeff.R ${file} ${Chromo} ${split_sync}) &
+	done 
+	wait
+	rm -f ${split_sync}/*.sync
+done
+wait
+
+Rscript ${Rscripts}/combinePoolseqCSV.R ${splitSync}
+
+##------------------------------------------------##
+```
+
+## Pool Seq R Scripts: running poolseq, combining csv
+
+**Script: PoolSeq_SelCoeff.R:**
 To run on own:
 ```
 Rscript PoolSeq_SelCoeff.R ".SYNCFILE" "CHROMOSOME_OF_SYNC" "INPUTDIR"
@@ -2010,7 +1991,7 @@ Rscript PoolSeq_SelCoeff.R ".SYNCFILE" "CHROMOSOME_OF_SYNC" "INPUTDIR"
 ```
 
 
-### Script: combinePoolseqCSV.R:
+**Script: combinePoolseqCSV.R:**
 To run on own:
 ```
 Rscript combinePoolseqCSV.R "Dir_Holding_all_SPLIT_DIR's"
@@ -2034,10 +2015,14 @@ for (dir in mydirs){
 }
 ```
 
-______________________________________________
+ -- Note: may want to move combine into big (dir) loop and change script to not loop through all dir's but just the current one dir?
+ 
+ ## Combine mappers and plot / position extract:
 
-______________________________________________
 
+
+
+# Positions of interest: finding positions overlapping in model output and selection coefficients with high Con:Sel Fst values
 
 
 Links and Notes
