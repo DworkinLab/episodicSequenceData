@@ -1788,6 +1788,7 @@ _____________________________________________________________
 _____________________________________________________________
 
 # Running [poolSeq](https://github.com/ThomasTaus/poolSeq) R package:
+**Note: running in 15 sections (more then below) took from March 20th -- April 17th!**
 
 ```
 #! /bin/bash
