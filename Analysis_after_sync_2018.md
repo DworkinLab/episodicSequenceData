@@ -229,6 +229,11 @@ Also, to run with modified Sync files (Change is spacing), need a personal read.
 
 Ex. For individual Chromosomes: [combine_poolseq_individual_Chromo.R](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_scripts/combine_poolseq_individual_Chromo.R)
 
+Plot: overlay (red = control) over selection coefficients of Selections:
+![poolseqoverlaycontrols](https://github.com/PaulKnoops/episodicSequenceData/blob/master/Analysis_after_sync_2018_plots/overlay_CON:SEL_poolseq.png)
+
+
+
 Notes: 
 
 - need to edit to make more efficient to run (not taking 3 days per section)
