@@ -7161,15 +7161,22 @@ Full positions:
 ```
 cat novo_episodic.sync  | awk '{print $1,$2}' > /home/paul/Gowinda/positions.txt
 ```
-From [Gowinda source forge tutorial](https://sourceforge.net/p/gowinda/wiki/Tutorial/) Example 1: Basic Example
+Read into R and re-write in tab deliminated format
 ```
-java -Xmx32g -Djava.io.tmpdir=/home/paul/Gowinda/tmp_dir -jar /home/paul/Gowinda/Gowinda-1.12.jar --snp-file /home/paul/episodicData/novoalign/novo_mpileup/novo_episodic.sync --candidate-snp-file /home/paul/Gowinda/candidatePos.txt --gene-set-file /home/paul/Gowinda/funcassociate_go_associations.txt --annotation-file /home/paul/Gowinda/dmel-all-r5.57.gtf --simulations 100000 --min-significance 1 --gene-definition gene --threads 8 --output-file results_gene_gene.txt --mode gene --min-genes 1
+write.table(Xc, file='positions.txt', sep ="\t", col.names = F, row.names = F)
+```
+
+From [Gowinda source forge tutorial](https://sourceforge.net/p/gowinda/wiki/Tutorial/) Example 1: Basic Example
+--snp-file /home/paul/Gowinda/positions.txt
+THis works:
+```
+java -Xmx32g -Djava.io.tmpdir=/home/paul/Gowinda/tmp_dir -jar /home/paul/Gowinda/Gowinda-1.12.jar --snp-file /home/paul/Gowinda/positions.txt --candidate-snp-file /home/paul/Gowinda/candidatePos.txt --gene-set-file /home/paul/Gowinda/funcassociate_go_associations.txt --annotation-file /home/paul/Gowinda/dmel-all-r5.57.gtf --simulations 100000 --min-significance 1 --gene-definition gene --threads 8 --output-file results_gene_gene.txt --mode gene --min-genes 1
 ```
 
 From [Gowinda source forge tutorial](https://sourceforge.net/p/gowinda/wiki/Tutorial/) Example 3: high resolution GO term enrichment
 ```
-java -Xmx8g -Djava.io.tmpdir=/home/paul/Gowinda/tmp_dir -jar /home/paul/Gowinda/Gowinda-1.12.jar \
-	--snp-file /home/paul/episodicData/novoalign/novo_mpileup/novo_episodic.sync \
+java -Xmx32g -Djava.io.tmpdir=/home/paul/Gowinda/tmp_dir -jar /home/paul/Gowinda/Gowinda-1.12.jar \
+	--snp-file /home/paul/Gowinda/positions.txt \
 	--candidate-snp-file /home/paul/Gowinda/candidatePos.txt \
 	--gene-set-file /home/paul/Gowinda/funcassociate_go_associations.txt \
 	--annotation-file /home/paul/Gowinda/dmel-all-r5.57.gtf \
@@ -7180,7 +7187,6 @@ java -Xmx8g -Djava.io.tmpdir=/home/paul/Gowinda/tmp_dir -jar /home/paul/Gowinda/
 	--output-file /home/paul/Gowinda/results_snp_2000ud.txt \
 	--mode snp \
 	--min-genes 1
-	--TMP_DIR=/home/paul/Gowinda/tmp_dir
 ```
 Does not like "positions.txt"
 
