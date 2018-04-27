@@ -7122,4 +7122,69 @@ name.Columns <- c("Chromosome", "Position", "ref",
 
 
 
+### Gowinda:
+convert gff to gtf:
+```
+python /home/paul/Gowinda/Gff2Gtf.py --input /home/paul/episodicData/index_dir/dmel-all-r5.57.gff > /home/paul/Gowinda/dmel-all-r5.57.gtf
+```
+
+Gene associations with FuncAssociate (http://llama.mshri.on.ca/funcassociate/download_go_associations)
+
+Positions candidates: (found [here](https://github.com/PaulKnoops/Experimental_Evolution_Sequence_Repo/blob/master/Analysis_after_BAM_Scripts/positions_Extract.R))
+```
+Pos_X_max <- fread('X_positions_maxP.csv')
+Pos_X_max$chr <- 'X'
+
+Pos_2L_max <- fread('2L_positions_maxP.csv')
+Pos_2L_max$chr <- '2L'
+
+Pos_2R_max <- fread('2R_positions_maxP.csv')
+Pos_2R_max$chr <- '2R'
+
+Pos_3L_max <- fread('3L_positions_maxP.csv')
+Pos_3L_max$chr <- '3L'
+
+Pos_3R_max <- fread('3R_positions_maxP.csv')
+Pos_3R_max$chr <- '3R'
+
+Pos_4_max <- fread('4_positions_maxP.csv')
+Pos_4_max$chr <- '4'
+
+Ppos <- rbind(Pos_2L_max, Pos_2R_max, Pos_3L_max, Pos_3R_max, Pos_4_max, Pos_X_max)
+Ppos$pos <- Ppos$int
+Ppos_2 <- subset( Ppos, select = -int )
+write.csv(Ppos_2, file = "candidatePos.csv", row.names = F)
+
+```
+
+Full positions:
+```
+cat novo_episodic.sync  | awk '{print $1,$2}' > /home/paul/Gowinda/positions.txt
+```
+From [Gowinda source forge tutorial](https://sourceforge.net/p/gowinda/wiki/Tutorial/) Example 1: Basic Example
+```
+java -Xmx32g -Djava.io.tmpdir=/home/paul/Gowinda/tmp_dir -jar /home/paul/Gowinda/Gowinda-1.12.jar --snp-file /home/paul/episodicData/novoalign/novo_mpileup/novo_episodic.sync --candidate-snp-file /home/paul/Gowinda/candidatePos.csv --gene-set-file /home/paul/Gowinda/funcassociate_go_associations.txt --annotation-file /home/paul/Gowinda/dmel-all-r5.57.gtf --simulations 100000 --min-significance 1 --gene-definition gene --threads 8 --output-file results_gene_gene.txt --mode gene --min-genes 1
+```
+
+From [Gowinda source forge tutorial](https://sourceforge.net/p/gowinda/wiki/Tutorial/) Example 3: high resolution GO term enrichment
+```
+java -Xmx8g -Djava.io.tmpdir=/home/paul/Gowinda/tmp_dir -jar /home/paul/Gowinda/Gowinda-1.12.jar \
+	--snp-file /home/paul/episodicData/novoalign/novo_mpileup/novo_episodic.sync \
+	--candidate-snp-file /home/paul/Gowinda/candidatePos.csv \
+	--gene-set-file /home/paul/Gowinda/funcassociate_go_associations.txt \
+	--annotation-file /home/paul/Gowinda/dmel-all-r5.57.gtf \
+	--simulations 100000 \
+	--min-significance 1 \
+	--gene-definition updownstream2000 \
+	--threads 8 \
+	--output-file /home/paul/Gowinda/results_snp_2000ud.txt \
+	--mode snp \
+	--min-genes 1
+	--TMP_DIR=/home/paul/Gowinda/tmp_dir
+```
+Does not like "positions.txt"
+
+
+
+
 
